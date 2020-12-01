@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Release Notes for STM32 Secure Engine</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="_htmresc/mini-st.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div class="row">
+<div class="col-sm-12 col-lg-4">
+<div class="card fluid">
+<div class="sectione dark">
+<center>
+<h1 id="release-notes-for-stm32-secure-engine"><small>Release Notes for</small> STM32 Secure Engine</h1>
+<p>Copyright © 2017 STMicroelectronics<br />
+</p>
+<a href="https://www.st.com" class="logo"><img src="_htmresc/st_logo.png" alt="ST logo" /></a>
+</center>
+</div>
+</div>
+<h1 id="license">License</h1>
+<p>This software component is licensed by ST under Ultimate Liberty license SLA0044, the “License”;</p>
+<p>You may not use this file except in compliance with the License.</p>
+<p>You may obtain a copy of the License at: <a href="http://www.st.com/SLA0044">SLA0044</a></p>
+<h1 id="purpose">Purpose</h1>
+<p>STM32 Secure Engine middleware provides a protected environment to manage all critical data and operations (such as cryptography operations accessing firmware encryption key, and others).</p>
+<p>Protected code and data are accessible through a single entry point (call gate mechanism) and it is therefore not possible to run or access any SE code or data without passing through it, otherwise a system reset is generated.</p>
+<p>Depending on hardware two different mechanisms are provided :<br />
+</p>
+<ul>
+<li>Firewall-based Secure Engine Isolation : The firewall is opened or closed using a specific “call gate” mechanism: a single entry point (placed at the 2nd word of the Code segment base address) must be used to open the gate and to execute the code protected by the firewall. If the protected code is accessed without passing through the call gate mechanism then a system reset is generated.<br />
+</li>
+</ul>
+<figure>
+<img src="_htmresc/Firewall.png" alt="" /><figcaption>Firewall-based isolation</figcaption>
+</figure>
+<p><br />
+</p>
+<ul>
+<li>MPU-based Secure Engine Isolation : The MPU-based Secure Engine isolation relies on the concept of privileged and unprivileged levels of software execution. The software must run in unprivileged level of execution by default (when SBSFU or the User Application is running), except for very specific actions like platform initialization or interrupt handling.</li>
+</ul>
+<figure>
+<img src="_htmresc/MPU.png" alt="" /><figcaption>MPU-based isolation</figcaption>
+</figure>
+<p>For more details, refer to <a href="https://www.st.com/st-web-ui/static/active/en/resource/technical/document/user_manual/DM00414687.pdf">UM2262</a>, AppendixA : Getting started with X-CUBE-SBSFU expansion package</p>
+</div>
+<section id="update-history" class="col-sm-12 col-lg-8">
+<h1>Update History</h1>
+<div class="collapse">
+<input type="checkbox" id="collapse-section8" checked aria-hidden="true"> <label for="collapse-section8" aria-hidden="true">V2.4.1 / 4-September-2020</label>
+<div>
+<h2 id="main-changes">Main Changes</h2>
+<ul>
+<li><p>Add service to enable and disable IRQ services</p></li>
+<li><p>Modify prepareimage to allow merge of any elf and bin files</p></li>
+</ul>
+<h2 id="known-limitations">Known Limitations</h2>
+<p>None</p>
+<h2 id="backward-compatibility">Backward Compatibility</h2>
+<p>No Break of compatibility with V2.4.0</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section7" aria-hidden="true"> <label for="collapse-section7" aria-hidden="true">V2.4.0 / 27-July-2020</label>
+<div>
+<h2 id="main-changes-1">Main Changes</h2>
+<ul>
+<li><p>Fix for IT management with firewall.</p></li>
+<li><p>Minor update with no functional impact.</p></li>
+</ul>
+<h2 id="known-limitations-1">Known Limitations</h2>
+<p>None</p>
+<h2 id="backward-compatibility-1">Backward Compatibility</h2>
+<p>None</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section6" aria-hidden="true"> <label for="collapse-section6" aria-hidden="true">V2.2.0 / 12-June-2020</label>
+<div>
+<h2 id="main-changes-2">Main Changes</h2>
+<ul>
+<li><p><strong>Management of interruption during code execution inside the firewall</strong> is now supported for applications with high real time constraints. IRQ are no more disabled when entering into the isolated code environment, when IT_MANAGEMENT compilation switch is enable.</p></li>
+<li><p>Add <strong>multi-images support</strong>:</p>
+<ul>
+<li>A maximum of 3 active images and 3 download areas can be configured.</li>
+<li>Slot number parameter is added to the service SE_APPLI_GetActiveFwInfo().</li>
+<li>Control for read/write/erase operations are extended to the 3 active images headers.</li>
+<li>For each active image, authentication, decryption and integrity are controlled with specific keys.</li>
+</ul></li>
+<li><p>Add <strong>image state handling</strong> feature:</p>
+<ul>
+<li>State information are added in the firmware header: FWIMG_STATE_NEW, FWIMG_STATE_SELFTEST, FWIMG_STATE_INVALID, FWIMG_STATE_VALID, FWIMG_STATE_VALID_ALL.</li>
+<li>New services added: SE_IMG_GetActiveFwState(), SE_IMG_SetActiveFwState(), SE_APP_ValidateFw().</li>
+<li>Image state transitions:
+<ul>
+<li>FWIMG_STATE_NEW -&gt; FWIMG_STATE_SELFTEST : at the end of installation process.</li>
+<li>FWIMG_STATE_SELFTEST -&gt; FWIMG_STATE_VALID : at first startup, the user application should call SE_APP_ValidateFw() to validate the new active image (if the self-tests are successful)</li>
+<li>FWIMG_STATE_SELFTEST -&gt; FWIMG_STATE_INVALID : at reset all actives images in “self-test state” are rollbacked-up to their previous version if identified (else erased).</li>
+<li>FWIMG_STATE_SELFTEST -&gt; FWIMG_STATE_VALID_ALL : the active image identified as MASTER will validate all new installed active images in a single operation.</li>
+</ul></li>
+</ul></li>
+<li><p>Update prepare image tools to support:</p>
+<ul>
+<li>New examples mapping configuration:
+<ul>
+<li>Firmware header is located inside the internal flash between SBSFU binary and standalone loader binary in order to be protected by secure memory (HDP) : STM32H7B3I-DK 2_Images_ExtFlash example provided.</li>
+<li>Header is not contiguous with firmware image : this is required in multi-images configuration to group all headers inside the protected environment (B-L475E-IOT01A 2_Images_ExtFlash example provided). This is also required for image state handling to be able to keep write capability in the header during user application execution (B-L475E-IOT01A, B-L4S5I-IOT01A KMS and ST-SAFE examples provided)</li>
+</ul></li>
+<li>Header magic information becomes one of SFU1, SFU2 or SFU3 to identify the installation slot (slot active #1, slot active #2, slot active #3).</li>
+<li>Add image state information in the firmware image header.</li>
+<li>VALID/VALID/VALID tag is removed from image header. This tag is no more applicable since image state handling management.</li>
+<li>Header magic information becomes one of SFU1, SFU2 or SFU3 to identify the installation slot (slot active #1, slot active #2, slot active #3).</li>
+<li>For partial image generation, add alignment on SWAP_SIZE : a direct copy (no more gap to be added) can be implemented between the data received over the air and the write operations in the download area.</li>
+<li>For multi-images configuration, add append feature to be able to create a big binary made of SBSFU binary + 3 firmware images.</li>
+<li>Add certificates injection capability for KMS embedded keys configuration.</li>
+</ul></li>
+<li><p>For CKS_ENABLED feature (P-NUCLEO-WB55.Nucleo): the lock of CM0 keys is now done during execution of SE_LOCK_RESTRICT_SERVICES just before jumping into user application.</p></li>
+</ul>
+<h2 id="known-limitations-2">Known Limitations</h2>
+<p>None</p>
+<h2 id="backward-compatibility-2">Backward Compatibility</h2>
+<p>Break of compatibility with V2.1.0</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section5" aria-hidden="true"> <label for="collapse-section5" aria-hidden="true">V2.1.0 / 17-January-2020</label>
+<div>
+<h2 id="main-changes-3">Main Changes</h2>
+<ul>
+<li><p>Management of <strong>header not contiguous with firmware</strong> for external flash : when slot0 is mapped in external flash, header of slot0 must be contiguous to SBSFU area, in order to be protected by secure memory</p></li>
+<li><p>New Secure Engine service (SECBOOT_ECCDSA_WITH_AES128_CTR_SHA256) for <strong>initialization of OTFDEC with symmetric keys</strong> ; AES CTR cryptographic scheme is required for external flash with OTFDEC variant</p></li>
+<li><p>Update of <strong>prepareimage.py utility</strong> to support :<br />
+</p>
+<ul>
+<li>partial image update<br />
+</li>
+<li>generation of big binary for STM32H7B3I-DK board
+<ul>
+<li>1 binary for internal flash (SBSFU and Header)</li>
+<li>1 binary for external flash (slot0)</li>
+</ul></li>
+</ul></li>
+<li><p>Changes in <strong>management of exceptions for STM32 series supporting Flash ECC error</strong> (STM32L4, STM32G0, STM32G4, STM32H7 and STM32WB series) : fix on double ecc error management</p></li>
+</ul>
+<h2 id="known-limitations-3">Known Limitations</h2>
+<p>None</p>
+<h2 id="backward-compatibility-3">Backward Compatibility</h2>
+<p>Break of compatibility with V2.0.0</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section4" aria-hidden="true"> <label for="collapse-section4" aria-hidden="true">V2.0.0 / 13-July-2019</label>
+<div>
+<h2 id="main-changes-4">Main Changes</h2>
+<p><strong>General improvements (software counter measures) against software attacks and against basic hardware faults injection</strong></p>
+<p>Secure Engine extended with <strong>Key Management Services</strong>, replacing former secure engine crypto services when KMS feature is enabled</p>
+<p>Add SE_IMG_Erase API to be able to erase slot #0 header: mandatory for NUCLEO-L073RZ (specific behavior of STM32L0 flash interface : writing instructions during erasing sequence)</p>
+<p>prepareimage.py utility updated to support :<br />
+- partial image update<br />
+- pairing keys, for communication with STSAFE-A100</p>
+<h2 id="known-limitations-4">Known Limitations</h2>
+<p>None</p>
+<h2 id="backward-compatibility-4">Backward Compatibility</h2>
+<p>Break of compatibility with V1.2.0</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section3" aria-hidden="true"> <label for="collapse-section3" aria-hidden="true">V1.2.0 / 14-December-2018</label>
+<div>
+<h2 id="main-changes-5">Main Changes</h2>
+<p>prepareimage/key/translate_key scripts improvements :<br />
+- Quicker execution timing.<br />
+- Support of big elf in order to be able to flash SBSFU+ UserApp from IDE : refer to AN5056 for more details.<br />
+- Adaptation for ARM V6M architecture (cortex MO+)<br />
+- Remove support of cipher text stealing : 16 bytes alignment ensure with linker command files during UserAppbuild process.</p>
+<p>Add mapping_export.h for IAR and SW4STM32 tool chains to avoid mapping symbols inclusion into *.c files.</p>
+<p>Add support of SE service calls from unprivileged part of application : SE_APP_GET_ACTIVE_FW_INFO.</p>
+<p>Security controls added :<br />
+- Check the mapping of the data given as parameters toSecure Engine services (SE_BufferCheck_SBSFU() /SE_BufferCheck_in_se_ram()).<br />
+- Clean Secure Engine RAM data (SE_LL_CORE_Cleanup())when leaving SBSFU (SE_LockRestrictServices()).</p>
+<h2 id="known-limitations-5">Known Limitations</h2>
+<p>None</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section2" aria-hidden="true"> <label for="collapse-section2" aria-hidden="true">V1.1.0 / 20-April-2018</label>
+<div>
+<h2 id="main-changes-6">Main Changes</h2>
+<p>Multiple crypto scheme implemented under compilation switch (se_crypto_config.h) :<br />
+- SECBOOT_AES128_GCM_AES128_GCM_AES128_GCM: symmetric crypto.<br />
+- SECBOOT_ECCDSA_WITH_AES128_CBC_SHA256(default config) : asymmetric crypto with encrypted (AES128-CBC)Firmware.<br />
+- SECBOOT_ECCDSA_WITHOUT_ENCRYPT_SHA256 : asymmetric crypto without firmware encryption.<br />
+</p>
+<p>Build process modification : scripts added in Utilities/KeysAndImages called during :<br />
+- SECoreBin build for key generation.<br />
+- UserApp build for firmware encryption.<br />
+- Windows executable version of the python scripts available : This is now the default tooling for pre/post build actions (so python not mandatory any more)</p>
+<p>Secure Engine now using its own stack inside protected area</p>
+<p>Files structure updated to provide more feature modularity and feature customization flexibility</p>
+<h2 id="known-limitations-6">Known Limitations</h2>
+<p>None</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section1" aria-hidden="true"> <label for="collapse-section1" aria-hidden="true">V1.0.0 / 1-December-2017</label>
+<div>
+<h2 id="main-changes-7">Main Changes</h2>
+<h3 id="first-release">First release</h3>
+<h2 id="known-limitations-7">Known Limitations</h2>
+<p>None</p>
+</div>
+</div>
+</section>
+</div>
+<footer class="sticky">
+<p>For complete documentation on STM32 Microcontrollers, visit: [<a href="http://www.st.com/STM32">www.st.com/stm32</a>]</p>
+<em>This release note uses up to date web standards and, for this reason, should not be opened with Internet Explorer but preferably with popular browsers such as Google Chrome, Mozilla Firefox, Opera or Microsoft Edge.</em>
+</footer>
+</body>
+</html>

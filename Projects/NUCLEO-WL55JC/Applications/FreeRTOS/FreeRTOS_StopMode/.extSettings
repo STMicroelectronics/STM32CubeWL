@@ -1,0 +1,9 @@
+[ProjectFiles]
+HeaderPath=..\..\..\..\..\..\Drivers\BSP\STM32WLxx_Nucleo
+[Others]
+Define=
+HALModule=TIM;EXTI
+[Groups]
+Application/User=../Src/main.c;../Src/stm32wlxx_it.c;../Src/stm32wlxx_hal_msp.c;../Src/stm32wlxx_hal_timebase_tim.c;../Src/app_freertos.c;
+Doc=../readme.txt;
+Drivers/BSP/STM32WLxx_Nucleo=../../../../../../Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo.c;

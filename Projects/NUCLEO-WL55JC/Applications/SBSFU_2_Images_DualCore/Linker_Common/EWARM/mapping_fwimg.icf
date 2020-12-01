@@ -1,0 +1,32 @@
+/*###ICF### Set of symbols used in SE and SB_SFU projects ****/
+
+/* Slots  must be aligned on 2048 bytes (0x800) */
+
+/* swap (4 kbytes) */
+define exported symbol  __ICFEDIT_SWAP_start__  = 0x08005800;
+define exported symbol  __ICFEDIT_SWAP_end__    = 0x080067FF;
+
+/* Active slot #1 (56 kbytes) */
+define exported symbol  __ICFEDIT_SLOT_Active_1_header__= 0x0803F800;
+define exported symbol  __ICFEDIT_SLOT_Active_1_start__ = 0x0801C000;
+define exported symbol  __ICFEDIT_SLOT_Active_1_end__   = 0x08029FFF;
+
+/* Active slot #2 (28 kbytes) */
+define exported symbol  __ICFEDIT_SLOT_Active_2_header__= 0x0803F000;
+define exported symbol  __ICFEDIT_SLOT_Active_2_start__ = 0x08015000;
+define exported symbol  __ICFEDIT_SLOT_Active_2_end__   = 0x0801BFFF;
+
+/* Dwl slot #1 (56 kbytes) */
+define exported symbol  __ICFEDIT_SLOT_Dwl_1_start__= 0x08006800;
+define exported symbol  __ICFEDIT_SLOT_Dwl_1_end__  = 0x080147FF;
+
+/* Slots not configured */
+define exported symbol  __ICFEDIT_SLOT_Active_3_header__= 0x00000000;
+define exported symbol  __ICFEDIT_SLOT_Active_3_start__ = 0x00000000;
+define exported symbol  __ICFEDIT_SLOT_Active_3_end__   = 0x00000000;
+define exported symbol  __ICFEDIT_SLOT_Dwl_2_start__    = 0x00000000;
+define exported symbol  __ICFEDIT_SLOT_Dwl_2_end__      = 0x00000000;
+define exported symbol  __ICFEDIT_SLOT_Dwl_3_start__    = 0x00000000;
+define exported symbol  __ICFEDIT_SLOT_Dwl_3_end__      = 0x00000000;
+
+

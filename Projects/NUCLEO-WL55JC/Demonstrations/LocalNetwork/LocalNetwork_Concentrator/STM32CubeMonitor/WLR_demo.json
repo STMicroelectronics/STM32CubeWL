@@ -1,0 +1,6361 @@
+[
+    {
+        "id": "78f04e3a.1177b",
+        "type": "tab",
+        "label": "STM32WL Demo Tool",
+        "disabled": false,
+        "info": "This flow is used to monitor values of STM32WL sensors.\n\nClick on the help node to see information."
+    },
+    {
+        "id": "a8d0e4b7.6d91e8",
+        "type": "tab",
+        "label": "Serial port configuration",
+        "disabled": false,
+        "info": "This tabs manage the Serial port\n\nTo configure the serial port, see details in the  node : \"Select the Serial Port in this node\""
+    },
+    {
+        "id": "59e12eb5.5a9e5",
+        "type": "tab",
+        "label": "Demo main flow",
+        "disabled": false,
+        "info": "This is the main flow of the STM32WL demo \n\nThis tab includes :\n\n- The initialization nodes to select country and start demo\n- The Finite state Machine (FSM) is used to manage the demo state based on user and board actions.\n- The data formatting : data received from concentrator are decoded, sent to charts and stored in the table.\n- The table data management : store the data and manage the display (refresh, addition of new sensor)\n"
+    },
+    {
+        "id": "205bafec.d7d23",
+        "type": "tab",
+        "label": "Sensor panels",
+        "disabled": false,
+        "info": "This tabs holds all the sensor panels\n\nFor each panel, there is a subflow node used to filter/split the data and the UI elements.\n\nThe subflow outputs 6 parameters  :\n - Sensor EUI\n - Temperature\n - PER\n - Voltage\n - RSSI\n - Number of missed packet\n\n \nBy default, Voltage, Missed packet and Temperature are plotted, but user can freely add or changes chart as required.\n\n"
+    },
+    {
+        "id": "a31b8916.3b68c8",
+        "type": "tab",
+        "label": "AT Command",
+        "disabled": false,
+        "info": "This Tab includes :\n- AT command parsing, management of timeout and errors.\n- Serial port log window"
+    },
+    {
+        "id": "236fcfed.94589",
+        "type": "subflow",
+        "name": "Single value",
+        "info": "The 'single value' subflow allows to :\r\n * Filter Data to extract only one variable after the \"processing node\" step .\r\n * Modify the message to fit with standard widgets such as gauges.\r\n * Limit the number of messages to a maximum of 10 msg per second.\r\n\r\n### **Input**\r\n\r\nThe subflow 'single value' takes in input the `msg.payload`\r\nfrom the processing output. All the messages sent by the processing node have the same structure.\r\n\r\n    \"payload\": {\r\n        \"groupname\": \"Snapshot2\",\r\n        \"variabledata\": [\r\n            {\r\n                \"y\": \"9\",\r\n                \"x\": \"1567509421459\"\r\n            },\r\n            {\r\n                \"y\": \"9\",\r\n                \"x\": \"1567509421459\"\r\n            },\r\n            {\r\n                \"y\": \"9\",\r\n                \"x\": \"1567509421459\"\r\n            }\r\n        ],\r\n        \"variablename\": \"int2\"\r\n      }\r\n    }\r\n\r\n### **Filter on selected variable**\r\nSeveral messages are sent by the processing node for each variable, so the first step of this 'single value' subflow is to filter and keep only messages related to the selected variable.\r\nThe 'filter variable' node will only keep messages with the right `variablename` key.\r\n\r\n### **Extract duplets table**\r\n\r\nThe received message is an Object containing {groupname, variabledata[array], variablename}.  \r\nThe array contains two variables :\r\n - `y` the value \r\n - `x` the time\r\n\r\nA single message contains multiple pairs of values extract at a regular time interval.\r\nThe time interval depends on the acquisition frequency.\r\nWith the 'change' node and the `set` property, the `msg.payload` is set to \r\n`msg.payload.variabledata`, only the data variable array is set into msg.payload.\r\n\r\n    \"payload\": {\r\n        \"variabledata\": [\r\n            {\r\n                \"y\": \"9\",\r\n                \"x\": \"1567509421459\"\r\n            },\r\n            {\r\n                \"y\": \"9\",\r\n                \"x\": \"1567509421459\"\r\n            },\r\n            {\r\n                \"y\": \"9\",\r\n                \"x\": \"1567509421459\"\r\n            }\r\n        ]\r\n    }\r\n\r\n### **Split duplets table**\r\n\r\nThe data variable array is split with a length of one in smaller objects by the 'split' node.\r\nEach new object contains two subvariables : `y` and `x`.\r\n\r\n    \"payload\": {\r\n        \"y\": \"9\",\r\n        \"x\": \"1567509421459\"\r\n    }\r\n\r\n\r\n### **Limit the number of messages**\r\n\r\nThe 'delay' node allows to limit the maximum number of message per second.\r\nIn the 'single value' subflow, one message is extracted per second.\r\n\r\n>_Be careful, a dashboard saturation risk exists if too many messages are received per second._\r\n\r\n### **Extract only y values**\r\n\r\nThe `msg.payload` is set to `msg.payload.y` with the `set` property. \r\nOnly `y` variable is set into msg.payload as single value.\r\n\r\n    \"payload\": { \r\n        \"y\": \"9\" \r\n    }\r\n\r\n### **Output** \r\n\r\nSome widgets such as the gauge and the text node are using the `msg.payload` property.  \r\nThe output node is linked to a gauge that allows to see the evolution \r\nof the `y` variable as a function of time.\r\n\r\n\r\n![subflow_gauge](images/subflow_gauge.png)\r\n\r\n### **Details**\r\n\r\nNote : The debug node allows to see clearly and easily the \r\nmessage at the node output.  \r\n\r\n\r\n> More details on [Node-Red][nr]\r\n[nr]: https://nodered.org/docs/user-guide/editor/workspace/subflows\r\n\r\n\r\n-------\r\n\r\n",
+        "category": "",
+        "in": [
+            {
+                "x": 40,
+                "y": 60,
+                "wires": [
+                    {
+                        "id": "3f1b8b9e.39a914"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 780,
+                "y": 140,
+                "wires": [
+                    {
+                        "id": "4e8e567a.8eef08",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "varfilter",
+                "type": "str",
+                "value": ""
+            }
+        ],
+        "color": "#DDAA99"
+    },
+    {
+        "id": "6074a628.24f198",
+        "type": "subflow",
+        "name": "scan",
+        "info": "",
+        "category": "ui-table",
+        "in": [
+            {
+                "x": 51,
+                "y": 85,
+                "wires": [
+                    {
+                        "id": "1ff1e339.f9499d"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 357,
+                "y": 85,
+                "wires": [
+                    {
+                        "id": "1ff1e339.f9499d",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "ipString",
+                "type": "str",
+                "value": "http://192.168.2.",
+                "ui": {
+                    "icon": "font-awesome/fa-feed",
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str"
+                        ]
+                    },
+                    "label": {}
+                }
+            },
+            {
+                "name": "start",
+                "type": "num",
+                "value": "1",
+                "ui": {
+                    "icon": "font-awesome/fa-arrow-circle-right",
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "num"
+                        ]
+                    },
+                    "label": {}
+                }
+            },
+            {
+                "name": "end",
+                "type": "num",
+                "value": "255",
+                "ui": {
+                    "icon": "font-awesome/fa-arrow-circle-left",
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "num"
+                        ]
+                    },
+                    "label": {}
+                }
+            },
+            {
+                "name": "suffix",
+                "type": "str",
+                "value": "/json",
+                "ui": {
+                    "icon": "font-awesome/fa-address-card-o",
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str"
+                        ]
+                    },
+                    "label": {}
+                }
+            }
+        ],
+        "color": "#A6BBCF",
+        "icon": "font-awesome/fa-stethoscope"
+    },
+    {
+        "id": "a4435987.cef7d8",
+        "type": "subflow",
+        "name": "ui-table handler",
+        "info": "# ui-table handler\nUniversal handler for ui-table.\n## features\n- buffer table data\n- add or update individual rows or cells of the table\n- delete rows\n- clear tableData\n- handle column width\n- handle column order\n\n## configuration\n- `tabulator` json formatted object containing configuration of the table. See ui-table for more details.\n- `property` property of the msg object that contains the data to be passed to ui-table. I.e. *state* `msg.state`\n- `index` index column to identify individual rows. Each message containing data must have a unique `msg.topic` to identify the row. Messages without this `msg.topic` will be droped. It is not nessesary but possible to display the index column in the table. Do not enable editing on this column otherwise you will loose the connection and another row will be added to the table as soon as a new message arrives!\n\n   Defaults to *$topic* `msg.state.$topic`\n- `dashboard` name of the dashboard tab to only update the table if the dashboard is visible. If empty the table will be updated on every tab change and connect.\n- `context` configuration of context data. The subflow will save or cache data in the flows context using `$parent.`. \n   **tableData** caches the incoming data to restore it on `ui-control´ *change* messages.\n   **tableConfig** saves column width and order to save the interactive table layot\n   **tableEdit** saves edits on the table data otherwise it would be overwritten when new data arrives\n```json\n{\n    \"tableData\": {\n        \"name\": \"tableData\"\n    },\n    \"tableConfig\": {\n        \"name\": \"tableConfig\",\n        \"storage\": \"file\"\n    },\n    \"tableEdit\": {\n        \"name\": \"tableEdit\",\n        \"storage\": \"file\"\n    }\n}\n```\n\n## commands\ncommands can be passed by sending a object as `msg.payload`\n- delete custom colum order and restore colum order from the tabulator json. This is important if you add or delete columns in the tabulator config otherwise the columns most likely don`t show up\n```json\n{\n    \"command\": \"delete\",\n    \"object\": \"columnOrder\"\n}\n```\n- delete custom column widths\n```json\n{\n    \"command\": \"delete\",\n    \"object\": \"columnWidth\"\n}\n```\n- delete tableCache\n```json\n{\n    \"command\": \"delete\",\n    \"object\": \"tableCache\"\n}\n```\n\n## background\nui-table warps the powerfull tabluator library. This subflow makes it easier to unleash the powerfull features of ui-table",
+        "category": "dashboard",
+        "in": [
+            {
+                "x": 54,
+                "y": 85,
+                "wires": [
+                    {
+                        "id": "73ad843.7ad667c"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 360,
+                "y": 85,
+                "wires": [
+                    {
+                        "id": "73ad843.7ad667c",
+                        "port": 1
+                    }
+                ]
+            },
+            {
+                "x": 360,
+                "y": 136,
+                "wires": [
+                    {
+                        "id": "73ad843.7ad667c",
+                        "port": 2
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "tabulator",
+                "type": "json",
+                "value": "{\"tabulator\":{\"responsiveLayout\":\"collapse\",\"responsiveLayoutCollapseStartOpen\":false,\"index\":\"$name\",\"layout\":\"fitColumns\",\"movableColumns\":true,\"groupBy\":\"\",\"columnResized\":\"function(column){     var newColumn = {         field: column._column.field,         visible: column._column.visible,         width: column._column.width,         widthFixed: column._column.widthFixed,         widthStyled: column._column.widthStyled     }; this.send({topic:this.config.topic,ui_control:{callback:'columnResized',columnWidths:newColumn}}); }\",\"columnMoved\":\"function(column, columns){     var newColumns=[];     columns.forEach(function (column) {         newColumns.push({'field': column._column.definition.field, 'title': column._column.definition.title});     });     this.send({topic:this.config.topic,ui_control:{callback:'columnMoved',columns:newColumns}}); }\",\"rowFormatter\":\"function(row){     var data = row.getData();     switch (data.$state) {         case \\\"lost\\\":             row.getElement().style.backgroundColor = \\\"#9e2e66\\\";             row.getElement().style.color = \\\"#a6a6a6\\\";             break;         case \\\"sleeping\\\":             row.getElement().style.backgroundColor = \\\"#336699\\\";             break;         case \\\"disconnected\\\":             row.getElement().style.backgroundColor = \\\"#cc3300\\\";             row.getElement().style.color = \\\"#a6a6a6\\\";             break;         case \\\"alert\\\":             row.getElement().style.backgroundColor = \\\"#A6A6DF\\\";             break;         case \\\"init\\\":             row.getElement().style.backgroundColor = \\\"#f2f20d\\\";             break;         case \\\"ready\\\":             row.getElement().style.backgroundColor = \\\"\\\";             row.getElement().style.color = \\\"\\\";             break;         } }\",\"columns\":[{\"formatter\":\"responsiveCollapse\",\"width\":30,\"minWidth\":30,\"align\":\"center\",\"resizable\":false,\"headerSort\":false,\"frozen\":true,\"title\":\"expand\",\"field\":\"expand\",\"headerVertical\":\"flip\"},{\"formatter\":\"function(cell, formatterParams, onRendered) {      var html = cell.getValue(); return html;  }\",\"title\":\"State\",\"field\":\"$stateIcon\",\"width\":100,\"frozen\":true,\"headerVertical\":\"flip\"},{\"formatter\":\"function(cell, formatterParams, onRendered) {     var html = cell.getValue(); return html;  }\",\"title\":\"Signal\",\"field\":\"signalIcon\",\"width\":100,\"frozen\":true,\"headerVertical\":\"flip\"},{\"title\":\"Name\",\"field\":\"$name\",\"width\":100,\"frozen\":true,\"headerVertical\":\"flip\"},{\"title\":\"State\",\"field\":\"$state\",\"width\":100,\"align\":\"center\",\"headerVertical\":\"flip\"},{\"title\":\"last-ready\",\"field\":\"lastSeenreadyFormatted\",\"width\":100,\"align\":\"left\",\"headerVertical\":\"flip\"},{\"title\":\"Homie\",\"field\":\"$homie\",\"width\":100,\"align\":\"left\",\"headerVertical\":\"flip\"},{\"title\":\"Platform\",\"field\":\"$implementation\",\"width\":100,\"align\":\"left\",\"headerVertical\":\"flip\"},{\"title\":\"Statistics\",\"columns\":[{\"title\":\"Interval\",\"field\":\"interval\",\"width\":100,\"headerVertical\":\"flip\"},{\"formatterParams\":{\"outputFormat\":\"d hh:mm:ss\",\"inputFormat\":\"seconds\",\"invalidPlaceholder\":\"(unknown)\"},\"title\":\"Uptime\",\"field\":\"uptime\",\"formatter\":\"function(cell, formatterParams, onRendered){     var pad = function (num) {         return (\\\"0\\\"+num).slice(-2);     };     var secs = Number(cell.getValue());     if (Number.isNaN(secs)) return;     var minutes = Math.floor(secs / 60);     secs = secs%60;     var hours = Math.floor(minutes/60);     minutes = minutes%60;     var days = Math.floor(hours/24);     hours = hours%24;     if (days>0)         return days+\\\"d \\\"+pad(hours)+\\\":\\\"+pad(minutes);     else         return pad(hours)+\\\":\\\"+pad(minutes)+\\\":\\\"+pad(secs); }\",\"width\":100,\"headerVertical\":\"flip\"},{\"formatterParams\":{\"min\":0,\"max\":100,\"color\":[\"red\",\"orange\",\"green\"],\"legend\":\"function (value) {if (value>0) return \\\"<span style='color:#FFFFFF;'>\\\"+value+\\\" %</span>\\\"; else return; }\",\"legendColor\":\"#FFFFFF\",\"legendAlign\":\"center\"},\"title\":\"Signal\",\"field\":\"signal\",\"formatter\":\"progress\",\"width\":100,\"headerVertical\":\"flip\"},{\"formatterParams\":{\"min\":2.5,\"max\":3.5,\"color\":[\"red\",\"green\",\"red\"],\"legend\":\"function (value) { if (value>0) return \\\"<span style='color:#FFFFFF;'>\\\"+value+\\\" V</span>\\\"; else return; }\",\"legendColor\":\"#101010\",\"legendAlign\":\"center\"},\"title\":\"Supply\",\"field\":\"supply\",\"formatter\":\"progress\",\"width\":100,\"headerVertical\":\"flip\"},{\"formatterParams\":{\"min\":0,\"max\":100,\"color\":[\"red\",\"orange\",\"green\"],\"legend\":\"function (value) {     if (value>0)         return \\\"<span style='color:#FFFFFF;'>\\\"+value+\\\" %</span>\\\";     else         return; }\",\"legendColor\":\"#101010\",\"legendAlign\":\"center\"},\"title\":\"Battery\",\"field\":\"battery\",\"formatter\":\"progress\",\"width\":100,\"headerVertical\":\"flip\"},{\"formatterParams\":{\"min\":0,\"max\":100000,\"color\":[\"red\",\"orange\",\"green\"],\"legend\":\"function (value) { if (value>0) return \\\"<span style='color:#FFFFFF;'>\\\"+(value/1024).toFixed(2)+\\\" kB</span>\\\"; else return; }\",\"legendColor\":\"#101010\",\"legendAlign\":\"center\"},\"title\":\"Memory\",\"field\":\"freeheap\",\"formatter\":\"progress\",\"width\":100,\"headerVertical\":\"flip\"},{\"formatterParams\":{\"target\":\"_blank\",\"min\":0,\"max\":100,\"color\":[\"red\",\"orange\",\"green\"],\"legend\":\"function (value) {     if (value>0)         return \\\"<span style='color:#FFFFFF;'>\\\"+value+\\\" %</span>\\\";     else         return; }\",\"legendColor\":\"#101010\",\"legendAlign\":\"center\"},\"title\":\"CPU load\",\"field\":\"cpuload\",\"formatter\":\"progress\",\"width\":100,\"headerVertical\":\"flip\"},{\"formatterParams\":{\"min\":20,\"max\":60,\"color\":[\"green\",\"orange\",\"red\"],\"legend\":\"function (value) { if (value>0) return \\\"<span style='color:#FFFFFF;'>\\\"+value+\\\" °C</span>\\\"; else return; }\",\"legendColor\":\"#101010\",\"legendAlign\":\"center\"},\"title\":\"CPU temp\",\"field\":\"cputemp\",\"formatter\":\"progress\",\"width\":100,\"headerVertical\":\"flip\"}]},{\"title\":\"Firmware\",\"columns\":[{\"formatter\":\"link\",\"formatterParams\":{\"labelField\":\"$localip\",\"urlPrefix\":\"http://\",\"target\":\"_blank\"},\"title\":\"IP\",\"field\":\"$localip\",\"width\":100},{\"title\":\"mac\",\"field\":\"$mac\",\"width\":100},{\"title\":\"Accsess Point\",\"field\":\"SSID\",\"width\":100},{\"title\":\"Firmware\",\"field\":\"name\",\"width\":100},{\"title\":\"Version\",\"field\":\"version\",\"width\":100},{\"title\":\"Last Boot Cause\",\"field\":\"lastBootCause\",\"width\":100},{\"title\":\"Reset Reason\",\"field\":\"resetReason\",\"width\":100}]}]},\"customHeight\":12}",
+                "ui": {
+                    "icon": "font-awesome/fa-table",
+                    "label": {
+                        "en-US": "Tabulator"
+                    },
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "json",
+                            "env"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "tableDataProp",
+                "type": "str",
+                "value": "row",
+                "ui": {
+                    "icon": "font-awesome/fa-tag",
+                    "label": {
+                        "en-US": "rowProperty"
+                    },
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str",
+                            "num",
+                            "bool",
+                            "json",
+                            "bin",
+                            "env"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "tableIndex",
+                "type": "str",
+                "value": "$topic",
+                "ui": {
+                    "icon": "font-awesome/fa-indent",
+                    "label": {
+                        "en-US": "Index"
+                    },
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str",
+                            "json",
+                            "env"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "dashboard",
+                "type": "str",
+                "value": "Remote Device Table",
+                "ui": {
+                    "icon": "font-awesome/fa-dashboard",
+                    "label": {
+                        "en-US": "Dashboard"
+                    },
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str",
+                            "env"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "tableContext",
+                "type": "json",
+                "value": "{\"tableData\":{\"name\":\"tableData\"},\"tableConfig\":{\"name\":\"tableConfig\",\"storage\":\"file\"},\"tableEdit\":{\"name\":\"tableEdit\",\"storage\":\"file\"}}",
+                "ui": {
+                    "icon": "font-awesome/fa-database",
+                    "label": {
+                        "en-US": "Context"
+                    },
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "json",
+                            "env"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "group",
+                "type": "str",
+                "value": ""
+            }
+        ],
+        "color": "#3FADB5",
+        "icon": "node-red-dashboard/ui_slider.png",
+        "status": {
+            "x": 360,
+            "y": 34,
+            "wires": [
+                {
+                    "id": "73ad843.7ad667c",
+                    "port": 0
+                }
+            ]
+        }
+    },
+    {
+        "id": "b70194c3.65f4b8",
+        "type": "subflow",
+        "name": "Split sensor data",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 60,
+                "y": 140,
+                "wires": [
+                    {
+                        "id": "1ac8b3fc.e9aecc"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 873,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "5e9d0587.26229c",
+                        "port": 0
+                    }
+                ]
+            },
+            {
+                "x": 873,
+                "y": 120,
+                "wires": [
+                    {
+                        "id": "86f39161.8c7d1",
+                        "port": 0
+                    }
+                ]
+            },
+            {
+                "x": 873,
+                "y": 160,
+                "wires": [
+                    {
+                        "id": "16bf47e8.318878",
+                        "port": 0
+                    }
+                ]
+            },
+            {
+                "x": 873,
+                "y": 200,
+                "wires": [
+                    {
+                        "id": "52c41347.a2583c",
+                        "port": 0
+                    }
+                ]
+            },
+            {
+                "x": 880,
+                "y": 240,
+                "wires": [
+                    {
+                        "id": "a7bb216d.adcaf",
+                        "port": 0
+                    }
+                ]
+            },
+            {
+                "x": 880,
+                "y": 280,
+                "wires": [
+                    {
+                        "id": "1baf7722.47a3e9",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "sensor",
+                "type": "num",
+                "value": "0",
+                "ui": {
+                    "icon": "font-awesome/fa-feed",
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "num"
+                        ]
+                    },
+                    "label": {}
+                }
+            }
+        ],
+        "color": "#3CB4E6",
+        "outputLabels": [
+            "Eui",
+            "Temperature",
+            "PER",
+            "Voltage",
+            "RSSI",
+            "Missed packet"
+        ],
+        "icon": "node-red/switch.svg"
+    },
+    {
+        "id": "d5129a11.c2b478",
+        "type": "ui_tab",
+        "z": "",
+        "name": "STM32WL Demo",
+        "icon": "network_wifi",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "b2debca7.ea722",
+        "type": "ui_group",
+        "z": "",
+        "name": "Sensor List",
+        "tab": "d5129a11.c2b478",
+        "order": 2,
+        "disp": true,
+        "width": "16",
+        "collapse": false
+    },
+    {
+        "id": "5350d1c9.85f6",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-light",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#0094CE",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#097479",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "customTheme": {
+                "name": "Untitled Theme 1",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#0094CE",
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#fafafa",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#1bbfff",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#0094ce",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey"
+            }
+        },
+        "site": {
+            "name": "STM32WL Demo",
+            "hideToolbar": "true",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "false",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 48,
+                "sy": 48,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
+        "id": "529c45f6.781cac",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 3,
+        "width": 4,
+        "height": 1
+    },
+    {
+        "id": "b4aafdc3.5752f",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 5,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "8a725362.e49ee",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 6,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "33e6504d.69069",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 7,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "395e5102.5abf7e",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 8,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "b2997170.90516",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 2,
+        "width": 7,
+        "height": 1
+    },
+    {
+        "id": "58bbdfa7.a0b85",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 4,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "7c335b2c.a6ce94",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 5,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "bfcd7336.cbfe5",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 6,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "d721f029.e851d",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 3,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "52a28275.49c7cc",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 6,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "81410e0a.033bf",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 10,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "a6a0e4ea.df6198",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 15,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "18848a5.a3bdb76",
+        "type": "ui_group",
+        "z": "",
+        "name": "Sensor 0",
+        "tab": "d5129a11.c2b478",
+        "order": 4,
+        "disp": true,
+        "width": 8,
+        "collapse": true
+    },
+    {
+        "id": "36f009b.e058af6",
+        "type": "ui_group",
+        "z": "",
+        "name": "Sensor 1",
+        "tab": "d5129a11.c2b478",
+        "order": 5,
+        "disp": true,
+        "width": 8,
+        "collapse": true
+    },
+    {
+        "id": "5cf86100.5fd8",
+        "type": "ui_group",
+        "z": "",
+        "name": "Sensor 2",
+        "tab": "d5129a11.c2b478",
+        "order": 6,
+        "disp": true,
+        "width": 8,
+        "collapse": true
+    },
+    {
+        "id": "9142e5f0.a71698",
+        "type": "ui_group",
+        "z": "",
+        "name": "Sensor 3",
+        "tab": "d5129a11.c2b478",
+        "order": 7,
+        "disp": true,
+        "width": 8,
+        "collapse": true
+    },
+    {
+        "id": "2b4a56e8.103f4a",
+        "type": "ui_group",
+        "z": "",
+        "name": "Start",
+        "tab": "d5129a11.c2b478",
+        "order": 1,
+        "disp": false,
+        "width": 16,
+        "collapse": false
+    },
+    {
+        "id": "432fa6f0.ad6a58",
+        "type": "ui_group",
+        "z": "",
+        "d": true,
+        "name": "Test",
+        "tab": "d5129a11.c2b478",
+        "order": 19,
+        "disp": true,
+        "width": "8",
+        "collapse": false
+    },
+    {
+        "id": "de77cfaf.cfb3d",
+        "type": "ui_group",
+        "z": "",
+        "name": "Sensor 4",
+        "tab": "d5129a11.c2b478",
+        "order": 8,
+        "disp": true,
+        "width": 8,
+        "collapse": true
+    },
+    {
+        "id": "cc6b0d90.1c354",
+        "type": "ui_group",
+        "z": "",
+        "name": "Sensor 5",
+        "tab": "d5129a11.c2b478",
+        "order": 9,
+        "disp": true,
+        "width": 8,
+        "collapse": true
+    },
+    {
+        "id": "2b4810e4.a7abc",
+        "type": "ui_group",
+        "z": "",
+        "name": "Sensor 6",
+        "tab": "d5129a11.c2b478",
+        "order": 10,
+        "disp": true,
+        "width": 8,
+        "collapse": true
+    },
+    {
+        "id": "f272d8bc.1f1258",
+        "type": "ui_group",
+        "z": "",
+        "name": "Sensor 7",
+        "tab": "d5129a11.c2b478",
+        "order": 11,
+        "disp": true,
+        "width": 8,
+        "collapse": true
+    },
+    {
+        "id": "5d4d1f39.203d3",
+        "type": "ui_group",
+        "z": "",
+        "name": "Sensor 8",
+        "tab": "d5129a11.c2b478",
+        "order": 12,
+        "disp": true,
+        "width": 8,
+        "collapse": true
+    },
+    {
+        "id": "ea39e33e.e1e4a",
+        "type": "ui_group",
+        "z": "",
+        "name": "Sensor 9",
+        "tab": "d5129a11.c2b478",
+        "order": 13,
+        "disp": true,
+        "width": "8",
+        "collapse": true
+    },
+    {
+        "id": "62172772.5040f8",
+        "type": "ui_group",
+        "z": "",
+        "name": "Sensor 14",
+        "tab": "d5129a11.c2b478",
+        "order": 18,
+        "disp": true,
+        "width": 8,
+        "collapse": true
+    },
+    {
+        "id": "46964e10.8d71",
+        "type": "ui_group",
+        "z": "",
+        "name": "Sensor 13",
+        "tab": "d5129a11.c2b478",
+        "order": 17,
+        "disp": true,
+        "width": 8,
+        "collapse": true
+    },
+    {
+        "id": "b6edb24b.79389",
+        "type": "ui_group",
+        "z": "",
+        "name": "Sensor 12",
+        "tab": "d5129a11.c2b478",
+        "order": 16,
+        "disp": true,
+        "width": 8,
+        "collapse": true
+    },
+    {
+        "id": "88af1aa6.4fd9a8",
+        "type": "ui_group",
+        "z": "",
+        "name": "Sensor 11",
+        "tab": "d5129a11.c2b478",
+        "order": 15,
+        "disp": true,
+        "width": 8,
+        "collapse": true
+    },
+    {
+        "id": "1519e739.96fc29",
+        "type": "ui_group",
+        "z": "",
+        "name": "Sensor 10",
+        "tab": "d5129a11.c2b478",
+        "order": 14,
+        "disp": true,
+        "width": 8,
+        "collapse": true
+    },
+    {
+        "id": "a0308ba2.3cecc8",
+        "type": "ui_group",
+        "z": "",
+        "name": "Serial log",
+        "tab": "d5129a11.c2b478",
+        "order": 3,
+        "disp": true,
+        "width": "8",
+        "collapse": true
+    },
+    {
+        "id": "7f4e8cca.126c54",
+        "type": "serial-port",
+        "z": "",
+        "serialport": "to be configured",
+        "serialbaud": "9600",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "\\n",
+        "bin": "false",
+        "out": "char",
+        "addchar": "",
+        "responsetimeout": "10000"
+    },
+    {
+        "id": "92b0b085.50151",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "2b4a56e8.103f4a",
+        "order": 3,
+        "width": 8,
+        "height": 1
+    },
+    {
+        "id": "9126e737.60bac8",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "2b4a56e8.103f4a",
+        "order": 5,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "eef88fda.eeba7",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "b2debca7.ea722",
+        "order": 1,
+        "width": 10,
+        "height": 1
+    },
+    {
+        "id": "a44d21b7.829ff",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "a0308ba2.3cecc8",
+        "order": 1,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "90fefb15.8fbbf8",
+        "type": "ui_group",
+        "z": "",
+        "name": "Sensor List",
+        "tab": "",
+        "order": 2,
+        "disp": true,
+        "width": "16",
+        "collapse": false
+    },
+    {
+        "id": "4478db41.8cec94",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 3,
+        "width": 4,
+        "height": 1
+    },
+    {
+        "id": "7af2bf5d.6ef7f",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 5,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "6c727aa6.839144",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 6,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "fd1f5dd7.42078",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 7,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "9deaa819.71a518",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 8,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "161ee0ee.c02c0f",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 2,
+        "width": 7,
+        "height": 1
+    },
+    {
+        "id": "25bd315d.6cbb6e",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 4,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "bfbe2d18.7c0cb",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 5,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "30391755.445358",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 6,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "e370dcda.0bd1d",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 3,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "96875a8c.0769d8",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 6,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "fae16d1e.32c1b",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 10,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "f48de331.e3377",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 15,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "a1714f5e.9a1ba",
+        "type": "ui_group",
+        "z": "",
+        "name": "Start",
+        "tab": "",
+        "order": 1,
+        "disp": false,
+        "width": 16,
+        "collapse": false
+    },
+    {
+        "id": "ab32e5fd.f19398",
+        "type": "ui_group",
+        "z": "",
+        "name": "Serial log",
+        "tab": "",
+        "order": 3,
+        "disp": true,
+        "width": "8",
+        "collapse": true
+    },
+    {
+        "id": "9247c07.c682d4",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "a1714f5e.9a1ba",
+        "order": 3,
+        "width": 8,
+        "height": 1
+    },
+    {
+        "id": "218bcb08.187c14",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "a1714f5e.9a1ba",
+        "order": 5,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "d2bb1df4.56c23",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "90fefb15.8fbbf8",
+        "order": 1,
+        "width": 10,
+        "height": 1
+    },
+    {
+        "id": "d150a644.eec188",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "ab32e5fd.f19398",
+        "order": 1,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "abba8550.f6c3b8",
+        "type": "ui_group",
+        "z": "",
+        "name": "Sensor List",
+        "tab": "",
+        "order": 2,
+        "disp": true,
+        "width": "16",
+        "collapse": false
+    },
+    {
+        "id": "6728ea3c.1ebff4",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 3,
+        "width": 4,
+        "height": 1
+    },
+    {
+        "id": "271ad1d7.ea96fe",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 5,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "66f1924e.2021cc",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 6,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "a3815dc5.30fc",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 7,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "28b237dc.5c8348",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 8,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "95a9ee3d.9fd97",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 2,
+        "width": 7,
+        "height": 1
+    },
+    {
+        "id": "8336b27c.d733b",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 4,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "26aa3e61.442852",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 5,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "6edbb397.1ffedc",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 6,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "2a97eec6.a1f632",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 3,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "c266370c.922aa8",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 6,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "d3d60476.7b7dd8",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 10,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "df4fb842.03bbb8",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 15,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "6181f179.aa1ba",
+        "type": "ui_group",
+        "z": "",
+        "name": "Start",
+        "tab": "",
+        "order": 1,
+        "disp": false,
+        "width": 16,
+        "collapse": false
+    },
+    {
+        "id": "c137f300.32918",
+        "type": "ui_group",
+        "z": "",
+        "name": "Serial log",
+        "tab": "",
+        "order": 3,
+        "disp": true,
+        "width": "8",
+        "collapse": true
+    },
+    {
+        "id": "f190fca2.5bcd9",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "6181f179.aa1ba",
+        "order": 3,
+        "width": 8,
+        "height": 1
+    },
+    {
+        "id": "524d8ec6.82e45",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "6181f179.aa1ba",
+        "order": 5,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "ee3f829b.d7028",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "abba8550.f6c3b8",
+        "order": 1,
+        "width": 10,
+        "height": 1
+    },
+    {
+        "id": "d5af4cd3.e48dc",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "c137f300.32918",
+        "order": 1,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "fbdb44d2.d1f818",
+        "type": "ui_group",
+        "z": "",
+        "name": "Sensor List",
+        "tab": "",
+        "order": 2,
+        "disp": true,
+        "width": "16",
+        "collapse": false
+    },
+    {
+        "id": "8843d469.8c8858",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 3,
+        "width": 4,
+        "height": 1
+    },
+    {
+        "id": "fba6c910.8119b8",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 5,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "349e568f.c2461a",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 6,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "650be355.012acc",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 7,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "73e10a45.754d84",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 8,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "a5ca9166.9b1ba",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 2,
+        "width": 7,
+        "height": 1
+    },
+    {
+        "id": "226b81e9.5e785e",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 4,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "98cbb43f.3d0318",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 5,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "ec5460ad.fbbbb",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 6,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "4496b460.ce1e4c",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 3,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "46ddabdc.f77914",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 6,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "a2d3811.c21ff8",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 10,
+        "width": 1,
+        "height": 1
+    },
+    {
+        "id": "2e20b2c6.71ee2e",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "",
+        "order": 15,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "9274d245.b0186",
+        "type": "ui_group",
+        "z": "",
+        "name": "Start",
+        "tab": "",
+        "order": 1,
+        "disp": false,
+        "width": 16,
+        "collapse": false
+    },
+    {
+        "id": "e3fec7ac.9cb508",
+        "type": "ui_group",
+        "z": "",
+        "name": "Serial log",
+        "tab": "",
+        "order": 3,
+        "disp": true,
+        "width": "8",
+        "collapse": true
+    },
+    {
+        "id": "dc5b7cf6.7af3c",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "9274d245.b0186",
+        "order": 3,
+        "width": 8,
+        "height": 1
+    },
+    {
+        "id": "6c986be9.2d8fb4",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "9274d245.b0186",
+        "order": 5,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "ed8ba8ba.a44408",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "fbdb44d2.d1f818",
+        "order": 1,
+        "width": 10,
+        "height": 1
+    },
+    {
+        "id": "bfdfd16.d0ffe3",
+        "type": "ui_spacer",
+        "name": "spacer",
+        "group": "e3fec7ac.9cb508",
+        "order": 1,
+        "width": 2,
+        "height": 1
+    },
+    {
+        "id": "c4ab1817.2388b8",
+        "type": "finite-state-machine",
+        "z": "59e12eb5.5a9e5",
+        "name": "FSM",
+        "fsmDefinition": "{\"state\":{\"status\":\"INIT\"},\"transitions\":{\"INIT\":{\"resetok\":\"IDLE\",\"start\":\"INIT\",\"connect\":\"INIT\"},\"IDLE\":{\"start\":\"SEND_REGION\",\"connect\":\"INIT\"},\"SEND_REGION\":{\"disconnect\":\"INIT\",\"error\":\"INIT\",\"ok\":\"SEND_SUBREGION\",\"resetok\":\"IDLE\"},\"SEND_SUBREGION\":{\"disconnect\":\"INIT\",\"error\":\"INIT\",\"ok\":\"STARTING\",\"resetok\":\"IDLE\"},\"STARTING\":{\"ok\":\"STARTED\",\"error\":\"INIT\",\"disconnect\":\"INIT\",\"resetok\":\"IDLE\"},\"STARTED\":{\"ok\":\"STARTED\",\"error\":\"INIT\",\"start\":\"SEND_REGION\",\"disconnect\":\"INIT\",\"resetok\":\"IDLE\"}}}",
+        "sendInitialState": false,
+        "sendStateWithoutChange": true,
+        "showTransitionErrors": false,
+        "x": 470,
+        "y": 620,
+        "wires": [
+            [
+                "df655368.4e413",
+                "bd72e112.5c2e4"
+            ]
+        ]
+    },
+    {
+        "id": "df655368.4e413",
+        "type": "switch",
+        "z": "59e12eb5.5a9e5",
+        "name": "state",
+        "property": "payload.status",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "INIT",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "IDLE",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "SEND_REGION",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "SEND_SUBREGION",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "STARTING",
+                "vt": "str"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 5,
+        "x": 650,
+        "y": 620,
+        "wires": [
+            [
+                "df11565e.a57338",
+                "3e770f37.f0604"
+            ],
+            [
+                "f60cd38d.e557",
+                "3e770f37.f0604"
+            ],
+            [
+                "87e68382.5068b",
+                "7e17680d.1c86f8",
+                "62741f35.92aa8"
+            ],
+            [
+                "f0e185e6.4e3d28"
+            ],
+            [
+                "4f1c4e41.f46cf"
+            ]
+        ]
+    },
+    {
+        "id": "df11565e.a57338",
+        "type": "function",
+        "z": "59e12eb5.5a9e5",
+        "name": "Init board",
+        "func": "msg.payload=\"ATZ\"\nmsg.flow=\"DEMO\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 980,
+        "y": 740,
+        "wires": [
+            [
+                "cde3caa6.a39998"
+            ]
+        ]
+    },
+    {
+        "id": "b2c2bbd0.c43958",
+        "type": "serial out",
+        "z": "a8d0e4b7.6d91e8",
+        "name": "SERIAL OUT",
+        "serial": "7f4e8cca.126c54",
+        "x": 450,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "95a74fab.0408c",
+        "type": "link in",
+        "z": "a8d0e4b7.6d91e8",
+        "name": "Serial port output",
+        "links": [
+            "ef79a5f0.536bd8"
+        ],
+        "x": 275,
+        "y": 220,
+        "wires": [
+            [
+                "b2c2bbd0.c43958",
+                "490784a.132e87c"
+            ]
+        ]
+    },
+    {
+        "id": "8795d342.58d38",
+        "type": "serial in",
+        "z": "a8d0e4b7.6d91e8",
+        "name": "SERIAL IN",
+        "serial": "7f4e8cca.126c54",
+        "x": 660,
+        "y": 220,
+        "wires": [
+            [
+                "47d31c4d.19bd34",
+                "e67637e8.a2ce38"
+            ]
+        ]
+    },
+    {
+        "id": "e67637e8.a2ce38",
+        "type": "link out",
+        "z": "a8d0e4b7.6d91e8",
+        "name": "Serial port input",
+        "links": [
+            "7b45712e.e1d8a",
+            "7f5edb0.a143524"
+        ],
+        "x": 1075,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "47d31c4d.19bd34",
+        "type": "debug",
+        "z": "a8d0e4b7.6d91e8",
+        "name": "Serial Port In",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 850,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "4c33b045.a22cb",
+        "type": "status",
+        "z": "a8d0e4b7.6d91e8",
+        "name": "Serial port status",
+        "scope": [
+            "8795d342.58d38"
+        ],
+        "x": 900,
+        "y": 340,
+        "wires": [
+            [
+                "e67637e8.a2ce38"
+            ]
+        ]
+    },
+    {
+        "id": "3ada1abf.c18c36",
+        "type": "comment",
+        "z": "a8d0e4b7.6d91e8",
+        "name": "SERIAL PORT CONFIGURATION",
+        "info": "",
+        "x": 240,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "ecda66a.cdf3d98",
+        "type": "comment",
+        "z": "a8d0e4b7.6d91e8",
+        "name": "From AT CMD",
+        "info": "",
+        "x": 170,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "4693028e.eb7a8c",
+        "type": "comment",
+        "z": "a8d0e4b7.6d91e8",
+        "name": "Select the Serial Port in this node",
+        "info": "**SERIAL PORT PARAMETERS**\n\nTo change the serial port, open the node \"SERIAL OUT\" and \"SERIAL IN\"\nThe Serial port must be configured with :\n - Speed : 9600 Bps\n - 8 bits\n - Parity None\n - 1 Stop bit\n - COM port number\n \n\n",
+        "x": 450,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "cde3caa6.a39998",
+        "type": "link out",
+        "z": "59e12eb5.5a9e5",
+        "name": "send to at command",
+        "links": [
+            "82d780ea.aa032"
+        ],
+        "x": 1275,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "76996be9.b3c0d4",
+        "type": "link in",
+        "z": "59e12eb5.5a9e5",
+        "name": "receive from AT command",
+        "links": [
+            "14b0b08.240395",
+            "97abf4fc.33d908"
+        ],
+        "x": 155,
+        "y": 780,
+        "wires": [
+            [
+                "d1201ee.35f1be"
+            ]
+        ]
+    },
+    {
+        "id": "6899ce60.b44d2",
+        "type": "ui_button",
+        "z": "59e12eb5.5a9e5",
+        "name": "Start button",
+        "group": "2b4a56e8.103f4a",
+        "order": 6,
+        "width": 6,
+        "height": 1,
+        "passthru": false,
+        "label": "START",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "start",
+        "x": 190,
+        "y": 540,
+        "wires": [
+            [
+                "c4ab1817.2388b8"
+            ]
+        ]
+    },
+    {
+        "id": "87e68382.5068b",
+        "type": "function",
+        "z": "59e12eb5.5a9e5",
+        "name": "Init region",
+        "func": "msg.payload=\"AT+REGION=\"+flow.get(\"Region\",\"file\");\nmsg.flow=\"DEMO\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 980,
+        "y": 780,
+        "wires": [
+            [
+                "cde3caa6.a39998"
+            ]
+        ]
+    },
+    {
+        "id": "f0e185e6.4e3d28",
+        "type": "function",
+        "z": "59e12eb5.5a9e5",
+        "name": "Init sub region",
+        "func": "msg.payload=\"AT+SUBREGION=\" + flow.get(\"SubRegion\",\"file\");\nmsg.flow=\"DEMO\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1000,
+        "y": 820,
+        "wires": [
+            [
+                "cde3caa6.a39998"
+            ]
+        ]
+    },
+    {
+        "id": "4f1c4e41.f46cf",
+        "type": "function",
+        "z": "59e12eb5.5a9e5",
+        "name": "start ",
+        "func": "msg.payload=\"AT+BEACON_ON\"\nmsg.flow=\"DEMO\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 970,
+        "y": 860,
+        "wires": [
+            [
+                "cde3caa6.a39998"
+            ]
+        ]
+    },
+    {
+        "id": "d1201ee.35f1be",
+        "type": "switch",
+        "z": "59e12eb5.5a9e5",
+        "name": "dispatch msg",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "data",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 2,
+        "x": 270,
+        "y": 780,
+        "wires": [
+            [
+                "c18290bc.de92"
+            ],
+            [
+                "34154d52.a699f2",
+                "c4ab1817.2388b8"
+            ]
+        ]
+    },
+    {
+        "id": "c18290bc.de92",
+        "type": "function",
+        "z": "59e12eb5.5a9e5",
+        "name": "parse data",
+        "func": "var pos= msg.payload.search(\"RCV\");\nif (pos==3){\n    data= msg.payload.split(\",\");\n    //data[0].substr(7);\n    //msg.payload.msgid=data[1];\n    msg.payload={\n        eui : data[0].substring(7,20),\n        msgId : parseInt(data[1]),\n        version: data[2],\n        rssi : data[3],\n        snr : data[4],\n        temperature : data[5],\n        voltage : data [6]\n        };\n}\nmsg.pos=pos;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 490,
+        "y": 980,
+        "wires": [
+            [
+                "bd3e021.b282d"
+            ]
+        ]
+    },
+    {
+        "id": "bd3e021.b282d",
+        "type": "function",
+        "z": "59e12eb5.5a9e5",
+        "name": "compute sensor data",
+        "func": "// read the sensor list\nvar sensorList = flow.get(\"sensorList\");\nif (sensorList===undefined ) {\n    sensorList=[];\n    flow.set(\"sensorList\", sensorList);\n}\nvar index=-1;\nvar newSensor=false;\n\n// search the sensor in the list\nsensorList.forEach(function(item,i,array){\n   if (item.eui==msg.payload.eui) {\n       index=i;\n   }\n});\n\nif (index===-1) {\n    // sensor not found, add new sensor in the list\n    if (sensorList.length>14) { \n        // List full, discard message\n        return null;\n    }\n    newSensor=true;\n    index=sensorList.length;\n    sensorList.push({\n        \"eui\":msg.payload.eui,\n        \"received\":0,\n        \"missed\":0,\n        \"PER\":0,\n        \"index\":index,\n        \"lastMsgId\":msg.payload.msgId-1\n        });\n        \n}\n\n// compute the sensor information\nvar sensor = sensorList[index];\n\nif (msg.payload.msgId<=sensor.lastMsgId)  {\n// wrap or reset of the counter (8 bit)   \n    sensor.lastMsgId=msg.payload.msgId-1;\n}\nif (msg.payload.msgId>sensor.lastMsgId+1) {\n    // missed packet detected\n    sensor.missed=sensor.missed+ (msg.payload.msgId-sensor.lastMsgId-1);\n}\nsensor.lastMsgId=msg.payload.msgId;\nsensor.received=sensor.received+1;\nsensor.rssi=msg.payload.rssi;\nsensor.snr=msg.payload.snr;\nsensor.temperature=msg.payload.temperature;\nsensor.voltage=msg.payload.voltage;\nsensor.PER=new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 }).format(100*sensor.missed/(sensor.missed+sensor.received));\n//flow.set(\"sensorList\", sensorList);\n\n\n// build the message with data for the table\nmsg.topic=index;\nmsg.payload.PER=sensor.PER;\nmsg.payload.index=sensor.index;\nmsg.payload.received=sensor.received;\nmsg.payload.missed=sensor.missed;\n\nif (newSensor===true) {\n    // send the new sensor index to activate the chart.\n    return [msg, { payload:index }];\n}\n\nreturn msg;",
+        "outputs": 2,
+        "noerr": 0,
+        "x": 720,
+        "y": 980,
+        "wires": [
+            [
+                "1ed7a60.d0f125a"
+            ],
+            [
+                "aed338fe.494a38",
+                "a59f1e4c.5427c"
+            ]
+        ]
+    },
+    {
+        "id": "9dea389b.6bd0e8",
+        "type": "ui_table",
+        "z": "59e12eb5.5a9e5",
+        "group": "b2debca7.ea722",
+        "name": "Sensor list",
+        "order": 4,
+        "width": 16,
+        "height": 7,
+        "columns": [],
+        "outputs": 1,
+        "cts": true,
+        "x": 790,
+        "y": 1420,
+        "wires": [
+            [
+                "8e73ee50.e0d33",
+                "335ef770.112358"
+            ]
+        ]
+    },
+    {
+        "id": "916d920f.214be",
+        "type": "ui_ui_control",
+        "z": "59e12eb5.5a9e5",
+        "name": "",
+        "events": "all",
+        "x": 1420,
+        "y": 1080,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8e73ee50.e0d33",
+        "type": "function",
+        "z": "59e12eb5.5a9e5",
+        "name": "Display charts",
+        "func": "\nvar UIConfig={\n    \"group\": {\n        \"open\": [\"STM32WL_Demo_Sensor_\"+msg.payload.index ]\n    }\n}\n\n\nmsg.payload=UIConfig;\nreturn msg;\n    \n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1000,
+        "y": 1380,
+        "wires": [
+            [
+                "810e21d3.ec014"
+            ]
+        ],
+        "info": "This function "
+    },
+    {
+        "id": "3f1b8b9e.39a914",
+        "type": "switch",
+        "z": "236fcfed.94589",
+        "name": "filter variable",
+        "property": "payload.variablename",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "varfilter",
+                "vt": "env"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 170,
+        "y": 60,
+        "wires": [
+            [
+                "4053245a.6d371c"
+            ]
+        ]
+    },
+    {
+        "id": "4053245a.6d371c",
+        "type": "change",
+        "z": "236fcfed.94589",
+        "name": "keep only table of duplets",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.variabledata",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 430,
+        "y": 60,
+        "wires": [
+            [
+                "ab7c4fa8.be436"
+            ]
+        ]
+    },
+    {
+        "id": "ab7c4fa8.be436",
+        "type": "split",
+        "z": "236fcfed.94589",
+        "name": "Split a table[1..n] of duplets in n msg of single duplet",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 800,
+        "y": 60,
+        "wires": [
+            [
+                "d91c9e64.8de3b"
+            ]
+        ]
+    },
+    {
+        "id": "d91c9e64.8de3b",
+        "type": "delay",
+        "z": "236fcfed.94589",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "10",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": true,
+        "x": 200,
+        "y": 140,
+        "wires": [
+            [
+                "4e8e567a.8eef08"
+            ]
+        ]
+    },
+    {
+        "id": "4e8e567a.8eef08",
+        "type": "change",
+        "z": "236fcfed.94589",
+        "name": "keep only value and delete timestamp",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.y",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 490,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "73e827cd.3550b8",
+        "type": "inject",
+        "z": "59e12eb5.5a9e5",
+        "name": "Initialize",
+        "topic": "reset",
+        "payload": "",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0.2",
+        "x": 200,
+        "y": 660,
+        "wires": [
+            [
+                "c4ab1817.2388b8"
+            ]
+        ]
+    },
+    {
+        "id": "b4c54013.4253c",
+        "type": "ui_dropdown",
+        "z": "59e12eb5.5a9e5",
+        "name": "Region",
+        "label": "Region",
+        "tooltip": "",
+        "place": "Select option",
+        "group": "2b4a56e8.103f4a",
+        "order": 2,
+        "width": 8,
+        "height": 1,
+        "passthru": true,
+        "multiple": false,
+        "options": [
+            {
+                "label": "869.525 MHz - European Union",
+                "value": "0",
+                "type": "str"
+            },
+            {
+                "label": "925.000 MHz - United States/Australia",
+                "value": "1",
+                "type": "str"
+            },
+            {
+                "label": "923.400 MHz - Asia",
+                "value": "2",
+                "type": "str"
+            },
+            {
+                "label": "470.300 MHz - China",
+                "value": "3",
+                "type": "str"
+            },
+            {
+                "label": "865.100 MHz - India",
+                "value": "4",
+                "type": "str"
+            },
+            {
+                "label": "868.950 MHz - Russia",
+                "value": "5",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "Region",
+        "x": 500,
+        "y": 140,
+        "wires": [
+            [
+                "37b69873.ba9b88"
+            ]
+        ]
+    },
+    {
+        "id": "37b69873.ba9b88",
+        "type": "function",
+        "z": "59e12eb5.5a9e5",
+        "name": "Configure SubRegion",
+        "func": "if (msg.topic===\"Region\") {\n    flow.set (\"Region\",msg.payload,\"file\");\n    var subRegion=[];\n    switch (msg.payload) {\n        case \"0\" : subRegion=[{\"European Union\":\"0\"}];\n        break;\n        case \"1\" : subRegion=[ {\"Australia\":\"1\"}, {\"United Stated\":\"0\"}];\n        break;\n        case \"2\" : subRegion=[ {\"Generic Asia\":\"2\"}, {\"Japan\":\"1\"}, {\"Republic of Korea\":\"0\"}  ];\n        break;\n        case \"3\" : subRegion=[ {\"China\":\"0\"}];\n        break;\n        case \"4\" : subRegion=[ {\"India\":\"0\"}];\n        break;\n        case \"5\" : subRegion=[ {\"Russia\":\"0\"}];\n        break;\n    }\n    msg.payload=flow.get(\"SubRegion\");\n    msg.topic=\"SubRegion\";\n    msg.options=subRegion;\n    return msg;\n}\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 700,
+        "y": 140,
+        "wires": [
+            [
+                "3804666d.fb766a"
+            ]
+        ]
+    },
+    {
+        "id": "3804666d.fb766a",
+        "type": "ui_dropdown",
+        "z": "59e12eb5.5a9e5",
+        "name": "SubRegion",
+        "label": "SubRegion",
+        "tooltip": "",
+        "place": "Select option",
+        "group": "2b4a56e8.103f4a",
+        "order": 4,
+        "width": 8,
+        "height": 1,
+        "passthru": true,
+        "multiple": false,
+        "options": [
+            {
+                "label": "Europe",
+                "value": "0",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "",
+        "x": 910,
+        "y": 140,
+        "wires": [
+            [
+                "c167f596.45b008"
+            ]
+        ]
+    },
+    {
+        "id": "c167f596.45b008",
+        "type": "change",
+        "z": "59e12eb5.5a9e5",
+        "name": "Set SubRegion",
+        "rules": [
+            {
+                "t": "set",
+                "p": "#:(file)::SubRegion",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1100,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6964f882.de0aa8",
+        "type": "ui_ui_control",
+        "z": "59e12eb5.5a9e5",
+        "name": "",
+        "events": "all",
+        "x": 1400,
+        "y": 560,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7e17680d.1c86f8",
+        "type": "change",
+        "z": "59e12eb5.5a9e5",
+        "name": "Display the sensor panels",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"group\":{\"hide\":[\"STM32WL_Demo_Start\"],\"show\":[\"STM32WL_Demo_Sensor_List\",\"STM32WL_Demo_Serial_log\"]}}",
+                "tot": "json"
+            },
+            {
+                "t": "set",
+                "p": "initDone",
+                "pt": "flow",
+                "to": "true",
+                "tot": "bool"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1030,
+        "y": 620,
+        "wires": [
+            [
+                "6964f882.de0aa8"
+            ]
+        ]
+    },
+    {
+        "id": "ea88718a.c51d9",
+        "type": "change",
+        "z": "59e12eb5.5a9e5",
+        "name": "Display the country page",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"group\":{\"hide\":[\"STM32WL_Demo_Sensor_List\",\"STM32WL_Demo_Sensor_0\",\"STM32WL_Demo_Sensor_1\",\"STM32WL_Demo_Sensor_2\",\"STM32WL_Demo_Sensor_3\",\"STM32WL_Demo_Sensor_4\",\"STM32WL_Demo_Sensor_5\",\"STM32WL_Demo_Sensor_6\",\"STM32WL_Demo_Sensor_7\",\"STM32WL_Demo_Sensor_8\",\"STM32WL_Demo_Sensor_9\",\"STM32WL_Demo_Sensor_10\",\"STM32WL_Demo_Sensor_11\",\"STM32WL_Demo_Sensor_12\",\"STM32WL_Demo_Sensor_13\",\"STM32WL_Demo_Sensor_14\",\"STM32WL_Demo_Serial_log\"],\"close\":[\"STM32WL_Demo_Sensor_0\",\"STM32WL_Demo_Sensor_1\",\"STM32WL_Demo_Sensor_2\",\"STM32WL_Demo_Sensor_3\",\"STM32WL_Demo_Sensor_4\",\"STM32WL_Demo_Sensor_5\",\"STM32WL_Demo_Sensor_6\",\"STM32WL_Demo_Sensor_7\",\"STM32WL_Demo_Sensor_8\",\"STM32WL_Demo_Sensor_9\",\"STM32WL_Demo_Sensor_10\",\"STM32WL_Demo_Sensor_11\",\"STM32WL_Demo_Sensor_12\",\"STM32WL_Demo_Sensor_13\",\"STM32WL_Demo_Sensor_14\",\"STM32WL_Demo_Serial_log\"],\"show\":[\"STM32WL_Demo_Start\"]}}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1230,
+        "y": 460,
+        "wires": [
+            [
+                "6964f882.de0aa8"
+            ]
+        ]
+    },
+    {
+        "id": "777eeea.dadd21",
+        "type": "ui_text",
+        "z": "59e12eb5.5a9e5",
+        "group": "2b4a56e8.103f4a",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "home page title",
+        "label": "Select region and subregion to start the demo",
+        "format": "",
+        "layout": "row-spread",
+        "x": 600,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "1ed7a60.d0f125a",
+        "type": "link out",
+        "z": "59e12eb5.5a9e5",
+        "name": "sensor data",
+        "links": [
+            "d9fb768d.070868",
+            "7c07f4c1.84e31c",
+            "1770db95.11ff54"
+        ],
+        "x": 915,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "ad038bb6.f91028",
+        "type": "link out",
+        "z": "59e12eb5.5a9e5",
+        "name": "Clear data",
+        "links": [
+            "7c07f4c1.84e31c",
+            "f0d12a7d.1d0b38"
+        ],
+        "x": 1135,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "f0d12a7d.1d0b38",
+        "type": "link in",
+        "z": "59e12eb5.5a9e5",
+        "name": "Clear data",
+        "links": [
+            "ad038bb6.f91028",
+            "b7886fe7.1dfc"
+        ],
+        "x": 155,
+        "y": 1420,
+        "wires": [
+            [
+                "e707b134.fbbe4"
+            ]
+        ]
+    },
+    {
+        "id": "86f39161.8c7d1",
+        "type": "change",
+        "z": "b70194c3.65f4b8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.temperature",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 711,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "774d74ce.f539bc",
+        "type": "ui_chart",
+        "z": "205bafec.d7d23",
+        "name": "temperature",
+        "group": "18848a5.a3bdb76",
+        "order": 4,
+        "width": 8,
+        "height": 3,
+        "label": "Temperature °C",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 770,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "52c41347.a2583c",
+        "type": "change",
+        "z": "b70194c3.65f4b8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.voltage",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 711,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "75ef6ca1.564484",
+        "type": "ui_gauge",
+        "z": "205bafec.d7d23",
+        "name": "voltage",
+        "group": "18848a5.a3bdb76",
+        "order": 3,
+        "width": 3,
+        "height": 3,
+        "gtype": "gage",
+        "title": "Voltage",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "2",
+        "max": "3.5",
+        "colors": [
+            "#b50000",
+            "#e6e600",
+            "#02ff22"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 760,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "e611a6fd.5905b8",
+        "type": "ui_chart",
+        "z": "205bafec.d7d23",
+        "name": "temperature",
+        "group": "36f009b.e058af6",
+        "order": 4,
+        "width": 8,
+        "height": 3,
+        "label": "Temperature",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 770,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5e9d0587.26229c",
+        "type": "change",
+        "z": "b70194c3.65f4b8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.eui",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 711,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "44abb180.5203a",
+        "type": "ui_text",
+        "z": "205bafec.d7d23",
+        "group": "18848a5.a3bdb76",
+        "order": 1,
+        "width": 8,
+        "height": 1,
+        "name": "",
+        "label": "Eui",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "x": 753,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "6ccc4b19.9495d4",
+        "type": "ui_text",
+        "z": "205bafec.d7d23",
+        "group": "36f009b.e058af6",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Sensor eui",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "x": 773,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "5bbf19ec.90a4c8",
+        "type": "ui_chart",
+        "z": "205bafec.d7d23",
+        "name": "temperature",
+        "group": "5cf86100.5fd8",
+        "order": 4,
+        "width": 8,
+        "height": 3,
+        "label": "Temperature",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 770,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "22126a6a.f8c326",
+        "type": "ui_text",
+        "z": "205bafec.d7d23",
+        "group": "5cf86100.5fd8",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Sensor eui",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "x": 770,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "dd156521.aeefa8",
+        "type": "ui_chart",
+        "z": "205bafec.d7d23",
+        "name": "temperature",
+        "group": "9142e5f0.a71698",
+        "order": 4,
+        "width": 8,
+        "height": 3,
+        "label": "Temperature",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 770,
+        "y": 740,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "941747fe.4814c8",
+        "type": "ui_text",
+        "z": "205bafec.d7d23",
+        "group": "9142e5f0.a71698",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Sensor eui",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "x": 770,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "7c07f4c1.84e31c",
+        "type": "link in",
+        "z": "205bafec.d7d23",
+        "name": "sensor data",
+        "links": [
+            "1ed7a60.d0f125a",
+            "ad038bb6.f91028",
+            "bc171374.1c95d",
+            "b7886fe7.1dfc"
+        ],
+        "x": 75,
+        "y": 1460,
+        "wires": [
+            [
+                "e044734e.64791",
+                "7889ef21.0b336",
+                "ed1a718e.cdc92",
+                "99f2e44.7e69118",
+                "ba80848e.5b9878",
+                "14409ed9.a83b61",
+                "b573309f.96e7d",
+                "dff47ff3.0ad1f",
+                "225144fc.df8a3c",
+                "d63fdcb7.be978",
+                "e0b2bf80.2af6",
+                "301efc2f.c7b5d4",
+                "b2cd27e3.d916a8",
+                "f561cc21.64bed",
+                "9a713750.0519b8"
+            ]
+        ]
+    },
+    {
+        "id": "16bf47e8.318878",
+        "type": "change",
+        "z": "b70194c3.65f4b8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.PER",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 711,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f2b4cbb.3633f38",
+        "type": "ui_chart",
+        "z": "205bafec.d7d23",
+        "name": "missed packet",
+        "group": "18848a5.a3bdb76",
+        "order": 2,
+        "width": 5,
+        "height": 3,
+        "label": "Missed Packet",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "step",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 780,
+        "y": 260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1ff1e339.f9499d",
+        "type": "function",
+        "z": "6074a628.24f198",
+        "name": "scan subnet",
+        "func": "var ipString = env.get('ipString') || '';\nvar start = env.get('start') || 1;\nvar end = env.get('end') || 255;\nvar suffix = env.get('suffix') || '/json';\n\nif (!msg.payload.hasOwnProperty(\"command\")) { // if no command scan complete subnet\n    for (let i=start; i<end+1; i++){\n        node.send({\"url\":ipString+i+\"/json\"})\n    }\n} else { // message form popup menue\n    switch (msg.payload.command){\n        case \"updateDevice\":\n            if (msg.payload.hasOwnProperty(\"$localip\") && \n                msg.payload.name===\"ESP Easy Mega\") {\n                    node.status({fill:\"green\", shape:\"dot\", text:\"scan \"+msg.payload.$localip})\n                    return({\"url\":\"http://\"+msg.payload.$localip+\"/json\"});\n            }\n            break;\n        case \"updateDevices\":\n            for (let i=start; i<end+1; i++){\n                node.send({\"url\":ipString+i+\"/json\"})\n            }\n            break;\n    }\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 206,
+        "y": 85,
+        "wires": [
+            []
+        ],
+        "icon": "node-red/white-globe.svg"
+    },
+    {
+        "id": "73ad843.7ad667c",
+        "type": "function",
+        "z": "a4435987.cef7d8",
+        "name": "handle tableData",
+        "func": "/* ui table handler is a subflow from Christian-Me\n https://github.com/Christian-Me/remote-device-table */\n\n/* Modification : addition of group name in variables to improve refresh when ui-groups are unhidden\n Copyright 2020 STMicroelectronics */\n \n/*  Licensed under the Apache License, Version 2.0 (the \"License\");\n   you may not use this file except in compliance with the License.\n   You may obtain a copy of the License at\n\n       http://www.apache.org/licenses/LICENSE-2.0\n\n   Unless required by applicable law or agreed to in writing, software\n   distributed under the License is distributed on an \"AS IS\" BASIS,\n   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n   See the License for the specific language governing permissions and\n   limitations under the License. */\n   \nvar status = {fill:\"red\",shape:\"dot\",text: \"payload \"};\nvar tableIndex = env.get(\"tableIndex\") || \"$topic\";\nvar tableDataProp = env.get(\"tableDataProp\") || \"row\";\nvar tableContext = env.get(\"tableContext\");\nvar dashboard = env.get(\"dashboard\");\nvar group = env.get(\"group\");\nif (!tableContext.hasOwnProperty(\"tableData\") || !tableContext.hasOwnProperty(\"tableConfig\")) {\n    status.text=\"tableContext not defined\";\n    node.error(status.text);\n    return [{payload:status},null];\n}\n\n// context store to cache table data (memoryOnly prefered)\nvar tableData = flow.get(\"$parent.\"+tableContext.tableData.name,tableContext.tableData.storage);\nif (tableData===undefined) {\n    //node.warn(\"[ui-table handler] tableData initialized!\");\n    tableData={};\n    flow.set(\"$parent.\"+tableContext.tableData.name,tableData,tableContext.tableData.storage);\n}\n\n// context Store to save table configuration (file)\nvar tableConfig = flow.get(\"$parent.\"+tableContext.tableConfig.name,tableContext.tableConfig.storage);\nif (tableConfig===undefined) {\n    //node.warn(\"[ui-table handler] tableConfig initialized!\");\n    tableConfig={ResponsiveLayout:true};\n    flow.set(\"$parent.\"+tableContext.tableConfig.name,tableConfig,tableContext.tableConfig.storage);\n}\n\n// context Store to save table configuration (file)\nvar tableEdit;\nif (tableContext.hasOwnProperty(\"tableEdit\")) {\n    tableEdit = flow.get(\"$parent.\"+tableContext.tableEdit.name,tableContext.tableEdit.storage);\n    if (tableEdit===undefined) {\n        //node.warn(\"[ui-table handler] tableEdit initialized!\");\n        tableEdit={};\n        flow.set(\"$parent.\"+tableContext.tableEdit.name,tableEdit,tableContext.tableEdit.storage);\n    }\n}\n\n// function to merge partial data into existing table row\nvar mergeObject = function (destination, source, filter) {\n    for (let currentSource in source) {\n        if (source.hasOwnProperty(currentSource)) {\n            if (filter!==undefined && tableEdit && tableEdit.hasOwnProperty(filter) && tableEdit[filter].hasOwnProperty(currentSource)) {\n                destination[currentSource]= tableEdit[filter][currentSource];\n                source[currentSource]=tableEdit[filter][currentSource];\n            } else {\n                destination[currentSource]= source[currentSource];\n            }\n        }    \n    }\n    return source;\n};\n    \n// deep search for a column\nvar searchTabulatorColumn = function (columns,key,match) {\n    var result;\n    for (let column of columns) {\n        if (column.hasOwnProperty(\"columns\")) {\n            result = searchTabulatorColumn(column.columns,key,match);\n            if (result!==undefined) return result;\n        } else if (column.hasOwnProperty(key) && column[key]===match) {\n            return column;\n        }\n    }\n};\n\n// command message to update add or update data on ui-table\nvar msgToTable={};\nmsgToTable.payload={\n    \"command\":\"updateOrAddData\",\n    \"arguments\": [],\n    \"returnPromise\": false\n};\n\nif (msg.hasOwnProperty(tableDataProp)) {\n    // store data for later recover\n    if (!msg.hasOwnProperty(\"topic\")) { // check if index existst\n        status.text=\"msg.topic not defined!\";\n        return [{payload:status},null];\n    }\n    if (!tableData.hasOwnProperty(msg.topic)){ // first seen\n        tableData[msg.topic]={};\n        if (tableEdit && tableEdit.hasOwnProperty(msg.topic)) { // table edits available!\n            Object.keys(tableEdit[msg.topic]).forEach((key) => {\n                msg[tableDataProp][key]=tableEdit[msg.topic][key];\n                tableData[msg.topic][key]=tableEdit[msg.topic][key];\n            })\n        }\n    }\n    if (!tableData[msg.topic].hasOwnProperty(tableIndex)) tableData[msg.topic][tableIndex]=msg.topic;\n    msg[tableDataProp]=mergeObject(tableData[msg.topic],msg[tableDataProp],msg.topic);\n    msg[tableDataProp][tableIndex]=msg.topic;\n    msgToTable.payload.arguments=[[msg[tableDataProp]]];\n    status.fill=\"green\";\n    status.text=msg.topic+\" updated\";\n    return [{payload:status},msgToTable,null];\n} if (msg.payload===\"connect\" || (msg.payload===\"change\" && msg.name===dashboard) ||(msg.payload===\"group\" && msg.group===group) || (msg.hasOwnProperty(\"payload\") && msg.payload.hasOwnProperty(\"command\"))) { \n    if (!msg.hasOwnProperty(\"ui_control\")) {\n        msg.ui_control = env.get('tabulator');\n        status.text+=\" ui_control added\";\n    }\n    //process commands\n    //node.warn({\"command\":msg.payload.command,\"msg\":msg,\"object\":msg.payload.object})\n    if (msg.payload.hasOwnProperty(\"command\")) {\n        status.fill=\"blue\";\n        switch(msg.payload.command) {\n            case 'deleteTable':\n                flow.set(\"$parent.\"+tableContext.tableData.name,undefined,tableContext.tableData.storage);\n                tableData={};\n                status.text=\"tabledata deleted\";\n                //node.warn(\"[ui-table handler] \"+\"tabledata deleted\");\n                break;\n            case 'deleteDevice':\n                if (tableData.hasOwnProperty(msg.payload.object)) {\n                    delete tableData[msg.payload.object];\n                    status.text=msg.payload.object+\" deleted\";\n                } else {\n                    status.fill=\"yellow\";\n                    status.text=msg.payload.object+\" undefined\";\n                }\n                break;\n            case 'ignoreDevice':\n                if (tableData.hasOwnProperty(msg.payload.object)) {\n                    delete tableData[msg.payload.object];\n                    status.text=msg.payload.object+\" will be ignored\";\n                    if (!tableConfig.hasOwnProperty('ignoreDevice')) tableConfig.ignoreDevice={};\n                    tableConfig.ignoreDevice[msg.payload.object]=true;\n                }\n                break;\n            case 'unIgnoreDevice':\n                if (tableConfig.hasOwnProperty('ignoreDevice')) {\n                    delete tableConfig.ignoreDevice[msg.payload.object];\n                }\n                break;\n            case 'unIgnoreDevices':\n                delete tableConfig.ignoreDevice;\n                break;\n            case 'updateData':\n                status.text=\"column \"+msg.payload.column+\" updated\";\n                return [{payload:status},msg];\n            case 'updateTable':\n                status.text=msg.payload.command+\": \";\n                break;\n            case 'columnHide':\n                if (!tableConfig.hasOwnProperty('columnVisible')) tableConfig.columnVisible={};\n                tableConfig.columnVisible[msg.payload.object]=false;\n                break;\n            case 'columnUnHide':\n                if (!tableConfig.hasOwnProperty('columnVisible')) tableConfig.columnVisible={};\n                tableConfig.columnVisible[msg.payload.object]=true;\n                break;\n            case 'columnsUnHide':\n                for (let column in tableConfig.columnVisible) {\n                    if (tableConfig.columnVisible.hasOwnProperty(column)) tableConfig.columnVisible[column]=true;\n                }\n                break;\n            case 'refreshTable':\n                break;\n            case 'restoreColumnOrder':\n                delete tableConfig.columns;\n                break;\n            case 'resetColumnWidth':\n                delete tableConfig.columnWidths;\n                break;\n            case 'setResponsiveLayout':\n                tableConfig.ResponsiveLayout=!tableConfig.ResponsiveLayout;\n                break;\n            default:\n                status.fill=\"red\";\n                status.text=\"unknown command \"+msg.payload.command;\n                node.warn(\"[ui-table handler] \"+status.text);\n                break;\n        }\n        flow.set(\"$parent.\"+tableContext.tableConfig.name,tableConfig,tableContext.tableConfig.storage);\n        node.send([{payload:status},null,null]);\n    }\n\n    // crawl through tabulator arrays and updated user defined values\n    var crawlTabulator = function (columns,match,config,property) {\n        for (let column of columns) {\n            if (column.hasOwnProperty(\"columns\")) {\n                crawlTabulator(column.columns,match,config,property);\n            } else if (config.hasOwnProperty(column[match])) column[property]=config[column.field];\n        }\n    };\n    \n    // restore custom column width\n    if (tableConfig.hasOwnProperty(\"columnWidths\") && msg.hasOwnProperty(\"ui_control\")) {\n        crawlTabulator(msg.ui_control.tabulator.columns,\"field\",tableConfig.columnWidths,\"width\");\n    }\n    \n    // restore custom column hide/show\n    if (tableConfig.hasOwnProperty(\"columnVisible\") && msg.hasOwnProperty(\"ui_control\")) {\n        crawlTabulator(msg.ui_control.tabulator.columns,\"field\",tableConfig.columnVisible,\"visible\");\n    }\n    \n    // restore custom responsive / standard view\n    if (tableConfig.hasOwnProperty(\"ResponsiveLayout\")) {\n        if (!tableConfig.ResponsiveLayout) {\n            msg.ui_control.tabulator.responsiveLayout=false;\n        }\n        msg.ui_control.tabulator.columns.forEach((column,index) => {\n            if (column.formatter===\"responsiveCollapse\") { // hide expand column on any position\n                column.visible=tableConfig.ResponsiveLayout;\n                return;\n            }\n        });\n    }\n\n    // sort columns\n    if (tableConfig.hasOwnProperty(\"columns\") && msg.hasOwnProperty(\"ui_control\") && msg.ui_control.hasOwnProperty(\"tabulator\")) {\n        var addedColumns = 0;\n        var sortColumnsByLayout = function (sortColumns, columnsLayout, targetColumns) {\n            for (var layoutColumn=0;  layoutColumn<columnsLayout.length; layoutColumn++) {\n                for (var sortColumn in sortColumns) {\n                    if (sortColumns[sortColumn].hasOwnProperty(\"columns\")) {\n                        targetColumns.push({\"title\":sortColumns[sortColumn].title, \"columns\":[]});\n                        sortColumnsByLayout(sortColumns[sortColumn].columns,columnsLayout,targetColumns[targetColumns.length-1].columns);\n                        layoutColumn=addedColumns; // jump forward after childes added\n                    } else {\n                        if (columnsLayout[layoutColumn].field===sortColumns[sortColumn].field){\n                            targetColumns.push(sortColumns[sortColumn]);\n                            addedColumns++;\n                            break;\n                        }\n                    }\n                }\n            }\n        };                 \n        var newColumns=[];\n        sortColumnsByLayout(msg.ui_control.tabulator.columns,tableConfig.columns,newColumns);\n        msg.ui_control.tabulator.columns=newColumns;\n    }\n\n    // restore stored lines after connect\n    msg.payload=[];\n    for (let device in tableData) {\n        if (tableConfig && tableConfig.hasOwnProperty(\"ignoreDevice\") && tableConfig.ignoreDevice[device]) {\n            continue;\n        }\n        // merge edits into table\n        if (tableEdit && tableEdit.hasOwnProperty(device)) {\n            let tableRow = RED.util.cloneMessage(tableData[device]);\n            Object.keys(tableEdit[device]).forEach((field) => {\n                tableRow[field]=tableEdit[device][field];\n            });\n            msg.payload.push(tableRow);\n        } else {\n            msg.payload.push(tableData[device]);\n        }\n    }\n    \n    status.fill=\"blue\";\n    status.text+=\" \"+msg.payload.length+\" rows restored\";\n    return [{payload:status},msg];\n} if (msg.hasOwnProperty(\"ui_control\")) {\n    // callback from tabulator\n    status.fill=\"blue\";\n    status.text=\"unknown callback \"+msg.ui_control.callback;\n    switch(msg.ui_control.callback) {\n        case \"columnResized\": // save new column width\n            if (tableConfig.columnWidths===undefined) tableConfig.columnWidths={};\n            tableConfig.columnWidths[msg.ui_control.columnWidths.field]=msg.ui_control.columnWidths.width;\n            flow.set(\"$parent.\"+tableContext.tableConfig.name,tableConfig,tableContext.tableConfig.storage);\n            status.text=msg.ui_control.columnWidths.field+\"=\"+msg.ui_control.columnWidths.width+\"px\";\n            break;\n        case \"columnMoved\": // save new column order\n            if (tableConfig.columns===undefined) tableConfig.columns=[];\n            tableConfig.columns=msg.ui_control.columns;\n            flow.set(\"$parent.\"+tableContext.tableConfig.name,tableConfig,tableContext.tableConfig.storage);\n            status.text=\"new column order\";\n            break;\n        case \"cellEdited\":\n            if (tableEdit) {\n                if (!tableEdit.hasOwnProperty(msg[tableIndex])) tableEdit[msg[tableIndex]]={};\n                tableEdit[msg[tableIndex]][msg.field] = msg.payload; // save data and mark es edited field\n                flow.set(\"$parent.\"+tableContext.tableEdit.name,tableEdit,tableContext.tableEdit.storage);\n                status.text=msg[tableIndex]+\" \"+msg.field+\" edited to \"+msg.payload;\n                msg[tableDataProp]={};\n                msg[tableDataProp][tableIndex]=msg[tableIndex];\n                msg[tableDataProp][msg.field]=msg.payload;\n                msgToTable.payload.arguments=[[msg[tableDataProp]]];\n                node.send([{payload:status},msgToTable,msg]);\n            } else {\n                node.error(\"[ui-table handler] no tableEdit store defined!\")\n            }\n            break;\n        case \"rowContext\":\n            msg.ignoredDevices=[];\n            for (let device in tableConfig.ignoreDevice) {\n                if (tableConfig.ignoreDevice.hasOwnProperty(device)) {\n                    msg.ignoredDevices.push({\"text\":device,\"icon\":\"fa fa-plug\",\"topic\":\"unIgnoreDevice\",\"payload\":device})  \n                }\n            }\n            break;\n        case \"headerContext\":\n            msg.hiddenColumns=[];\n            let tabulatorConfig = env.get('tabulator');\n            for (let column in tableConfig.columnVisible) {\n                if (tableConfig.columnVisible.hasOwnProperty(column) &&\n                    !tableConfig.columnVisible[column]) {\n                    let configColumn=searchTabulatorColumn(tabulatorConfig.tabulator.columns,\"field\",column);\n                    let icon;\n                    if (configColumn.hasOwnProperty('title') && configColumn.title.toLowerCase().includes('</i>')) {\n                        // <i class='fa fa-star-half-o'></i> State\n                        let start=configColumn.title.indexOf(\"'fa \");\n                        let end=configColumn.title.indexOf(\"'\",start+1);\n                        icon=configColumn.title.substring(start+4,end);\n                    }\n                    msg.hiddenColumns.push({\"text\":column,\"icon\":icon,\"topic\":\"columnUnHide\",\"payload\":configColumn.field})  \n                }\n            }\n            break;\n        default:\n            // if rowIndex exists pass complete object\n            if (msg.hasOwnProperty(tableIndex)) {\n                msg.rowData=tableData[msg[tableIndex]];\n            }\n            status.text=\"pass message\";\n    }\n    return [{payload:status},null,msg];\n}\n// nothing to do bejond this point\nstatus.text+=\" [\"+msg.payload+\"]\";\nreturn [{payload:status},null];\n",
+        "outputs": 3,
+        "noerr": 0,
+        "x": 192,
+        "y": 85,
+        "wires": [
+            [],
+            [],
+            []
+        ],
+        "icon": "font-awesome/fa-table"
+    },
+    {
+        "id": "54ad70aa.dcf34",
+        "type": "subflow:a4435987.cef7d8",
+        "z": "59e12eb5.5a9e5",
+        "name": "",
+        "env": [
+            {
+                "name": "tabulator",
+                "value": "{\"tabulator\":{\"index\":\"index\",\"layout\":\"fitColumns\",\"movableColumns\":false,\"groupBy\":\"\",\"columnResized\":\"function(column){     var newColumn = {         field: column._column.field,         visible: column._column.visible,         width: column._column.width,         widthFixed: column._column.widthFixed,         widthStyled: column._column.widthStyled     }; this.send({topic:this.config.topic,ui_control:{callback:'columnResized',columnWidths:newColumn}}); }\",\"columns\":[{\"formatterParams\":{\"target\":\"_blank\"},\"title\":\"\",\"field\":\"index\",\"align\":\"center\",\"width\":50},{\"formatterParams\":{\"target\":\"_blank\"},\"title\":\"EUI\",\"field\":\"eui\",\"align\":\"center\",\"width\":100},{\"formatterParams\":{\"target\":\"_blank\"},\"title\":\"Packets\",\"columns\":[{\"formatterParams\":{\"target\":\"_blank\"},\"title\":\"Received\",\"field\":\"received\",\"width\":100,\"align\":\"center\"},{\"formatterParams\":{\"target\":\"_blank\"},\"title\":\"Missed\",\"field\":\"missed\",\"width\":100,\"align\":\"center\"}]},{\"formatterParams\":{\"target\":\"_blank\"},\"title\":\"Signal quality\",\"columns\":[{\"formatterParams\":{\"target\":\"_blank\",\"min\":-120,\"max\":1,\"legend\":\"function (value) {return '&nbsp;&nbsp;'+value+' dBm';}\"},\"title\":\"RSSI\",\"field\":\"rssi\",\"formatter\":\"progress\",\"width\":70},{\"formatterParams\":{\"target\":\"_blank\"},\"title\":\"PER\",\"field\":\"PER\",\"align\":\"center\",\"formatter\":\"function(cell, formatterParams, onRendered){return cell.getValue()+' %'; }\",\"width\":70},{\"formatterParams\":{\"target\":\"_blank\",\"min\":-20,\"max\":20,\"legend\":\"function (value) {return '&nbsp;&nbsp;'+value;}\",\"legendAlign\":\"center\"},\"title\":\"SNR\",\"field\":\"snr\",\"formatter\":\"progress\",\"width\":70}]},{\"formatterParams\":{\"target\":\"_blank\"},\"title\":\"Measurements\",\"columns\":[{\"formatterParams\":{\"target\":\"_blank\"},\"title\":\"Temp\",\"field\":\"temperature\",\"width\":90,\"align\":\"center\",\"formatter\":\"function(cell, formatterParams, onRendered){return cell.getValue()+' °C'; }\"},{\"title\":\"Voltage\",\"field\":\"voltage\",\"align\":\"center\",\"formatter\":\"function(cell, formatterParams, onRendered){return cell.getValue()+' V'; }\"}]}]},\"customHeight\":12}",
+                "type": "json"
+            },
+            {
+                "name": "tableDataProp",
+                "value": "tableData",
+                "type": "str"
+            },
+            {
+                "name": "tableIndex",
+                "value": "msg.topic",
+                "type": "str"
+            },
+            {
+                "name": "dashboard",
+                "value": "STM32WL Demo",
+                "type": "str"
+            },
+            {
+                "name": "tableContext",
+                "value": "{\"tableData\":{\"name\":\"tableData\"},\"tableConfig\":{\"name\":\"tableConfig\"},\"tableEdit\":{\"name\":\"tableEdit\"}}",
+                "type": "json"
+            }
+        ],
+        "x": 600,
+        "y": 1420,
+        "wires": [
+            [
+                "9dea389b.6bd0e8"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "d766f25e.833a4",
+        "type": "ui_ui_control",
+        "z": "59e12eb5.5a9e5",
+        "name": "",
+        "events": "all",
+        "x": 360,
+        "y": 1480,
+        "wires": [
+            [
+                "54ad70aa.dcf34"
+            ]
+        ]
+    },
+    {
+        "id": "e707b134.fbbe4",
+        "type": "change",
+        "z": "59e12eb5.5a9e5",
+        "name": "Reset table",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload.command",
+                "pt": "msg",
+                "to": "deleteTable",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 310,
+        "y": 1420,
+        "wires": [
+            [
+                "54ad70aa.dcf34"
+            ]
+        ]
+    },
+    {
+        "id": "8f457180.71e",
+        "type": "change",
+        "z": "59e12eb5.5a9e5",
+        "name": "Inject data in the table",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload",
+                "pt": "msg",
+                "to": "tableData",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 340,
+        "y": 1360,
+        "wires": [
+            [
+                "54ad70aa.dcf34"
+            ]
+        ]
+    },
+    {
+        "id": "94443a71.d92888",
+        "type": "ui_chart",
+        "z": "205bafec.d7d23",
+        "name": "temperature",
+        "group": "de77cfaf.cfb3d",
+        "order": 4,
+        "width": 8,
+        "height": 3,
+        "label": "Temperature",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 770,
+        "y": 940,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7efd43d2.1050cc",
+        "type": "ui_text",
+        "z": "205bafec.d7d23",
+        "group": "de77cfaf.cfb3d",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Sensor eui",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "x": 773,
+        "y": 900,
+        "wires": []
+    },
+    {
+        "id": "779f891a.e873b8",
+        "type": "ui_chart",
+        "z": "205bafec.d7d23",
+        "name": "temperature",
+        "group": "cc6b0d90.1c354",
+        "order": 4,
+        "width": 8,
+        "height": 3,
+        "label": "Temperature",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 770,
+        "y": 1120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "75dd81d.e57e78",
+        "type": "ui_text",
+        "z": "205bafec.d7d23",
+        "group": "cc6b0d90.1c354",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Sensor eui",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "x": 773,
+        "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "3e770f37.f0604",
+        "type": "function",
+        "z": "59e12eb5.5a9e5",
+        "name": "Reset the UI",
+        "func": "if (msg.payload.status===\"INIT\"||msg.payload.status===\"IDLE\" ) {\n\n    return { \n        payload:\"uiInit\"\n    }   ;\n}\n\nif (msg.payload!==\"connect\") {\n    return null;\n}\n\nif ( flow.get(\"initDone\") === true ) {\n    return null;        \n}\n\nflow.set(\"initDone\",true);\n \n newMsg={ \n     payload:\"uiInit\"\n }   ;\n\nreturn newMsg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 990,
+        "y": 440,
+        "wires": [
+            [
+                "f674611c.912ad",
+                "ea88718a.c51d9"
+            ]
+        ]
+    },
+    {
+        "id": "f674611c.912ad",
+        "type": "link out",
+        "z": "59e12eb5.5a9e5",
+        "name": "UI_INIT",
+        "links": [
+            "2c4721ab.33202e",
+            "a7000ea0.6925b"
+        ],
+        "x": 1135,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "a7000ea0.6925b",
+        "type": "link in",
+        "z": "59e12eb5.5a9e5",
+        "name": "",
+        "links": [
+            "f674611c.912ad",
+            "16c19018.77704"
+        ],
+        "x": 155,
+        "y": 140,
+        "wires": [
+            [
+                "805ff970.659398"
+            ]
+        ]
+    },
+    {
+        "id": "805ff970.659398",
+        "type": "change",
+        "z": "59e12eb5.5a9e5",
+        "name": "Reset region",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "#:(file)::Region",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 330,
+        "y": 140,
+        "wires": [
+            [
+                "b4c54013.4253c"
+            ]
+        ]
+    },
+    {
+        "id": "1ac8b3fc.e9aecc",
+        "type": "switch",
+        "z": "b70194c3.65f4b8",
+        "name": "Filter EUI and reset",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "sensor",
+                "vt": "env"
+            },
+            {
+                "t": "eq",
+                "v": "reset",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 228,
+        "y": 140,
+        "wires": [
+            [
+                "52c41347.a2583c",
+                "16bf47e8.318878",
+                "86f39161.8c7d1",
+                "5e9d0587.26229c",
+                "a7bb216d.adcaf",
+                "1baf7722.47a3e9"
+            ],
+            [
+                "c8c91370.f9cb1"
+            ]
+        ]
+    },
+    {
+        "id": "c8c91370.f9cb1",
+        "type": "change",
+        "z": "b70194c3.65f4b8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload.eui",
+                "pt": "msg",
+                "to": "",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload.temperature",
+                "pt": "msg",
+                "to": "[]",
+                "tot": "json"
+            },
+            {
+                "t": "set",
+                "p": "payload.PER",
+                "pt": "msg",
+                "to": "[]",
+                "tot": "json"
+            },
+            {
+                "t": "set",
+                "p": "payload.voltage",
+                "pt": "msg",
+                "to": "0",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "payload.missed",
+                "pt": "msg",
+                "to": "[]",
+                "tot": "json"
+            },
+            {
+                "t": "set",
+                "p": "payload.rssi",
+                "pt": "msg",
+                "to": "0",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 460,
+        "y": 280,
+        "wires": [
+            [
+                "52c41347.a2583c",
+                "16bf47e8.318878",
+                "86f39161.8c7d1",
+                "5e9d0587.26229c",
+                "a7bb216d.adcaf",
+                "1baf7722.47a3e9"
+            ]
+        ]
+    },
+    {
+        "id": "e044734e.64791",
+        "type": "subflow:b70194c3.65f4b8",
+        "z": "205bafec.d7d23",
+        "name": "",
+        "env": [],
+        "x": 470,
+        "y": 200,
+        "wires": [
+            [
+                "44abb180.5203a"
+            ],
+            [
+                "774d74ce.f539bc"
+            ],
+            [],
+            [
+                "75ef6ca1.564484"
+            ],
+            [],
+            [
+                "f2b4cbb.3633f38"
+            ]
+        ]
+    },
+    {
+        "id": "7889ef21.0b336",
+        "type": "subflow:b70194c3.65f4b8",
+        "z": "205bafec.d7d23",
+        "name": "",
+        "env": [
+            {
+                "name": "sensor",
+                "value": "1",
+                "type": "num"
+            }
+        ],
+        "x": 470,
+        "y": 380,
+        "wires": [
+            [
+                "6ccc4b19.9495d4"
+            ],
+            [
+                "e611a6fd.5905b8"
+            ],
+            [],
+            [
+                "91127707.6b8c78"
+            ],
+            [],
+            [
+                "c7441b20.b80e68"
+            ]
+        ]
+    },
+    {
+        "id": "f60cd38d.e557",
+        "type": "change",
+        "z": "59e12eb5.5a9e5",
+        "name": "Reset the data",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "sensorList",
+                "pt": "flow"
+            },
+            {
+                "t": "delete",
+                "p": "selected_sensor",
+                "pt": "flow"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "reset",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "period",
+                "pt": "flow",
+                "to": "0",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1000,
+        "y": 500,
+        "wires": [
+            [
+                "ad038bb6.f91028"
+            ]
+        ],
+        "info": "This node reset the data :\n- list of nodes stored in the flow\n- last selected sensor \n- format a message to clear the graphs and table (set the msg.topic to \"reset\")"
+    },
+    {
+        "id": "ed1a718e.cdc92",
+        "type": "subflow:b70194c3.65f4b8",
+        "z": "205bafec.d7d23",
+        "name": "",
+        "env": [
+            {
+                "name": "sensor",
+                "value": "2",
+                "type": "num"
+            }
+        ],
+        "x": 470,
+        "y": 560,
+        "wires": [
+            [
+                "22126a6a.f8c326"
+            ],
+            [
+                "5bbf19ec.90a4c8"
+            ],
+            [],
+            [
+                "29473114.533c0e"
+            ],
+            [],
+            [
+                "b5ff46c.af391b8"
+            ]
+        ]
+    },
+    {
+        "id": "99f2e44.7e69118",
+        "type": "subflow:b70194c3.65f4b8",
+        "z": "205bafec.d7d23",
+        "name": "",
+        "env": [
+            {
+                "name": "sensor",
+                "value": "3",
+                "type": "num"
+            }
+        ],
+        "x": 470,
+        "y": 740,
+        "wires": [
+            [
+                "941747fe.4814c8"
+            ],
+            [
+                "dd156521.aeefa8"
+            ],
+            [],
+            [
+                "f6dbf895.a31e58"
+            ],
+            [],
+            [
+                "55e10334.9f33dc"
+            ]
+        ]
+    },
+    {
+        "id": "ba80848e.5b9878",
+        "type": "subflow:b70194c3.65f4b8",
+        "z": "205bafec.d7d23",
+        "name": "",
+        "env": [
+            {
+                "name": "sensor",
+                "value": "4",
+                "type": "num"
+            }
+        ],
+        "x": 450,
+        "y": 940,
+        "wires": [
+            [
+                "7efd43d2.1050cc"
+            ],
+            [
+                "94443a71.d92888"
+            ],
+            [],
+            [
+                "a27d3aaa.00f7c8"
+            ],
+            [],
+            [
+                "5312fa1c.053114"
+            ]
+        ]
+    },
+    {
+        "id": "14409ed9.a83b61",
+        "type": "subflow:b70194c3.65f4b8",
+        "z": "205bafec.d7d23",
+        "name": "",
+        "env": [
+            {
+                "name": "sensor",
+                "value": "5",
+                "type": "num"
+            }
+        ],
+        "x": 440,
+        "y": 1140,
+        "wires": [
+            [
+                "75dd81d.e57e78"
+            ],
+            [
+                "779f891a.e873b8"
+            ],
+            [],
+            [
+                "4ba87547.8757fc"
+            ],
+            [],
+            [
+                "8059c1e.e4c714"
+            ]
+        ]
+    },
+    {
+        "id": "378da0a4.69c3f",
+        "type": "comment",
+        "z": "205bafec.d7d23",
+        "name": "Sensor 5 panel",
+        "info": "",
+        "x": 440,
+        "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "8279c06c.587af",
+        "type": "comment",
+        "z": "205bafec.d7d23",
+        "name": "Sensor 4 panel",
+        "info": "",
+        "x": 440,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "69a648a2.06fff8",
+        "type": "comment",
+        "z": "205bafec.d7d23",
+        "name": "Sensor 3 panel",
+        "info": "",
+        "x": 460,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "9e669ea3.bce",
+        "type": "comment",
+        "z": "205bafec.d7d23",
+        "name": "Sensor 2 panel",
+        "info": "",
+        "x": 460,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "a8fa11ba.4cfef",
+        "type": "comment",
+        "z": "205bafec.d7d23",
+        "name": "Sensor 1 panel",
+        "info": "",
+        "x": 460,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "5d0c003f.c3e68",
+        "type": "comment",
+        "z": "205bafec.d7d23",
+        "name": "Sensor 0 panel",
+        "info": "",
+        "x": 460,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "737fd556.e8a42c",
+        "type": "ui_chart",
+        "z": "205bafec.d7d23",
+        "name": "temperature",
+        "group": "2b4810e4.a7abc",
+        "order": 4,
+        "width": 8,
+        "height": 3,
+        "label": "Temperature",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 770,
+        "y": 1300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bbe73179.ec57",
+        "type": "ui_text",
+        "z": "205bafec.d7d23",
+        "group": "2b4810e4.a7abc",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Sensor eui",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "x": 773,
+        "y": 1260,
+        "wires": []
+    },
+    {
+        "id": "b573309f.96e7d",
+        "type": "subflow:b70194c3.65f4b8",
+        "z": "205bafec.d7d23",
+        "name": "",
+        "env": [
+            {
+                "name": "sensor",
+                "value": "6",
+                "type": "num"
+            }
+        ],
+        "x": 440,
+        "y": 1320,
+        "wires": [
+            [
+                "bbe73179.ec57"
+            ],
+            [
+                "737fd556.e8a42c"
+            ],
+            [],
+            [
+                "ddf76f6e.35884"
+            ],
+            [],
+            [
+                "97f95f9a.442ec"
+            ]
+        ]
+    },
+    {
+        "id": "98c38cd9.6c6b1",
+        "type": "comment",
+        "z": "205bafec.d7d23",
+        "name": "Sensor 6 panel",
+        "info": "",
+        "x": 440,
+        "y": 1260,
+        "wires": []
+    },
+    {
+        "id": "d270cfff.ae59b",
+        "type": "ui_chart",
+        "z": "205bafec.d7d23",
+        "name": "temperature",
+        "group": "f272d8bc.1f1258",
+        "order": 4,
+        "width": 8,
+        "height": 3,
+        "label": "Temperature",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 770,
+        "y": 1480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "31bf241d.e716ec",
+        "type": "ui_text",
+        "z": "205bafec.d7d23",
+        "group": "f272d8bc.1f1258",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Sensor eui",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "x": 773,
+        "y": 1440,
+        "wires": []
+    },
+    {
+        "id": "dff47ff3.0ad1f",
+        "type": "subflow:b70194c3.65f4b8",
+        "z": "205bafec.d7d23",
+        "name": "",
+        "env": [
+            {
+                "name": "sensor",
+                "value": "7",
+                "type": "num"
+            }
+        ],
+        "x": 440,
+        "y": 1500,
+        "wires": [
+            [
+                "31bf241d.e716ec"
+            ],
+            [
+                "d270cfff.ae59b"
+            ],
+            [],
+            [
+                "223409c0.88c166"
+            ],
+            [],
+            [
+                "9fec8200.80303"
+            ]
+        ]
+    },
+    {
+        "id": "1841afa1.fefd7",
+        "type": "comment",
+        "z": "205bafec.d7d23",
+        "name": "Sensor 7 panel",
+        "info": "",
+        "x": 440,
+        "y": 1440,
+        "wires": []
+    },
+    {
+        "id": "4961d91e.5f7348",
+        "type": "ui_chart",
+        "z": "205bafec.d7d23",
+        "name": "temperature",
+        "group": "5d4d1f39.203d3",
+        "order": 4,
+        "width": 8,
+        "height": 3,
+        "label": "Temperature",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 770,
+        "y": 1660,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8421d094.18c01",
+        "type": "ui_text",
+        "z": "205bafec.d7d23",
+        "group": "5d4d1f39.203d3",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Sensor eui",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "x": 773,
+        "y": 1620,
+        "wires": []
+    },
+    {
+        "id": "225144fc.df8a3c",
+        "type": "subflow:b70194c3.65f4b8",
+        "z": "205bafec.d7d23",
+        "name": "",
+        "env": [
+            {
+                "name": "sensor",
+                "value": "8",
+                "type": "num"
+            }
+        ],
+        "x": 440,
+        "y": 1680,
+        "wires": [
+            [
+                "8421d094.18c01"
+            ],
+            [
+                "4961d91e.5f7348"
+            ],
+            [],
+            [
+                "55c40c3d.97c7c4"
+            ],
+            [],
+            [
+                "4ba9be88.2d24a"
+            ]
+        ]
+    },
+    {
+        "id": "b320a692.5070d8",
+        "type": "comment",
+        "z": "205bafec.d7d23",
+        "name": "Sensor 8 panel",
+        "info": "",
+        "x": 440,
+        "y": 1620,
+        "wires": []
+    },
+    {
+        "id": "7859451d.8420fc",
+        "type": "ui_chart",
+        "z": "205bafec.d7d23",
+        "name": "temperature",
+        "group": "ea39e33e.e1e4a",
+        "order": 4,
+        "width": 8,
+        "height": 3,
+        "label": "Temperature",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 770,
+        "y": 1840,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1b045b33.967105",
+        "type": "ui_text",
+        "z": "205bafec.d7d23",
+        "group": "ea39e33e.e1e4a",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Sensor eui",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "x": 773,
+        "y": 1800,
+        "wires": []
+    },
+    {
+        "id": "d63fdcb7.be978",
+        "type": "subflow:b70194c3.65f4b8",
+        "z": "205bafec.d7d23",
+        "name": "",
+        "env": [
+            {
+                "name": "sensor",
+                "value": "9",
+                "type": "num"
+            }
+        ],
+        "x": 440,
+        "y": 1860,
+        "wires": [
+            [
+                "1b045b33.967105"
+            ],
+            [
+                "7859451d.8420fc"
+            ],
+            [],
+            [
+                "d010d085.42f0e"
+            ],
+            [],
+            [
+                "329f25ce.8247ca"
+            ]
+        ]
+    },
+    {
+        "id": "64f36049.15792",
+        "type": "comment",
+        "z": "205bafec.d7d23",
+        "name": "Sensor 9 panel",
+        "info": "",
+        "x": 440,
+        "y": 1800,
+        "wires": []
+    },
+    {
+        "id": "998b7456.f59828",
+        "type": "ui_chart",
+        "z": "205bafec.d7d23",
+        "name": "temperature",
+        "group": "1519e739.96fc29",
+        "order": 4,
+        "width": 8,
+        "height": 3,
+        "label": "Temperature",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 770,
+        "y": 2020,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6d1030a2.1720d",
+        "type": "ui_text",
+        "z": "205bafec.d7d23",
+        "group": "1519e739.96fc29",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Sensor eui",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "x": 773,
+        "y": 1980,
+        "wires": []
+    },
+    {
+        "id": "e0b2bf80.2af6",
+        "type": "subflow:b70194c3.65f4b8",
+        "z": "205bafec.d7d23",
+        "name": "",
+        "env": [
+            {
+                "name": "sensor",
+                "value": "10",
+                "type": "num"
+            }
+        ],
+        "x": 440,
+        "y": 2040,
+        "wires": [
+            [
+                "6d1030a2.1720d"
+            ],
+            [
+                "998b7456.f59828"
+            ],
+            [],
+            [
+                "6c3305ab.8a25fc"
+            ],
+            [],
+            [
+                "48ef2064.6a205"
+            ]
+        ]
+    },
+    {
+        "id": "cf7932c5.09a8c",
+        "type": "comment",
+        "z": "205bafec.d7d23",
+        "name": "Sensor 10 panel",
+        "info": "",
+        "x": 440,
+        "y": 1980,
+        "wires": []
+    },
+    {
+        "id": "5d691ce5.e7a3c4",
+        "type": "ui_chart",
+        "z": "205bafec.d7d23",
+        "name": "temperature",
+        "group": "88af1aa6.4fd9a8",
+        "order": 4,
+        "width": 8,
+        "height": 3,
+        "label": "Temperature",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 770,
+        "y": 2200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "979b0726.fbed48",
+        "type": "ui_text",
+        "z": "205bafec.d7d23",
+        "group": "88af1aa6.4fd9a8",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Sensor eui",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "x": 773,
+        "y": 2160,
+        "wires": []
+    },
+    {
+        "id": "301efc2f.c7b5d4",
+        "type": "subflow:b70194c3.65f4b8",
+        "z": "205bafec.d7d23",
+        "name": "",
+        "env": [
+            {
+                "name": "sensor",
+                "value": "11",
+                "type": "num"
+            }
+        ],
+        "x": 440,
+        "y": 2220,
+        "wires": [
+            [
+                "979b0726.fbed48"
+            ],
+            [
+                "5d691ce5.e7a3c4"
+            ],
+            [],
+            [
+                "ab4e400.fab77c"
+            ],
+            [],
+            [
+                "2f4db20c.c2000e"
+            ]
+        ]
+    },
+    {
+        "id": "7e989ffd.71aa",
+        "type": "comment",
+        "z": "205bafec.d7d23",
+        "name": "Sensor 11 panel",
+        "info": "",
+        "x": 440,
+        "y": 2160,
+        "wires": []
+    },
+    {
+        "id": "e1bc744a.48afc8",
+        "type": "ui_chart",
+        "z": "205bafec.d7d23",
+        "name": "temperature",
+        "group": "b6edb24b.79389",
+        "order": 4,
+        "width": 8,
+        "height": 3,
+        "label": "Temperature",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 770,
+        "y": 2380,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "615ab956.f35ad8",
+        "type": "ui_text",
+        "z": "205bafec.d7d23",
+        "group": "b6edb24b.79389",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Sensor eui",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "x": 773,
+        "y": 2340,
+        "wires": []
+    },
+    {
+        "id": "b2cd27e3.d916a8",
+        "type": "subflow:b70194c3.65f4b8",
+        "z": "205bafec.d7d23",
+        "name": "",
+        "env": [
+            {
+                "name": "sensor",
+                "value": "12",
+                "type": "num"
+            }
+        ],
+        "x": 440,
+        "y": 2400,
+        "wires": [
+            [
+                "615ab956.f35ad8"
+            ],
+            [
+                "e1bc744a.48afc8"
+            ],
+            [],
+            [
+                "eecfdc9f.f4711"
+            ],
+            [],
+            [
+                "b7171fc3.46d02"
+            ]
+        ]
+    },
+    {
+        "id": "8c74003a.49ced",
+        "type": "comment",
+        "z": "205bafec.d7d23",
+        "name": "Sensor 12 panel",
+        "info": "",
+        "x": 440,
+        "y": 2340,
+        "wires": []
+    },
+    {
+        "id": "947b0155.eff8e",
+        "type": "ui_chart",
+        "z": "205bafec.d7d23",
+        "name": "temperature",
+        "group": "46964e10.8d71",
+        "order": 4,
+        "width": 8,
+        "height": 3,
+        "label": "Temperature",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 770,
+        "y": 2560,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2212f313.6a705c",
+        "type": "ui_text",
+        "z": "205bafec.d7d23",
+        "group": "46964e10.8d71",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Sensor eui",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "x": 773,
+        "y": 2520,
+        "wires": []
+    },
+    {
+        "id": "f561cc21.64bed",
+        "type": "subflow:b70194c3.65f4b8",
+        "z": "205bafec.d7d23",
+        "name": "",
+        "env": [
+            {
+                "name": "sensor",
+                "value": "13",
+                "type": "num"
+            }
+        ],
+        "x": 440,
+        "y": 2580,
+        "wires": [
+            [
+                "2212f313.6a705c"
+            ],
+            [
+                "947b0155.eff8e"
+            ],
+            [],
+            [
+                "3622530a.82e35c"
+            ],
+            [],
+            [
+                "1714a51f.8574fb"
+            ]
+        ]
+    },
+    {
+        "id": "5cfb5add.2ca8f4",
+        "type": "comment",
+        "z": "205bafec.d7d23",
+        "name": "Sensor 13 panel",
+        "info": "",
+        "x": 440,
+        "y": 2520,
+        "wires": []
+    },
+    {
+        "id": "db9c22e4.32256",
+        "type": "ui_chart",
+        "z": "205bafec.d7d23",
+        "name": "temperature",
+        "group": "62172772.5040f8",
+        "order": 4,
+        "width": 8,
+        "height": 3,
+        "label": "Temperature",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 770,
+        "y": 2740,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "aad7d39b.d7e98",
+        "type": "ui_text",
+        "z": "205bafec.d7d23",
+        "group": "62172772.5040f8",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Sensor eui",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "x": 773,
+        "y": 2700,
+        "wires": []
+    },
+    {
+        "id": "9a713750.0519b8",
+        "type": "subflow:b70194c3.65f4b8",
+        "z": "205bafec.d7d23",
+        "name": "",
+        "env": [
+            {
+                "name": "sensor",
+                "value": "14",
+                "type": "num"
+            }
+        ],
+        "x": 440,
+        "y": 2760,
+        "wires": [
+            [
+                "aad7d39b.d7e98"
+            ],
+            [
+                "db9c22e4.32256"
+            ],
+            [],
+            [
+                "6992b92b.e3af58"
+            ],
+            [],
+            [
+                "2c603f19.9b4b4"
+            ]
+        ]
+    },
+    {
+        "id": "dade5ec1.f54a5",
+        "type": "comment",
+        "z": "205bafec.d7d23",
+        "name": "Sensor 14 panel",
+        "info": "",
+        "x": 440,
+        "y": 2700,
+        "wires": []
+    },
+    {
+        "id": "91127707.6b8c78",
+        "type": "ui_gauge",
+        "z": "205bafec.d7d23",
+        "name": "voltage",
+        "group": "36f009b.e058af6",
+        "order": 3,
+        "width": 3,
+        "height": 3,
+        "gtype": "gage",
+        "title": "Voltage",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "2",
+        "max": "3.5",
+        "colors": [
+            "#b50000",
+            "#e6e600",
+            "#02ff22"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 760,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "29473114.533c0e",
+        "type": "ui_gauge",
+        "z": "205bafec.d7d23",
+        "name": "voltage",
+        "group": "5cf86100.5fd8",
+        "order": 3,
+        "width": 3,
+        "height": 3,
+        "gtype": "gage",
+        "title": "Voltage",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "2",
+        "max": "3.5",
+        "colors": [
+            "#b50000",
+            "#e6e600",
+            "#02ff22"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 760,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "f6dbf895.a31e58",
+        "type": "ui_gauge",
+        "z": "205bafec.d7d23",
+        "name": "voltage",
+        "group": "9142e5f0.a71698",
+        "order": 3,
+        "width": 3,
+        "height": 3,
+        "gtype": "gage",
+        "title": "Voltage",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "2",
+        "max": "3.5",
+        "colors": [
+            "#b50000",
+            "#e6e600",
+            "#02ff22"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 760,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "a27d3aaa.00f7c8",
+        "type": "ui_gauge",
+        "z": "205bafec.d7d23",
+        "name": "voltage",
+        "group": "de77cfaf.cfb3d",
+        "order": 3,
+        "width": 3,
+        "height": 3,
+        "gtype": "gage",
+        "title": "Voltage",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "2",
+        "max": "3.5",
+        "colors": [
+            "#b50000",
+            "#e6e600",
+            "#02ff22"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 760,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "4ba87547.8757fc",
+        "type": "ui_gauge",
+        "z": "205bafec.d7d23",
+        "name": "voltage",
+        "group": "cc6b0d90.1c354",
+        "order": 3,
+        "width": 3,
+        "height": 3,
+        "gtype": "gage",
+        "title": "Voltage",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "2",
+        "max": "3.5",
+        "colors": [
+            "#b50000",
+            "#e6e600",
+            "#02ff22"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 760,
+        "y": 1160,
+        "wires": []
+    },
+    {
+        "id": "ddf76f6e.35884",
+        "type": "ui_gauge",
+        "z": "205bafec.d7d23",
+        "name": "voltage",
+        "group": "2b4810e4.a7abc",
+        "order": 3,
+        "width": 3,
+        "height": 3,
+        "gtype": "gage",
+        "title": "Voltage",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "2",
+        "max": "3.5",
+        "colors": [
+            "#b50000",
+            "#e6e600",
+            "#02ff22"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 760,
+        "y": 1340,
+        "wires": []
+    },
+    {
+        "id": "223409c0.88c166",
+        "type": "ui_gauge",
+        "z": "205bafec.d7d23",
+        "name": "voltage",
+        "group": "f272d8bc.1f1258",
+        "order": 3,
+        "width": 3,
+        "height": 3,
+        "gtype": "gage",
+        "title": "Voltage",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "2",
+        "max": "3.5",
+        "colors": [
+            "#b50000",
+            "#e6e600",
+            "#02ff22"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 760,
+        "y": 1520,
+        "wires": []
+    },
+    {
+        "id": "55c40c3d.97c7c4",
+        "type": "ui_gauge",
+        "z": "205bafec.d7d23",
+        "name": "voltage",
+        "group": "5d4d1f39.203d3",
+        "order": 3,
+        "width": 3,
+        "height": 3,
+        "gtype": "gage",
+        "title": "Voltage",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "2",
+        "max": "3.5",
+        "colors": [
+            "#b50000",
+            "#e6e600",
+            "#02ff22"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 760,
+        "y": 1700,
+        "wires": []
+    },
+    {
+        "id": "d010d085.42f0e",
+        "type": "ui_gauge",
+        "z": "205bafec.d7d23",
+        "name": "voltage",
+        "group": "ea39e33e.e1e4a",
+        "order": 3,
+        "width": 3,
+        "height": 3,
+        "gtype": "gage",
+        "title": "Voltage",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "2",
+        "max": "3.5",
+        "colors": [
+            "#b50000",
+            "#e6e600",
+            "#02ff22"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 760,
+        "y": 1880,
+        "wires": []
+    },
+    {
+        "id": "6c3305ab.8a25fc",
+        "type": "ui_gauge",
+        "z": "205bafec.d7d23",
+        "name": "voltage",
+        "group": "1519e739.96fc29",
+        "order": 3,
+        "width": 3,
+        "height": 3,
+        "gtype": "gage",
+        "title": "Voltage",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "2",
+        "max": "3.5",
+        "colors": [
+            "#b50000",
+            "#e6e600",
+            "#02ff22"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 760,
+        "y": 2060,
+        "wires": []
+    },
+    {
+        "id": "ab4e400.fab77c",
+        "type": "ui_gauge",
+        "z": "205bafec.d7d23",
+        "name": "voltage",
+        "group": "88af1aa6.4fd9a8",
+        "order": 3,
+        "width": 3,
+        "height": 3,
+        "gtype": "gage",
+        "title": "Voltage",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "2",
+        "max": "3.5",
+        "colors": [
+            "#b50000",
+            "#e6e600",
+            "#02ff22"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 760,
+        "y": 2240,
+        "wires": []
+    },
+    {
+        "id": "eecfdc9f.f4711",
+        "type": "ui_gauge",
+        "z": "205bafec.d7d23",
+        "name": "voltage",
+        "group": "b6edb24b.79389",
+        "order": 3,
+        "width": 3,
+        "height": 3,
+        "gtype": "gage",
+        "title": "Voltage",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "2",
+        "max": "3.5",
+        "colors": [
+            "#b50000",
+            "#e6e600",
+            "#02ff22"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 760,
+        "y": 2420,
+        "wires": []
+    },
+    {
+        "id": "3622530a.82e35c",
+        "type": "ui_gauge",
+        "z": "205bafec.d7d23",
+        "name": "voltage",
+        "group": "46964e10.8d71",
+        "order": 3,
+        "width": 3,
+        "height": 3,
+        "gtype": "gage",
+        "title": "Voltage",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "2",
+        "max": "3.5",
+        "colors": [
+            "#b50000",
+            "#e6e600",
+            "#02ff22"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 760,
+        "y": 2600,
+        "wires": []
+    },
+    {
+        "id": "6992b92b.e3af58",
+        "type": "ui_gauge",
+        "z": "205bafec.d7d23",
+        "name": "voltage",
+        "group": "62172772.5040f8",
+        "order": 3,
+        "width": 3,
+        "height": 3,
+        "gtype": "gage",
+        "title": "Voltage",
+        "label": "V",
+        "format": "{{value}}",
+        "min": "2",
+        "max": "3.5",
+        "colors": [
+            "#b50000",
+            "#e6e600",
+            "#02ff22"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 760,
+        "y": 2780,
+        "wires": []
+    },
+    {
+        "id": "fe7e22d.67b0ae",
+        "type": "ui_button",
+        "z": "59e12eb5.5a9e5",
+        "name": "Reset button",
+        "group": "b2debca7.ea722",
+        "order": 3,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "Restart",
+        "tooltip": "Click to restart the demo",
+        "color": "",
+        "bgcolor": "",
+        "icon": "replay",
+        "payload": "reset",
+        "payloadType": "str",
+        "topic": "reset",
+        "x": 190,
+        "y": 600,
+        "wires": [
+            [
+                "c4ab1817.2388b8"
+            ]
+        ]
+    },
+    {
+        "id": "3814ec44.8d32e4",
+        "type": "ui_ui_control",
+        "z": "59e12eb5.5a9e5",
+        "name": "",
+        "events": "connect",
+        "x": 780,
+        "y": 440,
+        "wires": [
+            [
+                "3e770f37.f0604"
+            ]
+        ]
+    },
+    {
+        "id": "150d10b5.8dad4f",
+        "type": "change",
+        "z": "59e12eb5.5a9e5",
+        "name": "Delete reset flag",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "initDone",
+                "pt": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 420,
+        "y": 1640,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4b9454bf.3cd69c",
+        "type": "inject",
+        "z": "59e12eb5.5a9e5",
+        "name": "",
+        "topic": "reset UI at deploy",
+        "payload": "",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0.1",
+        "x": 170,
+        "y": 1640,
+        "wires": [
+            [
+                "150d10b5.8dad4f"
+            ]
+        ]
+    },
+    {
+        "id": "1770db95.11ff54",
+        "type": "link in",
+        "z": "59e12eb5.5a9e5",
+        "name": "",
+        "links": [
+            "1ed7a60.d0f125a",
+            "bc171374.1c95d"
+        ],
+        "x": 160,
+        "y": 1360,
+        "wires": [
+            [
+                "8f457180.71e"
+            ]
+        ]
+    },
+    {
+        "id": "6c41fdfd.359e04",
+        "type": "comment",
+        "z": "59e12eb5.5a9e5",
+        "name": "Manage the Sensor List in the dashboard",
+        "info": "",
+        "x": 740,
+        "y": 1300,
+        "wires": []
+    },
+    {
+        "id": "2fecfb43.c99ea4",
+        "type": "comment",
+        "z": "59e12eb5.5a9e5",
+        "name": "Manage the sensor data",
+        "info": "",
+        "x": 590,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "bff7589e.464dd8",
+        "type": "comment",
+        "z": "59e12eb5.5a9e5",
+        "name": "Send commands to board",
+        "info": "These nodes are used to format the AT commands for board with STM32WB.\n\nInitialize board with ATZ\nSet Region\nSet SubRegion\nStart beacon\n\nThe command are sent to the flow UART A. (UART flows manage the connection, the data logic and result parsing)",
+        "x": 1030,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "5d91296d.ec0628",
+        "type": "comment",
+        "z": "59e12eb5.5a9e5",
+        "name": "Reset management",
+        "info": "This nodes are used to reset the data when demo is started, and to initialize UI when dashboard is displayed the first time.\n\nThe Reset the UI function nodes uses a flag to track if UI has been intiialized.\n\nWhen the demo flow is started, the flag is deleted. When the Dashboard is displayed the first time the flag is set and UI is initialized to display the country selection page.\nIf dashboard was started before the flow, then flag is set when the start button is pressed.\n",
+        "x": 970,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "ec736177.635dd",
+        "type": "comment",
+        "z": "59e12eb5.5a9e5",
+        "name": "Display the sensor ",
+        "info": "When user has selected the coutnry, the concentrator is started and the sensor panels are displayed.\n\n2 nodes are used to display the panles :\n- one to hide the country selection group, and show the sensor list and sensors panels\n- a second one to collapse all sensors panels (they are empty at start)\n",
+        "x": 1010,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "f45e3a97.fe8028",
+        "type": "comment",
+        "z": "59e12eb5.5a9e5",
+        "name": "Data received on Serial port",
+        "info": "",
+        "x": 240,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "bc1fa2da.1cf2a",
+        "type": "comment",
+        "z": "59e12eb5.5a9e5",
+        "name": "Send data to sensor panels and table",
+        "info": "The data decoded and formatted are sent :\n- to the table component \n- the sensor panels in charts flows",
+        "x": 1130,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "335ef770.112358",
+        "type": "debug",
+        "z": "59e12eb5.5a9e5",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 990,
+        "y": 1460,
+        "wires": []
+    },
+    {
+        "id": "c80aa560.b4bd28",
+        "type": "comment",
+        "z": "59e12eb5.5a9e5",
+        "name": "Finite State Machine",
+        "info": "",
+        "x": 510,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "aed338fe.494a38",
+        "type": "function",
+        "z": "59e12eb5.5a9e5",
+        "name": "display new panel",
+        "func": "\nvar UIConfig={\n    \"group\": {\n        \"show\": [\"STM32WL_Demo_Sensor_\"+msg.payload],\n    }\n}\n\n\n\nmsg.payload=UIConfig;\nreturn msg;\n    ",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1030,
+        "y": 1080,
+        "wires": [
+            [
+                "916d920f.214be"
+            ]
+        ]
+    },
+    {
+        "id": "8c50fb50.63b408",
+        "type": "delay",
+        "z": "59e12eb5.5a9e5",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "200",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 1230,
+        "y": 1120,
+        "wires": [
+            [
+                "916d920f.214be"
+            ]
+        ]
+    },
+    {
+        "id": "4c95cb7b.7eaa34",
+        "type": "ui_button",
+        "z": "59e12eb5.5a9e5",
+        "name": "",
+        "group": "b2debca7.ea722",
+        "order": 2,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "Counter reset",
+        "tooltip": "Reset the packet count and PER",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "",
+        "x": 160,
+        "y": 1300,
+        "wires": [
+            [
+                "a535066a.649f98"
+            ]
+        ]
+    },
+    {
+        "id": "a535066a.649f98",
+        "type": "function",
+        "z": "59e12eb5.5a9e5",
+        "name": "reset counters",
+        "func": "var sensorList = flow.get(\"sensorList\");\nif (sensorList===undefined ) {\n    sensorList=[];\n}\n\n\nsensorList.forEach(function(item,i,array){\n   item.received=0;\n   item.missed=0;\n   item.PER=0;\n   node.send ({topic:item.index,\n       tableData:{\n           PER:0,\n           received:0,\n           missed:0,\n           index:item.index\n       }\n   })\n});\n\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 380,
+        "y": 1300,
+        "wires": [
+            [
+                "54ad70aa.dcf34"
+            ]
+        ]
+    },
+    {
+        "id": "a7bb216d.adcaf",
+        "type": "change",
+        "z": "b70194c3.65f4b8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.rssi",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 700,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "810e21d3.ec014",
+        "type": "ui_ui_control",
+        "z": "59e12eb5.5a9e5",
+        "name": "",
+        "events": "all",
+        "x": 1280,
+        "y": 1380,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a59f1e4c.5427c",
+        "type": "function",
+        "z": "59e12eb5.5a9e5",
+        "name": "close new panel",
+        "func": "\nvar UIConfig={\n    \"group\": {\n        \"close\": [\"STM32WL_Demo_Sensor_\"+msg.payload]\n    }\n}\n\nmsg.payload=UIConfig;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1020,
+        "y": 1120,
+        "wires": [
+            [
+                "8c50fb50.63b408"
+            ]
+        ]
+    },
+    {
+        "id": "490784a.132e87c",
+        "type": "debug",
+        "z": "a8d0e4b7.6d91e8",
+        "name": "Serial Port Out",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 460,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "188a1866.5c94e8",
+        "type": "comment",
+        "z": "a8d0e4b7.6d91e8",
+        "name": "To AT CMD",
+        "info": "",
+        "x": 1130,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "11437a10.a465f6",
+        "type": "comment",
+        "z": "78f04e3a.1177b",
+        "name": "Please select this node to see the demo description in the right panel (Node information)",
+        "info": "## This flow is used to monitor values of STM32WL sensors.\n## \n\n# Wiki  :\nDetailed help and information is available on wiki page : [STM32_Wireless_Long_Range_demo](https://wiki.st.com/stm32mcu/index.php?title=STM32CubeMonitor:How_to_start_with_STM32_Wireless_Long_Range_demo)\n\n# Demo description :\nThe demo shows data from wireless sensor connected to a concentrator. The sensors and the concentrator are based on STM32WL boards.\nThe concentrator is connected with serial port to STM32cubeMonitor to display the data from sensors.\nThere is one concentrator, and up to 15 sensors.\nWhen the demo starts, the concentrotr is configured with the region information to select the correct frequency to use. Then, the concentrator will broadcast beacons to synchronize the sensors. Then sensor will send the data (voltage, temperature) periodically.\n\n# Board configuration \nThe software \"concentrator.bin\" must be loaded in the concentrator. The concentrator must be connected to computer with an usb cable. \n\nThe sensors devices must be loaded with software \"sensor.bin\"\n\n# Connection to computer \nConnect the concentrator board to the computer. \nIn the \"UART configuration\" tab, select the COM port \nOpen the node « SERIAL IN » and click on the pencil to edit the Serial Port configuration.\nClick on the search icon at right of “Serial Port” box, to display the list of connected uart. Select the concentrator COM port. Set the baud rate to 9600 Bps. Other parameters don’t need to be changed.\nClick on “Add/Update” button : the port Serial-port configuration is ready.\nOpen the node “SERIAL OUT” and check the Serial-port configuration.\nThe serial port is configured.\n\n# Start the demo\n\nOpen the demo with “Dashboard” button.\nSelect the Region and subRegion and then press start.\nThe sensor list is displayed and will be updated when data are received. \n\n### Sensor List :\nEach detected sensor is added in the list, and information are updated :  \n -  EUI : Sensor unique identifier \n -  Packets received : Number of packets received from this sensor\n -  Packets missed : The sensor increases the packet ID for each packet sent. If there is a gap between previous packet Id and the current one, it means some packets have been lost. This is counted in \"missed packets\". \n -  RSSI : Received Signal Strength Indicator : show the level of power received\n -  PER : Packet Error Rate : Gives the % of lost packets. 0 if perfect. \n -  SNR : Signal to Noise Ratio : give an indication of signal quality. High value are better.\n -  Temp : Sensor temperature value. (Use STM32 internal sensor)\n -  Voltage : Power supply voltage.  Should be around 3.3V when board is usb powered.\n\nThe \"COUNTER RESET\" button set to 0 the received packets, the missed packets and the PER.\nThe \"RESTART\" button allows to reset te concentrator and goes back to Region selection page.\n\n\n### Serial log :\nThe Serial port log shows the AT commands sent to the concentrator (left arrow), and the answers (right arrow). \n### Sensor panels :\nSome \"Sensor x\" panels are added when sensors are detected. The panels can be opened by clicking on the sensor list or with the blue arrows on the right of the panels.  Each Panel shows temperature and RSSI value history in a chart and display the voltage in a gauge.\n\n\n\n\n\n\n\n",
+        "x": 480,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "100b810.744977f",
+        "type": "comment",
+        "z": "59e12eb5.5a9e5",
+        "name": "Display the new sensor panels",
+        "info": "",
+        "x": 1080,
+        "y": 1040,
+        "wires": []
+    },
+    {
+        "id": "aa4f45ac.056188",
+        "type": "comment",
+        "z": "59e12eb5.5a9e5",
+        "name": "Home page / Region selection",
+        "info": "",
+        "x": 360,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "e6777060.e2691",
+        "type": "comment",
+        "z": "59e12eb5.5a9e5",
+        "name": "Demo main part",
+        "info": "",
+        "x": 500,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "1baf7722.47a3e9",
+        "type": "change",
+        "z": "b70194c3.65f4b8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.missed",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 700,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c7441b20.b80e68",
+        "type": "ui_chart",
+        "z": "205bafec.d7d23",
+        "name": "missed packet",
+        "group": "36f009b.e058af6",
+        "order": 2,
+        "width": 5,
+        "height": 3,
+        "label": "Missed Packet",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "step",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 780,
+        "y": 440,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b5ff46c.af391b8",
+        "type": "ui_chart",
+        "z": "205bafec.d7d23",
+        "name": "missed packet",
+        "group": "5cf86100.5fd8",
+        "order": 2,
+        "width": 5,
+        "height": 3,
+        "label": "Missed Packet",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "step",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 780,
+        "y": 620,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "55e10334.9f33dc",
+        "type": "ui_chart",
+        "z": "205bafec.d7d23",
+        "name": "missed packet",
+        "group": "9142e5f0.a71698",
+        "order": 2,
+        "width": 5,
+        "height": 3,
+        "label": "Missed Packet",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "step",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 780,
+        "y": 820,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5312fa1c.053114",
+        "type": "ui_chart",
+        "z": "205bafec.d7d23",
+        "name": "missed packet",
+        "group": "de77cfaf.cfb3d",
+        "order": 2,
+        "width": 5,
+        "height": 3,
+        "label": "Missed Packet",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "step",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 780,
+        "y": 1020,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8059c1e.e4c714",
+        "type": "ui_chart",
+        "z": "205bafec.d7d23",
+        "name": "missed packet",
+        "group": "cc6b0d90.1c354",
+        "order": 2,
+        "width": 5,
+        "height": 3,
+        "label": "Missed Packet",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "step",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 780,
+        "y": 1200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "97f95f9a.442ec",
+        "type": "ui_chart",
+        "z": "205bafec.d7d23",
+        "name": "missed packet",
+        "group": "2b4810e4.a7abc",
+        "order": 2,
+        "width": 5,
+        "height": 3,
+        "label": "Missed Packet",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "step",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 780,
+        "y": 1380,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9fec8200.80303",
+        "type": "ui_chart",
+        "z": "205bafec.d7d23",
+        "name": "missed packet",
+        "group": "f272d8bc.1f1258",
+        "order": 2,
+        "width": 5,
+        "height": 3,
+        "label": "Missed Packet",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "step",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 780,
+        "y": 1560,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4ba9be88.2d24a",
+        "type": "ui_chart",
+        "z": "205bafec.d7d23",
+        "name": "missed packet",
+        "group": "5d4d1f39.203d3",
+        "order": 2,
+        "width": 5,
+        "height": 3,
+        "label": "Missed Packet",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "step",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 780,
+        "y": 1740,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "329f25ce.8247ca",
+        "type": "ui_chart",
+        "z": "205bafec.d7d23",
+        "name": "missed packet",
+        "group": "ea39e33e.e1e4a",
+        "order": 2,
+        "width": 5,
+        "height": 3,
+        "label": "Missed Packet",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "step",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 780,
+        "y": 1920,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "48ef2064.6a205",
+        "type": "ui_chart",
+        "z": "205bafec.d7d23",
+        "name": "missed packet",
+        "group": "1519e739.96fc29",
+        "order": 2,
+        "width": 5,
+        "height": 3,
+        "label": "Missed Packet",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "step",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 780,
+        "y": 2100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2f4db20c.c2000e",
+        "type": "ui_chart",
+        "z": "205bafec.d7d23",
+        "name": "missed packet",
+        "group": "88af1aa6.4fd9a8",
+        "order": 2,
+        "width": 5,
+        "height": 3,
+        "label": "Missed Packet",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "step",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 780,
+        "y": 2280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b7171fc3.46d02",
+        "type": "ui_chart",
+        "z": "205bafec.d7d23",
+        "name": "missed packet",
+        "group": "b6edb24b.79389",
+        "order": 2,
+        "width": 5,
+        "height": 3,
+        "label": "Missed Packet",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "step",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 780,
+        "y": 2460,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1714a51f.8574fb",
+        "type": "ui_chart",
+        "z": "205bafec.d7d23",
+        "name": "missed packet",
+        "group": "46964e10.8d71",
+        "order": 2,
+        "width": 5,
+        "height": 3,
+        "label": "Missed Packet",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "step",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 780,
+        "y": 2640,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2c603f19.9b4b4",
+        "type": "ui_chart",
+        "z": "205bafec.d7d23",
+        "name": "missed packet",
+        "group": "62172772.5040f8",
+        "order": 2,
+        "width": 5,
+        "height": 3,
+        "label": "Missed Packet",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "step",
+        "nodata": "",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 780,
+        "y": 2820,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bd72e112.5c2e4",
+        "type": "debug",
+        "z": "59e12eb5.5a9e5",
+        "name": "FSM state",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 660,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "34154d52.a699f2",
+        "type": "debug",
+        "z": "59e12eb5.5a9e5",
+        "name": "FSM input",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 490,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "62741f35.92aa8",
+        "type": "change",
+        "z": "59e12eb5.5a9e5",
+        "name": "Close Serial log",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"group\":{\"close\":[\"STM32WL_Demo_Serial_log\"]}}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1000,
+        "y": 660,
+        "wires": [
+            [
+                "7b35c083.def7f"
+            ]
+        ]
+    },
+    {
+        "id": "7b35c083.def7f",
+        "type": "delay",
+        "z": "59e12eb5.5a9e5",
+        "name": "Delay",
+        "pauseType": "delay",
+        "timeout": "100",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 1150,
+        "y": 660,
+        "wires": [
+            [
+                "6964f882.de0aa8"
+            ]
+        ]
+    },
+    {
+        "id": "9c2b9d58.a9113",
+        "type": "function",
+        "z": "a31b8916.3b68c8",
+        "name": "timeout reset",
+        "func": "if (msg.topic===\"ok\"|| msg.topic===\"resetok\" ) {\n    msg.reset=\"reset\";\n    return msg;\n}\nreturn null;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 670,
+        "y": 440,
+        "wires": [
+            [
+                "b67afc18.fb4b2"
+            ]
+        ]
+    },
+    {
+        "id": "82d780ea.aa032",
+        "type": "link in",
+        "z": "a31b8916.3b68c8",
+        "name": "Flow to AT command",
+        "links": [
+            "cde3caa6.a39998"
+        ],
+        "x": 215,
+        "y": 200,
+        "wires": [
+            [
+                "a4e20bbb.a66538"
+            ]
+        ]
+    },
+    {
+        "id": "14b0b08.240395",
+        "type": "link out",
+        "z": "a31b8916.3b68c8",
+        "name": "AT command to demo flow",
+        "links": [
+            "76996be9.b3c0d4"
+        ],
+        "x": 655,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "bdc27adc.9804f8",
+        "type": "comment",
+        "z": "a31b8916.3b68c8",
+        "name": "AT COMMAND MANAGEMENT",
+        "info": "",
+        "x": 390,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "6787dd37.a7d6c4",
+        "type": "function",
+        "z": "a31b8916.3b68c8",
+        "name": "Result formatter",
+        "func": "var status=null;\n\nif (msg.status) {\n    if ( msg.status.text===\"node-red:common.status.not-connected\") {\n    msg.topic=\"disconnect\";\n    msg.flow=\"ALL\"\n    flow.set(\"AT_Command\",\"\");\n    return msg;\n    } \n    if ( msg.status.text===\"node-red:common.status.connected\") {\n    msg.topic=\"connect\";\n    msg.flow=\"ALL\"\n    return msg;\n    } \n    if ( msg.status.text===\"timeout\") {\n    msg.topic=\"error\";\n    msg.flow=\"ALL\";\n    flow.set(\"AT_Command\",\"\"); \n    return msg;\n    } \n\n}\n\nvar input=msg.payload.trim();\nvar command=flow.get(\"AT_Command\").trim();\n\n// No command sent \nif (command===\"\") {\n    // check if it is reset message\n    if (input===\"Concentrator Reset\") {\n        flow.set(\"AT_Command\",\"\"); \n        msg.topic=\"resetok\";\n        msg.flow=\"ALL\";\n        return msg;\n        \n    } \n    if (input.includes(\"AT+RCV=\")) {\n        flow.set(\"AT_Command\",\"\"); \n        msg.topic=\"data\";\n        msg.flow=\"ALL\";\n        msg.payload=input;\n        return msg;\n        \n    } \n    return null;\n    \n}\n\n\nswitch (input) {\n    case \"OK\":\n        status=\"ok\";\n        flow.set(\"AT_Command\",\"\");\n        break;\n    case \"Concentrator Reset\":\n        status=\"resetok\";\n        msg.flow=\"ALL\";\n        flow.set(\"AT_Command\",\"\");\n        break;\n    case \"AT_PARAM_ERROR\":\n        status=\"error\";\n        flow.set(\"AT_Command\",\"\");\n        break;\n    case \"AT_BUSY_ERROR\":\n        status=\"error\";\n        flow.set(\"AT_Command\",\"\");\n        break;\n   \n    \n}\nif (status !== null) {\n    msg.topic=status;\n    msg.flow=msg.flow||flow.get(\"AT_Flow\");\n    \nreturn msg;\n}\nelse {\n    return null;\n\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 420,
+        "y": 340,
+        "wires": [
+            [
+                "9c2b9d58.a9113",
+                "14b0b08.240395"
+            ]
+        ]
+    },
+    {
+        "id": "a4e20bbb.a66538",
+        "type": "function",
+        "z": "a31b8916.3b68c8",
+        "name": "validate command",
+        "func": "if (flow.get(\"AT_Command\")===\"\"||flow.get(\"AT_Command\")===undefined) {\n\n// No AT cmd ongoing\nflow.set(\"AT_Command\",msg.payload);\nflow.set(\"AT_Flow\",msg.flow);\nmsg.payload=msg.payload+\"\\n\";\nreturn msg;\n\n    \n} else {\n    // error case\n    var errorMsg = { topic : \"error\", flow : msg.flow, payload : \"BUSY\" };\n    return [null, errorMsg];    \n}\n\n",
+        "outputs": 2,
+        "noerr": 0,
+        "x": 410,
+        "y": 200,
+        "wires": [
+            [
+                "b67afc18.fb4b2",
+                "ef79a5f0.536bd8"
+            ],
+            [
+                "14b0b08.240395"
+            ]
+        ]
+    },
+    {
+        "id": "b67afc18.fb4b2",
+        "type": "delay",
+        "z": "a31b8916.3b68c8",
+        "name": "Timeout",
+        "pauseType": "delay",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 900,
+        "y": 440,
+        "wires": [
+            [
+                "a8835174.8edc1"
+            ]
+        ]
+    },
+    {
+        "id": "a8835174.8edc1",
+        "type": "change",
+        "z": "a31b8916.3b68c8",
+        "name": "format timeout",
+        "rules": [
+            {
+                "t": "set",
+                "p": "status.text",
+                "pt": "msg",
+                "to": "timeout",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1080,
+        "y": 440,
+        "wires": [
+            [
+                "6787dd37.a7d6c4"
+            ]
+        ]
+    },
+    {
+        "id": "81e0a2e.c73216",
+        "type": "comment",
+        "z": "a31b8916.3b68c8",
+        "name": "From Demo Flow",
+        "info": "",
+        "x": 160,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "f77608af.de9168",
+        "type": "comment",
+        "z": "a31b8916.3b68c8",
+        "name": "To Demo Flow",
+        "info": "",
+        "x": 750,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "2ad20508.edcd1a",
+        "type": "ui_button",
+        "z": "a31b8916.3b68c8",
+        "name": "",
+        "group": "a0308ba2.3cecc8",
+        "order": 3,
+        "width": 3,
+        "height": 1,
+        "passthru": false,
+        "label": "clear log",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "clear",
+        "payloadType": "str",
+        "topic": "",
+        "x": 320,
+        "y": 800,
+        "wires": [
+            [
+                "d6a40626.f3b8f8"
+            ]
+        ]
+    },
+    {
+        "id": "775cb208.d5db3c",
+        "type": "template",
+        "z": "a31b8916.3b68c8",
+        "name": "set log direction",
+        "field": "from",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "<i class=\"fa fa-arrow-left\"></i>",
+        "output": "str",
+        "x": 340,
+        "y": 960,
+        "wires": [
+            [
+                "5f779945.1596b8"
+            ]
+        ]
+    },
+    {
+        "id": "fd1a6d41.2ccec",
+        "type": "template",
+        "z": "a31b8916.3b68c8",
+        "name": "set log direction",
+        "field": "from",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "<i class=\"fa fa-arrow-right\"></i>",
+        "output": "str",
+        "x": 340,
+        "y": 880,
+        "wires": [
+            [
+                "5f779945.1596b8"
+            ]
+        ]
+    },
+    {
+        "id": "eec150f4.49f2b",
+        "type": "subflow:a4435987.cef7d8",
+        "z": "a31b8916.3b68c8",
+        "name": "Log table data",
+        "env": [
+            {
+                "name": "tabulator",
+                "value": "{\"tabulator\":{\"index\":\"msg.topic\",\"movableColumns\":true,\"groupBy\":\"\",\"columns\":[{\"formatter\":\"html\",\"title\":\"I/O\",\"field\":\"from\",\"width\":35,\"frozen\":true,\"align\":\"center\",\"headerSort\":false},{\"formatter\":\"plaintext\",\"title\":\"Time\",\"field\":\"time\",\"align\":\"center\",\"width\":70,\"headerSort\":false},{\"formatter\":\"plaintext\",\"title\":\"Log\",\"field\":\"log\",\"width\":500,\"headerSort\":false}]}}",
+                "type": "json"
+            },
+            {
+                "name": "tableIndex",
+                "value": "msg.topic",
+                "type": "str"
+            },
+            {
+                "name": "dashboard",
+                "value": "STM32WL Demo",
+                "type": "str"
+            },
+            {
+                "name": "tableContext",
+                "value": "{\"tableData\":{\"name\":\"tableData\"},\"tableConfig\":{\"name\":\"tableConfig\",\"storage\":\"memory\"},\"tableEdit\":{\"name\":\"tableEdit\",\"storage\":\"memory\"}}",
+                "type": "json"
+            },
+            {
+                "name": "group",
+                "value": "STM32WL_Demo_Serial_log",
+                "type": "str"
+            }
+        ],
+        "x": 780,
+        "y": 860,
+        "wires": [
+            [
+                "7553dbe5.3676f4"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "7553dbe5.3676f4",
+        "type": "ui_table",
+        "z": "a31b8916.3b68c8",
+        "group": "a0308ba2.3cecc8",
+        "name": "Log Table UI",
+        "order": 4,
+        "width": 8,
+        "height": 7,
+        "columns": [],
+        "outputs": 0,
+        "cts": false,
+        "x": 1170,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "67fbb3f9.6aeebc",
+        "type": "ui_ui_control",
+        "z": "a31b8916.3b68c8",
+        "name": "",
+        "events": "all",
+        "x": 540,
+        "y": 860,
+        "wires": [
+            [
+                "eec150f4.49f2b"
+            ]
+        ]
+    },
+    {
+        "id": "5f779945.1596b8",
+        "type": "function",
+        "z": "a31b8916.3b68c8",
+        "name": "format log",
+        "func": "var index = flow.get(\"logIndex\")||0;\nindex+=1;\nflow.set(\"logIndex\",index);\n\nvar logTime = new Date(Date.now());\nvar newMsg = \n{\n    \"row\": {\n        \"time\": logTime.toTimeString().substr(0, 8),\n        \"log\":msg.payload,\n        \"from\":msg.from\n    },\n    \"topic\": index\n}\n\nreturn newMsg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 540,
+        "y": 920,
+        "wires": [
+            [
+                "eec150f4.49f2b",
+                "bae093b7.15527"
+            ]
+        ]
+    },
+    {
+        "id": "d6a40626.f3b8f8",
+        "type": "change",
+        "z": "a31b8916.3b68c8",
+        "name": "Reset table",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"command\":\"deleteTable\",\"object\":\"tableCache\"}",
+                "tot": "json"
+            },
+            {
+                "t": "set",
+                "p": "logIndex",
+                "pt": "flow",
+                "to": "0",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 530,
+        "y": 800,
+        "wires": [
+            [
+                "eec150f4.49f2b"
+            ]
+        ]
+    },
+    {
+        "id": "ef79a5f0.536bd8",
+        "type": "link out",
+        "z": "a31b8916.3b68c8",
+        "name": "AT command to Serial port",
+        "links": [
+            "95a74fab.0408c",
+            "c3352d3c.125a"
+        ],
+        "x": 675,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "7f5edb0.a143524",
+        "type": "link in",
+        "z": "a31b8916.3b68c8",
+        "name": "AT Command in",
+        "links": [
+            "e67637e8.a2ce38"
+        ],
+        "x": 215,
+        "y": 340,
+        "wires": [
+            [
+                "6787dd37.a7d6c4"
+            ]
+        ]
+    },
+    {
+        "id": "fd64d221.ee058",
+        "type": "comment",
+        "z": "a31b8916.3b68c8",
+        "name": "To Serial Port",
+        "info": "",
+        "x": 750,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "f47288c.247db78",
+        "type": "comment",
+        "z": "a31b8916.3b68c8",
+        "name": "From Serial Port",
+        "info": "",
+        "x": 160,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "7b45712e.e1d8a",
+        "type": "link in",
+        "z": "a31b8916.3b68c8",
+        "name": "",
+        "links": [
+            "e67637e8.a2ce38"
+        ],
+        "x": 195,
+        "y": 880,
+        "wires": [
+            [
+                "fd1a6d41.2ccec"
+            ]
+        ]
+    },
+    {
+        "id": "c3352d3c.125a",
+        "type": "link in",
+        "z": "a31b8916.3b68c8",
+        "name": "",
+        "links": [
+            "ef79a5f0.536bd8"
+        ],
+        "x": 195,
+        "y": 960,
+        "wires": [
+            [
+                "775cb208.d5db3c"
+            ]
+        ]
+    },
+    {
+        "id": "845e4c05.7122c",
+        "type": "comment",
+        "z": "a31b8916.3b68c8",
+        "name": "Serial Port log",
+        "info": "",
+        "x": 450,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "857059d3.ff5fb8",
+        "type": "function",
+        "z": "a31b8916.3b68c8",
+        "name": "scroll down",
+        "func": "if (msg.topic===\"autoScroll\") {\n    context.set(\"autoScroll\", msg.payload);\n} \n\nif (context.get(\"autoScroll\")===true) {\n\n    var index = flow.get(\"logIndex\")||1;\n    \n    return {\n        payload: {\n            \"command\": \"scrollToRow\",\n        \"arguments\": [\n            index,\n            \"top\",\n            false\n        ]\n        }\n    };\n}\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 930,
+        "y": 960,
+        "wires": [
+            [
+                "7553dbe5.3676f4"
+            ]
+        ]
+    },
+    {
+        "id": "bae093b7.15527",
+        "type": "delay",
+        "z": "a31b8916.3b68c8",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "50",
+        "timeoutUnits": "milliseconds",
+        "rate": "2",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 750,
+        "y": 920,
+        "wires": [
+            [
+                "857059d3.ff5fb8"
+            ]
+        ]
+    },
+    {
+        "id": "23819cb8.b53cd4",
+        "type": "ui_switch",
+        "z": "a31b8916.3b68c8",
+        "name": "",
+        "label": "Auto Scroll",
+        "tooltip": "",
+        "group": "a0308ba2.3cecc8",
+        "order": 2,
+        "width": 3,
+        "height": 1,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "autoScroll",
+        "style": "",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "x": 750,
+        "y": 1020,
+        "wires": [
+            [
+                "857059d3.ff5fb8"
+            ]
+        ]
+    },
+    {
+        "id": "3ec579c7.e0a096",
+        "type": "inject",
+        "z": "a31b8916.3b68c8",
+        "name": "init",
+        "topic": "",
+        "payload": "true",
+        "payloadType": "bool",
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "x": 590,
+        "y": 1020,
+        "wires": [
+            [
+                "23819cb8.b53cd4"
+            ]
+        ]
+    }
+]

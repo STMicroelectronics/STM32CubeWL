@@ -1,0 +1,30 @@
+/*###ICF### Set of symbols used in SE and SB_SFU projects ****/
+
+/*-Sizes-*/
+define symbol __ICFEDIT_size_cstack__ = 0x1A00;
+define symbol __ICFEDIT_size_heap__ = 0;
+
+define memory mem with size = 4G;
+
+/******************************************************************************/
+/*       Include of SE symbols file                                           */
+/*   (Project>Options>Linker>Extra Options --config_search option is used to  */
+/*   specify the the directory to search for include files                    */
+/******************************************************************************/
+include "mapping_sbsfu.icf";
+include "mapping_fwimg.icf";
+
+define block CSTACK    with alignment = 8, size = __ICFEDIT_size_cstack__   { };
+define block HEAP      with alignment = 8, size = __ICFEDIT_size_heap__     { };
+
+initialize by copy { readwrite };
+do not initialize  { section .noinit };
+
+/******************************************************************************/
+/*                          placement instructions                            */
+/******************************************************************************/
+place at address mem:__ICFEDIT_intvec_start__ { readonly section .intvec };
+place at address mem:__ICFEDIT_SE_CallGate_region_ROM_start__ { readonly section SE_CORE_Bin };
+place in SE_IF_ROM_region {section .SE_IF_Code};
+place in SB_ROM_region    { readonly };
+place in SB_RAM_region    { readwrite, block CSTACK, block HEAP};

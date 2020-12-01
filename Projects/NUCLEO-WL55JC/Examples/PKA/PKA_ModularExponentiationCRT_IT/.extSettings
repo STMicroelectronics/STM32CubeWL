@@ -1,0 +1,9 @@
+[ProjectFiles]
+HeaderPath=..\..\..\..\..\..\Drivers\BSP\STM32WLxx_Nucleo
+[Others]
+Define=
+HALModule=EXTI
+[Groups]
+Application/User=../Src/main.c;../Src/stm32wlxx_hal_msp.c;../Src/stm32wlxx_it.c;../Src/plaintext.c;../Src/ciphertext.c;../Src/rsa_priv_2048.c;../Src/rsa_pub_2048.c;
+Doc=../readme.txt;../Src/rsa_priv_2048.pem;../Src/rsa_pub_2048.pem;
+Drivers/BSP/STM32WLxx_Nucleo=../../../../../../Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo.c;

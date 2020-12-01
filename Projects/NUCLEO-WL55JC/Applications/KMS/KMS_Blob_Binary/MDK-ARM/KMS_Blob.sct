@@ -1,0 +1,12 @@
+; *** regions needed by KMS_Blob project ***
+LR_ROM (0x00000000) ALIGN(16) {
+  ROM_region +0 {
+  *(.KMS_blob_Keys)
+  }
+  ALIGN_region +0 ALIGN(16) EMPTY(16) {
+  }
+  ; *** Keil returning error cause of missing load region: creating a dummy one for this purpose ***
+  Dummy +0 {
+    .ANY
+  }
+}  

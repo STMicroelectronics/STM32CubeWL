@@ -1,0 +1,8 @@
+[ProjectFiles]
+HeaderPath=..\..\..\..\..\..\Drivers\BSP\STM32WLxx_Nucleo
+[Others]
+Define=
+HALModule=EXTI;UART
+[Groups]
+Doc=../readme.txt;../Expected_Results.txt;
+Drivers/BSP/STM32WLxx_Nucleo=../../../../../../Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo.c;

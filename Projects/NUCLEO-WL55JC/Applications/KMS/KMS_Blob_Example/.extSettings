@@ -1,0 +1,9 @@
+[ProjectFiles]
+HeaderPath=..\..\..\..\..\..\Drivers\BSP\STM32WLxx_Nucleo
+[Others]
+Define=
+HALModule=UART;CRC;EXTI
+[Groups]
+Application/User=../Src/main.c;../Src/stm32wlxx_it.c;../Src/stm32wlxx_hal_msp.c;../Src/kms_low_level.c;../Src/nvms_low_level.c;../Src/app_kms.c;../Src/com.c;../Src/common.c;../Src/flash_if.c;../Src/kms_object_update_app.c;../Src/ymodem.c;
+Doc=../readme.txt;
+Drivers/BSP/STM32WLxx_Nucleo=../../../../../../Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo.c;

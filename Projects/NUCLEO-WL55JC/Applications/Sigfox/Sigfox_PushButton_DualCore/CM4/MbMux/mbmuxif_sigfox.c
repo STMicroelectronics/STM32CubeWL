@@ -1,0 +1,248 @@
+/**
+  ******************************************************************************
+  * @file    mbmuxif_sigfox.c
+  * @author  MCD Application Team
+  * @brief   allows CM4 applic to register and handle SigfoxWAN via MBMUX
+  ******************************************************************************
+  * @attention
+  *
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
+  * All rights reserved.</center></h2>
+  *
+  * This software component is licensed by ST under Ultimate Liberty license
+  * SLA0044, the "License"; You may not use this file except in compliance with
+  * the License. You may obtain a copy of the License at:
+  *                             www.st.com/SLA0044
+  *
+  ******************************************************************************
+  */
+
+/* Includes ------------------------------------------------------------------*/
+#include "platform.h"
+#include "mbmuxif_sigfox.h"
+#include "mbmuxif_sys.h"
+#include "sys_app.h"
+#include "stm32_mem.h"
+#include "stm32_seq.h"
+#include "sigfox_mbwrapper.h"
+#include "sgfx_app_version.h"
+#include "utilities_def.h"
+/* USER CODE BEGIN Includes */
+
+/* USER CODE END Includes */
+
+/* External variables ---------------------------------------------------------*/
+/* USER CODE BEGIN EV */
+
+/* USER CODE END EV */
+
+/* Private typedef -----------------------------------------------------------*/
+/* USER CODE BEGIN PTD */
+
+/* USER CODE END PTD */
+
+/* Private define ------------------------------------------------------------*/
+/* USER CODE BEGIN PD */
+
+/* USER CODE END PD */
+
+/* Private macro -------------------------------------------------------------*/
+/* USER CODE BEGIN PM */
+
+/* USER CODE END PM */
+
+/* Private variables ---------------------------------------------------------*/
+static MBMUX_ComParam_t *SigfoxComObj;
+
+UTIL_MEM_PLACE_IN_SECTION("MB_MEM1") uint32_t aSigfoxCmdRespBuff[MAX_PARAM_OF_SIGFOX_CMD_FUNCTIONS];/*shared*/
+UTIL_MEM_PLACE_IN_SECTION("MB_MEM1") uint32_t aSigfoxNotifAckBuff[MAX_PARAM_OF_SIGFOX_NOTIF_FUNCTIONS];/*shared*/
+
+/* USER CODE BEGIN PV */
+
+/* USER CODE END PV */
+
+/* Private function prototypes -----------------------------------------------*/
+static void MBMUXIF_IsrSigfoxRespRcvCb(void *ComObj);
+static void MBMUXIF_IsrSigfoxNotifRcvCb(void *ComObj);
+static void MBMUXIF_TaskSigfoxNotifRcv(void);
+
+/* USER CODE BEGIN PFP */
+
+/* USER CODE END PFP */
+
+/* Exported functions --------------------------------------------------------*/
+
+/**
+  * @brief   Registers Sigfox feature to the mailbox and to the sequencer
+  * @param   none
+  * @retval   0: OK; -1: no more ipcc channel available; -2: feature not provided by CM0PLUS; -3: callback error on CM0PLUS
+  */
+int8_t MBMUXIF_SigfoxInit(void)
+{
+  FEAT_INFO_Param_t *p_cm0plus_system_info;
+  int32_t cm0_vers = 0;
+  int8_t ret = 0;
+
+  /* USER CODE BEGIN MBMUXIF_SigfoxInit_1 */
+
+  /* USER CODE END MBMUXIF_SigfoxInit_1 */
+
+  p_cm0plus_system_info = MBMUXIF_SystemGetFeatCapabInfoPtr(FEAT_INFO_SYSTEM_ID);
+  /* abstract CM0 release version from RC (release candidate) and compare */
+  cm0_vers = p_cm0plus_system_info->Feat_Info_Feature_Version >> __APP_VERSION_SUB2_SHIFT;
+  if (cm0_vers < (__LAST_COMPATIBLE_CM0_RELEASE >> __APP_VERSION_SUB2_SHIFT))
+  {
+    ret = -4; /* version incompatibility */
+  }
+  if (ret >= 0)
+  {
+    ret = MBMUX_RegisterFeature(FEAT_INFO_SIGFOX_ID, MBMUX_CMD_RESP, MBMUXIF_IsrSigfoxRespRcvCb, aSigfoxCmdRespBuff, sizeof(aSigfoxCmdRespBuff));
+  }
+  if (ret >= 0)
+  {
+    ret = MBMUX_RegisterFeature(FEAT_INFO_SIGFOX_ID, MBMUX_NOTIF_ACK, MBMUXIF_IsrSigfoxNotifRcvCb, aSigfoxNotifAckBuff, sizeof(aSigfoxNotifAckBuff));
+  }
+  if (ret >= 0)
+  {
+    UTIL_SEQ_RegTask(1 << CFG_SEQ_Task_MbSigfoxNotifRcv, UTIL_SEQ_RFU, MBMUXIF_TaskSigfoxNotifRcv);
+    ret = MBMUXIF_SystemSendCm0plusRegistrationCmd(FEAT_INFO_SIGFOX_ID);
+    if (ret < 0)
+    {
+      ret = -3;
+    }
+  }
+
+  if (ret >= 0)
+  {
+    ret = 0;
+  }
+
+  /* USER CODE BEGIN MBMUXIF_SigfoxInit_Last */
+
+  /* USER CODE END MBMUXIF_SigfoxInit_Last */
+
+  return ret;
+}
+
+/**
+  * @brief gives back the pointer to the com buffer associated to Sigfox feature Cmd
+  * @param none
+  * @retval  return pointer to the com param buffer
+  */
+MBMUX_ComParam_t *MBMUXIF_GetSigfoxFeatureCmdComPtr(void)
+{
+  /* USER CODE BEGIN MBMUXIF_GetSigfoxFeatureCmdComPtr_1 */
+
+  /* USER CODE END MBMUXIF_GetSigfoxFeatureCmdComPtr_1 */
+  MBMUX_ComParam_t *com_param_ptr = MBMUX_GetFeatureComPtr(FEAT_INFO_SIGFOX_ID, MBMUX_CMD_RESP);
+  if (com_param_ptr == NULL)
+  {
+    while (1) {} /* ErrorHandler() : feature isn't registered */
+  }
+  return com_param_ptr;
+  /* USER CODE BEGIN MBMUXIF_GetSigfoxFeatureCmdComPtr_Last */
+
+  /* USER CODE END MBMUXIF_GetSigfoxFeatureCmdComPtr_Last */
+}
+
+/**
+  * @brief  Sends a Sigfox-Cmd via Ipcc and Wait for the response
+  * @param  none
+  * @retval none
+  */
+void MBMUXIF_SigfoxSendCmd(void)
+{
+  /* USER CODE BEGIN MBMUXIF_SigfoxSendCmd_1 */
+
+  /* USER CODE END MBMUXIF_SigfoxSendCmd_1 */
+  if (MBMUX_CommandSnd(FEAT_INFO_SIGFOX_ID) == 0)
+  {
+    UTIL_SEQ_WaitEvt(1 << CFG_SEQ_Evt_MbSigfoxRespRcv);
+  }
+  else
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN MBMUXIF_SigfoxSendCmd_Last */
+
+  /* USER CODE END MBMUXIF_SigfoxSendCmd_Last */
+}
+
+/**
+  * @brief Sends a Sigfox-Ack  via Ipcc without waiting for the ack
+  * @param none
+  * @retval   none
+  */
+void MBMUXIF_SigfoxSendAck(void)
+{
+  /* USER CODE BEGIN MBMUXIF_SigfoxSendAck_1 */
+
+  /* USER CODE END MBMUXIF_SigfoxSendAck_1 */
+  if (MBMUX_AcknowledgeSnd(FEAT_INFO_SIGFOX_ID) != 0)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN MBMUXIF_SigfoxSendAck_Last */
+
+  /* USER CODE END MBMUXIF_SigfoxSendAck_Last */
+}
+
+/* USER CODE BEGIN EFD */
+
+/* USER CODE END EFD */
+
+/* Private functions ---------------------------------------------------------*/
+/**
+  * @brief  Sigfox response callbacks: set event to release waiting task
+  * @param  pointer to the Sigfox com param buffer
+  * @retval  none
+  */
+static void MBMUXIF_IsrSigfoxRespRcvCb(void *ComObj)
+{
+  /* USER CODE BEGIN MBMUXIF_IsrSigfoxRespRcvCb_1 */
+
+  /* USER CODE END MBMUXIF_IsrSigfoxRespRcvCb_1 */
+  UTIL_SEQ_SetEvt(1 << CFG_SEQ_Evt_MbSigfoxRespRcv);
+  /* USER CODE BEGIN MBMUXIF_IsrSigfoxRespRcvCb_Last */
+
+  /* USER CODE END MBMUXIF_IsrSigfoxRespRcvCb_Last */
+}
+
+/**
+  * @brief  Sigfox notification callbacks: schedules a task in order to quit the ISR
+  * @param  pointer to the Sigfox com param buffer
+  * @retval  none
+  */
+static void MBMUXIF_IsrSigfoxNotifRcvCb(void *ComObj)
+{
+  /* USER CODE BEGIN MBMUXIF_IsrSigfoxNotifRcvCb_1 */
+
+  /* USER CODE END MBMUXIF_IsrSigfoxNotifRcvCb_1 */
+  SigfoxComObj = (MBMUX_ComParam_t *) ComObj;
+  UTIL_SEQ_SetTask(1 << CFG_SEQ_Task_MbSigfoxNotifRcv, CFG_SEQ_Prio_0);
+  /* USER CODE BEGIN MBMUXIF_IsrSigfoxNotifRcvCb_Last */
+
+  /* USER CODE END MBMUXIF_IsrSigfoxNotifRcvCb_Last */
+}
+
+/**
+  * @brief  Sigfox task to process the notification
+  * @param  pointer to the Sigfox com param buffer
+  * @retval  none
+  */
+static void MBMUXIF_TaskSigfoxNotifRcv(void)
+{
+  /* USER CODE BEGIN MBMUXIF_TaskSigfoxNotifRcv_1 */
+
+  /* USER CODE END MBMUXIF_TaskSigfoxNotifRcv_1 */
+  Process_Sigfox_Notif(SigfoxComObj);
+  /* USER CODE BEGIN MBMUXIF_TaskSigfoxNotifRcv_Last */
+
+  /* USER CODE END MBMUXIF_TaskSigfoxNotifRcv_Last */
+}
+
+/* USER CODE BEGIN PrFD */
+
+/* USER CODE END PrFD */
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

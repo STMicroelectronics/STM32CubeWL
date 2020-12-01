@@ -1,0 +1,21 @@
+/*###ICF### Set of symbols used in SE and SB_SFU projects ****/
+
+define memory mem with size = 4G;
+
+
+define region ROM_region   = mem:[from 0 to 0x8000];
+
+/* to make sure the binary size is a multiple of the AES block size (16 bytes) */
+define root section aes_block_padding with alignment=16
+{
+udata8 "Force Alignment";
+pad_to 16;
+};
+
+/******************************************************************************/
+/*                          placement instructions                            */
+/******************************************************************************/
+
+place in ROM_region   { section .KMS_blob_Keys, last section aes_block_padding };
+keep { section .KMS_blob_Keys };
+
