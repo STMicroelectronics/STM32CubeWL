@@ -245,19 +245,19 @@ void Configure_MPU(void)
   /* Disable MPU */
   LL_MPU_Disable();
 
-  /* Configure RAM region as Region N°0, 64KB of size and R/W region */
+  /* Configure RAM region as Region Number 0, 64KB of size and R/W region */
   LL_MPU_ConfigRegion(EXAMPLE_RAM_REGION_NUMBER, 0x00, EXAMPLE_RAM_ADDRESS_START, 
          EXAMPLE_RAM_SIZE | portMPU_REGION_READ_WRITE | LL_MPU_ACCESS_NOT_BUFFERABLE |
          LL_MPU_ACCESS_NOT_CACHEABLE | LL_MPU_ACCESS_NOT_SHAREABLE | LL_MPU_TEX_LEVEL0 |
          LL_MPU_INSTRUCTION_ACCESS_ENABLE);
 
-  /* Configure FLASH region as REGION N°1, 256KB of size and R/W region */
+  /* Configure FLASH region as REGION Number 1, 256KB of size and R/W region */
   LL_MPU_ConfigRegion(EXAMPLE_FLASH_REGION_NUMBER, 0x00, EXAMPLE_FLASH_ADDRESS_START, 
          EXAMPLE_FLASH_SIZE | portMPU_REGION_READ_WRITE | LL_MPU_ACCESS_NOT_BUFFERABLE |
          LL_MPU_ACCESS_NOT_CACHEABLE | LL_MPU_ACCESS_NOT_SHAREABLE | LL_MPU_TEX_LEVEL0 |
          LL_MPU_INSTRUCTION_ACCESS_ENABLE);
 
-  /* Configure Peripheral region as REGION N°2, 512MB of size, R/W and Execute
+  /* Configure Peripheral region as REGION Number 2, 512MB of size, R/W and Execute
   Never region */
   LL_MPU_ConfigRegion(EXAMPLE_PERIPH_REGION_NUMBER, 0x00, EXAMPLE_PERIPH_ADDRESS_START, 
          EXAMPLE_PERIPH_SIZE | portMPU_REGION_READ_WRITE | LL_MPU_ACCESS_NOT_BUFFERABLE |
@@ -275,7 +275,7 @@ void Configure_MPU(void)
   */
 void MPU_AccessPermConfig(void)
 {
-  /* Configure region for PrivilegedReadOnlyArray as REGION N°3, 32byte and R
+  /* Configure region for PrivilegedReadOnlyArray as REGION Number 3, 32byte and R
      only in privileged mode */
   /* Disable MPU */
   LL_MPU_Disable();

@@ -20,6 +20,26 @@
  ******************************************************************************
   @endverbatim
 
+### V2.3.0/18-May-2021 ###
+===============================
+   + Implements LoRa Mac from Semtech/StackForce develop branch (18-Jan-2021 commits, version 4.4.7)
+   
+   + SecureElementDeleteDerivedKeys dynamic implementation in using KMS APIs
+   
+   + Cleanup NVM key attributes with KMS default values definition
+   
+   + Printable Keys (Root and derived) with KEY_EXTRACTABLE
+   
+   + Remove GCCv9 compiler warnings
+   
+   + Fix SetAppEUI/SetDevEUI functions
+   
+   + Add LinkCheckReq and DeviceTimeReq support
+   
+   + Fragmentation processing move to application layer
+
+   + Release Notes update
+
 ### V2.2.1/2-Oct-2020 ###
 ===============================
    + Multiple tools write to the same file' if AES + LoRaWAN + option .c/.h

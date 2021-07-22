@@ -26,13 +26,11 @@
   * @brief   End-device commissioning parameters
   ******************************************************************************
  */
+
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __COMMISSIONING_H__
 #define __COMMISSIONING_H__
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 /*!
  ******************************************************************************
  ********************************** WARNING ***********************************
@@ -80,9 +78,5 @@ extern "C" {
 /* USER CODE BEGIN EC2 */
 
 /* USER CODE END EC2 */
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* __COMMISSIONING_H__ */

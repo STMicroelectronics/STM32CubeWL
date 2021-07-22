@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    lorawan_conf.h
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __LORAWAN_CONF_H__
@@ -25,8 +27,6 @@
 extern "C" {
 #endif
 /* Includes ------------------------------------------------------------------*/
-#include "stm32_systime.h"
-#include "sys_app.h"   /* needed for APP_PRINTF */
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */
@@ -40,7 +40,7 @@ extern "C" {
 
 /* Region ------------------------------------*/
 /* the region listed here will be linked in the MW code */
-/* the applic (on sys_conf.h) shall just configure one region at the time */
+/* the application (on sys_conf.h) shall just configure one region at the time */
 /*#define REGION_AS923*/
 /*#define REGION_AU915*/
 /*#define REGION_CN470*/
@@ -52,15 +52,30 @@ extern "C" {
 #define REGION_US915
 /*#define REGION_RU864*/
 
-#define HYBRID_ENABLED          0
+/**
+  * \brief Limits the number usable channels by default for AU915, CN470 and US915 regions
+  * \note the default channel mask with this option activates the first 8 channels. \
+  *       this default mask can be modified in the RegionXXXXXInitDefaults function associated with the active region.
+  */
+#define HYBRID_ENABLED                                  0
 
-#define KEY_LOG_ENABLED         1
+/**
+  * \brief Define the read access of the keys in memory
+  * \note this value should be disabled after the development process
+  */
+#define KEY_EXTRACTABLE                                 1
+
+/*!
+ * Enables/Disables the context storage management storage.
+ * Must be enabled for LoRaWAN 1.0.4 or later.
+ */
+#define CONTEXT_MANAGEMENT_ENABLED                      0
 
 /* Class B ------------------------------------*/
 #define LORAMAC_CLASSB_ENABLED  0
 
 #if ( LORAMAC_CLASSB_ENABLED == 1 )
-/* CLASS B LSE crystall calibration*/
+/* CLASS B LSE crystal calibration*/
 /**
   * \brief Temperature coefficient of the clock source
   */

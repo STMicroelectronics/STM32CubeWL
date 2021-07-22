@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    mbmux.c
@@ -16,11 +17,13 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
 #include "stdint.h"
 #include "assert.h"
 #include "stddef.h"
+#include "stm32_mem.h"
 #include "ipcc_if.h"
 #include "mbmux.h"
 /* USER CODE BEGIN Includes */
@@ -58,11 +61,44 @@ static FEAT_INFO_List_t *p_MBMUX_Cm0plusFeatureList = NULL;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
+/**
+  * @brief   Check if the FEATURE is in the CM0 table and return it's position
+  * @param   e_featID  identifier of the feature
+  * @retval  0 not present, 1 present
+  */
 static uint8_t MBMUX_CheckIfFeatureSupportedByCm0plus(FEAT_INFO_IdTypeDef e_featID);
+
+/**
+  * @brief   Isr executed when Ipcc receive IRQ notification: forwards to upper layer
+  * @param   channelIdx ipcc channel number
+  */
 static void MBMUX_IsrResponseRcvCb(uint32_t channelIdx);
+
+/**
+  * @brief   Isr executed when Ipcc receive IRQ notification: forwards to upper layer
+  * @param   channelIdx  ipcc channel number
+  */
 static void MBMUX_IsrNotificationRcvCb(uint32_t channelIdx);
+
+/**
+  * @brief   Find the first channel not yet associated to a feature (available)
+  * @param   ComType  0 for CMd/Resp (TX), 1 for Notif/Ack (RX)
+  * @retval  ipcc channel number: if 0xFF means no channel available
+  */
 static uint8_t MBMUX_FindChStillUnregistered(MBMUX_ComType_t ComType);
+
+/**
+  * @brief   gives back channel associated to the feature
+  * @param   e_featID  identifier of the feature (Lora, Sigfox, etc).
+  * @param   ComType  0 for CMd/Resp (TX), 1 for Notif/Ack (RX)
+  * @retval  ipcc channel number: if 0xFF means the feature isn't registered
+  */
 static uint8_t MBMUX_GetFeatureChIdx(FEAT_INFO_IdTypeDef e_featID, MBMUX_ComType_t ComType);
+
+/**
+  * @brief   To facilitate the debug in case a function is not registered
+  * @param   ComObj Dummy
+  */
 static void MBMUX_IsrNotRegistered(void *ComObj);
 
 /* USER CODE BEGIN PFP */
@@ -70,11 +106,6 @@ static void MBMUX_IsrNotRegistered(void *ComObj);
 /* USER CODE END PFP */
 
 /* Exported functions --------------------------------------------------------*/
-/**
-  * @brief Init the mailbox feature table and init the ipcc
-  * @param MBMUX_ComTable_t  Mailbox intra-MCUs communication table
-  * @retval  none
-  */
 void MBMUX_Init(MBMUX_ComTable_t *const pMBMUX_ComTable)
 {
   /* USER CODE BEGIN MBMUX_Init_1 */
@@ -107,11 +138,6 @@ void MBMUX_Init(MBMUX_ComTable_t *const pMBMUX_ComTable)
   /* USER CODE END MBMUX_Init_Last */
 }
 
-/**
-  * @brief The application informs MBMUX about the CM0PLUS supported feature list
-  * @param p_CM0PLUS_FeatureList  pointer to the list of CM0PLUS features
-  * @retval  none
-  */
 void MBMUX_SetCm0plusFeatureListPtr(FEAT_INFO_List_t *pCM0PLUS_FeatureList)
 {
   /* USER CODE BEGIN MBMUX_SetCm0plusFeatureListPtr_1 */
@@ -123,15 +149,6 @@ void MBMUX_SetCm0plusFeatureListPtr(FEAT_INFO_List_t *pCM0PLUS_FeatureList)
   /* USER CODE END MBMUX_SetCm0plusFeatureListPtr_Last */
 }
 
-/**
-  * @brief Assigns an ipcc channel to a feature (for a requested direction) and registers associated applic cb and buffer
-  * @param e_featID  identifier of the feature (Lora, Sigfox, etc).
-  * @param ComType  0 for CMd/Resp, 1 for Notif/Ack
-  * @param MsgCb   applic callback for notification processing
-  * @param ComBuffer   applic buffer where Msg values (params) are stored
-  * @param ComBufSize  max size allocated by the applic for the buffer
-  * @retval   channel index or -1: (no more ipcc channel available) or -2: feature not provided by CM0PLUS
-  */
 int8_t MBMUX_RegisterFeature(FEAT_INFO_IdTypeDef e_featID, MBMUX_ComType_t ComType, void (*MsgCb)(void *ComObj), uint32_t *const ComBuffer, uint16_t ComBufSize)
 {
   int8_t check_if_feature_provided_by_cm0plus = 0;
@@ -203,13 +220,6 @@ int8_t MBMUX_RegisterFeature(FEAT_INFO_IdTypeDef e_featID, MBMUX_ComType_t ComTy
   return ret;
 }
 
-/**
-  * @brief Release an ipcc channel from the given feature and direction
-  * @param e_featID  identifier of the feature (Lora, Sigfox, etc).
-  * @param ComType  0 for CMd/Resp (TX), 1 for Notif/Ack (RX)
-  * @retval  none
-  * @note  this function has not been fully tested, because never required by our applic
-  */
 void MBMUX_UnregisterFeature(FEAT_INFO_IdTypeDef e_featID, MBMUX_ComType_t ComType)
 {
   /* USER CODE BEGIN MBMUX_UnregisterFeature_1 */
@@ -235,9 +245,9 @@ void MBMUX_UnregisterFeature(FEAT_INFO_IdTypeDef e_featID, MBMUX_ComType_t ComTy
     }
     else
     {
-      /* Make sure to clear pending IRQ Notification before unregistering the callback */
+      /* Make sure to clear pending IRQ Notification before un-registering the callback */
       /* necessary because the HAL_cb only mask the register, the SR is cleaned by the task */
-      /* if the mask is removed by anyone, the unwhished IRQ is generated if SR isn't cleaned */
+      /* if the mask is removed by anyone, the unwished IRQ is generated if SR isn't cleaned */
       IPCC_IF_AcknowledgeSnd(mb_ch);
 
       p_MBMUX_ComTable->MBNotifAckParam[mb_ch].MsgCm4Cb = MBMUX_IsrNotRegistered;
@@ -254,12 +264,6 @@ void MBMUX_UnregisterFeature(FEAT_INFO_IdTypeDef e_featID, MBMUX_ComType_t ComTy
   /* USER CODE END MBMUX_UnregisterFeature_Last */
 }
 
-/**
-  * @brief gives back the pointer to the MailBox com buffer associated to the feature
-  * @param e_featID  identifier of the feature (Lora, Sigfox, etc).
-  * @param ComType  0 for CMd/Resp (TX), 1 for Notif/Ack (RX)
-  * @retval  return pointer to the com param buffer
-  */
 MBMUX_ComParam_t *MBMUX_GetFeatureComPtr(FEAT_INFO_IdTypeDef e_featID, MBMUX_ComType_t ComType)
 {
   /* USER CODE BEGIN MBMUX_GetFeatureComPtr_1 */
@@ -286,11 +290,6 @@ MBMUX_ComParam_t *MBMUX_GetFeatureComPtr(FEAT_INFO_IdTypeDef e_featID, MBMUX_Com
   /* USER CODE END MBMUX_GetFeatureComPtr_Last */
 }
 
-/**
-  * @brief Send Cmd to remote MCU for a requested feature by abstracting the channel idx
-  * @param e_featID  identifier of the feature
-  * @retval OK: 0 , fail: -1
-  */
 int32_t MBMUX_CommandSnd(FEAT_INFO_IdTypeDef e_featID)
 {
   /* USER CODE BEGIN MBMUX_CommandSnd_1 */
@@ -309,11 +308,6 @@ int32_t MBMUX_CommandSnd(FEAT_INFO_IdTypeDef e_featID)
   /* USER CODE END MBMUX_CommandSnd_Last */
 }
 
-/**
-  * @brief Send ack to remote MCU for a requested feature by abstracting the channel idx
-  * @param e_featID  identifier of the feature
-  * @retval OK: 0 , fail: -1
-  */
 uint32_t MBMUX_AcknowledgeSnd(FEAT_INFO_IdTypeDef e_featID)
 {
   /* USER CODE BEGIN MBMUX_AcknowledgeSnd_1 */
@@ -333,12 +327,6 @@ uint32_t MBMUX_AcknowledgeSnd(FEAT_INFO_IdTypeDef e_featID)
 /* USER CODE END EFD */
 
 /* Private functions ---------------------------------------------------------*/
-
-/**
-  * @brief Check if the FEATURE is in the CM0 table and return it's position
-  * @param e_featID  identifier of the feature
-  * @retval 0 not present, 1 present
-  */
 static uint8_t MBMUX_CheckIfFeatureSupportedByCm0plus(FEAT_INFO_IdTypeDef e_featID)
 {
   int8_t ret = 0;
@@ -370,11 +358,6 @@ static uint8_t MBMUX_CheckIfFeatureSupportedByCm0plus(FEAT_INFO_IdTypeDef e_feat
   return ret;
 }
 
-/**
-  * @brief Isr executed when Ipcc receive IRQ notification: forwards to upper layer
-  * @param channelIdx  ipcc channel number
-  * @retval none
-  */
 static void MBMUX_IsrResponseRcvCb(uint32_t channelIdx)
 {
   /* USER CODE BEGIN MBMUX_IsrResponseRcvCb_1 */
@@ -390,11 +373,6 @@ static void MBMUX_IsrResponseRcvCb(uint32_t channelIdx)
   return;
 }
 
-/**
-  * @brief Isr executed when Ipcc receive IRQ notification: forwards to upper layer
-  * @param channelIdx  ipcc channel number
-  * @retval none
-  */
 static void MBMUX_IsrNotificationRcvCb(uint32_t channelIdx)
 {
   /* USER CODE BEGIN MBMUX_IsrNotificationRcvCb_1 */
@@ -410,11 +388,6 @@ static void MBMUX_IsrNotificationRcvCb(uint32_t channelIdx)
   return;
 }
 
-/**
-  * @brief Find the first channel not yet associated to a feature (available)
-  * @param ComType  0 for CMd/Resp (TX), 1 for Notif/Ack (RX)
-  * @retval ipcc channel number: if 0xFF means no channel available
-  */
 static uint8_t MBMUX_FindChStillUnregistered(MBMUX_ComType_t ComType)
 {
   /* USER CODE BEGIN MBMUX_FindChStillUnregistered_1 */
@@ -475,12 +448,6 @@ static uint8_t MBMUX_FindChStillUnregistered(MBMUX_ComType_t ComType)
   /* USER CODE END MBMUX_FindChStillUnregistered_Last */
 }
 
-/**
-  * @brief gives back channel associated to the feature
-  * @param e_featID  identifier of the feature (Lora, Sigfox, etc).
-  * @param ComType  0 for CMd/Resp (TX), 1 for Notif/Ack (RX)
-  * @retval ipcc channel number: if 0xFF means the feature isn't registered
-  */
 static uint8_t MBMUX_GetFeatureChIdx(FEAT_INFO_IdTypeDef e_featID, MBMUX_ComType_t ComType)
 {
   /* USER CODE BEGIN MBMUX_GetFeatureChIdx_1 */
@@ -492,17 +459,12 @@ static uint8_t MBMUX_GetFeatureChIdx(FEAT_INFO_IdTypeDef e_featID, MBMUX_ComType
   /* USER CODE END MBMUX_GetFeatureChIdx_Last */
 }
 
-/**
-  * @brief To facilitate the debug in case a function is not registered
-  * @param ComType  Dummy
-  * @retval None
-  */
 static void MBMUX_IsrNotRegistered(void *ComObj)
 {
   /* USER CODE BEGIN MBMUX_IsrNotRegistered_1 */
 
   /* USER CODE END MBMUX_IsrNotRegistered_1 */
-  while(1);
+  Error_Handler();
   /* USER CODE BEGIN MBMUX_IsrNotRegistered_Last */
 
   /* USER CODE END MBMUX_IsrNotRegistered_Last */

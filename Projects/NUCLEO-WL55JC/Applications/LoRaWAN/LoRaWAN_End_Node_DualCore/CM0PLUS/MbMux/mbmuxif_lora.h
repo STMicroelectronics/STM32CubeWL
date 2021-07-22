@@ -1,8 +1,9 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    mbmuxif_lora.h
   * @author  MCD Application Team
-  * @brief   API provided to CM0PLUS applic to register and handle LoraWAN via MBMUX
+  * @brief   API provided to CM0PLUS application to register and handle LoraWAN via MBMUX
   ******************************************************************************
   * @attention
   *
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __MBMUXIF_LORA_CM0PLUS_H__
@@ -52,9 +54,30 @@ extern "C" {
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
+/**
+  * @brief   Registers LORA feature to the mailbox and to the sequencer
+  * @retval   0: OK;
+             -1: no more ipcc channel available;
+             -2: feature not provided by CM0PLUS;
+             -3: callback error on CM0PLUS
+             -4: mismatch between CM4 and CM0PLUS lora stack versions
+  */
 int8_t MBMUXIF_LoraInit(void);
+
+/**
+  * @brief   gives back the pointer to the com buffer associated to Lora feature Notif
+  * @retval  return pointer to the com param buffer
+  */
 MBMUX_ComParam_t *MBMUXIF_GetLoraFeatureNotifComPtr(void);
+
+/**
+  * @brief   Sends a Lora-Notif via Ipcc and Wait for the ack
+  */
 void MBMUXIF_LoraSendNotif(void);
+
+/**
+  * @brief   Sends a Lora-Resp  via Ipcc without waiting for the response
+  */
 void MBMUXIF_LoraSendResp(void);
 /* USER CODE BEGIN EFP */
 

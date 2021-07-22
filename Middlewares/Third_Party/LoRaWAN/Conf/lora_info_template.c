@@ -20,6 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "LoRaMac.h"
 #include "lora_info.h"
+#include "sys_app.h" /* APP_PRINTF */
 
 /* USER CODE BEGIN Includes */
 
@@ -118,7 +119,7 @@ void LoraInfo_Init(void)
   loraInfo.ActivationMode = 3;
 #else /* LORAWAN_KMS == 1 */
   loraInfo.Kms = 1;
-  loraInfo.ActivationMode = ACTIVATION_BY_PERSONALISATION + OVER_THE_AIR_ACTIVATION << 1;
+  loraInfo.ActivationMode = ACTIVATION_BY_PERSONALIZATION + (OVER_THE_AIR_ACTIVATION << 1);
 #endif /* LORAWAN_KMS */
 }
 

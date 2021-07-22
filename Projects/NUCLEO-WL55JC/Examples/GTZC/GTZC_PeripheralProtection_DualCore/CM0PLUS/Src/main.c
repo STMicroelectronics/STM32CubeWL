@@ -70,7 +70,7 @@ int main(void)
   /* USER CODE BEGIN Init */
   /* USER CODE END Init */
 
-  /* MX_GTZC_S_Init initialisation */
+  /* GTZC initialisation */
   MX_GTZC_S_Init();
 
   /* USER CODE BEGIN SysInit */
@@ -126,6 +126,10 @@ static void MX_GTZC_S_Init(void)
   /* USER CODE BEGIN GTZC_S_Init 1 */
 
   /* USER CODE END GTZC_S_Init 1 */
+  if (HAL_GTZC_TZIC_EnableIT(GTZC_PERIPH_RNG) != HAL_OK)
+  {
+    Error_Handler();
+  }
   if (HAL_GTZC_TZSC_ConfigPeriphAttributes(GTZC_PERIPH_RNG, GTZC_TZSC_ATTRIBUTE_SEC|GTZC_TZSC_ATTRIBUTE_NPRIV) != HAL_OK)
   {
     Error_Handler();
@@ -147,7 +151,6 @@ static void MX_GTZC_S_Init(void)
   {
     Error_Handler();
   }
-  MPCWM_NonPrivilegeArea_Desc.AreaId = GTZC_TZSC_MPCWM_AREAID_UNPRIV;
   if (HAL_GTZC_TZSC_MPCWM_ConfigMemAttributes(SRAM2_BASE, &MPCWM_NonPrivilegeArea_Desc) != HAL_OK)
   {
     Error_Handler();

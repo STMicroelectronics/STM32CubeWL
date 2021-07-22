@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2020(-2021) STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -65,11 +64,15 @@ typedef enum
 /** @defgroup STM32WLXX_NUCLEO_RADIO_LOW_LEVEL_RADIOCONFIG RADIO LOW LEVEL RADIO CONFIG Constants
   * @{
   */ 
+#define RADIO_CONF_RFO_LP_HP                     0U
+#define RADIO_CONF_RFO_LP                        1U
+#define RADIO_CONF_RFO_HP                        2U
 
-#define RADIO_CONF_RFO_LP_HP  0
-#define RADIO_CONF_RFO_LP     1
-#define RADIO_CONF_RFO_HP     2
+#define RADIO_CONF_TCXO_NOT_SUPPORTED            0U
+#define RADIO_CONF_TCXO_SUPPORTED                1U
 
+#define RADIO_CONF_DCDC_NOT_SUPPORTED            0U
+#define RADIO_CONF_DCDC_SUPPORTED                1U
 /**
   * @}
   */ 
@@ -112,7 +115,6 @@ int32_t BSP_RADIO_Init(void);
 int32_t BSP_RADIO_DeInit(void);
 int32_t BSP_RADIO_ConfigRFSwitch(BSP_RADIO_Switch_TypeDef Config);
 int32_t BSP_RADIO_GetTxConfig(void);
-int32_t BSP_RADIO_GetWakeUpTime(void);
 int32_t BSP_RADIO_IsTCXO(void);
 int32_t BSP_RADIO_IsDCDC(void);
 

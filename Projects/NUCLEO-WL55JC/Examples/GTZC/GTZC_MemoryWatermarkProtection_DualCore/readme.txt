@@ -84,7 +84,7 @@ Option bytes have to be modified following this sequence:
 
 @par Keywords
 
-Security, GTZC, TZSC, TZIC, TrustZone, Secure, Privilege, Watermark, Illegal access, Memory
+Security, GTZC, TZSC, TZIC, Secure, Privilege, Watermark, Illegal access, Memory
 
 @par Directory contents
 

@@ -1,8 +1,9 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    mbmuxif_trace.c
   * @author  MCD Application Team
-  * @brief   allows CM4 applic to receive by CM0 TRACE via MBMUX
+  * @brief   allows CM4 application to receive by CM0 TRACE via MBMUX
   ******************************************************************************
   * @attention
   *
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
 #include "platform.h"
@@ -46,25 +48,26 @@
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
-
+/**
+  * @brief trace buffer to exchange data between CM4 and CM0+
+  */
 UTIL_MEM_PLACE_IN_SECTION("MB_MEM1") uint32_t aTraceNotifAckBuff[MAX_PARAM_OF_TRACE_NOTIF_FUNCTIONS];/*shared*/
 /* USER CODE BEGIN PM */
 
 /* USER CODE END PM */
 
 /* Private function prototypes -----------------------------------------------*/
+/**
+  * @brief  TRACE notification callbacks: schedules a task in order to quit the ISR
+  * @param  ComObj pointer to the TRACE com param buffer
+  */
 static void MBMUXIF_IsrTraceNotifRcvCb(void *ComObj);
+
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Exported functions --------------------------------------------------------*/
-
-/**
-  * @brief Registers TRACE feature to the mailbox
-  * @param none
-  * @retval   0: OK; -1: no more ipcc channel available; -2: feature not provided by CM0PLUS
-  */
 int8_t MBMUXIF_TraceInit(void)
 {
   int8_t ret;
@@ -90,23 +93,18 @@ int8_t MBMUXIF_TraceInit(void)
   return ret;
 }
 
-/**
-  * @brief Sends a Trace-Ack  via Ipcc without waiting for the ack
-  * @param none
-  * @retval   none
-  */
 void MBMUXIF_TraceSendAck(void)
 {
-/* USER CODE BEGIN MBMUXIF_TraceSendAck_1 */
+  /* USER CODE BEGIN MBMUXIF_TraceSendAck_1 */
 
-/* USER CODE END MBMUXIF_TraceSendAck_1 */
+  /* USER CODE END MBMUXIF_TraceSendAck_1 */
   if (MBMUX_AcknowledgeSnd(FEAT_INFO_TRACE_ID) != 0)
   {
     Error_Handler();
   }
-/* USER CODE BEGIN MBMUXIF_TraceSendAck_Last */
+  /* USER CODE BEGIN MBMUXIF_TraceSendAck_Last */
 
-/* USER CODE END MBMUXIF_TraceSendAck_Last */
+  /* USER CODE END MBMUXIF_TraceSendAck_Last */
 }
 
 /* USER CODE BEGIN EFD */
@@ -114,16 +112,11 @@ void MBMUXIF_TraceSendAck(void)
 /* USER CODE END EFD */
 
 /* Private functions ---------------------------------------------------------*/
-/**
-  * @brief  TRACE notification callbacks: schedules a task in order to quit the ISR
-  * @param  pointer to the TRACE com param buffer
-  * @retval  none
-  */
 static void MBMUXIF_IsrTraceNotifRcvCb(void *ComObj)
 {
-/* USER CODE BEGIN MBMUXIF_IsrTraceNotifRcvCb_1 */
+  /* USER CODE BEGIN MBMUXIF_IsrTraceNotifRcvCb_1 */
 
-/* USER CODE END MBMUXIF_IsrTraceNotifRcvCb_1 */
+  /* USER CODE END MBMUXIF_IsrTraceNotifRcvCb_1 */
   MBMUX_ComParam_t *TraceComObj;
   uint32_t  notif_ack_id;
   uint8_t *buffer;
@@ -151,9 +144,9 @@ static void MBMUXIF_IsrTraceNotifRcvCb(void *ComObj)
 
   /* Send ack */
   MBMUXIF_TraceSendAck();
-/* USER CODE BEGIN MBMUXIF_IsrTraceNotifRcvCb_Last */
+  /* USER CODE BEGIN MBMUXIF_IsrTraceNotifRcvCb_Last */
 
-/* USER CODE END MBMUXIF_IsrTraceNotifRcvCb_Last */
+  /* USER CODE END MBMUXIF_IsrTraceNotifRcvCb_Last */
 }
 
 /* USER CODE BEGIN PrFD */

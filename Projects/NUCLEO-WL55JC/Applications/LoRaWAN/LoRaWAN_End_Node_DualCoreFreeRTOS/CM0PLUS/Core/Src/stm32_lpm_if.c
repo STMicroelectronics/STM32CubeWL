@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    stm32_lpm_if.c
@@ -16,9 +17,10 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
-#include "sys_debug.h"
+#include "platform.h"
 #include "stm32_lpm_if.h"
 
 /* USER CODE BEGIN Includes */
@@ -91,7 +93,6 @@ void PWR_EnterStopMode(void)
   /* USER CODE BEGIN EnterStopMode_1 */
 
   /* USER CODE END EnterStopMode_1 */
-  /* Suspend sysTick : work around for degugger problem in dual core (tickets 71085,  72038, 71087 ) */
   HAL_SuspendTick();
   /* Clear Status Flag before entering STOP/STANDBY Mode */
   LL_PWR_ClearFlag_C2STOP_C2STB();
@@ -110,7 +111,7 @@ void PWR_ExitStopMode(void)
   /* USER CODE BEGIN ExitStopMode_1 */
 
   /* USER CODE END ExitStopMode_1 */
-  /* Resume sysTick : work around for degugger problem in dual core */
+  /* Resume sysTick : work around for debugger problem in dual core */
   HAL_ResumeTick();
   /*Not retained periph:
     ADC interface

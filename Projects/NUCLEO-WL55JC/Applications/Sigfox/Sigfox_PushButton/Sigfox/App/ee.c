@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    ee.c
@@ -16,6 +17,7 @@
   *
   *****************************************************************************
   */
+/* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
 #include "ee.h"
@@ -206,7 +208,7 @@ int32_t EE_Init(int32_t format, uint32_t base_address)
     total_nb_pages =
       2 * (EE_var[0].nb_pages + (CFG_EE_BANK1_SIZE ? EE_var[1].nb_pages : 0));
 
-    if (HW_FLASH_Erase(EE_FLASH_PAGE(EE_var, 0), total_nb_pages, 0) != 0)
+    if (FLASH_IF_EraseByPages(EE_FLASH_PAGE(EE_var, 0), total_nb_pages, 0) != 0)
     {
       return EE_ERASE_ERROR;
     }
@@ -242,7 +244,7 @@ int32_t EE_Read(int32_t bank, uint16_t addr, uint32_t *data)
   /* USER CODE BEGIN EE_Read_1 */
 
   /* USER CODE END EE_Read_1 */
-  EE_var_t *pv = &EE_var[CFG_EE_BANK1_SIZE && bank];;
+  EE_var_t *pv = &EE_var[CFG_EE_BANK1_SIZE && bank];
 
   /* Read element starting from active page */
   return EE_ReadEl(pv, addr, data, pv->current_write_page);
@@ -256,7 +258,7 @@ int32_t EE_Write(int32_t bank, uint16_t addr, uint32_t data)
   /* USER CODE BEGIN EE_Write_1 */
 
   /* USER CODE END EE_Write_1 */
-  EE_var_t *pv = &EE_var[CFG_EE_BANK1_SIZE && bank];;
+  EE_var_t *pv = &EE_var[CFG_EE_BANK1_SIZE && bank];
   uint32_t page;
 
   /* Check if current pool is full */
@@ -334,7 +336,7 @@ int32_t EE_Clean(int32_t bank, int32_t interrupt)
   DBG_EE(EE_1);
 
   /* Erase all the pages of the pool */
-  if (HW_FLASH_Erase(EE_FLASH_PAGE(pv, page), pv->nb_pages, interrupt)
+  if (FLASH_IF_EraseByPages(EE_FLASH_PAGE(pv, page), pv->nb_pages, interrupt)
       != 0)
   {
     return EE_ERASE_ERROR;
@@ -471,7 +473,7 @@ static int32_t EE_Recovery(EE_var_t *pv)
       {
         if (EE_GetState(pv, page) != EE_STATE_ERASED)
         {
-          if (HW_FLASH_Erase(EE_FLASH_PAGE(pv, page), 1, 0) != 0)
+          if (FLASH_IF_EraseByPages(EE_FLASH_PAGE(pv, page), 1, 0) != 0)
           {
             return EE_ERASE_ERROR;
           }
@@ -505,7 +507,7 @@ static int32_t EE_Transfer(EE_var_t *pv, uint16_t addr, uint32_t page)
      or ACTIVE, except in case of recovery, where some pages may be already
      in ERASING state.
      However, in case of recovery, we do not not need to set ERASING,
-     as initialization phase erases the unactive pool. */
+     as initialization phase erases the inactive pool. */
   last_page =
     (page < pv->nb_pages) ? (2 * pv->nb_pages - 1) : (pv->nb_pages - 1);
 
@@ -624,7 +626,7 @@ static int32_t EE_WriteEl(EE_var_t *pv, uint16_t addr, uint32_t data)
     EE_FLASH_ADDR(pv, pv->current_write_page) + pv->next_write_offset;
 
   /* Write element in flash */
-  if (HW_FLASH_Write(flash_addr, el) != 0)
+  if (FLASH_IF_Write64(flash_addr, el) != 0)
   {
     return EE_WRITE_ERROR;
   }
@@ -700,7 +702,7 @@ static int32_t EE_SetState(const EE_var_t *pv, uint32_t page, uint32_t state)
   DBG_EE(EE_0);
 
   /* Set new page state inside page header */
-  if (HW_FLASH_Write(flash_addr, EE_PROGRAMMED) != 0)
+  if (FLASH_IF_Write64(flash_addr, EE_PROGRAMMED) != 0)
   {
     return EE_WRITE_ERROR;
   }

@@ -31,8 +31,8 @@ extern "C" {
 #endif
 
 /**
- * @brief Structure defining one of sensor channels.
- */
+  * @brief Structure defining one of sensor channels.
+  */
 typedef struct
 {
   int32_t power;                        /**<Power used on this channel [dBm]*/
@@ -42,11 +42,11 @@ typedef struct
 } DEMO_Channel_t;
 
 /**
- * @brief Structure defining subregion.
- */
+  * @brief Structure defining subregion.
+  */
 typedef struct
 {
-  const char* name;                     /**<String with subregion name*/
+  const char *name;                     /**<String with subregion name*/
   int32_t beacon_power;                 /**<Beacon power [dBm]*/
   uint16_t max_t;                       /**<Maximal transmission time [ms]*/
   uint8_t hopping:1;                    /**<Choose channels pseudorandomly if set*/
@@ -60,11 +60,11 @@ typedef struct
 } DEMO_Subregion_t;
 
 /**
- * @brief Structure defining region.
- */
+  * @brief Structure defining region.
+  */
 typedef struct
 {
-  const char* name;                     /**<String with region name*/
+  const char *name;                     /**<String with region name*/
   uint32_t beacon_freq;                 /**<Frequency of the beacon [Hz]*/
   uint8_t beacon_bw;                    /**<Bandwidth used for beacon [same as in DEMO_coding_lora_t::bw]*/
   uint8_t beacon_sf;                    /**<Spreading used for beacon [same as in DEMO_coding_lora_t::sf]*/
@@ -76,8 +76,8 @@ typedef struct
 
 
 /**
- * @brief Definition of all Regions.
- */
+  * @brief Definition of all Regions.
+  */
 extern const DEMO_Region_t DEMO_Regions[];
 extern const int DEMO_Regions_n;
 

@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    sgfx_eeprom_if.h
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __SGFX_EEPROM_IF_H__
@@ -73,7 +75,7 @@ typedef enum
   EE_MCU_NVM_2_ID,
   EE_MCU_NVM_3_ID,
   /*Public ID e.g. visible on M4 starting at EE_ID=EE_RSSI_CAL_ID */
-  EE_RSSI_CAL_ID= 100,
+  EE_RSSI_CAL_ID = 100,
   EE_AT_ECHO_ID,
   EE_TX_POWER_RC1_ID,
   EE_TX_POWER_RC2_ID,
@@ -119,182 +121,164 @@ typedef enum
 /*!
  * @brief Initializes the Eeprom
  * @note  DEFAULT_FACTORY_SETTINGS are written E2pData
- * @param  None
- * @retval None
  */
 void E2P_Init(void);
 
 /*!
  * @brief Initializes the Eeprom
  * @note  DEFAULT_FACTORY_SETTINGS are written E2pData
- * @param  None
- * @retval None
  */
 void E2P_RestoreFs(void);
 
 /*!
- * @brief Read Output Power
- * @note  DEFAULT_FACTORY_SETTINGS are written E2pData
- * @param  Output Power
- * @retval None
+ * @brief  Read Output Power
+ * @note   DEFAULT_FACTORY_SETTINGS are written E2pData
+ * @param  SgfxRc Region Configuration RC
+ * @return Output Power
  */
 int8_t E2P_Read_Power(sfx_rc_enum_t SgfxRc);
 
 /*!
- * @brief Write Output Power to eeprom
- * @note  DEFAULT_FACTORY_SETTINGS are written E2pData
- * @param  Output Power
- * @retval None
+ * @brief  Write Output Power to eeprom
+ * @note   DEFAULT_FACTORY_SETTINGS are written E2pData
+ * @param  SgfxRc Region Configuration RC
+ * @param  power Output Power
  */
 void E2P_Write_Power(sfx_rc_enum_t SgfxRc, int8_t power);
 
 /*!
- * @brief Read Region Configuration RC from eeprom
- * @note  DEFAULT_FACTORY_SETTINGS are written E2pData
- * @param  None
- * @retval Region Configuration RC
+ * @brief  Read Region Configuration RC from eeprom
+ * @note   DEFAULT_FACTORY_SETTINGS are written E2pData
+ * @return Region Configuration RC
  */
 sfx_rc_enum_t E2P_Read_Rc(void);
 
 /*!
- * @brief Write Region Configuration RC from eeprom
- * @note  DEFAULT_FACTORY_SETTINGS are written E2pData
- * @param  Region Configuration RC
- * @retval None
+ * @brief  Write Region Configuration RC from eeprom
+ * @note   DEFAULT_FACTORY_SETTINGS are written E2pData
+ * @param  SgfxRc Region Configuration RC
  */
 void E2P_Write_Rc(sfx_rc_enum_t SgfxRc);
 
 /*!
- * @brief Read Region Configuration words depending on RC
- * @note  DEFAULT_FACTORY_SETTINGS are written E2pData
- * @param  RC
- * @param  Configuration words
- * @retval None
+ * @brief  Read Region Configuration words depending on RC
+ * @note   DEFAULT_FACTORY_SETTINGS are written E2pData
+ * @param  sfx_rc Region Configuration RC
+ * @param  config_words Configuration words
  */
 void E2P_Read_ConfigWords(sfx_rc_enum_t sfx_rc, sfx_u32 config_words[3]);
 
 /*!
- * @brief Write Region Configuration words depending on RC
- * @note  DEFAULT_FACTORY_SETTINGS are written E2pData
- * @param  RC
- * @param  Configuration words
- * @retval None
+ * @brief  Write Region Configuration words depending on RC
+ * @note   DEFAULT_FACTORY_SETTINGS are written E2pData
+ * @param  sfx_rc Region Configuration RC
+ * @param  config_words Configuration words
  */
 void E2P_Write_ConfigWords(sfx_rc_enum_t sfx_rc, sfx_u32 config_words[3]);
 
 /*!
- * @brief Read rssi calibration value from eeprom
- * @note  DEFAULT_FACTORY_SETTINGS are written E2pData
- * @param  None
- * @retval rssi calibration value
+ * @brief  Read rssi calibration value from eeprom
+ * @note   DEFAULT_FACTORY_SETTINGS are written E2pData
+ * @return rssi calibration value
  */
 int16_t E2P_Read_RssiCal(void);
 
 /*!
- * @brief Writes rssi calibration value to eeprom
- * @note  DEFAULT_FACTORY_SETTINGS are written E2pData
- * @param  rssi calibration value
- * @retval None
+ * @brief  Writes rssi calibration value to eeprom
+ * @note   DEFAULT_FACTORY_SETTINGS are written E2pData
+ * @param  rssi_cal calibration value
  */
 void E2P_Write_RssiCal(int16_t rssi_cal);
 
 /*!
- * @brief Read Region At echo setting
- * @note  DEFAULT_FACTORY_SETTINGS are written E2pData
- * @param  None
+ * @brief  Read Region At echo setting
+ * @note   DEFAULT_FACTORY_SETTINGS are written E2pData
  * @retval at_echo
  */
 uint32_t E2P_Read_AtEcho(void);
 
 /*!
- * @brief Write Region At echo setting
- * @note  DEFAULT_FACTORY_SETTINGS are written E2pData
+ * @brief  Write Region At echo setting
+ * @note   DEFAULT_FACTORY_SETTINGS are written E2pData
  * @param  at_echo
- * @retval None
  */
 void E2P_Write_AtEcho(uint32_t at_echo);
 
 /*!
- * @brief Read KeyType setting
- * @note  DEFAULT_FACTORY_SETTINGS are written E2pData
- * @param  None
+ * @brief  Read KeyType setting
+ * @note   DEFAULT_FACTORY_SETTINGS are written E2pData
  * @retval KeyType
  */
 sfx_key_type_t E2P_Read_KeyType(void);
 
 /*!
- * @brief Write KeyType setting
- * @note  DEFAULT_FACTORY_SETTINGS are written E2pData
- * @param  KeyType
- * @retval None
+ * @brief  Write KeyType setting
+ * @note   DEFAULT_FACTORY_SETTINGS are written E2pData
+ * @param  key_type KeyType setting
  */
 void E2P_Write_KeyType(sfx_key_type_t key_type);
 
 /*!
- * @brief Read EncryptionFlag setting
- * @note  DEFAULT_FACTORY_SETTINGS are written E2pData
- * @param  None
+ * @brief  Read EncryptionFlag setting
+ * @note   DEFAULT_FACTORY_SETTINGS are written E2pData
  * @retval encryption_flag
  */
 uint8_t E2P_Read_EncryptionFlag(void);
 
 /*!
- * @brief Write EncryptionFlag  setting
- * @note  DEFAULT_FACTORY_SETTINGS are written E2pData
+ * @brief  Write EncryptionFlag  setting
+ * @note   DEFAULT_FACTORY_SETTINGS are written E2pData
  * @param  encryption_flag
- * @retval None
  */
 void E2P_Write_EncryptionFlag(sfx_u8 encryption_flag);
 
 /*!
- * @brief Read Region SEnvm setting
- * @note  DEFAULT_FACTORY_SETTINGS are written E2pData
- * @param  SEnvm
+ * @brief  Read Region SEnvm setting
+ * @note   DEFAULT_FACTORY_SETTINGS are written E2pData
+ * @param  read_data SEnvm
  * @param  len
  * @retval error status
  */
 E2P_ErrorStatus_t E2P_Read_SeNvm(sfx_u8 *read_data, uint32_t len);
 
 /*!
- * @brief Write Region SEnvm setting
- * @note  DEFAULT_FACTORY_SETTINGS are written E2pData
- * @param  SEnvm
+ * @brief  Write Region SEnvm setting
+ * @note   DEFAULT_FACTORY_SETTINGS are written E2pData
+ * @param  data_to_write SEnvm
  * @param  len
  * @retval error status
  */
 E2P_ErrorStatus_t E2P_Write_SeNvm(sfx_u8 *data_to_write, uint32_t len);
 
 /*!
- * @brief Read MCUnvm setting
- * @note  DEFAULT_FACTORY_SETTINGS are written E2pData
- * @param  MCUnvm
+ * @brief  Read MCUnvm setting
+ * @note   DEFAULT_FACTORY_SETTINGS are written E2pData
+ * @param  read_data MCUnvm
  * @param  len
  * @retval error status
  */
 E2P_ErrorStatus_t E2P_Read_McuNvm(sfx_u8 *read_data,  uint32_t len);
 
 /*!
- * @brief Write Region MCUnvm setting
- * @note  DEFAULT_FACTORY_SETTINGS are written E2pData
- * @param  MCUnvm
+ * @brief  Write Region MCUnvm setting
+ * @note   DEFAULT_FACTORY_SETTINGS are written E2pData
+ * @param  data_to_write MCUnvm
  * @param  len
  * @retval error status
  */
 E2P_ErrorStatus_t E2P_Write_McuNvm(sfx_u8 *data_to_write, uint32_t len);
 
 /*!
- * @brief Read Region SEnvm setting
- * @note  DEFAULT_FACTORY_SETTINGS are written E2pData
- * @param   None
+ * @brief  Read Region SEnvm setting
+ * @note   DEFAULT_FACTORY_SETTINGS are written E2pData
  * @retval the VL
  */
 uint8_t E2P_Read_VerboseLevel(void);
 
 /*!
- * @brief Read verbose levelsetting
- * @note  DEFAULT_FACTORY_SETTINGS are written E2pData
+ * @brief  Read verbose levelsetting
+ * @note   DEFAULT_FACTORY_SETTINGS are written E2pData
  * @param  verboselevel
- * @retval None
  */
 void E2P_Write_VerboseLevel(uint8_t verboselevel);
 

@@ -1,13 +1,12 @@
 /**
   ******************************************************************************
   * @file    lptim.h
-  * @author  MCD Application Team
   * @brief   This file contains all the function prototypes for
   *          the lptim.c file
-  *****************************************************************************
+  ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under Ultimate Liberty license
@@ -15,9 +14,8 @@
   * the License. You may obtain a copy of the License at:
   *                             www.st.com/SLA0044
   *
-  *****************************************************************************
+  ******************************************************************************
   */
-
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __LPTIM_H__
 #define __LPTIM_H__
@@ -33,35 +31,17 @@ extern "C" {
 
 /* USER CODE END Includes */
 
-/* Exported types ------------------------------------------------------------*/
-/* USER CODE BEGIN ET */
-
-/* USER CODE END ET */
-
-/* Exported constants --------------------------------------------------------*/
-/* USER CODE BEGIN EC */
-
-/* USER CODE END EC */
-
-/* External variables --------------------------------------------------------*/
-/* USER CODE BEGIN EV */
-
-/* USER CODE END EV */
-
-/* Exported macro ------------------------------------------------------------*/
-/* USER CODE BEGIN EM */
-
-/* USER CODE END EM */
-
-/* Exported functions prototypes ---------------------------------------------*/
-
 extern LPTIM_HandleTypeDef hlptim1;
+
+/* USER CODE BEGIN Private defines */
+
+/* USER CODE END Private defines */
 
 void MX_LPTIM1_Init(void);
 
-/* USER CODE BEGIN EFP */
+/* USER CODE BEGIN Prototypes */
 
-/* USER CODE END EFP */
+/* USER CODE END Prototypes */
 
 #ifdef __cplusplus
 }
@@ -69,4 +49,4 @@ void MX_LPTIM1_Init(void);
 
 #endif /* __LPTIM_H__ */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE***/
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

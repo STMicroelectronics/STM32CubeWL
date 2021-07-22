@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    lora_app.c
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
 #include "platform.h"
@@ -59,45 +61,21 @@
 
 /* Private function prototypes -----------------------------------------------*/
 /**
-  * @brief  LED Tx timer callback function
-  * @param  LED context
-  * @retval none
-  */
-static void OnTxTimerLedEvent(void *context);
-
-/**
-  * @brief  LED Rx timer callback function
-  * @param  LED context
-  * @retval none
-  */
-static void OnRxTimerLedEvent(void *context);
-
-/**
-  * @brief  LED Join timer callback function
-  * @param  LED context
-  * @retval none
-  */
-static void OnJoinTimerLedEvent(void *context);
-
-/**
   * @brief  join event callback function
-  * @param  params
-  * @retval none
+  * @param  joinParams status of join
   */
 static void OnJoinRequest(LmHandlerJoinParams_t *joinParams);
 
 /**
   * @brief  tx event callback function
-  * @param  params
-  * @retval none
+  * @param  params status of last Tx
   */
 static void OnTxData(LmHandlerTxParams_t *params);
 
 /**
-  * @brief callback when LoRa endNode has received a frame
-  * @param appData
-  * @param params
-  * @retval None
+  * @brief callback when LoRa application has received a frame
+  * @param appData data received in the last Rx
+  * @param params status of last Rx
   */
 static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params);
 
@@ -109,12 +87,28 @@ static void OnMacProcessNotify(void);
 
 /**
   * @brief  call back when LoRaWan Stack needs update
-  * @param  none
-  * @retval none
   */
 static void CmdProcessNotify(void);
 
 /* USER CODE BEGIN PFP */
+
+/**
+  * @brief  LED Tx timer callback function
+  * @param  context ptr of LED context
+  */
+static void OnTxTimerLedEvent(void *context);
+
+/**
+  * @brief  LED Rx timer callback function
+  * @param  context ptr of LED context
+  */
+static void OnRxTimerLedEvent(void *context);
+
+/**
+  * @brief  LED Join timer callback function
+  * @param  context ptr of LED context
+  */
+static void OnJoinTimerLedEvent(void *context);
 
 /* USER CODE END PFP */
 
@@ -126,6 +120,8 @@ static LmHandlerCallbacks_t LmHandlerCallbacks =
 {
   .GetBatteryLevel =           GetBatteryLevel,
   .GetTemperature =            GetTemperatureLevel,
+  .GetUniqueId =               GetUniqueId,
+  .GetDevAddr =                GetDevAddr,
   .OnMacProcess =              OnMacProcessNotify,
   .OnJoinRequest =             OnJoinRequest,
   .OnTxData =                  OnTxData,
@@ -144,6 +140,7 @@ static LmHandlerParams_t LmHandlerParams =
   .PingPeriodicity =          LORAWAN_DEFAULT_PING_SLOT_PERIODICITY
 };
 
+/* USER CODE BEGIN PV */
 /**
   * @brief Timer to handle the application Tx Led to toggle
   */
@@ -159,8 +156,6 @@ static UTIL_TIMER_Object_t RxLedTimer;
   */
 static UTIL_TIMER_Object_t JoinLedTimer;
 
-/* USER CODE BEGIN PV */
-
 /* USER CODE END PV */
 
 /* Exported functions ---------------------------------------------------------*/
@@ -170,24 +165,14 @@ static UTIL_TIMER_Object_t JoinLedTimer;
 
 void LoRaWAN_Init(void)
 {
+  CMD_Init(CmdProcessNotify);
+
   /* USER CODE BEGIN LoRaWAN_Init_1 */
 
-  /* USER CODE END LoRaWAN_Init_1 */
-#if defined(USE_BSP_DRIVER)
   BSP_LED_Init(LED_BLUE);
   BSP_LED_Init(LED_GREEN);
   BSP_LED_Init(LED_RED);
   BSP_PB_Init(BUTTON_SW2, BUTTON_MODE_EXTI);
-#elif defined(MX_BOARD_PSEUDODRIVER)
-  SYS_LED_Init(SYS_LED_BLUE);
-  SYS_LED_Init(SYS_LED_GREEN);
-  SYS_LED_Init(SYS_LED_RED);
-  SYS_PB_Init(SYS_BUTTON2, SYS_BUTTON_MODE_EXTI);
-#else
-#error user to provide its board code or to call his board driver functions
-#endif  /* USE_BSP_DRIVER || MX_BOARD_PSEUDODRIVER */
-
-  CMD_Init(CmdProcessNotify);
 
   /* Get LoRa APP version*/
   APP_LOG(TS_OFF, VLEVEL_M, "APP_VERSION:        V%X.%X.%X\r\n",
@@ -214,6 +199,8 @@ void LoRaWAN_Init(void)
   UTIL_TIMER_SetPeriod(&RxLedTimer, 500);
   UTIL_TIMER_SetPeriod(&JoinLedTimer, 500);
 
+  /* USER CODE END LoRaWAN_Init_1 */
+
   UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LmHandlerProcess), UTIL_SEQ_RFU, LmHandlerProcess);
   UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_Vcom), UTIL_SEQ_RFU, CMD_Process);
 
@@ -225,14 +212,18 @@ void LoRaWAN_Init(void)
 
   LmHandlerConfigure(&LmHandlerParams);
 
+  /* USER CODE BEGIN LoRaWAN_Init_Last */
   UTIL_TIMER_Start(&JoinLedTimer);
 
   APP_PPRINTF("ATtention command interface\r\n");
   APP_PPRINTF("AT? to list all available functions\r\n");
-  /* USER CODE BEGIN LoRaWAN_Init_Last */
 
   /* USER CODE END LoRaWAN_Init_Last */
 }
+
+/* USER CODE BEGIN PB_Callbacks */
+
+/* USER CODE END PB_Callbacks */
 
 /* Private functions ---------------------------------------------------------*/
 /* USER CODE BEGIN PrFD */
@@ -242,115 +233,65 @@ void LoRaWAN_Init(void)
 static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params)
 {
   /* USER CODE BEGIN OnRxData_1 */
-
-  /* USER CODE END OnRxData_1 */
-  if ((appData != NULL) && (params != NULL))
+  if ((appData != NULL) || (params != NULL))
   {
-#if defined(USE_BSP_DRIVER)
     BSP_LED_On(LED_BLUE) ;
-#elif defined(MX_BOARD_PSEUDODRIVER)
-    SYS_LED_On(SYS_LED_BLUE) ;
-#endif /* USE_BSP_DRIVER || MX_BOARD_PSEUDODRIVER */
+
     UTIL_TIMER_Start(&RxLedTimer);
 
     AT_event_receive(appData, params);
   }
-
-  /* USER CODE BEGIN OnRxData_2 */
-
-  /* USER CODE END OnRxData_2 */
+  /* USER CODE END OnRxData_1 */
 }
 
+/* USER CODE BEGIN PrFD_LedEvents */
 static void OnTxTimerLedEvent(void *context)
 {
-  /* USER CODE BEGIN OnTxTimerLedEvent_1 */
-
-  /* USER CODE END OnTxTimerLedEvent_1 */
-#if defined(USE_BSP_DRIVER)
   BSP_LED_Off(LED_GREEN) ;
-#else
-  SYS_LED_Off(SYS_LED_GREEN) ;
-#endif /* USE_BSP_DRIVER || MX_BOARD_PSEUDODRIVER */
-  /* USER CODE BEGIN OnTxTimerLedEvent_2 */
-
-  /* USER CODE END OnTxTimerLedEvent_2 */
 }
 
 static void OnRxTimerLedEvent(void *context)
 {
-  /* USER CODE BEGIN OnRxTimerLedEvent_1 */
-
-  /* USER CODE END OnRxTimerLedEvent_1 */
-#if defined(USE_BSP_DRIVER)
   BSP_LED_Off(LED_BLUE) ;
-#else
-  SYS_LED_Off(SYS_LED_BLUE) ;
-#endif /* USE_BSP_DRIVER || MX_BOARD_PSEUDODRIVER */
-  /* USER CODE BEGIN OnRxTimerLedEvent_2 */
-
-  /* USER CODE END OnRxTimerLedEvent_2 */
 }
 
 static void OnJoinTimerLedEvent(void *context)
 {
-  /* USER CODE BEGIN OnJoinTimerLedEvent_1 */
-
-  /* USER CODE END OnJoinTimerLedEvent_1 */
-#if defined(USE_BSP_DRIVER)
   BSP_LED_Toggle(LED_RED) ;
-#else
-  SYS_LED_Toggle(SYS_LED_RED) ;
-#endif /* USE_BSP_DRIVER || MX_BOARD_PSEUDODRIVER */
-  /* USER CODE BEGIN OnJoinTimerLedEvent_2 */
-
-  /* USER CODE END OnJoinTimerLedEvent_2 */
 }
+
+/* USER CODE END PrFD_LedEvents */
 
 static void OnTxData(LmHandlerTxParams_t *params)
 {
   /* USER CODE BEGIN OnTxData_1 */
-
-  /* USER CODE END OnTxData_1 */
-  if ((params != NULL) && (params->IsMcpsConfirm != 0))
+  if ((params != NULL))
   {
-#if defined(USE_BSP_DRIVER)
-    BSP_LED_On(LED_GREEN) ;
-#elif defined(MX_BOARD_PSEUDODRIVER)
-    SYS_LED_On(SYS_LED_GREEN) ;
-#endif /* USE_BSP_DRIVER || MX_BOARD_PSEUDODRIVER */
-    UTIL_TIMER_Start(&TxLedTimer);
+    /* Process Tx event only if its a mcps response to prevent some internal events (mlme) */
+    if (params->IsMcpsConfirm != 0)
+    {
+      BSP_LED_On(LED_GREEN) ;
+      UTIL_TIMER_Start(&TxLedTimer);
+    }
+    AT_event_confirm(params);
   }
-  AT_event_confirm(params);
-
-  /* USER CODE BEGIN OnTxData_2 */
-
-  /* USER CODE END OnTxData_2 */
+  /* USER CODE END OnTxData_1 */
 }
 
 static void OnJoinRequest(LmHandlerJoinParams_t *joinParams)
 {
   /* USER CODE BEGIN OnJoinRequest_1 */
-
-  /* USER CODE END OnJoinRequest_1 */
   if (joinParams != NULL)
   {
     if (joinParams->Status == LORAMAC_HANDLER_SUCCESS)
     {
       UTIL_TIMER_Stop(&JoinLedTimer);
-
-#if defined(USE_BSP_DRIVER)
       BSP_LED_Off(LED_RED) ;
-#elif defined(MX_BOARD_PSEUDODRIVER)
-      SYS_LED_Off(SYS_LED_RED) ;
-#endif /* USE_BSP_DRIVER || MX_BOARD_PSEUDODRIVER */
 
     }
+    AT_event_join(joinParams);
   }
-  AT_event_join(joinParams);
-
-  /* USER CODE BEGIN OnJoinRequest_2 */
-
-  /* USER CODE END OnJoinRequest_2 */
+  /* USER CODE END OnJoinRequest_1 */
 }
 
 static void CmdProcessNotify(void)
@@ -370,6 +311,7 @@ static void OnMacProcessNotify(void)
 
   /* USER CODE END OnMacProcessNotify_1 */
   UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LmHandlerProcess), CFG_SEQ_Prio_0);
+
   /* USER CODE BEGIN OnMacProcessNotify_2 */
 
   /* USER CODE END OnMacProcessNotify_2 */

@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    sigfox_mbwrapper.h
@@ -17,6 +18,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __SIGFOX_MBWRAPPER_CM4_H__
@@ -76,8 +78,16 @@ typedef struct sSigfoxCallback
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
+/**
+  * @brief This function processes the callbacks and primitives from Cm0
+  * @param ComObj exchange buffer parameter
+  */
 void Process_Sigfox_Notif(MBMUX_ComParam_t *ComObj);
 
+/**
+ * @brief Register the callbacks structure for the process notification
+ * @param SigfoxCallback struct of callbacks
+ */
 void Sigfox_Register(SigfoxCallback_t *SigfoxCallback);
 
 /* USER CODE BEGIN EFP */

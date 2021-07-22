@@ -424,11 +424,6 @@
               <FilePath>../Src/kms_low_level.c</FilePath>
             </File>
             <File>
-              <FileName>nvms_low_level.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Src/nvms_low_level.c</FilePath>
-            </File>
-            <File>
               <FileName>ca_low_level.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Src/ca_low_level.c</FilePath>

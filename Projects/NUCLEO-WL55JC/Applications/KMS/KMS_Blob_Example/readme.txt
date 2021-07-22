@@ -55,9 +55,9 @@ Cryptography, KMS, Provisioning
 
 @par Directory contents 
 
-  - KMS/KMS_Blob_Example/Inc/stm32wlxx_nucleo_conf.h     BSP configuration file
-  - KMS/KMS_Blob_Example/Inc/stm32wlxx_hal_conf.h    HAL configuration file
-  - KMS/KMS_Blob_Example/Inc/stm32wlxx_it.h          Interrupt handlers header file
+  - KMS/KMS_Blob_Example/Inc/stm32wlxx_nucleo_conf.h       BSP configuration file
+  - KMS/KMS_Blob_Example/Inc/stm32wlxx_hal_conf.h          HAL configuration file
+  - KMS/KMS_Blob_Example/Inc/stm32wlxx_it.h                Interrupt handlers header file
   - KMS/KMS_Blob_Example/Inc/app_kms.h                     Header for app_kms.c module
   - KMS/KMS_Blob_Example/Inc/ca_conf.h                     Cryptographic configuration file
   - KMS/KMS_Blob_Example/Inc/ca_low_level.h                Header for ca_low_level.c module
@@ -73,8 +73,8 @@ Cryptography, KMS, Provisioning
   - KMS/KMS_Blob_Example/Inc/mbedtls_config.h              MBED crypto configuration file
   - KMS/KMS_Blob_Example/Inc/nvms_low_level.h              Header for nvms_low_level.c module
   - KMS/KMS_Blob_Example/Inc/ymodem.h                      Header for ymodem.c module
-  - KMS/KMS_Blob_Example/Src/stm32wlxx_it.c          Interrupt handlers
-  - KMS/KMS_Blob_Example/Src/stm32wlxx_hal_msp.c     HAL MSP module
+  - KMS/KMS_Blob_Example/Src/stm32wlxx_it.c                Interrupt handlers
+  - KMS/KMS_Blob_Example/Src/stm32wlxx_hal_msp.c           HAL MSP module
   - KMS/KMS_Blob_Example/Src/app_kms.c                     KMS application
   - KMS/KMS_Blob_Example/Src/ca_low_level.c                Cryptographic low level source file
   - KMS/KMS_Blob_Example/Src/com.c                         Communication module file
@@ -84,7 +84,7 @@ Cryptography, KMS, Provisioning
   - KMS/KMS_Blob_Example/Src/kms_object_update_app.c       KMS blob image download and import source file
   - KMS/KMS_Blob_Example/Src/main.c                        Main program
   - KMS/KMS_Blob_Example/Src/nvms_low_level.c              NVMS low level source file
-  - KMS/KMS_Blob_Example/Src/system_stm32wlxx.c      STM32WLxx system source file
+  - KMS/KMS_Blob_Example/Src/system_stm32wlxx.c            STM32WLxx system source file
   - KMS/KMS_Blob_Example/Src/ymodem.c                      Ymodem communication protocol source file
 
 

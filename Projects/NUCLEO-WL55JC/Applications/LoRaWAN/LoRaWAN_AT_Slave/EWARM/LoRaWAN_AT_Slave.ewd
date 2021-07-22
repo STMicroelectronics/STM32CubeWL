@@ -40,11 +40,11 @@
                 </option>
                 <option>
                     <name>MemOverride</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>MemFile</name>
-                    <state>$TOOLKIT_DIR$\config\debugger\ST\STM32WL55JC_M4.ddf</state>
+                    <state>$TOOLKIT_DIR$\CONFIG\debugger\ST\STM32WL55JC_M4.ddf</state>
                 </option>
                 <option>
                     <name>RunToEnable</name>
@@ -282,6 +282,10 @@
                 <wantNonLocal>1</wantNonLocal>
                 <debug>1</debug>
                 <option>
+                    <name>CatchSFERR</name>
+                    <state>1</state>
+                </option>
+                <option>
                     <name>OCDriverInfo</name>
                     <state>1</state>
                 </option>
@@ -400,10 +404,6 @@
                     <state>1</state>
                 </option>
                 <option>
-                    <name>CatchSFERR</name>
-                    <state>1</state>
-                </option>
-                <option>
                     <name>CatchHARDERR</name>
                     <state>1</state>
                 </option>
@@ -498,6 +498,10 @@
                 <wantNonLocal>1</wantNonLocal>
                 <debug>1</debug>
                 <option>
+                    <name>CatchSFERR</name>
+                    <state>1</state>
+                </option>
+                <option>
                     <name>OCDriverInfo</name>
                     <state>1</state>
                 </option>
@@ -508,7 +512,7 @@
                 <option>
                     <name>IjetResetList</name>
                     <version>1</version>
-                    <state>9</state>
+                    <state>10</state>
                 </option>
                 <option>
                     <name>IjetHWResetDuration</name>
@@ -573,7 +577,7 @@
                 </option>
                 <option>
                     <name>IjetCpuClockEdit</name>
-                    <state></state>
+                    <state>72.0</state>
                 </option>
                 <option>
                     <name>IjetSwoPrescalerList</name>
@@ -649,10 +653,6 @@
                     <state>1</state>
                 </option>
                 <option>
-                    <name>CatchSFERR</name>
-                    <state>1</state>
-                </option>
-                <option>
                     <name>CatchHARDERR</name>
                     <state>1</state>
                 </option>
@@ -682,7 +682,7 @@
                 </option>
                 <option>
                     <name>IjetSelectedCPUBehaviour</name>
-                    <state></state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>ICpuName</name>
@@ -727,6 +727,10 @@
                 <version>16</version>
                 <wantNonLocal>1</wantNonLocal>
                 <debug>1</debug>
+                <option>
+                    <name>CCCatchSFERR</name>
+                    <state>0</state>
+                </option>
                 <option>
                     <name>JLinkSpeed</name>
                     <state>1000</state>
@@ -831,7 +835,7 @@
                 <option>
                     <name>CCJLinkResetList</name>
                     <version>6</version>
-                    <state>5</state>
+                    <state>7</state>
                 </option>
                 <option>
                     <name>CCJLinkInterfaceCmdLine</name>
@@ -866,10 +870,6 @@
                     <state>0</state>
                 </option>
                 <option>
-                    <name>CCCatchSFERR</name>
-                    <state>0</state>
-                </option>
-                <option>
                     <name>CCCatchHARDERR</name>
                     <state>0</state>
                 </option>
@@ -896,7 +896,7 @@
                 </option>
                 <option>
                     <name>CCCpuClockEdit</name>
-                    <state></state>
+                    <state>72.0</state>
                 </option>
                 <option>
                     <name>CCSwoClockAuto</name>
@@ -1361,7 +1361,7 @@
                 </option>
                 <option>
                     <name>CCXds100InterfaceRadio</name>
-                    <state>2</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>CCXds100InterfaceCmdLine</name>
@@ -1370,7 +1370,7 @@
                 <option>
                     <name>CCXds100ProbeList</name>
                     <version>0</version>
-                    <state>2</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>CCXds100SWOPortRadio</name>

@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    sys_conf.h
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __SYS_CONF_H__
@@ -41,29 +43,33 @@ extern "C" {
   * @brief Temperature and pressure values are retrieved from sensors shield
   *        (instead of sending dummy values). It requires MEMS IKS shield
   */
-#define SENSOR_ENABLED  0
+#define SENSOR_ENABLED              0
 
 /**
   * @brief CM4 Verbose level for all trace logs
   */
-#define VERBOSE_LEVEL     VLEVEL_M
+#define VERBOSE_LEVEL               VLEVEL_M
 
 /**
   * @brief Enable trace logs
   */
-#define APP_LOG_ENABLED   1
+#define APP_LOG_ENABLED             1
 
 /**
-  * @brief Enable Debugger mode
-  * @note  1:ON it enables the debbugger plus 4 dgb pins, 0:OFF the debugger is OFF (lower consumption)
+  * @brief Enable MCU Debugger pins (dbg serial wires, sbg spi, etc)
   */
-#define DEBUGGER_ON       0
+#define DEBUGGER_ENABLED            0
+
+/**
+  * @brief Enable four wires usable as probes (two of them PROBE1 and PROBE2 used by the MW)
+  */
+#define PROBE_PINS_ENABLED          0
 
 /**
   * @brief Disable Low Power mode
   * @note  0: LowPowerMode enabled. MCU enters stop2 mode, 1: LowPowerMode disabled. MCU enters sleep mode only
   */
-#define LOW_POWER_DISABLE 0
+#define LOW_POWER_DISABLE           0
 
 /* USER CODE BEGIN EC */
 

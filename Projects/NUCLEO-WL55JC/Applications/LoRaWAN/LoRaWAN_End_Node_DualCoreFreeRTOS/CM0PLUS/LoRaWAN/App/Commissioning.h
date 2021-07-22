@@ -26,21 +26,19 @@
   * @brief   End-device commissioning parameters
   ******************************************************************************
  */
+
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __COMMISSIONING_H__
 #define __COMMISSIONING_H__
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 /*!
  ******************************************************************************
  ********************************** WARNING ***********************************
  ******************************************************************************
 
- The LoRaWAN AES128 keys are stored and provisionned on secure-elements.
+ The LoRaWAN AES128 keys are stored and provisioned on secure-elements.
 
- This project providdes a software emulated secure-element.
+ This project provides a software emulated secure-element.
  The LoRaWAN AES128 keys SHALL be updated under
  src/peripherals/<secure-element name>-se\se-identity.h file.
 
@@ -80,9 +78,5 @@ extern "C" {
 /* USER CODE BEGIN EC2 */
 
 /* USER CODE END EC2 */
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* __COMMISSIONING_H__ */

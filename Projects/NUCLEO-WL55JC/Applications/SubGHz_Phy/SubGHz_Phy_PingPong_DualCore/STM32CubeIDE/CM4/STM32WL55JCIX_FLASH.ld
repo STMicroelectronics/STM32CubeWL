@@ -6,13 +6,16 @@
 **  Author      : STM32CubeIDE
 **
 **  Abstract    : Linker script for STM32WL55xC Device
-**                      256Kbytes ROM
+**                      256Kbytes FLASH
 **                      64Kbytes RAM
 **
 **                Set heap size, stack size and stack location according
 **                to application requirements.
 **
 **                Set memory bank area and size if external memory is used.
+**
+**  Note:       : For specific memory allocation, linker and startup files must be customized.
+**                Refer to STM32CubeIDE user guide (UM2609), chapter "Modify the linker script".
 **
 **  Target      : STMicroelectronics STM32
 **
@@ -39,29 +42,29 @@ ENTRY(Reset_Handler)
 /* Highest address of the user mode stack */
 _estack = ORIGIN(RAM) + LENGTH(RAM); /* end of "RAM" Ram type memory */
 
-_Min_Heap_Size = 0x400 ; /* required amount of heap  */
-_Min_Stack_Size = 0x1000 ; /* required amount of stack */
+_Min_Heap_Size = 0x200 ; /* required amount of heap  */
+_Min_Stack_Size = 0x800 ; /* required amount of stack */
 
 /* Memories definition */
 MEMORY
 {
   RAM    (xrw)   : ORIGIN = 0x20000000, LENGTH = 32K
-  ROM    (rx)    : ORIGIN = 0x08000000, LENGTH = 128K
+  FLASH   (rx)   : ORIGIN = 0x08000000, LENGTH = 128K
   RAM_SHARED (rw): ORIGIN = 0x20008000, LENGTH = 4K
 }
 
 /* Sections */
 SECTIONS
 {
-  /* The startup code into "ROM" Rom type memory */
+  /* The startup code into "FLASH" Rom type memory */
   .isr_vector :
   {
     . = ALIGN(4);
     KEEP(*(.isr_vector)) /* Startup code */
     . = ALIGN(4);
-  } >ROM
+  } >FLASH
 
-  /* The program code and other data into "ROM" Rom type memory */
+  /* The program code and other data into "FLASH" Rom type memory */
   .text :
   {
     . = ALIGN(4);
@@ -76,30 +79,30 @@ SECTIONS
 
     . = ALIGN(4);
     _etext = .;        /* define a global symbols at end of code */
-  } >ROM
+  } >FLASH
 
-  /* Constant data into "ROM" Rom type memory */
+  /* Constant data into "FLASH" Rom type memory */
   .rodata :
   {
     . = ALIGN(4);
     *(.rodata)         /* .rodata sections (constants, strings, etc.) */
     *(.rodata*)        /* .rodata* sections (constants, strings, etc.) */
     . = ALIGN(4);
-  } >ROM
+  } >FLASH
 
-  .ARM.extab   : { 
+  .ARM.extab   : {
     . = ALIGN(4);
     *(.ARM.extab* .gnu.linkonce.armextab.*)
     . = ALIGN(4);
-  } >ROM
-  
+  } >FLASH
+
   .ARM : {
     . = ALIGN(4);
     __exidx_start = .;
     *(.ARM.exidx*)
     __exidx_end = .;
     . = ALIGN(4);
-  } >ROM
+  } >FLASH
 
   .preinit_array     :
   {
@@ -108,8 +111,8 @@ SECTIONS
     KEEP (*(.preinit_array*))
     PROVIDE_HIDDEN (__preinit_array_end = .);
     . = ALIGN(4);
-  } >ROM
-  
+  } >FLASH
+
   .init_array :
   {
     . = ALIGN(4);
@@ -118,8 +121,8 @@ SECTIONS
     KEEP (*(.init_array*))
     PROVIDE_HIDDEN (__init_array_end = .);
     . = ALIGN(4);
-  } >ROM
-  
+  } >FLASH
+
   .fini_array :
   {
     . = ALIGN(4);
@@ -128,23 +131,47 @@ SECTIONS
     KEEP (*(.fini_array*))
     PROVIDE_HIDDEN (__fini_array_end = .);
     . = ALIGN(4);
-  } >ROM
+  } >FLASH
 
   /* Used by the startup to initialize data */
   _sidata = LOADADDR(.data);
 
   /* Initialized data sections into "RAM" Ram type memory */
-  .data : 
+  .data :
   {
     . = ALIGN(4);
     _sdata = .;        /* create a global symbol at data start */
     *(.data)           /* .data sections */
     *(.data*)          /* .data* sections */
+    *(.RamFunc)        /* .RamFunc sections */
+    *(.RamFunc*)       /* .RamFunc* sections */
 
     . = ALIGN(4);
     _edata = .;        /* define a global symbol at data end */
-    
-  } >RAM AT> ROM
+
+  } >RAM AT> FLASH
+
+  /* Uninitialized data section into "MAPPING_TABLE" Ram type memory */
+  MAPPING_TABLE (NOLOAD) :
+  {
+    . = ALIGN(4);
+    _sMAPPING_TABLE = .;
+    *(MAPPING_TABLE)
+
+    . = ALIGN(4);
+    _eMAPPING_TABLE = .;
+  } >RAM_SHARED
+
+  /* Uninitialized data section into "MB_MEM1" Ram type memory */
+  MB_MEM1 (NOLOAD) : 
+  {
+    . = ALIGN(4);
+    _sMB_MEM1 = .;
+    *(MB_MEM1)
+
+    . = ALIGN(4);
+    _eMB_MEM1 = .;
+  } >RAM_SHARED
 
   /* Uninitialized data section into "RAM" Ram type memory */
   . = ALIGN(4);
@@ -182,6 +209,4 @@ SECTIONS
   }
 
   .ARM.attributes 0 : { *(.ARM.attributes) }
-   MAPPING_TABLE (NOLOAD) : { *(MAPPING_TABLE) } >RAM_SHARED
-   MB_MEM1 (NOLOAD)       : { *(MB_MEM1) } >RAM_SHARED
 }

@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    utilities_def.h
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __UTILITIES_DEF_H__
@@ -40,9 +42,11 @@ extern "C" {
   */
 typedef enum
 {
+  /* USER CODE BEGIN CFG_LPM_Id_t_0 */
+
+  /* USER CODE END CFG_LPM_Id_t_0 */
   CFG_LPM_APPLI_Id,
   CFG_LPM_UART_TX_Id,
-  CFG_LPM_TCXO_WA_Id,
   /* USER CODE BEGIN CFG_LPM_Id_t */
 
   /* USER CODE END CFG_LPM_Id_t */
@@ -72,7 +76,10 @@ typedef enum
 typedef enum
 {
   /* CM4 */
-  CFG_SEQ_Task_PingPong_Process,
+  /* USER CODE BEGIN CFG_SEQ_Task_Id_t_0 */
+
+  /* USER CODE END CFG_SEQ_Task_Id_t_0 */
+  CFG_SEQ_Task_SubGHz_Phy_App_Process,
   CFG_SEQ_Task_MbSystemNotifRcv,
   CFG_SEQ_Task_MbRadioNotifRcv,
   /* USER CODE BEGIN CFG_SEQ_Task_Id_t */

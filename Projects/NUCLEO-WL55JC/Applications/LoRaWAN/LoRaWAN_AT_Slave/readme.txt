@@ -1,9 +1,9 @@
 /**
   @page LoRaWAN_AT_Slave Readme file
- 
+
   @verbatim
   ******************** (C) COPYRIGHT 2020 STMicroelectronics *******************
-  * @file    Applications/LoRaWAN/LoRaWAN_AT_Slave/readme.txt 
+  * @file    Applications/LoRaWAN/LoRaWAN_AT_Slave/readme.txt
   * @author  MCD Application Team
   * @brief   This application is a simple demo application software of a LoRa
   *          modem controlled though AT command interface over UART by an
@@ -35,13 +35,12 @@ This application is targeting the STM32WLxx Nucleo board embedding the STM32WLxx
 
 Applications, SubGHz_Phy, LoRaWAN, AT_Slave, SingleCore
 
-@par Directory contents 
+@par Directory contents
 
 
   - LoRaWAN_AT_Slave/Core/Inc/adc.h                                             This file contains all the function prototypes for
                                                                                 the adc.c file
   - LoRaWAN_AT_Slave/Core/Inc/adc_if.h                                          Header for ADC interface configuration
-  - LoRaWAN_AT_Slave/Core/Inc/board_resources.h                                 Header for driver at.c module
   - LoRaWAN_AT_Slave/Core/Inc/dma.h                                             This file contains all the function prototypes for
                                                                                 the dma.c file
   - LoRaWAN_AT_Slave/Core/Inc/main.h                                            : Header for main.c file.
@@ -83,7 +82,6 @@ Applications, SubGHz_Phy, LoRaWAN, AT_Slave, SingleCore
   - LoRaWAN_AT_Slave/Core/Src/adc.c                                             This file provides code for the configuration
                                                                                 of the ADC instances.
   - LoRaWAN_AT_Slave/Core/Src/adc_if.c                                          Read status related to the chip (battery level, VREF, chip temperature)
-  - LoRaWAN_AT_Slave/Core/Src/board_resources.c                                 Source file
   - LoRaWAN_AT_Slave/Core/Src/dma.c                                             This file provides code for the configuration
                                                                                 of all the requested memory to memory DMA transfers.
   - LoRaWAN_AT_Slave/Core/Src/main.c                                            : Main program body
@@ -101,7 +99,7 @@ Applications, SubGHz_Phy, LoRaWAN, AT_Slave, SingleCore
   - LoRaWAN_AT_Slave/Core/Src/timer_if.c                                        Configure RTC Alarm, Tick and Calendar manager
   - LoRaWAN_AT_Slave/Core/Src/usart.c                                           This file provides code for the configuration
                                                                                 of the USART instances.
-  - LoRaWAN_AT_Slave/Core/Src/usart_if.c                                        Configuration of UART MX driver interface for hyperterminal communication
+  - LoRaWAN_AT_Slave/Core/Src/usart_if.c                                        Configuration of UART driver interface for hyperterminal communication
   - LoRaWAN_AT_Slave/LoRaWAN/App/app_lorawan.c                                  Application of the LRWAN Middleware
   - LoRaWAN_AT_Slave/LoRaWAN/App/lora_app.c                                     Application of the LRWAN Middleware
   - LoRaWAN_AT_Slave/LoRaWAN/App/lora_at.c                                      AT command API
@@ -109,24 +107,23 @@ Applications, SubGHz_Phy, LoRaWAN, AT_Slave, SingleCore
   - LoRaWAN_AT_Slave/LoRaWAN/App/lora_info.c                                    To give info to the application about LoRaWAN configuration
   - LoRaWAN_AT_Slave/LoRaWAN/App/test_rf.c                                      manages tx tests
   - LoRaWAN_AT_Slave/LoRaWAN/Target/radio_board_if.c                            This file provides an interface layer between MW and Radio Board
-  - LoRaWAN_AT_Slave/STM32CubeIDE/Application/Core/syscalls.c                   STM32CubeIDE Minimal System calls file
-  - LoRaWAN_AT_Slave/STM32CubeIDE/Application/Core/sysmem.c                     STM32CubeIDE System Memory calls file
+  - LoRaWAN_AT_Slave/STM32CubeIDE/Application/User/Core/syscalls.c              STM32CubeIDE Minimal System calls file
+  - LoRaWAN_AT_Slave/STM32CubeIDE/Application/User/Core/sysmem.c                STM32CubeIDE System Memory calls file
 
 
-@par Hardware and Software environment 
+@par Hardware and Software environment
 
   - This example runs on the STM32WLxx Nucleo board.
 
-  - STM32WLxx Nucleo board Set-up    
-    - Connect the Nucleo board to your PC with a USB cable type A to micro-B 
+  - STM32WLxx Nucleo board Set-up
+    - Connect the Nucleo board to your PC with a USB cable type A to micro-B
       to ST-LINK connector.
     - Please ensure that the ST-LINK connector jumpers are fitted.
 
   - Configure the software via the configuration files:
-    - sys_conf.h, radio_conf.h, lorawan_conf.h, lora_app.h, Commissioning.h, se-identity.h, mw_log_conf.h, radio_board_if.h, nucleo_conf.h, main.h, etc
-    - Careful: 
+    - sys_conf.h, radio_conf.h, lorawan_conf.h, lora_app.h, Commissioning.h, se-identity.h, mw_log_conf.h, main.h, etc
+    - Careful:
         - the region and class chosen on LoRaWAN/App/lora_app.h shall be compatible with LoRaWAN/Target/lorawan_conf.h list
-        - STM32WLxx Nucleo requires IS_TCXO_SUPPORTED=1
 
   -Set Up:
 
@@ -137,9 +134,9 @@ Applications, SubGHz_Phy, LoRaWAN, AT_Slave, SingleCore
              |                        |          |                        |
              --------------------------          --------------------------
 
-@par How to use it ? 
+@par How to use it ?
 In order to make the program work, you must do the following :
-  - Open your preferred toolchain 
+  - Open your preferred toolchain
   - Rebuild all files and load your image into target memory
   - Run the example
   - Open a Terminal, connected the LoRa Object
@@ -148,6 +145,11 @@ In order to make the program work, you must do the following :
   - Reset the board
   - type AT? to get all available commands
   - Send your AT commands by typing them in the terminal
+
+@par How to debug ?
+  - make sure the flag DEBUGGER_ENABLED to 1 in sys_conf.h
+  - simpler to define the flag LOW_POWER_DISABLE to 1 as well
+  - compile, download and attach
 
  * <h3><center>&copy; COPYRIGHT STMicroelectronics</center></h3>
  */

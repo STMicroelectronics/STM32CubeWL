@@ -66,7 +66,7 @@ Option bytes have to be modified following this sequence:
 
 @par Keywords
 
-Security, GTZC, FLASH, DMA, TZSC, TZIC, MPCWM, TrustZone, Secure, Privilege, Illegal access, Memory, Option bytes, Lock, Power On Reset
+Security, GTZC, FLASH, DMA, TZSC, TZIC, MPCWM, Secure, Privilege, Illegal access, Memory, Option bytes, Lock, Power On Reset
 
 @par Directory contents
 

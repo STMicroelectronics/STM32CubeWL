@@ -10,11 +10,13 @@
   <project>
     <PathAndName>.\Sigfox_AT_Slave_DualCore_CM0PLUS.uvprojx</PathAndName>
     <NodeIsActive>1</NodeIsActive>
+    <NodeIsExpanded>1</NodeIsExpanded>
     <NodeIsCheckedInBatchBuild>1</NodeIsCheckedInBatchBuild>
   </project>
 
   <project>
     <PathAndName>.\Sigfox_AT_Slave_DualCore_CM4.uvprojx</PathAndName>
+    <NodeIsExpanded>1</NodeIsExpanded>
     <NodeIsCheckedInBatchBuild>1</NodeIsCheckedInBatchBuild>
   </project>
 

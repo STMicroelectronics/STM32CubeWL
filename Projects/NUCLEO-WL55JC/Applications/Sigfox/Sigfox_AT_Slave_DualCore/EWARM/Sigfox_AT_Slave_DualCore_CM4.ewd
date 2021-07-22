@@ -44,7 +44,7 @@
                 </option>
                 <option>
                     <name>MemFile</name>
-                    <state>$TOOLKIT_DIR$\CONFIG\debugger\ST\STM32WL55JC_M4.ddf</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>RunToEnable</name>
@@ -112,7 +112,7 @@
                 </option>
                 <option>
                     <name>FlashLoadersV3</name>
-                    <state>$TOOLKIT_DIR$\config\flashloader\ST\FlashSTM32WLxxxC_M4.board</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>OCImagesSuppressCheck1</name>
@@ -184,7 +184,7 @@
                 </option>
                 <option>
                     <name>OCMulticoreMaster</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>OCMulticorePort</name>
@@ -192,15 +192,15 @@
                 </option>
                 <option>
                     <name>OCMulticoreWorkspace</name>
-                    <state>$PROJ_DIR$\Project.eww</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>OCMulticoreSlaveProject</name>
-                    <state>Sigfox_AT_Slave_DualCore_CM0PLUS</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>OCMulticoreSlaveConfiguration</name>
-                    <state>MBMUX_STM32WL_M0_FLASH</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>OCDownloadExtraImage</name>
@@ -1106,11 +1106,11 @@
                 </option>
                 <option>
                     <name>CCSTLinkDAPNumber</name>
-                    <state>0</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>CCSTLinkDebugAccessPortRadio</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>CCSTLinkUseServerSelect</name>

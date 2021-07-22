@@ -113,3 +113,5 @@ VP_ADC_TempSens_Input.Signal=ADC_TempSens_Input
 VP_SYS_VS_Systick.Mode=SysTick
 VP_SYS_VS_Systick.Signal=SYS_VS_Systick
 board=custom
+ProjectManager.Example=ADC_TemperatureSensor_Init
+ProjectManager.ExampleSource=CubeFw

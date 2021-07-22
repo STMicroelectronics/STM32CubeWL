@@ -34,6 +34,16 @@
  *            Implementation according to LoRaWAN Specification v1.0.2.
  * \{
  */
+/**
+  ******************************************************************************
+  *
+  *          Portions COPYRIGHT 2020 STMicroelectronics
+  *
+  * @file    RegionIN865.h
+  * @author  MCD Application Team
+  * @brief   Region definition for IN865
+  ******************************************************************************
+  */
 #ifndef __REGION_IN865_H__
 #define __REGION_IN865_H__
 
@@ -95,11 +105,6 @@ extern "C"
 #define IN865_MAX_RX1_DR_OFFSET                     7
 
 /*!
- * Default Rx1 receive datarate offset
- */
-#define IN865_DEFAULT_RX1_DR_OFFSET                 0
-
-/*!
  * Minimal Tx output power that can be used by the node
  */
 #define IN865_MIN_TX_POWER                          TX_POWER_10
@@ -125,16 +130,6 @@ extern "C"
 #define IN865_DEFAULT_ANTENNA_GAIN                  2.15f
 
 /*!
- * ADR Ack limit
- */
-#define IN865_ADR_ACK_LIMIT                         64
-
-/*!
- * ADR Ack delay
- */
-#define IN865_ADR_ACK_DELAY                         32
-
-/*!
  * Enabled or disabled the duty cycle
  */
 #define IN865_DUTY_CYCLE_ENABLED                    0
@@ -143,41 +138,6 @@ extern "C"
  * Maximum RX window duration
  */
 #define IN865_MAX_RX_WINDOW                         3000
-
-/*!
- * Receive delay 1
- */
-#define IN865_RECEIVE_DELAY1                        1000
-
-/*!
- * Receive delay 2
- */
-#define IN865_RECEIVE_DELAY2                        2000
-
-/*!
- * Join accept delay 1
- */
-#define IN865_JOIN_ACCEPT_DELAY1                    5000
-
-/*!
- * Join accept delay 2
- */
-#define IN865_JOIN_ACCEPT_DELAY2                    6000
-
-/*!
- * Maximum frame counter gap
- */
-#define IN865_MAX_FCNT_GAP                          16384
-
-/*!
- * Ack timeout
- */
-#define IN865_ACKTIMEOUT                            2000
-
-/*!
- * Random ack timeout limits
- */
-#define IN865_ACK_TIMEOUT_RND                       1000
 
 #if ( IN865_DEFAULT_DATARATE > DR_5 )
 #error "A default DR higher than DR_5 may lead to connectivity loss."
@@ -192,6 +152,11 @@ extern "C"
  * Second reception window channel datarate definition.
  */
 #define IN865_RX_WND_2_DR                           DR_2
+
+/*!
+ * Default uplink dwell time configuration
+ */
+#define IN865_DEFAULT_UPLINK_DWELL_TIME             0
 
 /*
  * CLASS B
@@ -243,9 +208,9 @@ extern "C"
 
 /*!
  * Band 0 definition
- * Band = { DutyCycle, TxMaxPower, LastBandUpdateTime, TimeCredits, MaxTimeCredits, ReadyForTransmission }
+ * Band = { DutyCycle, TxMaxPower, LastBandUpdateTime, LastMaxCreditAssignTime, TimeCredits, MaxTimeCredits, ReadyForTransmission }
  */
-#define IN865_BAND0                                 { 1 , IN865_MAX_TX_POWER, 0, 0, 0, 0 } //  100.0 %
+#define IN865_BAND0                                 { 1 , IN865_MAX_TX_POWER, 0, 0, 0, 0, 0 } //  100.0 %
 
 /*!
  * LoRaMac default channel 1
@@ -280,6 +245,7 @@ static const uint8_t DataratesIN865[]  = { 12, 11, 10,  9,  8,  7,  7, 50 };
  */
 static const uint32_t BandwidthsIN865[] = { 125000, 125000, 125000, 125000, 125000, 125000, 250000, 0 };
 
+/* ST_WORKAROUND_BEGIN: Keep repeater feature */
 /*!
  * Maximum payload with respect to the datarate index. Cannot operate with repeater.
  */
@@ -289,6 +255,7 @@ static const uint8_t MaxPayloadOfDatarateIN865[] = { 51, 51, 51, 115, 242, 242, 
  * Maximum payload with respect to the datarate index. Can operate with repeater.
  */
 static const uint8_t MaxPayloadOfDatarateRepeaterIN865[] = { 51, 51, 51, 115, 222, 222, 222, 222 };
+/* ST_WORKAROUND_END */
 
 /*!
  * Effective datarate offsets for receive window 1.
@@ -317,15 +284,6 @@ void RegionIN865SetBandTxDone( SetBandTxDoneParams_t* txDone );
  * \param [IN] type Sets the initialization type.
  */
 void RegionIN865InitDefaults( InitDefaultsParams_t* params );
-
-/*!
- * \brief Returns a pointer to the internal context and its size.
- *
- * \param [OUT] params Pointer to the function parameters.
- *
- * \retval      Points to a structure where the module store its non-volatile context.
- */
-void* RegionIN865GetNvmCtx( GetNvmCtxParams_t* params );
 
 /*!
  * \brief Verifies a parameter.
@@ -419,7 +377,7 @@ uint8_t RegionIN865RxParamSetupReq( RxParamSetupReqParams_t* rxParamSetupReq );
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  */
-uint8_t RegionIN865NewChannelReq( NewChannelReqParams_t* newChannelReq );
+int8_t RegionIN865NewChannelReq( NewChannelReqParams_t* newChannelReq );
 
 /*!
  * \brief The function processes a TX ParamSetup Request.
@@ -439,7 +397,7 @@ int8_t RegionIN865TxParamSetupReq( TxParamSetupReqParams_t* txParamSetupReq );
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  */
-uint8_t RegionIN865DlChannelReq( DlChannelReqParams_t* dlChannelReq );
+int8_t RegionIN865DlChannelReq( DlChannelReqParams_t* dlChannelReq );
 
 /*!
  * \brief Alternates the datarate of the channel for the join request.

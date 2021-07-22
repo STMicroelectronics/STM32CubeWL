@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    se_nvm.h
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __SE_NVM_H__
@@ -67,48 +69,46 @@ typedef enum
 
 /* Exported functions prototypes ---------------------------------------------*/
 /**
-  * @brief This function reads data pointed by read_data to non
-  * volatile memory
+  * @brief     This function reads data pointed by read_data to non volatile memory
   *
-  * @param [IN] sfx_u8 read_data[SFX_SE_NVMEM_BLOCK_SIZE] Pointer to the data block to write with the data stored in memory
-  * @retval SFX_ERR_NONE:                      No error
-  * @retval SE_ERR_API_SE_NVM:                 SE nvmem error
+  * @param[in] read_data Pointer to the data block to write with the data stored in memory
+  * @retval    SFX_ERR_NONE:                      No error
+  * @retval    SE_ERR_API_SE_NVM:                 SE nvmem error
   */
 sfx_u8 SE_NVM_get(sfx_u8 read_data[SFX_SE_NVMEM_BLOCK_SIZE]);
 
 /**
-  * @brief This function write data pointed by data_to_write to non
-  * volatile memory
+  * @brief     This function write data pointed by data_to_write to non volatile memory
   *
-  * @param [IN] sfx_u8 data_to_write[SFX_SE_NVMEM_BLOCK_SIZE] Pointer to the data block to write with the data stored in memory
-  * @retval SFX_ERR_NONE:                      No error
-  * @retval SE_ERR_API_SE_NVM:                 SE nvmem error
+  * @param[in] data_to_write Pointer to the data block to write with the data stored in memory
+  * @retval    SFX_ERR_NONE:                      No error
+  * @retval    SE_ERR_API_SE_NVM:                 SE nvmem error
   */
 sfx_u8 SE_NVM_set(sfx_u8 data_to_write[SFX_SE_NVMEM_BLOCK_SIZE]);
 
 /**
-  * @brief Get the active encryption payload flag
-  * @retval encryption_flag 0:Off, 1:On
+  * @brief     Get the active encryption payload flag
+  * @retval    encryption_flag 0:Off, 1:On
   */
 sfx_u8 SE_NVM_get_encrypt_flag(void);
 
 /**
-  * @brief Set the active encryption payload flag
-  * @param [IN]  encryption_flag 0:Off, 1:On
+  * @brief     Set the active encryption payload flag
+  * @param[in] encryption_flag 0:Off, 1:On
   */
 void  SE_NVM_set_encrypt_flag(sfx_u8 encryption_flag);
 
 /**
-  * @brief Get the active encryption key
-  * @retval  sfx_key_type_t key: public or private
+  * @brief     Get the active encryption key
+  * @return    key public or private
   */
 sfx_key_type_t SE_NVM_get_key_type(void);
 
 /**
-  * @brief Set the active encryption key
-  * @param [IN]  sfx_key_type_t key: public or private
+  * @brief     Set the active encryption key
+  * @param[in] keyType key public or private
   */
-void  SE_NVM_set_key_type(sfx_key_type_t keyType);
+void SE_NVM_set_key_type(sfx_key_type_t keyType);
 
 /* USER CODE BEGIN EFP */
 
@@ -120,4 +120,3 @@ void  SE_NVM_set_key_type(sfx_key_type_t keyType);
 #endif /* __SE_NVM_H__ */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-

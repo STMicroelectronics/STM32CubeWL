@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under Ultimate Liberty license
@@ -30,11 +30,21 @@ IPCC_HandleTypeDef hipcc;
 void MX_IPCC_Init(void)
 {
 
+  /* USER CODE BEGIN IPCC_Init 0 */
+
+  /* USER CODE END IPCC_Init 0 */
+
+  /* USER CODE BEGIN IPCC_Init 1 */
+
+  /* USER CODE END IPCC_Init 1 */
   hipcc.Instance = IPCC;
   if (HAL_IPCC_Init(&hipcc) != HAL_OK)
   {
     Error_Handler();
   }
+  /* USER CODE BEGIN IPCC_Init 2 */
+
+  /* USER CODE END IPCC_Init 2 */
 
 }
 

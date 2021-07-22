@@ -1,8 +1,9 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    mbmuxif_trace.h
   * @author  MCD Application Team
-  * @brief   API for CM0PLUS applic to register and handle TRACE via MBMUX
+  * @brief   API for CM0PLUS application to register and handle TRACE via MBMUX
   ******************************************************************************
   * @attention
   *
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __MBMUXIF_TRACE_CM0PLUS_H__
@@ -52,8 +54,23 @@ extern "C" {
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
+/**
+  * @brief   Registers TRACE feature to the mailbox
+  * @param   verboseLevel level of trace verbosity
+  * @retval  0: OK; -1: if ch hasn't been registered by CM4
+  * @note    this function is supposed to be called by the System on request (Cmd) of CM4
+  */
 int8_t MBMUXIF_TraceInit(uint8_t verboseLevel);
+
+/**
+  * @brief   gives back the pointer to the com buffer associated to Trace feature Notif
+  * @retval  return pointer to the com param buffer
+  */
 MBMUX_ComParam_t *MBMUXIF_GetTraceFeatureNotifComPtr(void);
+
+/**
+  * @brief Sends a Trace-Notif via Ipcc without waiting for the ack
+  */
 void MBMUXIF_TraceSendNotif_NoWait(void);
 /* USER CODE BEGIN EFP */
 

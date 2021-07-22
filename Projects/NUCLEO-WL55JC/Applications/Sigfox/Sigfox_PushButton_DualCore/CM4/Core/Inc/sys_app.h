@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    sys_app.h
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __SYS_APP_H__
@@ -35,6 +37,10 @@ extern "C" {
 /* USER CODE END Includes */
 
 /* Exported defines ----------------------------------------------------------*/
+/* USER CODE BEGIN ED */
+
+/* USER CODE END ED */
+
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
 
@@ -70,12 +76,14 @@ extern "C" {
 
 /* Exported functions prototypes ---------------------------------------------*/
 /**
-  * @brief initialises the system (dbg pins, trace, systiemr, LPM, ...)
-  * @param none
-  * @retval  none
+  * @brief initialize the system (dbg pins, trace, mbmux, sys timer, LPM, ...)
   */
 void SystemApp_Init(void);
 
+/**
+  * @brief  Process System Notifications
+  * @param  com_buf exchange buffer parameter
+  */
 void Process_Sys_Notif(MBMUX_ComParam_t *com_buf);
 
 /* USER CODE BEGIN EFP */

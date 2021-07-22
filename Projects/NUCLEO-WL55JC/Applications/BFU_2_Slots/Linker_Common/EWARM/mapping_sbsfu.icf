@@ -1,0 +1,63 @@
+/*###ICF### Set of symbols used in SE and BFU projects ****/
+
+/******************************************************************************/
+/*                              ROM section                                   */
+/******************************************************************************/
+
+/* Vector table */
+define exported symbol __ICFEDIT_intvec_start__                    = 0x08000000;
+define exported symbol __ICFEDIT_Vector_size__                     = 0x200;
+
+/* SE Code region */
+define exported symbol __ICFEDIT_SE_Code_region_ROM_start__       = __ICFEDIT_intvec_start__ + __ICFEDIT_Vector_size__;
+define exported symbol __ICFEDIT_SE_CallGate_region_ROM_start__   = __ICFEDIT_SE_Code_region_ROM_start__+ 4;
+define exported symbol __ICFEDIT_SE_CallGate_Region_ROM_End__     = __ICFEDIT_SE_Code_region_ROM_start__ + 0x1FF;
+
+/* SE key region */
+define exported symbol __ICFEDIT_SE_Key_region_ROM_start__        = __ICFEDIT_SE_CallGate_Region_ROM_End__ + 1;
+define exported symbol __ICFEDIT_SE_Key_region_ROM_end__          = __ICFEDIT_SE_Key_region_ROM_start__ + 0x2FF;
+
+/* SE Startup */
+define exported symbol __ICFEDIT_SE_Startup_region_ROM_start__    = __ICFEDIT_SE_Key_region_ROM_end__ + 1;
+define exported symbol __ICFEDIT_SE_Code_nokey_region_ROM_start__ = __ICFEDIT_SE_Startup_region_ROM_start__ + 0x100;
+define exported symbol __ICFEDIT_SE_Code_region_ROM_end__         = __ICFEDIT_SE_Startup_region_ROM_start__ + 0x80FF;
+
+/* SE IF ROM: used to locate Secure Engine interface code */
+define exported symbol __ICFEDIT_SE_IF_region_ROM_start__         = __ICFEDIT_SE_Code_region_ROM_end__ + 1;
+define exported symbol __ICFEDIT_SE_IF_region_ROM_end__           = __ICFEDIT_SE_IF_region_ROM_start__ + 0x7FF;
+
+/* SBSFU Code region */
+define exported symbol __ICFEDIT_SB_region_ROM_start__            = __ICFEDIT_SE_IF_region_ROM_end__ + 1;
+define exported symbol __ICFEDIT_SB_region_ROM_end__              = 0x08012FFF;
+
+/* KMS Data Storage (NVMS) region */
+/* KMS Data Storage need for 2 images : 4 kbytes * 2 ==> 8 kbytes */
+define exported symbol __ICFEDIT_KMS_DataStorage_start__          = 0x08013000;
+define exported symbol __ICFEDIT_KMS_DataStorage_end__            = 0x08014FFF;
+
+/* ROM regions definition : ordered  */
+define region SE_CallGate_ROM_Region     = mem:[from __ICFEDIT_SE_CallGate_region_ROM_start__ to __ICFEDIT_SE_CallGate_Region_ROM_End__];
+define region SE_Key_ROM_region          = mem:[from __ICFEDIT_SE_Key_region_ROM_start__ to __ICFEDIT_SE_Key_region_ROM_end__];
+define region SE_ROM_region              = mem:[from __ICFEDIT_SE_Code_region_ROM_start__ to __ICFEDIT_SE_Code_region_ROM_end__];
+define region SE_CODE_NOKEY_ROM_region   = mem:[from __ICFEDIT_SE_Code_nokey_region_ROM_start__ to __ICFEDIT_SE_Code_region_ROM_end__];
+define region SE_IF_ROM_region           = mem:[from __ICFEDIT_SE_IF_region_ROM_start__ to __ICFEDIT_SE_IF_region_ROM_end__];
+define region SB_ROM_region              = mem:[from __ICFEDIT_SB_region_ROM_start__ to __ICFEDIT_SB_region_ROM_end__];
+define region KMS_DataStorage            = mem:[from __ICFEDIT_KMS_DataStorage_start__ to __ICFEDIT_KMS_DataStorage_end__];
+
+/******************************************************************************/
+/*                              RAM section                                   */
+/*                                                                            */
+/******************************************************************************/
+
+/* SE RAM region */
+define exported symbol __ICFEDIT_SE_region_RAM_start__     = 0x20000000;
+define exported symbol __ICFEDIT_SE_region_RAM_stack_top__ = 0x20000C00; /* Secure Engine's private stack */
+define exported symbol __ICFEDIT_SE_region_RAM_end__       = 0x200033FF;
+
+/* SBSFU RAM region */
+define exported symbol __ICFEDIT_SB_region_RAM_start__ = __ICFEDIT_SE_region_RAM_end__ + 1;
+define exported symbol __ICFEDIT_SB_region_RAM_end__   = 0x20007FFF;
+
+/* RAM regions definition */
+define region SE_RAM_region    = mem:[from __ICFEDIT_SE_region_RAM_stack_top__ to __ICFEDIT_SE_region_RAM_end__];
+define region SB_RAM_region    = mem:[from __ICFEDIT_SB_region_RAM_start__ to __ICFEDIT_SB_region_RAM_end__];

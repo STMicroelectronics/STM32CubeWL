@@ -185,3 +185,5 @@ VP_TIM2_VS_ControllerModeTrigger.Signal=TIM2_VS_ControllerModeTrigger
 VP_TIM2_VS_OPM.Mode=OPM_bit
 VP_TIM2_VS_OPM.Signal=TIM2_VS_OPM
 board=custom
+ProjectManager.Example=TIM_OnePulse_Init
+ProjectManager.ExampleSource=CubeFw

@@ -18,16 +18,16 @@
 
     <h1>STM32CubeWL Firmware Examples for STM32WLxx Series</h1>
 
-    <p class="copyright">Copyright 2019 STMicroelectronics</p>
+    <p class="copyright">Copyright 2021 STMicroelectronics</p>
 
     <div class="picture">
-      <img alt="" id="_x0000_i1025" src="../_htmresc/st_logo.png" style="border: 0px solid ; width: 104px; height: 77px;"/>
+      <img alt="" id="_x0000_i1025" src="../_htmresc/st_logo_2020.png" style="border: 0px solid ; width: 104px; height: 77px;"/>
     </div>
 
     <p>The STM32CubeWL Firmware package comes with a rich set of examples running on STMicroelectronics boards, organized by board and provided with preconfigured projects for the main supported toolchains.</p>
 
     <div class="picture">
-      <img alt="" src="../_htmresc/STM32Cube.bmp"/>
+      <img alt="" src="../_htmresc/STM32Cube_2020.bmp"/>
     </div>
 
     <p>The examples are classified depending on the STM32Cube level they apply to, and are named as follows:</p>
@@ -47,7 +47,7 @@
       <li>\Inc folder that contains all header files.</li>
       <li>\Src folder for the sources code.</li>
       <li>\EWARM, \MDK-ARM and \STM32CubeIDE folders contain the preconfigured project for each toolchain.</li>
-      <li>readme.txt describing the example behavior and the environment required to run the example.</li>
+      <li>A readme describing the example behavior and the environment required to run the example.</li>
     </ul>
 
     <p>To run the example, you have to do the following:</p>
@@ -55,9 +55,9 @@
     <ul>
       <li>Open the example using your preferred toolchain.</li>
       <li>Rebuild all files and load the image into target memory.</li>
-      <li>Run the example by following the readme.txt instructions.</li>
+      <li>Run the example by following the readme instructions.</li>
       <li>
-        <i><u>Note</u>: refer to section "Development Toolchains and Compilers" and "Supported Devices and EVAL boards" of the Firmware package release notes to know about the SW/HW environment used for the Firmware development and validation. The correct operation of the provided examples is not guaranteed on some environments, for example when using different compiler or board versions.</i>
+        <i><u>Note</u>: refer to section "Development Toolchains and Compilers" and "Supported Devices and EVAL, Nucleo and Discovery boards" of the Firmware package release notes to know about the SW/HW environment used for the Firmware development and validation. The correct operation of the provided examples is not guaranteed on some environments, for example when using different compiler or board versions.</i>
       </li>
     </ul>
 
@@ -793,7 +793,7 @@ Configuration and generation of an RTC alarm using the RTC HAL API.
       </tr>
       <tr align=center>
         <td align=left><p id="RTC_Alarm_DualCore">RTC_Alarm_DualCore</p></td>
-        <td align=left>This multicore project shows how CM4 uses the Alarm A and CM0 uses Alarm B.
+        <td align=left>This multicore project shows how CPU1 (CM4) uses the Alarm A and CPU2 (CM0) uses Alarm B.
 </td>
         <td><font size="5" color=green>CubeMx</font></td>
       </tr>
@@ -1943,14 +1943,13 @@ the STM32WLxx UART HAL and LL API, the LL API being used for performance improve
         <td>12</td>
       </tr>
       <tr align=center>
-        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" rowspan=39><p id="Applications">Applications</p></td>
-        <td align=left rowspan=4><p id="BFU_1_Image">BFU_1_Image</p></td>
+        <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" rowspan=61><p id="Applications">Applications</p></td>
+        <td align=left rowspan=4><p id="BFU_1_Slot">BFU_1_Slot</p></td>
         <td align=left><p id="1_Image_BFU">1_Image_BFU</p></td>
         <td align=left>
-The Boot (B) and Firmware Update (FU) solution allows the update
-of the STM32 microcontroller built-in program with new firmware versions, adding
-new features and correcting potential issues. The update process is performed in
-a secure way to prevent unauthorized updates.
+The Boot (B) and Firmware Update (FU) solution allows the update of the STM32 microcontroller built-in
+program with new firmware versions, adding new features and correcting potential issues. The update process is performed
+in a secure way to prevent unauthorized updates.
 </td>
         <td><font size="5" color=green>X</font></td>
       </tr>
@@ -1973,8 +1972,42 @@ with Boot & Firmware Update application (BFU).
       <tr align=center>
         <td align=left><p id="1_Image_UserApp">1_Image_UserApp</p></td>
         <td align=left>
-This application demonstrates firmware download capabilities and provides a set
-of functions to test the active protections offered by Secure Boot and Secure Engine.
+This application demonstrates firmware download capabilities and provides a set of functions to test the active
+protections offered by Secure Boot and Secure Engine.
+</td>
+        <td><font size="5" color=green>X</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left rowspan=4><p id="BFU_2_Slots">BFU_2_Slots</p></td>
+        <td align=left><p id="1_Image_BFU">1_Image_BFU</p></td>
+        <td align=left>
+The Boot (B) and Firmware Update (FU) solution allows the update of the STM32 microcontroller built-in
+program with new firmware versions, adding new features and correcting potential issues. The update process is performed
+in a secure way to prevent unauthorized updates.
+</td>
+        <td><font size="5" color=green>X</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left><p id="1_Image_KMS_Blob">1_Image_KMS_Blob</p></td>
+        <td align=left>
+This application is used to generate Key Management Services Blob binary file to be downloaded
+with KMS through the ImportBlob() API. 
+</td>
+        <td><font size="5" color=green>X</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left><p id="1_Image_SECoreBin">1_Image_SECoreBin</p></td>
+        <td align=left>
+This application is used to generate Secure Engine Core binary file to be linked
+with Boot & Firmware Update application (BFU).
+</td>
+        <td><font size="5" color=green>X</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left><p id="1_Image_UserApp">1_Image_UserApp</p></td>
+        <td align=left>
+This application demonstrates firmware download capabilities and provides a set of functions to test the active
+protections offered by Secure Boot and Secure Engine.
 </td>
         <td><font size="5" color=green>X</font></td>
       </tr>
@@ -2121,12 +2154,46 @@ device sending sensors data to LoRa Network server.
         <td align=left><p id="LoRaWAN_End_Node_DualCoreFreeRTOS">LoRaWAN_End_Node_DualCoreFreeRTOS</p></td>
         <td align=left>
 This directory contains a set of source files that implements a Dual Core (CM4 / CM0) LoRa application
-device sending sensors data to LoRa Network server.
+device sending sensors data to LoRa Network server with FreeRTOS Task scheduler on CM4.
 </td>
         <td><font size="5" color=green>CubeMx</font></td>
       </tr>
       <tr align=center>
         <td align=left rowspan=4><p id="LoRaWAN_FUOTA">LoRaWAN_FUOTA</p></td>
+        <td align=left><p id="1_Image_BFU">1_Image_BFU</p></td>
+        <td align=left>
+The Boot (B) and Firmware Update (FU) solution allows the update of the STM32 microcontroller built-in
+program with new firmware versions, adding new features and correcting potential issues. The update process is performed
+in a secure way to prevent unauthorized updates.
+</td>
+        <td><font size="5" color=green>X</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left><p id="1_Image_KMS_Blob">1_Image_KMS_Blob</p></td>
+        <td align=left>
+This application is used to generate Key Management Services Blob binary file to be downloaded
+with KMS through the ImportBlob() API. 
+</td>
+        <td><font size="5" color=green>X</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left><p id="1_Image_SECoreBin">1_Image_SECoreBin</p></td>
+        <td align=left>
+This application is used to generate Secure Engine Core binary file to be linked
+with Boot & Firmware Update application (BFU).
+</td>
+        <td><font size="5" color=green>X</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left><p id="LoRaWAN_End_Node">LoRaWAN_End_Node</p></td>
+        <td align=left>
+This directory contains a set of source files that implements a LoRa application
+device with firmware update over the air download capabilities.
+</td>
+        <td><font size="5" color=green>X</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left rowspan=4><p id="LoRaWAN_FUOTA_DualCore">LoRaWAN_FUOTA_DualCore</p></td>
         <td align=left><p id="2_Images_KMS_Blob">2_Images_KMS_Blob</p></td>
         <td align=left>
 This application is used to generate Key Management Services Blob binary file to be downloaded
@@ -2137,11 +2204,10 @@ with KMS through the ImportBlob() API.
       <tr align=center>
         <td align=left><p id="2_Images_SBSFU">2_Images_SBSFU</p></td>
         <td align=left>
-The Secure Boot (SB) and Secure Firmware Update (SFU) solution allows the update
-of the STM32 microcontroller built-in program with new firmware versions, adding
-new features and correcting potential issues. The update process is performed in
-a secure way to prevent unauthorized updates and access to confidential on-device
-data such as secret code and firmware encryption key.
+The Secure Boot (SB) and Secure Firmware Update (SFU) solution allows the update of the STM32 microcontroller built-in
+program with new firmware versions, adding new features and correcting potential issues. The update process is performed
+in a secure way to prevent unauthorized updates and access to confidential on-device data such as secret code and
+firmware encryption key.
 </td>
         <td><font size="5" color=green>X</font></td>
       </tr>
@@ -2157,12 +2223,12 @@ with Secure Boot & Secure Firmware Update application (SBSFU).
         <td align=left><p id="LoRaWAN_End_Node_DualCore">LoRaWAN_End_Node_DualCore</p></td>
         <td align=left>
 This directory contains a set of source files that implements a Dual Core (CM4 / CM0) LoRa application
-device sending sensors data to LoRa Network server.
+device with firmware update over the air download capabilities.
 </td>
         <td><font size="5" color=green>X</font></td>
       </tr>
       <tr align=center>
-        <td align=left rowspan=5><p id="SBSFU_2_Images_DualCore">SBSFU_2_Images_DualCore</p></td>
+        <td align=left rowspan=4><p id="LoRaWAN_SBSFU_1_Slot_DualCore">LoRaWAN_SBSFU_1_Slot_DualCore</p></td>
         <td align=left><p id="2_Images_KMS_Blob">2_Images_KMS_Blob</p></td>
         <td align=left>
 This application is used to generate Key Management Services Blob binary file to be downloaded
@@ -2173,11 +2239,45 @@ with KMS through the ImportBlob() API.
       <tr align=center>
         <td align=left><p id="2_Images_SBSFU">2_Images_SBSFU</p></td>
         <td align=left>
-The Secure Boot (SB) and Secure Firmware Update (SFU) solution allows the update
-of the STM32 microcontroller built-in program with new firmware versions, adding
-new features and correcting potential issues. The update process is performed in
-a secure way to prevent unauthorized updates and access to confidential on-device
-data such as secret code and firmware encryption key.
+The Secure Boot (SB) and Secure Firmware Update (SFU) solution allows the update of the STM32 microcontroller built-in
+program with new firmware versions, adding new features and correcting potential issues. The update process is performed
+in a secure way to prevent unauthorized updates and access to confidential on-device data such as secret code and
+firmware encryption key.
+</td>
+        <td><font size="5" color=green>X</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left><p id="2_Images_SECoreBin">2_Images_SECoreBin</p></td>
+        <td align=left>
+This application is used to generate Secure Engine Core binary file to be linked
+with Secure Boot & Secure Firmware Update application (SBSFU).
+</td>
+        <td><font size="5" color=green>X</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left><p id="LoRaWAN_End_Node_DualCore">LoRaWAN_End_Node_DualCore</p></td>
+        <td align=left>
+This directory contains a set of source files that implements a Dual Core (CM4 / CM0) LoRa application
+device with security environment offered by Secure Boot and Secure Engine.
+</td>
+        <td><font size="5" color=green>X</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left rowspan=5><p id="SBSFU_1_Slot_DualCore">SBSFU_1_Slot_DualCore</p></td>
+        <td align=left><p id="2_Images_KMS_Blob">2_Images_KMS_Blob</p></td>
+        <td align=left>
+This application is used to generate Key Management Services Blob binary file to be downloaded
+with KMS through the ImportBlob() API. 
+</td>
+        <td><font size="5" color=green>X</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left><p id="2_Images_SBSFU">2_Images_SBSFU</p></td>
+        <td align=left>
+The Secure Boot (SB) and Secure Firmware Update (SFU) solution allows the update of the STM32 microcontroller built-in
+program with new firmware versions, adding new features and correcting potential issues. The update process is performed
+in a secure way to prevent unauthorized updates and access to confidential on-device data such as secret code and
+firmware encryption key.
 </td>
         <td><font size="5" color=green>X</font></td>
       </tr>
@@ -2192,8 +2292,50 @@ with Secure Boot & Secure Firmware Update application (SBSFU).
       <tr align=center>
         <td align=left><p id="2_Images_UserApp_M0Plus">2_Images_UserApp_M0Plus</p></td>
         <td align=left>
-This application demonstrates firmware download capabilities and provides a set
-of functions to test the active protections offered by Secure Boot and Secure Engine.
+This application demonstrates firmware download capabilities and provides a set of functions to test the active
+protections offered by Secure Boot and Secure Engine.
+</td>
+        <td><font size="5" color=green>X</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left><p id="2_Images_UserApp_M4">2_Images_UserApp_M4</p></td>
+        <td align=left>
+This application demonstrates firmware download capabilities.
+</td>
+        <td><font size="5" color=green>X</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left rowspan=5><p id="SBSFU_2_Slots_DualCore">SBSFU_2_Slots_DualCore</p></td>
+        <td align=left><p id="2_Images_KMS_Blob">2_Images_KMS_Blob</p></td>
+        <td align=left>
+This application is used to generate Key Management Services Blob binary file to be downloaded
+with KMS through the ImportBlob() API. 
+</td>
+        <td><font size="5" color=green>X</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left><p id="2_Images_SBSFU">2_Images_SBSFU</p></td>
+        <td align=left>
+The Secure Boot (SB) and Secure Firmware Update (SFU) solution allows the update of the STM32 microcontroller built-in
+program with new firmware versions, adding new features and correcting potential issues. The update process is performed
+in a secure way to prevent unauthorized updates and access to confidential on-device data such as secret code and
+firmware encryption key.
+</td>
+        <td><font size="5" color=green>X</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left><p id="2_Images_SECoreBin">2_Images_SECoreBin</p></td>
+        <td align=left>
+This application is used to generate Secure Engine Core binary file to be linked
+with Secure Boot & Secure Firmware Update application (SBSFU).
+</td>
+        <td><font size="5" color=green>X</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left><p id="2_Images_UserApp_M0Plus">2_Images_UserApp_M0Plus</p></td>
+        <td align=left>
+This application demonstrates firmware download capabilities and provides a set of functions to test the active
+protections offered by Secure Boot and Secure Engine.
 </td>
         <td><font size="5" color=green>X</font></td>
       </tr>
@@ -2226,8 +2368,8 @@ like a computer executing a terminal.
       <tr align=center>
         <td align=left><p id="Sigfox_PushButton">Sigfox_PushButton</p></td>
         <td align=left>
-This directory contains a set of source files that implements an example of a 
-Sigfox object sending temperature - and Batterie Level to a Sigfox Network. 
+This directory contains a set of source files that implements an example of a
+Sigfox object sending temperature and Battery Level to a Sigfox Network.
 </td>
         <td><font size="5" color=green>CubeMx</font></td>
       </tr>
@@ -2235,15 +2377,58 @@ Sigfox object sending temperature - and Batterie Level to a Sigfox Network.
         <td align=left><p id="Sigfox_PushButton_DualCore">Sigfox_PushButton_DualCore</p></td>
         <td align=left>
 This directory contains a set of source files that implements a Dual Core (CM4 / CM0) Sigfox application
-example of a Sigfox object sending temperature - and Batterie Level to a Sigfox Network.
+example of a Sigfox object sending temperature and Battery Level to a Sigfox Network.
 </td>
         <td><font size="5" color=green>CubeMx</font></td>
       </tr>
       <tr align=center>
-        <td align=left rowspan=2><p id="SubGHz_Phy">SubGHz_Phy</p></td>
+        <td align=left rowspan=4><p id="Sigfox_SBSFU_1_Slot_DualCore">Sigfox_SBSFU_1_Slot_DualCore</p></td>
+        <td align=left><p id="2_Images_KMS_Blob">2_Images_KMS_Blob</p></td>
+        <td align=left>
+This application is used to generate Key Management Services Blob binary file to be downloaded
+with KMS through the ImportBlob() API. 
+</td>
+        <td><font size="5" color=green>X</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left><p id="2_Images_SBSFU">2_Images_SBSFU</p></td>
+        <td align=left>
+The Secure Boot (SB) and Secure Firmware Update (SFU) solution allows the update of the STM32 microcontroller built-in
+program with new firmware versions, adding new features and correcting potential issues. The update process is performed
+in a secure way to prevent unauthorized updates and access to confidential on-device data such as secret code and
+firmware encryption key.
+</td>
+        <td><font size="5" color=green>X</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left><p id="2_Images_SECoreBin">2_Images_SECoreBin</p></td>
+        <td align=left>
+This application is used to generate Secure Engine Core binary file to be linked
+with Secure Boot & Secure Firmware Update application (SBSFU).
+</td>
+        <td><font size="5" color=green>X</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left><p id="Sigfox_PushButton_DualCore">Sigfox_PushButton_DualCore</p></td>
+        <td align=left>
+This directory contains a set of source files that implements a Dual Core (CM4 / CM0) Sigfox application
+device with security environment offered by Secure Boot and Secure Engine.
+</td>
+        <td><font size="5" color=green>X</font></td>
+      </tr>
+      <tr align=center>
+        <td align=left rowspan=3><p id="SubGHz_Phy">SubGHz_Phy</p></td>
+        <td align=left><p id="SubGHz_Phy_Per">SubGHz_Phy_Per</p></td>
+        <td align=left>
+This directory contains a set of source files that implements a PER (Packet Error Rate) tests application
+with IBM whitening between one Tx device and one Rx device.
+</td>
+        <td><font size="5" color=green>CubeMx</font></td>
+      </tr>
+      <tr align=center>
         <td align=left><p id="SubGHz_Phy_PingPong">SubGHz_Phy_PingPong</p></td>
         <td align=left>
-This directory contains a set of source files that implements a Ping-Pong application 
+This directory contains a set of source files that implements a Ping-Pong application
 between two PingPong Devices.
 </td>
         <td><font size="5" color=green>CubeMx</font></td>
@@ -2251,35 +2436,31 @@ between two PingPong Devices.
       <tr align=center>
         <td align=left><p id="SubGHz_Phy_PingPong_DualCore">SubGHz_Phy_PingPong_DualCore</p></td>
         <td align=left>
-This directory contains a set of source files that implements a Dual Core (CM4 / CM0) Ping-Pong application 
+This directory contains a set of source files that implements a Dual Core (CM4 / CM0) Ping-Pong application
 between two PingPong Devices.
 </td>
         <td><font size="5" color=green>CubeMx</font></td>
       </tr>
       <tr style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>
-        <td colspan="3"><b>Total number of applications: 38</b></td>
-        <td>38</td>
+        <td colspan="3"><b>Total number of applications: 60</b></td>
+        <td>60</td>
       </tr>
       <tr align=center>
         <td style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" rowspan=3><p id="Demonstrations">Demonstrations</p></td>
         <td align=left rowspan=2><p id="LocalNetwork">LocalNetwork</p></td>
         <td align=left><p id="LocalNetwork_Concentrator">LocalNetwork_Concentrator</p></td>
         <td align=left>
-This directory contains a set of source files that implements a Concentrator 
-sending Beacon to  administrate a Network of up to 14 sensors and receives 
-each connected Sensor's data 
-
-This application is targeting the STM32WLxx Nucleo board embedding the STM32WLxx.
+This directory contains a set of source files that implements a Concentrator
+sending Beacon to administrate a Network of up to 14 sensors and receives
+each connected Sensor's data.
 </td>
         <td><font size="5" color=green>X</font></td>
       </tr>
       <tr align=center>
         <td align=left><p id="LocalNetwork_Sensor">LocalNetwork_Sensor</p></td>
         <td align=left>
-This directory contains a set of source files that implements Sensor sending Sensor 
-data to the demo concentrator 
-
-This application is targeting the STM32WLxx Nucleo board embedding the STM32WLxx.
+This directory contains a set of source files that implements Sensor sending Sensor
+data to the demo concentrator.
 </td>
         <td><font size="5" color=green>X</font></td>
       </tr>
@@ -2288,8 +2469,8 @@ This application is targeting the STM32WLxx Nucleo board embedding the STM32WLxx
         <td>2</td>
       </tr>
       <tr style="background-repeat: no-repeat;background-position: right center;background-color: #39A9DC;color: #FFF;" align=center>
-      	<td colspan="4"><b>Total number of projects: 254</b></td>
-      	<td>254</td>
+      	<td colspan="4"><b>Total number of projects: 276</b></td>
+      	<td>276</td>
       </tr>
     </table>
   </body>

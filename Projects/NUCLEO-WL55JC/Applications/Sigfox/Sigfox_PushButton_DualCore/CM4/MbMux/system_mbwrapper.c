@@ -1,8 +1,9 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    system_mbwrapper.c
   * @author  MCD Application Team
-  * @brief   allows CM4 applic to handle the SYSTEM MBMUX channel.
+  * @brief   allows CM4 application to handle the SYSTEM MBMUX channel.
   ******************************************************************************
   * @attention
   *
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
 #include "system_mbwrapper.h"
@@ -48,20 +50,22 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+/* USER CODE BEGIN PV */
 
-/*!
-* \brief   Returns the last stored variable data, if found, which corresponds to
-*          the passed virtual address
-* \param   EEsgfxID:
-*          data: to be read
-* \retval  error status
-*/
-uint32_t SYS_EE_ReadBuffer_mbwrapper(e_EE_ID EEsgfxID,  uint32_t *data)
+/* USER CODE END PV */
+
+/* Private function prototypes -----------------------------------------------*/
+/* USER CODE BEGIN PFP */
+
+/* USER CODE END PFP */
+
+/* Exported functions --------------------------------------------------------*/
+uint32_t SYS_EE_ReadBuffer_mbwrapper(e_EE_ID EEsgfxID, uint32_t *data)
 {
   MBMUX_ComParam_t *com_obj;
   uint32_t *com_buffer ;
   uint16_t i = 0;
-  uint32_t ret= 0;
+  uint32_t ret = 0;
 
   com_obj = MBMUXIF_GetSystemFeatureCmdComPtr(FEAT_INFO_SYSTEM_ID);
   if (com_obj != NULL)
@@ -80,18 +84,12 @@ uint32_t SYS_EE_ReadBuffer_mbwrapper(e_EE_ID EEsgfxID,  uint32_t *data)
   return (uint32_t) ret;
 }
 
-/*!
-* \brief   Writes/updates variable data in EEPROM emulator.
-* \param   EEsgfxID:
-*          data: to be written
-* \retval error status
-*/
-uint32_t SYS_EE_WriteBuffer_mbwrapper(e_EE_ID EEsgfxID,  uint32_t data)
+uint32_t SYS_EE_WriteBuffer_mbwrapper(e_EE_ID EEsgfxID, uint32_t data)
 {
   MBMUX_ComParam_t *com_obj;
   uint32_t *com_buffer ;
   uint16_t i = 0;
-  uint32_t ret= 0;
+  uint32_t ret = 0;
 
   com_obj = MBMUXIF_GetSystemFeatureCmdComPtr(FEAT_INFO_SYSTEM_ID);
   if (com_obj != NULL)
@@ -110,8 +108,8 @@ uint32_t SYS_EE_WriteBuffer_mbwrapper(e_EE_ID EEsgfxID,  uint32_t data)
   return (uint32_t) ret;
 }
 
-/* USER CODE BEGIN PV */
+/* USER CODE BEGIN EF */
 
-/* USER CODE END PV */
+/* USER CODE END EF */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

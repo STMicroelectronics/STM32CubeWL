@@ -36,13 +36,13 @@
 #define __RADIO_H__
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 /* Includes ------------------------------------------------------------------*/
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "radio_ex.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /*!
@@ -52,9 +52,11 @@ typedef enum
 {
     MODEM_FSK = 0,
     MODEM_LORA,
+    /* ST_WORKAROUND_BEGIN: Upgraded modulations list */
     MODEM_BPSK,
     MODEM_SIGFOX_TX,
     MODEM_SIGFOX_RX,
+    /* ST_WORKAROUND_END */
 }RadioModems_t;
 
 /*!
@@ -87,11 +89,11 @@ typedef struct
      * \param [IN] payload Received buffer pointer
      * \param [IN] size    Received buffer size
      * \param [IN] rssi    RSSI value computed while receiving the frame [dBm]
-     * \param [IN] snr     SNR value computed while receiving the frame [dB]
-     *                     FSK : N/A ( set to 0 )
+     * \param [IN] LoraSnr_FskCfo
+     *                     FSK : Carrier Frequency Offset in kHz
      *                     LoRa: SNR value in dB
      */
-    void    ( *RxDone )( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr );
+    void    ( *RxDone )( uint8_t *payload, uint16_t size, int16_t rssi, int8_t LoraSnr_FskCfo );
     /*!
      * \brief  Rx Timeout callback prototype.
      */
@@ -114,6 +116,8 @@ typedef struct
      */
     void ( *CadDone ) ( bool channelActivityDetected );
 }RadioEvents_t;
+
+#include "radio_ex.h" /* ST_WORKAROUND: extended radio functions */
 
 /*!
  * \brief Radio driver definition
@@ -331,6 +335,7 @@ struct Radio_s
      * \retval rssiValue Current RSSI value in [dBm]
      */
     int16_t ( *Rssi )( RadioModems_t modem );
+    /* ST_WORKAROUND_BEGIN: Force register addr to uint16_t */
     /*!
      * \brief Writes the radio register at the specified address
      *
@@ -361,6 +366,7 @@ struct Radio_s
      * \param [IN] size Number of registers to be read
      */
     void    ( *ReadRegisters )( uint16_t addr, uint8_t *buffer, uint8_t size );
+    /* ST_WORKAROUND_END */
     /*!
      * \brief Sets the maximum payload length.
      *
@@ -404,6 +410,7 @@ struct Radio_s
      * \param [in]  sleepTime     Structure describing sleep timeout value
      */
     void ( *SetRxDutyCycle ) ( uint32_t rxTime, uint32_t sleepTime );
+    /* ST_WORKAROUND_BEGIN: extended radio functions */
     /*!
      * @brief Sets the Transmitter in continuous PRBS mode
      *
@@ -411,7 +418,7 @@ struct Radio_s
      */
     void (*TxPrbs) ( void );
     /*!
-     * @brief Sets the Transmitter in continuous unmodulated Carrier mode at power dBm
+     * @brief Sets the Transmitter in continuous un-modulated Carrier mode at power dBm
      */
     void (*TxCw) ( int8_t power );
     /*!
@@ -438,10 +445,34 @@ struct Radio_s
     *                           lora field to be used if modem =GENERIC_LORA
                                 bpsk field to be used if modem =GENERIC_BPSK
      * \param [IN] power        Sets the output power [dBm]
-     * \param [IN] timeout      Transmission timeout [ms]
+     * \param [IN] timeout      Reception timeout [ms]
      * \return 0 when no parameters error, -1 otherwise
      */
     int32_t (*RadioSetTxGenericConfig)( GenericModems_t modem, TxConfigGeneric_t* config, int8_t power, uint32_t timeout );
+  /*!
+   * \brief Starts sending long Packet, packet maybe short
+   *
+   * \param [IN] payload_size        total payload size to be sent
+     \param [IN] timeout             in ms
+   * \param [IN] TxLongPacketGetNextChunkCb   callback to be implemented on user side to feed partial chunk
+   *                                  buffer: source buffer allocated by the app
+   *                                  size: size in bytes to feed
+   * \return 0 when no parameters error, -1 otherwise
+   */
+  int32_t (*TransmitLongPacket)( uint16_t payload_size, uint32_t timeout,void (*TxLongPacketGetNextChunkCb) (uint8_t** buffer, uint8_t buffer_size) );
+
+  /*!
+   * \brief Starts receiving long Packet, packet maybe short
+   *
+   * \param [IN] boosted_mode        boosted_mode: 0 normal Rx, 1:improved sensitivity
+   * \param [IN] timeout             Reception timeout [ms]
+   * \param [IN] RxLongStorePacketChunkCb   callback to be implemented on user side to record partial chunk in the application 
+   *                                  buffer: source buffer allocated in the radio driver
+   *                                  size: size in bytes to record
+   * \return 0 when no parameters error, -1 otherwise
+   */
+  int32_t (*ReceiveLongPacket)( uint8_t boosted_mode, uint32_t timeout, void (*RxLongStorePacketChunkCb) (uint8_t* buffer, uint8_t chunk_size) );
+  /* ST_WORKAROUND_END */
 };
 
 /*!
@@ -451,17 +482,9 @@ struct Radio_s
  *         board implementation
  */
 extern const struct Radio_s Radio;
-/* Private defines -----------------------------------------------------------*/
-/* Private macros ------------------------------------------------------------*/
-/* Private variables ---------------------------------------------------------*/
-/* Global variables ----------------------------------------------------------*/
-/* Private function prototypes -----------------------------------------------*/
-/* Functions Definition ------------------------------------------------------*/
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif // __RADIO_H__
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    test_rf.c
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
 #include "platform.h"
@@ -46,7 +48,7 @@
 #define SF12                          12
 #define CR4o5                         1
 #define EMISSION_POWER                P_14dBm
-#define CONTIUNUOUS_TIMEOUT           0xFFFF
+#define CONTINUOUS_TIMEOUT           0xFFFF
 #define LORA_PREAMBLE_LENGTH          8         /* Same for Tx and Rx */
 #define LORA_SYMBOL_TIMEOUT           30        /* Symbols */
 #define TX_TIMEOUT_VALUE              3000
@@ -84,12 +86,17 @@ static __IO uint32_t RadioRxDone_flag = 0;
 static __IO uint32_t RadioRxTimeout_flag = 0;
 static __IO uint32_t RadioError_flag = 0;
 static __IO int16_t last_rx_rssi = 0;
-static __IO int8_t last_rx_snr = 0;
+static __IO int8_t last_rx_LoraSnr_FskCfo = 0;
 
 /*!
  * Radio events function pointer
  */
 static RadioEvents_t RadioEvents;
+
+/*!
+ * Radio test payload pointer
+ */
+static uint8_t payload[256] = {0};
 
 /* USER CODE BEGIN PV */
 
@@ -142,7 +149,7 @@ int32_t TST_TxTone(void)
 
     APP_TPRINTF("Tx FSK Test\r\n");
 
-    Radio.SetTxContinuousWave(testParam.freq, testParam.power, CONTIUNUOUS_TIMEOUT);
+    Radio.SetTxContinuousWave(testParam.freq, testParam.power, CONTINUOUS_TIMEOUT);
 
     return 0;
   }
@@ -263,7 +270,6 @@ int32_t TST_TX_Start(int32_t nb_packet)
 
   /* USER CODE END TST_TX_Start_1 */
   int32_t i;
-  uint8_t payload[256] = {0};
   TxConfigGeneric_t TxConfig;
 
   if ((TestState & TX_TEST_LORA) != TX_TEST_LORA)
@@ -378,7 +384,7 @@ int32_t TST_RX_Start(int32_t nb_packet)
   uint32_t count_RxOk = 0;
   uint32_t count_RxKo = 0;
   uint32_t PER = 0;
-  RxConfigGeneric_t RxConfig;
+  RxConfigGeneric_t RxConfig = {0};
 
   if (((TestState & RX_TEST_LORA) != RX_TEST_LORA) && (nb_packet > 0))
   {
@@ -407,11 +413,14 @@ int32_t TST_RX_Start(int32_t nb_packet)
         RxConfig.fsk.PreambleLen = 3; /*in Byte*/
         RxConfig.fsk.SyncWordLength = 3; /*in Byte*/
         RxConfig.fsk.SyncWord = syncword; /*SyncWord Buffer*/
+        RxConfig.fsk.PreambleMinDetect = RADIO_FSK_PREAMBLE_DETECTOR_08_BITS;
         RxConfig.fsk.whiteSeed = 0x01FF ; /*WhiteningSeed*/
         RxConfig.fsk.LengthMode = RADIO_FSK_PACKET_VARIABLE_LENGTH; /* If the header is explicit, it will be transmitted in the GFSK packet. If the header is implicit, it will not be transmitted*/
         RxConfig.fsk.CrcLength = RADIO_FSK_CRC_2_BYTES_CCIT;       /* Size of the CRC block in the GFSK packet*/
         RxConfig.fsk.CrcPolynomial = 0x1021;
         RxConfig.fsk.Whitening = RADIO_FSK_DC_FREE_OFF;
+        RxConfig.fsk.MaxPayloadLength = 255;
+        RxConfig.fsk.AddrComp = RADIO_FSK_ADDRESSCOMP_FILT_OFF;
         Radio.RadioSetRxGenericConfig(GENERIC_FSK, &RxConfig, RX_CONTINUOUS_ON, 0);
       }
       else if (testParam.modulation == TEST_LORA)
@@ -441,9 +450,16 @@ int32_t TST_RX_Start(int32_t nb_packet)
       if (RadioRxDone_flag == 1)
       {
         int16_t rssi = last_rx_rssi;
-        int8_t snr = last_rx_snr;
+        int8_t LoraSnr_FskCfo = last_rx_LoraSnr_FskCfo;
         APP_TPRINTF("OnRxDone\r\n");
-        APP_TPRINTF("RssiValue=%d dBm, SnrValue=%d\r\n", rssi, snr);
+        if (testParam.modulation == TEST_FSK)
+        {
+          APP_TPRINTF("RssiValue=%d dBm, cfo=%dkHz\r\n", rssi, LoraSnr_FskCfo);
+        }
+        else
+        {
+          APP_TPRINTF("RssiValue=%d dBm, SnrValue=%ddB\r\n", rssi, LoraSnr_FskCfo);
+        }
       }
 
       if (RadioRxTimeout_flag == 1)
@@ -505,13 +521,13 @@ void OnTxDone(void)
   /* USER CODE END OnTxDone_2 */
 }
 
-void OnRxDone(uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr)
+void OnRxDone(uint8_t *payload, uint16_t size, int16_t rssi, int8_t LoraSnr_FskCfo)
 {
   /* USER CODE BEGIN OnRxDone_1 */
 
   /* USER CODE END OnRxDone_1 */
   last_rx_rssi = rssi;
-  last_rx_snr = snr;
+  last_rx_LoraSnr_FskCfo = LoraSnr_FskCfo;
 
   /* Set Rxdone flag */
   RadioRxDone_flag = 1;
@@ -566,6 +582,8 @@ static int32_t Prbs9_generator(uint8_t *payload, uint8_t len)
 
   /* USER CODE END Prbs9_generator_1 */
   uint16_t prbs9_val = PRBS9_INIT;
+  /*init payload to 0*/
+  UTIL_MEM_set_8(payload, 0, len);
 
   for (int32_t i = 0; i < len * 8; i++)
   {

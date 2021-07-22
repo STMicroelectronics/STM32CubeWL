@@ -34,9 +34,9 @@
                       0x76  SX1276 */
 
 #define __SUBGHZ_PHY_TYPE           (0x01U) /*!< [31:24] main version */
-#define __SUBGHZ_PHY_VERSION_MAIN   (0x00U) /*!< [23:16] main version */
-#define __SUBGHZ_PHY_VERSION_SUB1   (0x06U) /*!< [15:8]  sub1 version */
-#define __SUBGHZ_PHY_VERSION_SUB2   (0x01U) /*!< [7:0]   sub2 version */ 
+#define __SUBGHZ_PHY_VERSION_MAIN   (0x01U) /*!< [23:16] main version */
+#define __SUBGHZ_PHY_VERSION_SUB1   (0x01U) /*!< [15:8]  sub1 version */
+#define __SUBGHZ_PHY_VERSION_SUB2   (0x00U) /*!< [7:0]   sub2 version */ 
 #define __SUBGHZ_PHY_VERSION        ((__SUBGHZ_PHY_VERSION_MAIN << 24)  \
                                      |(__SUBGHZ_PHY_VERSION_SUB1 << 16) \
                                      |(__SUBGHZ_PHY_VERSION_SUB2 << 8 ) \

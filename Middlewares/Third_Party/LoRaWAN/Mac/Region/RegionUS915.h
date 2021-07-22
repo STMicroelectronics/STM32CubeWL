@@ -34,6 +34,16 @@
  *            Implementation according to LoRaWAN Specification v1.0.2.
  * \{
  */
+/**
+  ******************************************************************************
+  *
+  *          Portions COPYRIGHT 2020 STMicroelectronics
+  *
+  * @file    RegionUS915.h
+  * @author  MCD Application Team
+  * @brief   Region definition for US915
+  ******************************************************************************
+  */
 #ifndef __REGION_US915_H__
 #define __REGION_US915_H__
 
@@ -84,11 +94,7 @@ extern "C"
  */
 #define US915_MAX_RX1_DR_OFFSET                     3
 
-/*!
- * Default Rx1 receive datarate offset
- */
-#define US915_DEFAULT_RX1_DR_OFFSET                 0
-
+/* ST_WORKAROUND_BEGIN: Certification requirement */
 /*!
  * Minimal Tx output power that can be used by the node
  */
@@ -97,6 +103,8 @@ extern "C"
 #else
 #define US915_MIN_TX_POWER                          TX_POWER_14
 #endif /* CERTIF_LORAWAN_VERSION */
+/* ST_WORKAROUND_END */
+
 /*!
  * Maximal Tx output power that can be used by the node
  */
@@ -113,16 +121,6 @@ extern "C"
 #define US915_DEFAULT_MAX_ERP                      30.0f
 
 /*!
- * ADR Ack limit
- */
-#define US915_ADR_ACK_LIMIT                         64
-
-/*!
- * ADR Ack delay
- */
-#define US915_ADR_ACK_DELAY                         32
-
-/*!
  * Enabled or disabled the duty cycle
  */
 #define US915_DUTY_CYCLE_ENABLED                    0
@@ -133,41 +131,6 @@ extern "C"
 #define US915_MAX_RX_WINDOW                         3000
 
 /*!
- * Receive delay 1
- */
-#define US915_RECEIVE_DELAY1                        1000
-
-/*!
- * Receive delay 2
- */
-#define US915_RECEIVE_DELAY2                        2000
-
-/*!
- * Join accept delay 1
- */
-#define US915_JOIN_ACCEPT_DELAY1                    5000
-
-/*!
- * Join accept delay 2
- */
-#define US915_JOIN_ACCEPT_DELAY2                    6000
-
-/*!
- * Maximum frame counter gap
- */
-#define US915_MAX_FCNT_GAP                          16384
-
-/*!
- * Ack timeout
- */
-#define US915_ACKTIMEOUT                            2000
-
-/*!
- * Random ack timeout limits
- */
-#define US915_ACK_TIMEOUT_RND                       1000
-
-/*!
  * Second reception window channel frequency definition.
  */
 #define US915_RX_WND_2_FREQ                         923300000
@@ -176,6 +139,11 @@ extern "C"
  * Second reception window channel datarate definition.
  */
 #define US915_RX_WND_2_DR                           DR_8
+
+/*!
+ * Default uplink dwell time configuration
+ */
+#define US915_DEFAULT_UPLINK_DWELL_TIME             0
 
 /*
  * CLASS B
@@ -194,11 +162,6 @@ extern "C"
  * Ping slot channel frequency
  */
 #define US915_PING_SLOT_CHANNEL_FREQ                923300000
-
-/*!
- * Number of possible ping slot channels
- */
-#define US915_PING_SLOT_NB_CHANNELS                 8
 
 /*!
  * Number of possible beacon channels
@@ -242,9 +205,9 @@ extern "C"
 
 /*!
  * Band 0 definition
- * Band = { DutyCycle, TxMaxPower, LastBandUpdateTime, TimeCredits, MaxTimeCredits, ReadyForTransmission }
+ * Band = { DutyCycle, TxMaxPower, LastBandUpdateTime, LastMaxCreditAssignTime, TimeCredits, MaxTimeCredits, ReadyForTransmission }
  */
-#define US915_BAND0                                 { 1, US915_MAX_TX_POWER, 0, 0, 0, 0 } //  100.0 %
+#define US915_BAND0                                 { 1, US915_MAX_TX_POWER, 0, 0, 0, 0, 0 } //  100.0 %
 
 /*!
  * Defines the first channel for RX window 1 for US band
@@ -283,6 +246,7 @@ static const int8_t DatarateOffsetsUS915[5][4] =
     { DR_13, DR_13, DR_12, DR_11 }, // DR_4
 };
 
+/* ST_WORKAROUND_BEGIN: Keep repeater feature */
 /*!
  * Maximum payload with respect to the datarate index. Cannot operate with repeater.
  */
@@ -292,6 +256,7 @@ static const uint8_t MaxPayloadOfDatarateUS915[] = { 11, 53, 125, 242, 242, 0, 0
  * Maximum payload with respect to the datarate index. Can operate with repeater.
  */
 static const uint8_t MaxPayloadOfDatarateRepeaterUS915[] = { 11, 53, 125, 242, 242, 0, 0, 0, 33, 109, 222, 222, 222, 222, 0, 0 };
+/* ST_WORKAROUND_END */
 
 /*!
  * \brief The function gets a value of a specific phy attribute.
@@ -315,15 +280,6 @@ void RegionUS915SetBandTxDone( SetBandTxDoneParams_t* txDone );
  * \param [IN] type Sets the initialization type.
  */
 void RegionUS915InitDefaults( InitDefaultsParams_t* params );
-
-/*!
- * \brief Returns a pointer to the internal context and its size.
- *
- * \param [OUT] params Pointer to the function parameters.
- *
- * \retval      Points to a structure where the module store its non-volatile context.
- */
-void* RegionUS915GetNvmCtx( GetNvmCtxParams_t* params );
 
 /*!
  * \brief Verifies a parameter.
@@ -417,7 +373,7 @@ uint8_t RegionUS915RxParamSetupReq( RxParamSetupReqParams_t* rxParamSetupReq );
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  */
-uint8_t RegionUS915NewChannelReq( NewChannelReqParams_t* newChannelReq );
+int8_t RegionUS915NewChannelReq( NewChannelReqParams_t* newChannelReq );
 
 /*!
  * \brief The function processes a TX ParamSetup Request.
@@ -437,7 +393,7 @@ int8_t RegionUS915TxParamSetupReq( TxParamSetupReqParams_t* txParamSetupReq );
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  */
-uint8_t RegionUS915DlChannelReq( DlChannelReqParams_t* dlChannelReq );
+int8_t RegionUS915DlChannelReq( DlChannelReqParams_t* dlChannelReq );
 
 /*!
  * \brief Alternates the datarate of the channel for the join request.

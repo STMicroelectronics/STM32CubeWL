@@ -1,9 +1,9 @@
 /**
   @page Sigfox_AT_Slave Readme file
- 
+
   @verbatim
   ******************** (C) COPYRIGHT 2020 STMicroelectronics *******************
-  * @file    Applications/Sigfox/Sigfox_AT_Slave/readme.txt 
+  * @file    Applications/Sigfox/Sigfox_AT_Slave/readme.txt
   * @author  MCD Application Team
   * @brief   This application is a simple demo application software of a Sigfox
   *          modem controlled though AT command interface over UART by an
@@ -29,23 +29,21 @@ modem that is controlled though AT command interface over UART by an external ho
 like a computer executing a terminal.
 
 This application is targeting the NUCLEO-WL55JC1 (HIGH-BAND) embedding the STM32WLxx.
-
   ******************************************************************************
 
 @par Keywords
 
 Applications, SubGHz_Phy, Sigfox, AT_Slave, SingleCore
 
-@par Directory contents 
+@par Directory contents
 
 
   - Sigfox_AT_Slave/Core/Inc/adc.h                                              This file contains all the function prototypes for
                                                                                 the adc.c file
   - Sigfox_AT_Slave/Core/Inc/adc_if.h                                           Header for ADC interface configuration
-  - Sigfox_AT_Slave/Core/Inc/board_resources.h                                  Header for driver at.c module
   - Sigfox_AT_Slave/Core/Inc/dma.h                                              This file contains all the function prototypes for
                                                                                 the dma.c file
-  - Sigfox_AT_Slave/Core/Inc/flash_if.h                                         This file provides interface to low level driver
+  - Sigfox_AT_Slave/Core/Inc/flash_if.h                                         This file contains definitions for FLASH Interface functionalities.
   - Sigfox_AT_Slave/Core/Inc/lptim.h                                            This file contains all the function prototypes for
                                                                                 the lptim.c file
   - Sigfox_AT_Slave/Core/Inc/main.h                                             : Header for main.c file.
@@ -78,7 +76,7 @@ Applications, SubGHz_Phy, Sigfox, AT_Slave, SingleCore
   - Sigfox_AT_Slave/Sigfox/App/sgfx_cstimer.h                                   Interface for  cstimer.c driver
   - Sigfox_AT_Slave/Sigfox/App/sgfx_eeprom_if.h                                 eeprom interface to the upper module.
   - Sigfox_AT_Slave/Sigfox/App/sigfox_data.h                                    provides encrypted data
-  - Sigfox_AT_Slave/Sigfox/Target/mcu_api.h                                     defines the interfaace to mcu_api.c
+  - Sigfox_AT_Slave/Sigfox/Target/mcu_api.h                                     defines the interface to mcu_api.c
   - Sigfox_AT_Slave/Sigfox/Target/mn_api.h                                      monarch library interface
   - Sigfox_AT_Slave/Sigfox/Target/mw_log_conf.h                                 Configure (enable/disable) traces for CM0
   - Sigfox_AT_Slave/Sigfox/Target/radio_board_if.h                              Header for Radio interface configuration
@@ -91,10 +89,10 @@ Applications, SubGHz_Phy, Sigfox, AT_Slave, SingleCore
   - Sigfox_AT_Slave/Core/Src/adc.c                                              This file provides code for the configuration
                                                                                 of the ADC instances.
   - Sigfox_AT_Slave/Core/Src/adc_if.c                                           Read status related to the chip (battery level, VREF, chip temperature)
-  - Sigfox_AT_Slave/Core/Src/board_resources.c                                  Source file
   - Sigfox_AT_Slave/Core/Src/dma.c                                              This file provides code for the configuration
                                                                                 of all the requested memory to memory DMA transfers.
-  - Sigfox_AT_Slave/Core/Src/flash_if.c                                         This file contains the FLASH driver
+  - Sigfox_AT_Slave/Core/Src/flash_if.c                                         This file provides set of firmware functions to manage Flash
+                                                                                Interface functionalities.
   - Sigfox_AT_Slave/Core/Src/lptim.c                                            This file provides code for the configuration
                                                                                 of the LPTIM instances.
   - Sigfox_AT_Slave/Core/Src/main.c                                             : Main program body
@@ -113,7 +111,7 @@ Applications, SubGHz_Phy, Sigfox, AT_Slave, SingleCore
   - Sigfox_AT_Slave/Core/Src/timer_if.c                                         Configure RTC Alarm, Tick and Calendar manager
   - Sigfox_AT_Slave/Core/Src/usart.c                                            This file provides code for the configuration
                                                                                 of the USART instances.
-  - Sigfox_AT_Slave/Core/Src/usart_if.c                                         Configuration of UART MX driver interface for hyperterminal communication
+  - Sigfox_AT_Slave/Core/Src/usart_if.c                                         Configuration of UART driver interface for hyperterminal communication
   - Sigfox_AT_Slave/Sigfox/App/app_sigfox.c                                     Application of the Sigfox Middleware
   - Sigfox_AT_Slave/Sigfox/App/ee.c                                             Implementation of the EEPROM emulator
   - Sigfox_AT_Slave/Sigfox/App/sgfx_app.c                                       provides code for the application of the sigfox Middleware
@@ -127,23 +125,21 @@ Applications, SubGHz_Phy, Sigfox, AT_Slave, SingleCore
   - Sigfox_AT_Slave/Sigfox/Target/rf_api.c                                      rf library interface
   - Sigfox_AT_Slave/Sigfox/Target/se_nvm.c                                      manages SE nvm data
   - Sigfox_AT_Slave/Sigfox/Target/sgfx_credentials.c                            manages keys and encryption algorithm
-  - Sigfox_AT_Slave/STM32CubeIDE/Application/Core/syscalls.c                    STM32CubeIDE Minimal System calls file
-  - Sigfox_AT_Slave/STM32CubeIDE/Application/Core/sysmem.c                      STM32CubeIDE System Memory calls file
+  - Sigfox_AT_Slave/STM32CubeIDE/Application/User/Core/syscalls.c               STM32CubeIDE Minimal System calls file
+  - Sigfox_AT_Slave/STM32CubeIDE/Application/User/Core/sysmem.c                 STM32CubeIDE System Memory calls file
 
 
-@par Hardware and Software environment 
+@par Hardware and Software environment
 
   - This example runs on the STM32WLxx Nucleo board.
 
-  - STM32WLxx Nucleo board Set-up    
-    - Connect the Nucleo board to your PC with a USB cable type A to micro-B 
+  - STM32WLxx Nucleo board Set-up
+    - Connect the Nucleo board to your PC with a USB cable type A to micro-B
       to ST-LINK connector.
     - Please ensure that the ST-LINK connector jumpers are fitted.
 
   - Configure the software via the configuration files:
-    - sys_conf.h, radio_conf.h, mw_log_conf.h, radio_board_if.h, nucleo_conf.h, main.h, etc
-    - Careful: 
-        - STM32WLxx Nucleo requires IS_TCXO_SUPPORTED=1
+    - sys_conf.h, radio_conf.h, mw_log_conf.h, main.h, etc
 
   -Set Up:
 
@@ -154,9 +150,9 @@ Applications, SubGHz_Phy, Sigfox, AT_Slave, SingleCore
              |                        |          |                        |
              --------------------------          --------------------------
 
-@par How to use it ? 
+@par How to use it ?
 In order to make the program work, you must do the following :
-  - Open your preferred toolchain 
+  - Open your preferred toolchain
   - Rebuild all files and load your image into target memory
   - Run the example
   - Open a Terminal, connected the Sigfox Object
@@ -165,6 +161,11 @@ In order to make the program work, you must do the following :
   - Reset the board
   - type AT? to get all available commands
   - Send your AT commands by typing them in the terminal
+
+@par How to debug ?
+  - make sure the flag DEBUGGER_ENABLED to 1 in sys_conf.h
+  - simpler to define the flag LOW_POWER_DISABLE to 1 as well
+  - compile, download and attach
 
  * <h3><center>&copy; COPYRIGHT STMicroelectronics</center></h3>
  */

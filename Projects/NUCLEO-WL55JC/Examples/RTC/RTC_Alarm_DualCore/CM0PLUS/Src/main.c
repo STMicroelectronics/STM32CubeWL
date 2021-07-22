@@ -84,6 +84,11 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
+
+  /* Configure LED assigned to CPU2 */
+  /* Note: LED3 used in case of error has already been configured by CPU1 */
+  BSP_LED_Init(LED2);
+
   /* Do not initialise RTC again, already done by the CM4 core */
   hrtc.Instance = RTC;
   __HAL_RCC_RTC_ENABLE();
@@ -124,7 +129,9 @@ int main(void)
   {
   }
 
-  BSP_LED_On(LED3);
+  /* Turn on LED2 to indicate RTC Alarm B has triggered */ 
+  BSP_LED_On(LED2);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -202,7 +209,7 @@ void MX_RTC_Init(void)
   */
   sAlarm.AlarmTime.Hours = 0x0;
   sAlarm.AlarmTime.Minutes = 0x10;
-  sAlarm.AlarmTime.Seconds = 0x4;
+  sAlarm.AlarmTime.Seconds = 0x2;
   sAlarm.AlarmTime.SubSeconds = 0x0;
   sAlarm.AlarmTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
   sAlarm.AlarmTime.StoreOperation = RTC_STOREOPERATION_RESET;

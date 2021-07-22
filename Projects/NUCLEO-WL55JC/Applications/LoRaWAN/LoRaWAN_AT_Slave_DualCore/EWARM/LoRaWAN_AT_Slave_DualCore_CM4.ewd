@@ -184,7 +184,7 @@
                 </option>
                 <option>
                     <name>OCMulticoreMaster</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>OCMulticorePort</name>
@@ -192,15 +192,15 @@
                 </option>
                 <option>
                     <name>OCMulticoreWorkspace</name>
-                    <state>$PROJ_DIR$\Project.eww</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>OCMulticoreSlaveProject</name>
-                    <state>LoRaWAN_AT_Slave_DualCore_CM0PLUS</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>OCMulticoreSlaveConfiguration</name>
-                    <state>MBMUX_STM32WL_M0_FLASH</state>
+                    <state></state>
                 </option>
                 <option>
                     <name>OCDownloadExtraImage</name>

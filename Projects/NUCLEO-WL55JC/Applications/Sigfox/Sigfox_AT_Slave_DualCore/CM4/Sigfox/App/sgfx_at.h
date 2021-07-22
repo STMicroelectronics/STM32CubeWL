@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    sgfx_at.h
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __SGFX_AT_H__
@@ -103,219 +105,219 @@ typedef enum eATEerror
 /* Exported functions prototypes ---------------------------------------------*/
 /**
   * @brief  Return AT_OK in all cases
-  * @param  Param string of the AT command - unused
+  * @param  param string of the AT command - unused
   * @retval AT_OK
   */
 ATEerror_t AT_return_ok(const char *param);
 
 /**
   * @brief  Return AT_ERROR in all cases
-  * @param  Param string of the AT command - unused
+  * @param  param string of the AT command - unused
   * @retval AT_ERROR
   */
 ATEerror_t AT_return_error(const char *param);
 
 /**
   * @brief  Trig a reset of the MCU
-  * @param  Param string of the AT command - unused
+  * @param  param string of the AT command - unused
   * @retval AT_OK
   */
 ATEerror_t AT_reset(const char *param);
 
 /**
   * @brief  Restore factory settings in Eeprom
-  * @param  Param string of the AT command - unused
+  * @param  param string of the AT command - unused
   * @retval AT_OK
   */
 ATEerror_t AT_restore_factory_settings(const char *param);
 
 /**
   * @brief  Send Bit w/wo ack to Sigfox Nw
-  * @param  String pointing to command parameters
+  * @param  param String pointing to command parameters
   * @retval AT_OK if OK, or an appropriate AT_xxx error code
   */
 ATEerror_t AT_SendBit(const char *param);
 
 /**
   * @brief  Send  ASCII frame w/wo ack to Sigfox Nw
-  * @param  String pointing to command parameters
+  * @param  param String pointing to command parameters
   * @retval AT_OK if OK, or an appropriate AT_xxx error code
   */
 ATEerror_t AT_SendFrame(const char *param);
 
 /**
-  * @brief  Send  Hexa frame w/wo ack to Sigfox Nw
-  * @param  String pointing to command parameters
+  * @brief  Send  Hex frame w/wo ack to Sigfox Nw
+  * @param  param String pointing to command parameters
   * @retval AT_OK if OK, or an appropriate AT_xxx error code
   */
 ATEerror_t AT_SendHexFrame(const char *param);
 
 /**
   * @brief  Print last received message
-  * @param  String parameter
+  * @param  param String parameter
   * @retval AT_OK if OK, or an appropriate AT_xxx error code
   */
 ATEerror_t AT_Send(const char *param);
 
 /**
   * @brief  Get the DevId
-  * @param  String parameter
+  * @param  param String parameter
   * @retval AT_OK
   */
 ATEerror_t AT_DevId_get(const char *param);
 
 /**
   * @brief  Get the Dev Pac
-  * @param  String parameter
+  * @param  param String parameter
   * @retval AT_OK
   */
 ATEerror_t AT_DevPac_get(const char *param);
 
 /**
   * @brief  Set public Key
-  * @param  String parameter
+  * @param  param String parameter
   * @retval AT_OK
   */
 ATEerror_t AT_PublicKey_set(const char *param);
 
 /**
   * @brief  Get public Key
-  * @param  String parameter
+  * @param  param String parameter
   * @retval AT_OK
   */
 ATEerror_t AT_PublicKey_get(const char *param);
 /**
   * @brief  Set Payload Encryption
-  * @param  String parameter
+  * @param  param String parameter
   * @retval AT_OK
   */
 ATEerror_t AT_PayloadEncryption_set(const char *param);
 
 /**
   * @brief  Get Payload Encryption
-  * @param  String parameter
+  * @param  param String parameter
   * @retval AT_OK
   */
 ATEerror_t AT_PayloadEncryption_get(const char *param);
 
 /**
   * @brief  Print the version of the AT_Slave FW
-  * @param  String parameter
+  * @param  param String parameter
   * @retval AT_OK
   */
 ATEerror_t AT_version_get(const char *param);
 
 /**
   * @brief  Print the battery level
-  * @param  String parameter
+  * @param  param String parameter
   * @retval AT_OK
   */
 ATEerror_t AT_bat_get(const char *param);
 
 /**
   * @brief  Test Tone
-  * @param  String parameter
+  * @param  param String parameter
   * @retval AT_OK
   */
 ATEerror_t AT_test_cw(const char *param);
 
 /**
   * @brief  Tx Test with prbs9 modulation
-  * @param  String parameter
+  * @param  param String parameter
   * @retval AT_OK
   */
 ATEerror_t AT_test_pn(const char *param);
 
 /**
   * @brief  Starts a monarch scan
-  * @param  String parameter
+  * @param  param String parameter
   * @retval AT_OK
   */
 ATEerror_t AT_scan_mn(const char *param);
 /**
   * @brief  Test Tone
-  * @param  String parameter
+  * @param  param String parameter
   * @retval AT_OK
   */
 ATEerror_t AT_test_mode(const char *param);
 
 /**
   * @brief  set the output power of the radio (power in dBm)
-  * @param  String parameter
+  * @param  param String parameter
   * @retval AT_OK
   */
 ATEerror_t AT_power_set(const char *param);
 
 /**
   * @brief  get the output power of the radio (power in dBm)
-  * @param  String parameter
+  * @param  param String parameter
   * @retval AT_OK
   */
 ATEerror_t AT_power_get(const char *param);
 /**
   * @brief  send an out of band message one
-  * @param  String parameter
+  * @param  param String parameter
   * @retval AT_OK
   */
 ATEerror_t AT_outOfBand_run(const char *param);
 
 /**
   * @brief  to configure the enabled channels for FCC
-  * @param  String parameter
+  * @param  param String parameter
   * @retval AT_OK
   */
 ATEerror_t AT_ChannelConfigFcc_set(const char *param);
 
 /**
   * @brief  set zones (1 2 3 or 4)
-  * @param  String parameter
+  * @param  param String parameter
   * @retval AT_OK
   */
 ATEerror_t AT_rc_set(const char *param);
 
 /**
   * @brief  get zones (1 2 3 or 4)
-  * @param  String parameter
+  * @param  param String parameter
   * @retval AT_OK
   */
 ATEerror_t AT_rc_get(const char *param);
 
 /**
   * @brief  to get the rssi calibration value from eeprom.
-  * @param  String parameter
+  * @param  param String parameter
   * @retval AT_OK
   */
 ATEerror_t AT_rssi_cal_get(const char *param);
 
 /**
   * @brief  to set the rssi calibration state in eeprom.
-  * @param  String parameter
+  * @param  param String parameter
   * @retval AT_OK
   */
 ATEerror_t AT_rssi_cal_set(const char *param);
 /**
   * @brief  to get the current echo state from eeprom.
-  * @param  String parameter
+  * @param  param String parameter
   * @retval AT_OK
   */
 ATEerror_t AT_echo_get(const char *param);
 
 /**
   * @brief  to set the echo state in eeprom.
-  * @param  String parameter
+  * @param  param String parameter
   * @retval AT_OK
   */
 ATEerror_t AT_echo_set(const char *param);
 /**
   * @brief  Set the verbose level
-  * @param  String parameter
+  * @param  param String parameter
   * @retval AT_OK
   */
 ATEerror_t AT_verbose_set(const char *param);
 
 /**
   * @brief  Get the verbose level
-  * @param  String parameter
+  * @param  param String parameter
   * @retval AT_OK
   */
 ATEerror_t AT_verbose_get(const char *param);

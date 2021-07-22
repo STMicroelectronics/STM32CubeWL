@@ -225,6 +225,7 @@
                 <option>
                     <name>CCDefines</name>
                     <state>CORE_CM4</state>
+                    <state>USE_HAL_DRIVER</state>
                     <state>STM32WL55xx</state>
                 </option>
                 <option>
@@ -355,8 +356,9 @@
                     <state>$PROJ_DIR$/../CM4/LoRaWAN/Target</state>
                     <state>$PROJ_DIR$/../CM4/MbMux</state>
                     <state>$PROJ_DIR$/../Common/Board</state>
-                    <state>$PROJ_DIR$/../Common/MbMux</state>
                     <state>$PROJ_DIR$/../Common/System</state>
+                    <state>$PROJ_DIR$/../Common/MbMux</state>
+                    <state>$PROJ_DIR$/../../../../../../Drivers/BSP/STM32WLxx_Nucleo</state>
                     <state>$PROJ_DIR$/../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc</state>
                     <state>$PROJ_DIR$/../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc/Legacy</state>
                     <state>$PROJ_DIR$/../../../../../../Utilities/trace/adv_trace</state>
@@ -1019,7 +1021,7 @@
                 </option>
                 <option>
                     <name>IlinkTrustzoneImportLibraryOut</name>
-                    <state>LoRaWAN_End_Node_DualCore_CM4_import_lib.o</state>
+                    <state>###Unitialized###</state>
                 </option>
             </data>
         </settings>
@@ -1053,106 +1055,109 @@
     <group>
         <name>Application</name>
         <group>
-            <name>Core</name>
-            <file>
-                <name>$PROJ_DIR$\..\CM4\Core\Src\adc.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM4\Core\Src\adc_if.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\Common\Board\board_resources.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM4\Core\Src\dma.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM4\Core\Src\ipcc.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM4\Core\Src\ipcc_if.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM4\Core\Src\main.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM4\Core\Src\stm32_lpm_if.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM4\Core\Src\stm32wlxx_hal_msp.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM4\Core\Src\stm32wlxx_it.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM4\Core\Src\sys_app.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\Common\System\sys_debug.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM4\Core\Src\sys_sensors.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM4\Core\Src\timer_if.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM4\Core\Src\usart.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM4\Core\Src\usart_if.c</name>
-            </file>
-        </group>
-        <group>
             <name>EWARM</name>
             <file>
                 <name>$PROJ_DIR$\startup_stm32wl55xx_cm4.s</name>
             </file>
         </group>
         <group>
-            <name>LoRaWAN</name>
+            <name>User</name>
             <group>
-                <name>App</name>
-                <file>
-                    <name>$PROJ_DIR$\..\CM4\LoRaWAN\App\app_lorawan.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\CM4\LoRaWAN\App\CayenneLpp.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\CM4\LoRaWAN\App\lora_app.c</name>
-                </file>
+                <name>CM4</name>
+                <group>
+                    <name>Core</name>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM4\Core\Src\adc.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM4\Core\Src\adc_if.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM4\Core\Src\dma.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM4\Core\Src\ipcc.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM4\Core\Src\ipcc_if.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM4\Core\Src\main.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM4\Core\Src\stm32_lpm_if.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM4\Core\Src\stm32wlxx_hal_msp.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM4\Core\Src\stm32wlxx_it.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM4\Core\Src\sys_app.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM4\Core\Src\sys_sensors.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM4\Core\Src\timer_if.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM4\Core\Src\usart.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM4\Core\Src\usart_if.c</name>
+                    </file>
+                </group>
+                <group>
+                    <name>LoRaWAN</name>
+                    <group>
+                        <name>App</name>
+                        <file>
+                            <name>$PROJ_DIR$\..\CM4\LoRaWAN\App\app_lorawan.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\CM4\LoRaWAN\App\CayenneLpp.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\CM4\LoRaWAN\App\lora_app.c</name>
+                        </file>
+                    </group>
+                </group>
+                <group>
+                    <name>MbMux</name>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM4\MbMux\LmHandler_mbwrapper.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM4\MbMux\mbmux.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM4\MbMux\mbmuxif_lora.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM4\MbMux\mbmuxif_radio.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM4\MbMux\mbmuxif_sys.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM4\MbMux\mbmuxif_trace.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM4\MbMux\radio_mbwrapper.c</name>
+                    </file>
+                </group>
             </group>
-        </group>
-        <group>
-            <name>MbMux</name>
-            <file>
-                <name>$PROJ_DIR$\..\CM4\MbMux\LmHandler_mbwrapper.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM4\MbMux\mbmux.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM4\MbMux\mbmuxif_kms.c</name>
-                <excluded>
-                    <configuration>LoRaWAN_End_Node_DualCore_CM4</configuration>
-                </excluded>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM4\MbMux\mbmuxif_lora.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM4\MbMux\mbmuxif_radio.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM4\MbMux\mbmuxif_sys.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM4\MbMux\mbmuxif_trace.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM4\MbMux\radio_mbwrapper.c</name>
-            </file>
+            <group>
+                <name>Common</name>
+                <group>
+                    <name>System</name>
+                    <file>
+                        <name>$PROJ_DIR$\..\Common\System\sys_debug.c</name>
+                    </file>
+                </group>
+            </group>
         </group>
     </group>
     <group>
@@ -1165,13 +1170,13 @@
         <name>Drivers</name>
         <group>
             <name>BSP</name>
-            <excluded>
-                <configuration>LoRaWAN_End_Node_DualCore_CM4</configuration>
-            </excluded>
             <group>
                 <name>STM32WLxx_Nucleo</name>
                 <file>
                     <name>$PROJ_DIR$\..\..\..\..\..\..\Drivers\BSP\STM32WLxx_Nucleo\stm32wlxx_nucleo.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\..\Drivers\BSP\STM32WLxx_Nucleo\stm32wlxx_nucleo_radio.c</name>
                 </file>
             </group>
         </group>
@@ -1233,6 +1238,12 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_rtc_ex.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_tim.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_tim_ex.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_uart.c</name>

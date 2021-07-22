@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    sigfox_info.h
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 #ifndef __SIGFOX_INFO_H__
 #define __SIGFOX_INFO_H__
@@ -61,16 +63,13 @@ typedef struct
 
 /* Exported functions prototypes ---------------------------------------------*/
 /**
-  * @brief initialises the SigfoxInfo table
-  * @param none
-  * @retval  none
+  * @brief initialize the SigfoxInfo capabilities table
   */
 void SigfoxInfo_Init(void);
 
 /**
-  * @brief returns the pointer to the SigfoxMacInfo table
-  * @param none
-  * @retval  SigfoxMacInfoTable pointer
+  * @brief returns the pointer to the SigfoxInfo capabilities table
+  * @return  SigfoxInfo_t pointer
   */
 SigfoxInfo_t *SigfoxInfo_GetPtr(void);
 

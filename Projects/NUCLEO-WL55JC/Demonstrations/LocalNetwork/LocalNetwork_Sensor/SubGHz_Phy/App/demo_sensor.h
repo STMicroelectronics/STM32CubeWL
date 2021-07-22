@@ -55,17 +55,17 @@ extern "C" {
 #define SENS_SCAN_CadDetMin         20
 
 /**
- * @brief Initialize Sensor and start scanning for Beacon.
- * @param GetDataCallback called before transmission, quickly add data to transmit, do block in the callback
- * @param ActivityCallback called on every activity to blink LED or something
- */
-int SENS_Init (void (*GetDataCallback)(void), void (*ActivityCallback)(void));
+  * @brief Initialize Sensor and start scanning for Beacon.
+  * @param GetDataCallback called before transmission, quickly add data to transmit, do block in the callback
+  * @param ActivityCallback called on every activity to blink LED or something
+  */
+int SENS_Init(void (*GetDataCallback)(void), void (*ActivityCallback)(void));
 
 /**
- * @brief Store data to send in next packet.
- * @param Data structure
- */
-void SENS_WriteSensorData(const DEMO_data_1_0_t* Data);
+  * @brief Store data to send in next packet.
+  * @param Data structure
+  */
+void SENS_WriteSensorData(const DEMO_data_1_0_t *Data);
 
 typedef enum
 {
@@ -77,9 +77,9 @@ typedef enum
 } SENS_State_t;
 
 /**
- * @brief Get state of the sensor connection.
- * @return one of SENS_State_t
- */
+  * @brief Get state of the sensor connection.
+  * @return one of SENS_State_t
+  */
 SENS_State_t SENS_GetState(void);
 
 

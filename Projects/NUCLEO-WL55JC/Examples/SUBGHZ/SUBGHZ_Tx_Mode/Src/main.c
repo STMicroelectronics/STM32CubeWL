@@ -144,7 +144,7 @@ int main(void)
   /* Reset RadioResult */
   RadioResult = 0x00;
 
-   /* Retrive Status from SUBGHZ Radio */
+   /* Retrieve Status from SUBGHZ Radio */
   if (HAL_SUBGHZ_ExecGetCmd(&hsubghz, RADIO_GET_STATUS, &RadioResult, 1) != HAL_OK)
   {
     Error_Handler();
@@ -162,7 +162,7 @@ int main(void)
       /* Reset RadioResult */
       RadioResult = 0x00;
 
-      /* Retrive Status from SUBGHZ Radio */
+      /* Retrieve Status from SUBGHZ Radio */
       if (HAL_SUBGHZ_ExecGetCmd(&hsubghz, RADIO_GET_STATUS, &RadioResult, 1) != HAL_OK)
       {
         Error_Handler();
@@ -176,7 +176,7 @@ int main(void)
   }
   else
   {
-    /* Call Error Handler – LED1 blinking */
+    /* Call Error Handler; LED1 blinking */
     Error_Handler();
   }
 
@@ -188,7 +188,7 @@ int main(void)
   }
   else
   {
-    /* Call Error Handler – LED1 blinking */
+    /* Call Error Handler; LED1 blinking */
     Error_Handler();
   }
   /* USER CODE END 2 */

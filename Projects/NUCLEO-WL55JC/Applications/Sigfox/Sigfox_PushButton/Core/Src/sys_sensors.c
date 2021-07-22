@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    sys_sensors.c
@@ -16,12 +17,14 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
 #include "stdint.h"
 #include "sys_conf.h"
 #include "sys_sensors.h"
 
+/* USER CODE BEGIN Includes */
 #if defined (SENSOR_ENABLED) && (SENSOR_ENABLED == 1)
 #if defined (X_NUCLEO_IKS01A2)
 #warning "IKS drivers are today available for several families but not stm32WL"
@@ -104,9 +107,6 @@ static void I2C2_MspDeInit(I2C_HandleTypeDef *i2cHandle)
 #elif !defined (SENSOR_ENABLED)
 #error SENSOR_ENABLED not defined
 #endif  /* SENSOR_ENABLED */
-
-/* USER CODE BEGIN Includes */
-
 /* USER CODE END Includes */
 
 /* External variables ---------------------------------------------------------*/
@@ -120,15 +120,14 @@ static void I2C2_MspDeInit(I2C_HandleTypeDef *i2cHandle)
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
+
+/* USER CODE BEGIN PD */
 #define STSOP_LATTITUDE           ((float) 43.618622 )  /*!< default latitude position */
 #define STSOP_LONGITUDE           ((float) 7.051415  )  /*!< default longitude position */
 #define MAX_GPS_POS               ((int32_t) 8388607 )  /*!< 2^23 - 1 */
 #define HUMIDITY_DEFAULT_VAL      50.0f                 /*!< default humidity */
 #define TEMPERATURE_DEFAULT_VAL   18.0f                 /*!< default temperature */
 #define PRESSURE_DEFAULT_VAL      1000.0f               /*!< default pressure */
-
-/* USER CODE BEGIN PD */
-
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -137,6 +136,8 @@ static void I2C2_MspDeInit(I2C_HandleTypeDef *i2cHandle)
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+
+/* USER CODE BEGIN PV */
 #if defined (SENSOR_ENABLED) && (SENSOR_ENABLED == 1)
 #if defined (X_NUCLEO_IKS01A2)
 #warning "IKS drivers are today available for several families but not stm32WL"
@@ -151,9 +152,6 @@ IKS01A3_ENV_SENSOR_Capabilities_t EnvCapabilities;
 #elif !defined (SENSOR_ENABLED)
 #error SENSOR_ENABLED not defined
 #endif  /* SENSOR_ENABLED */
-
-/* USER CODE BEGIN PV */
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -162,11 +160,9 @@ IKS01A3_ENV_SENSOR_Capabilities_t EnvCapabilities;
 /* USER CODE END PFP */
 
 /* Exported functions --------------------------------------------------------*/
-void EnvSensors_Read(sensor_t *sensor_data)
+int32_t  EnvSensors_Read(sensor_t *sensor_data)
 {
-  /* USER CODE BEGIN EnvSensors_Read_1 */
-
-  /* USER CODE END EnvSensors_Read_1 */
+  /* USER CODE BEGIN EnvSensors_Read */
   float HUMIDITY_Value = HUMIDITY_DEFAULT_VAL;
   float TEMPERATURE_Value = TEMPERATURE_DEFAULT_VAL;
   float PRESSURE_Value = PRESSURE_DEFAULT_VAL;
@@ -198,17 +194,14 @@ void EnvSensors_Read(sensor_t *sensor_data)
 
   sensor_data->latitude  = (int32_t)((STSOP_LATTITUDE  * MAX_GPS_POS) / 90);
   sensor_data->longitude = (int32_t)((STSOP_LONGITUDE  * MAX_GPS_POS) / 180);
-  /* USER CODE BEGIN EnvSensors_Read_Last */
 
-  /* USER CODE END EnvSensors_Read_Last */
+  return 0;
+  /* USER CODE END EnvSensors_Read */
 }
 
-void  EnvSensors_Init(void)
+int32_t  EnvSensors_Init(void)
 {
-  /* USER CODE BEGIN EnvSensors_Init_1 */
-
-  /* USER CODE END EnvSensors_Init_1 */
-
+  /* USER CODE BEGIN EnvSensors_Init */
 #if defined (SENSOR_ENABLED) && (SENSOR_ENABLED == 1)
   /* Init */
 #if (USE_IKS01A2_ENV_SENSOR_HTS221_0 == 1)
@@ -259,9 +252,8 @@ void  EnvSensors_Init(void)
 #elif !defined (SENSOR_ENABLED)
 #error SENSOR_ENABLED not defined
 #endif /* SENSOR_ENABLED  */
-  /* USER CODE BEGIN EnvSensors_Init_Last */
-
-  /* USER CODE END EnvSensors_Init_Last */
+  return 0;
+  /* USER CODE END EnvSensors_Init */
 }
 
 /* USER CODE BEGIN EF */

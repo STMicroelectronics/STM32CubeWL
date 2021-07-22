@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    sgfx_eeprom_if.c
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
 #include <stdint.h>
@@ -23,6 +25,8 @@
 #include "ee.h"
 #include "st_sigfox_api.h"
 #include "se_nvm.h"
+#include "sys_conf.h"
+#include "utilities_conf.h"
 
 /* USER CODE BEGIN Includes */
 
@@ -72,8 +76,19 @@ enum
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
+/**
+  * @brief        Read Sigfox Configuration from eeprom
+  * @param addr   variable virtual address
+  * @param data   pointer to a 32-bit word (allocated by the caller) containing the
+  *               variable value in case of success.
+  */
 static void E2P_Read(e_EE_ID addr, uint32_t *data);
 
+/**
+  * @brief        Write Sigfox Configuration to eeprom
+  * @param addr   variable virtual address
+  * @param data   32-bit data word to be written
+  */
 static void E2P_Write(e_EE_ID addr, uint32_t data);
 
 /* USER CODE BEGIN PFP */
@@ -152,7 +167,7 @@ void E2P_RestoreFs(void)
   E2P_Write(EE_MCU_NVM_2_ID, 0);
   E2P_Write(EE_MCU_NVM_3_ID, 0);
   E2P_Write(EE_SGFX_ENCRYPTIONFLAG_ID, 0);
-  E2P_Write(EE_SGFX_VERBOSELEVEL_ID, 0);
+  E2P_Write(EE_SGFX_VERBOSELEVEL_ID, VERBOSE_LEVEL);
 
   HAL_FLASH_Lock();
   /* USER CODE BEGIN E2P_RestoreFs_2 */
@@ -407,9 +422,9 @@ void E2P_Write_VerboseLevel(uint8_t verboselevel)
   E2P_Write(EE_SGFX_VERBOSELEVEL_ID, (uint32_t) verboselevel);
 
   HAL_FLASH_Lock();
-  /* USER CODE BEGIN E2P_Write_VerboseLevel_1 */
+  /* USER CODE BEGIN E2P_Write_VerboseLevel_2 */
 
-  /* USER CODE END E2P_Write_VerboseLevel_1 */
+  /* USER CODE END E2P_Write_VerboseLevel_2 */
 }
 
 void E2P_Read_ConfigWords(sfx_rc_enum_t sfx_rc, sfx_u32 config_words[3])
@@ -561,7 +576,7 @@ E2P_ErrorStatus_t E2P_Read_SeNvm(sfx_u8 *read_data, uint32_t len)
   E2P_Read(EE_SE_NVM_1_ID, &data_from_eeprom);
   read_data[i++] = (sfx_u8) data_from_eeprom;
   E2P_Read(EE_SE_NVM_2_ID, &data_from_eeprom);
-  read_data[i++] = (sfx_u8) data_from_eeprom;;
+  read_data[i++] = (sfx_u8) data_from_eeprom;
   E2P_Read(EE_SE_NVM_3_ID, &data_from_eeprom);
   read_data[i++] = (sfx_u8) data_from_eeprom;
   E2P_Read(EE_SE_NVM_4_ID, &data_from_eeprom);
@@ -658,43 +673,6 @@ E2P_ErrorStatus_t E2P_Write_McuNvm(sfx_u8 *data_to_write, uint32_t len)
   /* USER CODE END E2P_Write_McuNvm_2 */
 }
 
-/* USER CODE BEGIN EF */
-
-/* USER CODE END EF */
-
-/* Private Functions Definition -----------------------------------------------*/
-static void E2P_Write(e_EE_ID addr, uint32_t data)
-{
-  /* USER CODE BEGIN E2P_Write_1 */
-
-  /* USER CODE END E2P_Write_1 */
-  if (EE_Write(EE_BANK_0, (uint16_t) addr, data) == EE_CLEAN_NEEDED)
-  {
-    EE_Clean(EE_BANK_0, EE_CLEAN_MODE_POLLING);
-  }
-  /* USER CODE BEGIN E2P_Write_2 */
-
-  /* USER CODE END E2P_Write_2 */
-}
-
-static void E2P_Read(e_EE_ID addr, uint32_t *data)
-{
-  /* USER CODE BEGIN E2P_Read_1 */
-
-  /* USER CODE END E2P_Read_1 */
-  EE_Read(EE_BANK_0, (uint16_t) addr, data);
-  /* USER CODE BEGIN E2P_Read_2 */
-
-  /* USER CODE END E2P_Read_2 */
-}
-
-/*!
-* \brief   Returns the last stored variable data, if found, which corresponds to
-*          the passed virtual address
-* \param   EEsgfxID:
-*          data: to be read
-* \retval  error status
-*/
 int32_t EE_ReadValue(e_EE_ID EEsgfxID,  uint32_t *data)
 {
   /* USER CODE BEGIN EE_ReadValue_1 */
@@ -717,12 +695,6 @@ int32_t EE_ReadValue(e_EE_ID EEsgfxID,  uint32_t *data)
   /* USER CODE END EE_ReadValue_2 */
 }
 
-/*!
-* \brief   Writes/updates variable data in EEPROM emulator.
-* \param   EEsgfxID:
-*          data: to be written
-* \retval error status
-*/
 int32_t EE_WriteValue(e_EE_ID EEsgfxID,  uint32_t data)
 {
   /* USER CODE BEGIN EE_WriteValue_1 */
@@ -752,6 +724,36 @@ int32_t EE_WriteValue(e_EE_ID EEsgfxID,  uint32_t data)
   /* USER CODE BEGIN EE_WriteValue_2 */
 
   /* USER CODE END EE_WriteValue_2 */
+}
+
+/* USER CODE BEGIN EF */
+
+/* USER CODE END EF */
+
+/* Private Functions Definition -----------------------------------------------*/
+static void E2P_Write(e_EE_ID addr, uint32_t data)
+{
+  /* USER CODE BEGIN E2P_Write_1 */
+
+  /* USER CODE END E2P_Write_1 */
+  if (EE_Write(EE_BANK_0, (uint16_t) addr, data) == EE_CLEAN_NEEDED)
+  {
+    EE_Clean(EE_BANK_0, EE_CLEAN_MODE_POLLING);
+  }
+  /* USER CODE BEGIN E2P_Write_2 */
+
+  /* USER CODE END E2P_Write_2 */
+}
+
+static void E2P_Read(e_EE_ID addr, uint32_t *data)
+{
+  /* USER CODE BEGIN E2P_Read_1 */
+
+  /* USER CODE END E2P_Read_1 */
+  EE_Read(EE_BANK_0, (uint16_t) addr, data);
+  /* USER CODE BEGIN E2P_Read_2 */
+
+  /* USER CODE END E2P_Read_2 */
 }
 
 /* USER CODE BEGIN PrFD */

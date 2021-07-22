@@ -1,8 +1,9 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    mbmuxif_radio.c
   * @author  MCD Application Team
-  * @brief   allows CM4 applic to register and handle RADIO driver via MBMUX
+  * @brief   allows CM4 application to register and handle RADIO driver via MBMUX
   ******************************************************************************
   * @attention
   *
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
 #include "platform.h"
@@ -55,7 +57,14 @@
 /* Private variables ---------------------------------------------------------*/
 static MBMUX_ComParam_t *RadioComObj;
 
+/**
+  * @brief radio cmd buffer to exchange data between CM4 and CM0+
+  */
 UTIL_MEM_PLACE_IN_SECTION("MB_MEM1") uint32_t aRadioCmdRespBuff[MAX_PARAM_OF_RADIO_CMD_FUNCTIONS];/*shared*/
+
+/**
+  * @brief radio notif buffer to exchange data between CM4 and CM0+
+  */
 UTIL_MEM_PLACE_IN_SECTION("MB_MEM1") uint32_t aRadioNotifAckBuff[MAX_PARAM_OF_RADIO_NOTIF_FUNCTIONS];/*shared*/
 
 /* USER CODE BEGIN PV */
@@ -63,8 +72,21 @@ UTIL_MEM_PLACE_IN_SECTION("MB_MEM1") uint32_t aRadioNotifAckBuff[MAX_PARAM_OF_RA
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
+/**
+  * @brief   RADIO response callbacks: set event to release waiting task
+  * @param   ComObj pointer to the RADIO com param buffer
+  */
 static void MBMUXIF_IsrRadioRespRcvCb(void *ComObj);
+
+/**
+  * @brief   RADIO notification callbacks: schedules a task in order to quit the ISR
+  * @param   ComObj pointer to the RADIO com param buffer
+  */
 static void MBMUXIF_IsrRadioNotifRcvCb(void *ComObj);
+
+/**
+  * @brief  RADIO task to process the notification
+  */
 static void MBMUXIF_TaskRadioNotifRcv(void);
 
 /* USER CODE BEGIN PFP */
@@ -72,16 +94,6 @@ static void MBMUXIF_TaskRadioNotifRcv(void);
 /* USER CODE END PFP */
 
 /* Exported functions --------------------------------------------------------*/
-
-/**
-  * @brief Registers RADIO feature to the mailbox and to the sequencer
-  * @param none
-  * @retval   0: OK;
-             -1: no more ipcc channel available;
-             -2: feature not provided by CM0PLUS;
-             -3: callback error on CM0PLUS
-             -4: mistmatch between CM4 and CM0PLUS lora stack versions
-  */
 int8_t MBMUXIF_RadioInit(void)
 {
   FEAT_INFO_Param_t *p_cm0plus_specific_features_info;
@@ -125,11 +137,6 @@ int8_t MBMUXIF_RadioInit(void)
   return ret;
 }
 
-/**
-  * @brief gives back the pointer to the com buffer associated to Radio feature Cmd
-  * @param none
-  * @retval  return pointer to the com param buffer
-  */
 MBMUX_ComParam_t *MBMUXIF_GetRadioFeatureCmdComPtr(void)
 {
   /* USER CODE BEGIN MBMUXIF_GetRadioFeatureCmdComPtr_1 */
@@ -138,7 +145,7 @@ MBMUX_ComParam_t *MBMUXIF_GetRadioFeatureCmdComPtr(void)
   MBMUX_ComParam_t *com_param_ptr = MBMUX_GetFeatureComPtr(FEAT_INFO_RADIO_ID, MBMUX_CMD_RESP);
   if (com_param_ptr == NULL)
   {
-    while (1) {} /* ErrorHandler() : feature isn't registered */
+    Error_Handler(); /* feature isn't registered */
   }
   return com_param_ptr;
   /* USER CODE BEGIN MBMUXIF_GetRadioFeatureCmdComPtr_Last */
@@ -146,11 +153,6 @@ MBMUX_ComParam_t *MBMUXIF_GetRadioFeatureCmdComPtr(void)
   /* USER CODE END MBMUXIF_GetRadioFeatureCmdComPtr_Last */
 }
 
-/**
-  * @brief Sends a Radio-Cmd via Ipcc and Wait for the response
-  * @param none
-  * @retval   none
-  */
 void MBMUXIF_RadioSendCmd(void)
 {
   /* USER CODE BEGIN MBMUXIF_RadioSendCmd_1 */
@@ -169,11 +171,6 @@ void MBMUXIF_RadioSendCmd(void)
   /* USER CODE END MBMUXIF_RadioSendCmd_Last */
 }
 
-/**
-  * @brief Sends a Radio-Ack  via Ipcc without waiting for the ack
-  * @param none
-  * @retval   none
-  */
 void MBMUXIF_RadioSendAck(void)
 {
   /* USER CODE BEGIN MBMUXIF_RadioSendAck_1 */
@@ -193,11 +190,6 @@ void MBMUXIF_RadioSendAck(void)
 /* USER CODE END EFD */
 
 /* Private functions ---------------------------------------------------------*/
-/**
-  * @brief  RADIO response callbacks: set event to release waiting task
-  * @param  pointer to the RADIO com param buffer
-  * @retval  none
-  */
 static void MBMUXIF_IsrRadioRespRcvCb(void *ComObj)
 {
   /* USER CODE BEGIN MBMUXIF_IsrRadioRespRcvCb_1 */
@@ -209,11 +201,6 @@ static void MBMUXIF_IsrRadioRespRcvCb(void *ComObj)
   /* USER CODE END MBMUXIF_IsrRadioRespRcvCb_Last */
 }
 
-/**
-  * @brief  RADIO notification callbacks: schedules a task in order to quit the ISR
-  * @param  pointer to the RADIO com param buffer
-  * @retval  none
-  */
 static void MBMUXIF_IsrRadioNotifRcvCb(void *ComObj)
 {
   /* USER CODE BEGIN MBMUXIF_IsrRadioNotifRcvCb_1 */
@@ -226,11 +213,6 @@ static void MBMUXIF_IsrRadioNotifRcvCb(void *ComObj)
   /* USER CODE END MBMUXIF_IsrRadioNotifRcvCb_Last */
 }
 
-/**
-  * @brief  RADIO task to process the notification
-  * @param  pointer to the RADIO com param buffer
-  * @retval  none
-  */
 static void MBMUXIF_TaskRadioNotifRcv(void)
 {
   /* USER CODE BEGIN MBMUXIF_TaskRadioNotifRcv_1 */

@@ -76,7 +76,7 @@ int main(void)
   /* USER CODE BEGIN Init */
   /* USER CODE END Init */
 
-  /* MX_GTZC_S_Init initialisation */
+  /* GTZC initialisation */
   MX_GTZC_S_Init();
 
   /* USER CODE BEGIN SysInit */
@@ -173,13 +173,11 @@ static void MX_GTZC_S_Init(void)
 
   /* USER CODE BEGIN GTZC_S_Init 1 */
 
-  /* Note: Default state of GTZC peripherals interrruption are enable.
-           Therefore, SRAM2 interruption is implicitly enable, corresponding
-           to the corresponding explicit code:
-           "HAL_GTZC_TZIC_EnableIT(GTZC_PERIPH_SRAM2);"
-  */
-
   /* USER CODE END GTZC_S_Init 1 */
+  if (HAL_GTZC_TZIC_EnableIT(GTZC_PERIPH_SRAM2) != HAL_OK)
+  {
+    Error_Handler();
+  }
   MPCWM_NonPrivilegeArea_Desc.AreaId = GTZC_TZSC_MPCWM_AREAID_UNPRIV;
   MPCWM_NonPrivilegeArea_Desc.Length = 0x40000;
   if (HAL_GTZC_TZSC_MPCWM_ConfigMemAttributes(FLASH_BASE, &MPCWM_NonPrivilegeArea_Desc) != HAL_OK)
@@ -197,7 +195,6 @@ static void MX_GTZC_S_Init(void)
   {
     Error_Handler();
   }
-  MPCWM_NonPrivilegeArea_Desc.AreaId = GTZC_TZSC_MPCWM_AREAID_UNPRIV;
   MPCWM_NonPrivilegeArea_Desc.Length = 0x4000;
   if (HAL_GTZC_TZSC_MPCWM_ConfigMemAttributes(SRAM2_BASE, &MPCWM_NonPrivilegeArea_Desc) != HAL_OK)
   {

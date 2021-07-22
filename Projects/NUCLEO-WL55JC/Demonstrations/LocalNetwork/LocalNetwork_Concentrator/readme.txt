@@ -1,12 +1,12 @@
 /**
   @page LocalNetwork_Concentrator Readme file
- 
+
   @verbatim
   ******************** (C) COPYRIGHT 2020 STMicroelectronics *******************
-  * @file    Demonstrations/LocalNetwork/LocalNetwork_Concentrator/readme.txt 
+  * @file    Demonstrations/LocalNetwork/LocalNetwork_Concentrator/readme.txt
   * @author  MCD Application Team
-  * @brief   This application is a demo software of a Concentrator sending 
-  *          Beacon to  administrate a Network and receiving Sensor data 
+  * @brief   This application is a demo software of a Concentrator sending
+  *          Beacon to  administrate a Network and receiving Sensor data
   ******************************************************************************
   * @attention
   *
@@ -23,9 +23,9 @@
 
 @par Description
 
-This directory contains a set of source files that implements a Concentrator 
-sending Beacon to  administrate a Network of up to 14 sensors and receives 
-each connected Sensor's data 
+This directory contains a set of source files that implements a Concentrator
+sending Beacon to administrate a Network of up to 14 sensors and receives
+each connected Sensor's data.
 
 This application is targeting the STM32WLxx Nucleo board embedding the STM32WLxx.
   ******************************************************************************
@@ -34,7 +34,7 @@ This application is targeting the STM32WLxx Nucleo board embedding the STM32WLxx
 
 Demonstrations, SubGHz_Phy, LocalNetwork, Concentrator
 
-@par Directory contents 
+@par Directory contents
 
 
   - LocalNetwork_Concentrator/Common/Inc/demo_data_format.h                     Header with data format definitions for STM32WL Concentrator Demo.
@@ -101,7 +101,7 @@ Demonstrations, SubGHz_Phy, LocalNetwork, Concentrator
   - LocalNetwork_Concentrator/Core/Src/timer_if.c                               Configure RTC Alarm, Tick and Calendar manager
   - LocalNetwork_Concentrator/Core/Src/usart.c                                  This file provides code for the configuration
                                                                                 of the USART instances.
-  - LocalNetwork_Concentrator/Core/Src/usart_if.c                               Configuration of UART MX driver interface for hyperterminal communication
+  - LocalNetwork_Concentrator/Core/Src/usart_if.c                               Configuration of UART driver interface for hyperterminal communication
   - LocalNetwork_Concentrator/STM32CubeIDE/Application/Core/syscalls.c          STM32CubeIDE Minimal System calls file
   - LocalNetwork_Concentrator/STM32CubeIDE/Application/Core/sysmem.c            STM32CubeIDE System Memory calls file
   - LocalNetwork_Concentrator/SubGHz_Phy/App/demo_at.c                          at command API
@@ -111,15 +111,17 @@ Demonstrations, SubGHz_Phy, LocalNetwork, Concentrator
   - LocalNetwork_Concentrator/SubGHz_Phy/Target/radio_board_if.c                This file provides an interface layer between MW and Radio Board
 
 
-@par Hardware and Software environment 
+@par Hardware and Software environment
 
   - This example runs on the STM32WLxx Nucleo board.
 
-  - STM32WLxx Nucleo board Set-up    
-    - Connect the Nucleo board to your PC with a USB cable type A to micro-B 
+  - STM32WLxx Nucleo board Set-up
+    - Connect the Nucleo board to your PC with a USB cable type A to micro-B
       to ST-LINK connector.
     - Please ensure that the ST-LINK connector jumpers are fitted.
-     - STM32WLxx Nucleo requires IS_TCXO_SUPPORTED=1
+
+  - Configure the software via the configuration files:
+    - sys_conf.h, radio_conf.h, mw_log_conf.h, main.h, etc
 
   -Set Up:
 
@@ -130,15 +132,15 @@ Demonstrations, SubGHz_Phy, LocalNetwork, Concentrator
              |                        |          |                        |
              --------------------------          --------------------------
 
-@par How to use it ? 
+@par How to use it ?
 In order to make the program work, you must do the following :
-  - Open your preferred toolchain 
+  - Open your preferred toolchain
   - Rebuild all files and load your image into target memory
   - Run the example
   - Open a Terminal, connected the Demo/Sensor
   - UART Config = 9600, 8b, 1 stopbit, no parity, no flow control
   - Terminal Config: Select 'CR+LF' for Transmit New-Line and switch 'Local echo' on
-  - Type AT? to get the all ATcommand. 
+  - Type AT? to get the all ATcommand.
   - Type AT+LIST_REGIONS to list all supported regions and AT+REGION and AT+SUBREGION to set the region where user is located
   - Type AT+BEACON_ON (default beacon frequency is EU)
   - the Demo/Concentrator will automatically start to send beacon every 16 seconds.
@@ -149,7 +151,12 @@ In order to make the program work, you must do the following :
   - Any time the concentrator receives one-s sensor packet it will displayed as:
       AT+RCV=UID, COUNTER, VERSION_MAJOR, VERSION_MINOR, RSSI, SNR, TEMP, Voltage
         UID is a 32bits lsb of IEEE64 number. It may be 0xFFFFFFFF for early version of STM32WLxx
-        COUNTER is the uplimk ounter f a sensor, and can be used for PER count
+        COUNTER is the uplink counter of a sensor, and can be used for PER count
+
+@par How to debug ?
+  - make sure the flag DEBUGGER_ENABLED to 1 in sys_conf.h
+  - simpler to define the flag LOW_POWER_DISABLE to 1 as well
+  - compile, download and attach
 
  * <h3><center>&copy; COPYRIGHT STMicroelectronics</center></h3>
  */

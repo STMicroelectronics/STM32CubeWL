@@ -67,21 +67,21 @@ const osThreadAttr_t defaultTask_attributes = {
   * @param  None
   * @retval None
   */
-static void  WakeUpTimer_Cb( void *context );
+static void  WakeUpTimer_Cb(void *context);
 
 /**
   * @brief  Convert time in ms to RTOS ticks
   * @param  value in milliseconds
   * @retval value in RTOS tick
   */
-static uint32_t app_freertos_ms_to_tick( uint32_t ms);
+static uint32_t app_freertos_ms_to_tick(uint32_t ms);
 
 /**
   * @brief  Convert time in RTOS ticks to ms
   * @param  value in RTOS tick
   * @retval value in milliseconds
   */
-static uint32_t app_freertos_tick_to_ms( uint32_t tick);
+static uint32_t app_freertos_tick_to_ms(uint32_t tick);
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void *argument);
@@ -98,12 +98,12 @@ void PreSleepProcessing(uint32_t *ulExpectedIdleTime)
   even lower.  For example, peripherals can be turned off here, and then back
   on again in the post sleep processing function.  For maximum power saving
   ensure all unused pins are in their lowest power state. */
-  
-  uint32_t WakeUpTimer_timeOut_ms=app_freertos_tick_to_ms(*ulExpectedIdleTime);
-  
+
+  uint32_t WakeUpTimer_timeOut_ms = app_freertos_tick_to_ms(*ulExpectedIdleTime);
+
   UTIL_TIMER_Create(&WakeUpTimer, WakeUpTimer_timeOut_ms, UTIL_TIMER_ONESHOT, WakeUpTimer_Cb, NULL);
   UTIL_TIMER_Start(&WakeUpTimer);
-  Time_BeforeSleep=UTIL_TIMER_GetCurrentTime();
+  Time_BeforeSleep = UTIL_TIMER_GetCurrentTime();
 
   /*Enter to sleep Mode using the HAL function HAL_PWR_EnterSLEEPMode with WFI instruction*/
   //HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);
@@ -120,11 +120,11 @@ void PostSleepProcessing(uint32_t *ulExpectedIdleTime)
 {
   /* Called by the kernel when the MCU exits a sleep mode because
   configPOST_SLEEP_PROCESSING is #defined to PostSleepProcessing(). */
-  uint32_t SleepDuration=UTIL_TIMER_GetElapsedTime(Time_BeforeSleep);
+  uint32_t SleepDuration = UTIL_TIMER_GetElapsedTime(Time_BeforeSleep);
 
   /* Avoid compiler warnings about the unused parameter. */
   UTIL_TIMER_Stop(&WakeUpTimer);
-  *ulExpectedIdleTime= app_freertos_ms_to_tick(SleepDuration);
+  *ulExpectedIdleTime = app_freertos_ms_to_tick(SleepDuration);
 }
 /* USER CODE END PREPOSTSLEEP */
 
@@ -181,36 +181,36 @@ void StartDefaultTask(void *argument)
   MX_LoRaWAN_Init();
   /* USER CODE BEGIN StartDefaultTask */
   /* Infinite loop */
-  for(;;)
+  for (;;)
   {
-    osThreadFlagsWait(1,osFlagsWaitAll,osWaitForever);
+    osThreadFlagsWait(1, osFlagsWaitAll, osWaitForever);
   }
   /* USER CODE END StartDefaultTask */
 }
 
 /* Private application code --------------------------------------------------*/
 /* USER CODE BEGIN Application */
-static void  WakeUpTimer_Cb( void *context )
+static void  WakeUpTimer_Cb(void *context)
 {
   /*Nothing to do*/
 }
 
-static uint32_t app_freertos_ms_to_tick( uint32_t ms)
+static uint32_t app_freertos_ms_to_tick(uint32_t ms)
 {
-  uint32_t tick=ms;
+  uint32_t tick = ms;
   if (configTICK_RATE_HZ != configTICK_RATE_HZ_1MS)
   {
-    tick=(uint32_t) (( ((uint64_t)(ms)) * configTICK_RATE_HZ)/configTICK_RATE_HZ_1MS);
+    tick = (uint32_t)((((uint64_t)(ms)) * configTICK_RATE_HZ) / configTICK_RATE_HZ_1MS);
   }
   return tick;
 }
 
-static uint32_t app_freertos_tick_to_ms( uint32_t tick)
+static uint32_t app_freertos_tick_to_ms(uint32_t tick)
 {
-  uint32_t ms=tick;
+  uint32_t ms = tick;
   if (configTICK_RATE_HZ != configTICK_RATE_HZ_1MS)
   {
-    ms=(uint32_t) (( ((uint64_t)(tick)) * configTICK_RATE_HZ_1MS)/configTICK_RATE_HZ);
+    ms = (uint32_t)((((uint64_t)(tick)) * configTICK_RATE_HZ_1MS) / configTICK_RATE_HZ);
   }
   return ms;
 }

@@ -111,6 +111,12 @@ UTIL_ADV_TRACE_Status_t UTIL_ADV_TRACE_Init(void);
 UTIL_ADV_TRACE_Status_t UTIL_ADV_TRACE_DeInit(void);
 
 /**
+ * @brief this function check if the buffer is empty.
+ * @retval 1 if the buffer is empty else 0
+ */
+uint8_t UTIL_ADV_TRACE_IsBufferEmpty(void);
+
+/**
  * @brief start the RX process.
  * @param UserCallback ptr function used to get the RX data
  * @retval Status based on @ref UTIL_ADV_TRACE_Status_t
@@ -127,7 +133,7 @@ UTIL_ADV_TRACE_Status_t UTIL_ADV_TRACE_FSend(const char *strFormat, ...);
 /**
  * @brief post data to the circular queue
  * @param *pdata pointer to Data
- * @param length length of data buffer ro be sent
+ * @param length length of data buffer to be sent
  * @retval Status based on @ref UTIL_ADV_TRACE_Status_t
  */
 UTIL_ADV_TRACE_Status_t UTIL_ADV_TRACE_Send(const uint8_t *pdata, uint16_t length);
@@ -220,7 +226,7 @@ void UTIL_ADV_TRACE_RegisterTimeStampFunction(cb_timestamp *cb);
 
 /**
  * @brief  Set the verbose level
- * @param  Level (0 to 256)
+ * @param  Level (0 to 255)
  * @retval None
  */
 void UTIL_ADV_TRACE_SetVerboseLevel(uint8_t Level);

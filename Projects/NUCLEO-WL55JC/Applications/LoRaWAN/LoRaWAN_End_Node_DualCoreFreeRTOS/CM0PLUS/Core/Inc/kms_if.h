@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    kms_if.h
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef KMS_IF_H
@@ -67,4 +69,3 @@ extern "C" {
 #endif /* KMS_IF_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-

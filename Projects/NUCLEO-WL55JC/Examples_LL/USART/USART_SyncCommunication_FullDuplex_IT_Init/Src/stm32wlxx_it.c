@@ -230,7 +230,7 @@ void DMA1_Channel1_IRQHandler(void)
   /* USER CODE BEGIN DMA1_Channel1_IRQn 0 */
   if (LL_DMA_IsActiveFlag_TC1(DMA1))
   {
-    LL_DMA_ClearFlag_GI1(DMA1);
+    LL_DMA_ClearFlag_TC1(DMA1);
     /* Call function Transmission complete Callback */
     SPI1_DMA1_TransmitComplete_Callback();
   }
@@ -254,7 +254,7 @@ void DMA1_Channel2_IRQHandler(void)
   /* USER CODE BEGIN DMA1_Channel2_IRQn 0 */
   if (LL_DMA_IsActiveFlag_TC2(DMA1))
   {
-    LL_DMA_ClearFlag_GI2(DMA1);
+    LL_DMA_ClearFlag_TC2(DMA1);
     /* Call function Reception complete Callback */
     SPI1_DMA1_ReceiveComplete_Callback();
   }

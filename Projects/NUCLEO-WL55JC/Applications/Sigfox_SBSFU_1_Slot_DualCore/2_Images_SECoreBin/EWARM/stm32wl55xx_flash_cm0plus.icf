@@ -1,0 +1,30 @@
+/*###ICF### Set of symbols used in SE and SB_SFU projects ****/
+
+define memory mem with size = 4G;
+
+define symbol __ICFEDIT_size_heap__ = 0x200;
+
+/******************************************************************************/
+/*       Include of SE symbols file                                           */
+/*   (Project>Options>Linker>Extra Options --config_search option is used to  */
+/*   specify the the directory to search for include files                    */
+/******************************************************************************/
+include "mapping_sbsfu.icf";
+include "mapping_fwimg.icf";
+
+initialize by copy { readwrite };
+do not initialize  { section .noinit};
+
+define block HEAP      with alignment = 8, size = __ICFEDIT_size_heap__     { };
+
+/******************************************************************************/
+/*                          placement instructions                            */
+/******************************************************************************/
+place at address mem:__ICFEDIT_SE_CallGate_region_ROM_start__ { readonly section .SE_CallGate_Code };
+place at address mem:__ICFEDIT_SE_Startup_region_ROM_start__ { readonly section .SE_Startup_Code};
+place in SE_CODE_NOKEY_ROM_region {readonly};
+place in User_Key_ROM_region { section .USER_embedded_Keys };
+keep { section .USER_embedded_Keys };
+place in SE_Key_ROM_region { readonly section .SE_embedded_Keys };
+keep { section .SE_embedded_Keys };
+place in SE_RAM_region {readwrite, block HEAP};

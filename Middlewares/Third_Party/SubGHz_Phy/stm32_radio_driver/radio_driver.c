@@ -31,10 +31,9 @@
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/
-#include "radio_driver.h" 
 #include "radio_conf.h"
+#include "radio_driver.h" 
 #include "mw_log_conf.h"
-#include "stm32_lpm.h"
 
 /* External variables ---------------------------------------------------------*/
 /*!
@@ -44,26 +43,73 @@ extern SUBGHZ_HandleTypeDef hsubghz;
 
 /* Private typedef -----------------------------------------------------------*/
 /*!
- * \brief Radio registers definition
+ * FSK bandwidth definition
  */
-typedef struct
+typedef struct FskBandwidth_s
 {
-    uint16_t      Addr;                             //!< The address of the register
-    uint8_t       Value;                            //!< The value of the register
-}RadioRegisters_t;
-
+    uint32_t bandwidth;
+    uint8_t  RegValue;
+} FskBandwidth_t;
 /* Private define ------------------------------------------------------------*/
+/**
+  * @brief drive value used anytime radio is NOT in TX low power mode
+  * @note SMPS_DRIVE_SETTING_DEFAULT can be redefined in radio_conf.h
+  */
+#ifndef SMPS_DRIVE_SETTING_DEFAULT
+#define SMPS_DRIVE_SETTING_DEFAULT  SMPS_DRV_40
+#endif /* SMPS_DRIVE_SETTING_DEFAULT */
 
-/*!
- * \brief Provides the frequency of the chip running on the radio and the frequency step
- *
- * \remark These defines are used for computing the frequency divider to set the RF frequency
- *
- * \note XTAL_FREQ can be redefined in radio_conf.h
- */
+/**
+  * @brief drive value used anytime radio is in TX low power mode
+  *        TX low power mode is the worst case because the PA sinks from SMPS
+  *        while in high power mode, current is sunk directly from the battery
+  * @note SMPS_DRIVE_SETTING_MAX can be redefined in radio_conf.h
+  */
+#ifndef SMPS_DRIVE_SETTING_MAX
+#define SMPS_DRIVE_SETTING_MAX      SMPS_DRV_60
+#endif /* SMPS_DRIVE_SETTING_MAX */
+
+/**
+  * @brief Provides the frequency of the chip running on the radio and the frequency step
+  * @remark These defines are used for computing the frequency divider to set the RF frequency
+  * @note XTAL_FREQ can be redefined in radio_conf.h
+  */
 #ifndef XTAL_FREQ
-#define XTAL_FREQ                                   32000000UL
-#endif
+#define XTAL_FREQ                   ( 32000000UL )
+#endif /* XTAL_FREQ */
+
+/**
+  * @brief in XO mode, set internal capacitor (from 0x00 to 0x2F starting 11.2pF with 0.47pF steps)
+  * @note XTAL_DEFAULT_CAP_VALUE can be redefined in radio_conf.h
+  */
+#ifndef XTAL_DEFAULT_CAP_VALUE
+#define XTAL_DEFAULT_CAP_VALUE      ( 0x20UL )
+#endif /* XTAL_DEFAULT_CAP_VALUE */
+
+/**
+  * @brief voltage of vdd tcxo.
+  * @note TCXO_CTRL_VOLTAGE can be redefined in radio_conf.h
+  */
+#ifndef TCXO_CTRL_VOLTAGE
+#define TCXO_CTRL_VOLTAGE           TCXO_CTRL_1_7V
+#endif /* TCXO_CTRL_VOLTAGE */
+
+/**
+  * @brief Radio maximum wakeup time (in ms)
+  * @note RF_WAKEUP_TIME can be redefined in radio_conf.h
+  */
+#ifndef RF_WAKEUP_TIME
+#define RF_WAKEUP_TIME              ( 10UL )
+#endif /* RF_WAKEUP_TIME */
+
+/**
+  * @brief DCDC is present and enabled
+  * @remark this define is only used if the DCDC is present on the board
+  * @note DCDC_ENABLE can be redefined in radio_conf.h
+  */
+#ifndef DCDC_ENABLE
+#define DCDC_ENABLE                 ( 1UL )
+#endif /* DCDC_ENABLE */
 
 /* Private macro -------------------------------------------------------------*/
 
@@ -72,9 +118,6 @@ do                                                                           \
 {                                                                            \
   channel = (uint32_t) ((((uint64_t) freq)<<25)/(XTAL_FREQ) );               \
 }while( 0 )
-
-#define SUBGRF_WriteCommand( x, y, z )  HAL_SUBGHZ_ExecSetCmd( &hsubghz, (x), (y), (z) )
-#define SUBGRF_ReadCommand( x, y, z )   HAL_SUBGHZ_ExecGetCmd( &hsubghz, (x), (y), (z) )
 
 /* Private variables ---------------------------------------------------------*/
 /*!
@@ -102,6 +145,35 @@ volatile uint32_t FrequencyError = 0;
  */
 static bool ImageCalibrated = false;
 
+/*!
+ * Precomputed FSK bandwidth registers values
+ */
+static const FskBandwidth_t FskBandwidths[] =
+{
+    { 4800  , 0x1F },
+    { 5800  , 0x17 },
+    { 7300  , 0x0F },
+    { 9700  , 0x1E },
+    { 11700 , 0x16 },
+    { 14600 , 0x0E },
+    { 19500 , 0x1D },
+    { 23400 , 0x15 },
+    { 29300 , 0x0D },
+    { 39000 , 0x1C },
+    { 46900 , 0x14 },
+    { 58600 , 0x0C },
+    { 78200 , 0x1B },
+    { 93800 , 0x13 },
+    { 117300, 0x0B },
+    { 156200, 0x1A },
+    { 187200, 0x12 },
+    { 234300, 0x0A },
+    { 312000, 0x19 },
+    { 373600, 0x11 },
+    { 467000, 0x09 },
+    { 500000, 0x00 }, // Invalid Bandwidth
+};
+
 /* Private function prototypes -----------------------------------------------*/
 
 /*!
@@ -114,6 +186,25 @@ static void Radio_SMPS_Set( uint8_t level );
  */
 static DioIrqHandler RadioOnDioIrqCb;
 
+/*!
+ * \brief Write command to the radio
+ *
+ * \param [in]  SetCommand    The Write Command
+ * \param [out] buffer        A pointer command buffer
+ * \param [in]  size          Size in byte of the command buffer
+ */
+static void SUBGRF_WriteCommand( SUBGHZ_RadioSetCmd_t Command, uint8_t *pBuffer,
+                                        uint16_t Size );
+/*!
+ * \brief Read command to the radio
+ *
+ * \param [in]  GetCommand    The Read Command
+ * \param [out] buffer        A pointer command buffer
+ * \param [in]  size          Size in byte of the command buffer
+ */
+static void SUBGRF_ReadCommand( SUBGHZ_RadioGetCmd_t Command, uint8_t *pBuffer,
+                                        uint16_t Size );
+
 /* Exported functions ---------------------------------------------------------*/
 void SUBGRF_Init( DioIrqHandler dioIrq )
 {
@@ -122,10 +213,10 @@ void SUBGRF_Init( DioIrqHandler dioIrq )
         RadioOnDioIrqCb = dioIrq;
     }
 
+    RADIO_INIT();
+
     /* set default SMPS current drive to default*/
     Radio_SMPS_Set(SMPS_DRIVE_SETTING_DEFAULT);
-
-    RADIO_INIT();
 
     ImageCalibrated = false;
 
@@ -134,7 +225,7 @@ void SUBGRF_Init( DioIrqHandler dioIrq )
     // Initialize TCXO control
     if (1U == RBI_IsTCXO() )
     {
-        SUBGRF_SetTcxoMode( TCXO_CTRL_VOLTAGE, RBI_GetWakeUpTime() << 6 );// 100 ms
+        SUBGRF_SetTcxoMode( TCXO_CTRL_VOLTAGE, RF_WAKEUP_TIME << 6 );// 100 ms
         SUBGRF_WriteRegister( REG_XTA_TRIM, 0x00 );
 
         /*enable calibration for cut1.1 and later*/
@@ -173,6 +264,7 @@ uint8_t SUBGRF_GetPayload( uint8_t *buffer, uint8_t *size,  uint8_t maxSize )
         return 1;
     }
     SUBGRF_ReadBuffer( offset, buffer, *size );
+
     return 0;
 }
 
@@ -401,7 +493,7 @@ void SUBGRF_SetRegulatorMode( void )
     /* ST_WORKAROUND_BEGIN: Get RegulatorMode value from RBI */
     RadioRegulatorMode_t mode;
 
-    if ( 1U == RBI_IsDCDC() )
+    if ( ( 1UL == RBI_IsDCDC() ) && ( 1UL == DCDC_ENABLE ) )
     {
         mode = USE_DCDC ;
     }
@@ -513,8 +605,6 @@ void SUBGRF_SetRfFrequency( uint32_t frequency )
 {
     uint8_t buf[4];
     uint32_t chan = 0;
-
-    frequency+= RF_FREQUENCY_ERROR;
 
     if( ImageCalibrated == false )
     {
@@ -871,22 +961,46 @@ uint8_t SUBGRF_ReadRegister( uint16_t addr )
 
 void SUBGRF_WriteRegisters( uint16_t address, uint8_t *buffer, uint16_t size )
 {
+    CRITICAL_SECTION_BEGIN();
     HAL_SUBGHZ_WriteRegisters( &hsubghz, address, buffer, size );
+    CRITICAL_SECTION_END();
 }
 
 void SUBGRF_ReadRegisters( uint16_t address, uint8_t *buffer, uint16_t size )
 {
+    CRITICAL_SECTION_BEGIN();
     HAL_SUBGHZ_ReadRegisters( &hsubghz, address, buffer, size );
+    CRITICAL_SECTION_END();
 }
 
 void SUBGRF_WriteBuffer( uint8_t offset, uint8_t *buffer, uint8_t size )
 {
+    CRITICAL_SECTION_BEGIN();
     HAL_SUBGHZ_WriteBuffer( &hsubghz, offset, buffer, size );
+    CRITICAL_SECTION_END();
 }
 
 void SUBGRF_ReadBuffer( uint8_t offset, uint8_t *buffer, uint8_t size )
 {
+    CRITICAL_SECTION_BEGIN();
     HAL_SUBGHZ_ReadBuffer( &hsubghz, offset, buffer, size );
+    CRITICAL_SECTION_END();
+}
+
+void SUBGRF_WriteCommand( SUBGHZ_RadioSetCmd_t Command, uint8_t *pBuffer,
+                                        uint16_t Size )
+{
+    CRITICAL_SECTION_BEGIN();
+    HAL_SUBGHZ_ExecSetCmd( &hsubghz, Command, pBuffer, Size );
+    CRITICAL_SECTION_END();
+}
+
+void SUBGRF_ReadCommand( SUBGHZ_RadioGetCmd_t Command, uint8_t *pBuffer,
+                                        uint16_t Size )
+{
+    CRITICAL_SECTION_BEGIN();
+    HAL_SUBGHZ_ExecGetCmd( &hsubghz, Command, pBuffer, Size );
+    CRITICAL_SECTION_END();
 }
 
 void SUBGRF_SetSwitch( uint8_t paSelect, RFState_t rxtx )
@@ -956,7 +1070,7 @@ uint8_t SUBGRF_SetRfTxPower( int8_t power )
 
 uint32_t SUBGRF_GetRadioWakeUpTime( void )
 {
-    return ( uint32_t ) RBI_GetWakeUpTime();
+    return RF_WAKEUP_TIME;
 }
 
 /* HAL_SUBGHz Callbacks definitions */ 
@@ -1024,5 +1138,60 @@ static void Radio_SMPS_Set(uint8_t level)
     modReg&= (~SMPS_DRV_MASK);
     SUBGRF_WriteRegister(SUBGHZ_SMPSC2R, modReg | level);
   }
+}
+
+uint8_t SUBGRF_GetFskBandwidthRegValue( uint32_t bandwidth )
+{
+    uint8_t i;
+
+    if( bandwidth == 0 )
+    {
+        return( 0x1F );
+    }
+
+    /* ST_WORKAROUND_BEGIN: Simplified loop */
+    for( i = 0; i < ( sizeof( FskBandwidths ) / sizeof( FskBandwidth_t ) ); i++ )
+    {
+        if ( bandwidth < FskBandwidths[i].bandwidth )
+        {
+            return FskBandwidths[i].RegValue;
+        }
+    }
+    /* ST_WORKAROUND_END */
+    // ERROR: Value not found
+    while( 1 );
+}
+void SUBGRF_GetCFO( uint32_t bitRate, int32_t *cfo)
+{
+  uint8_t BwMant[] = {4, 8, 10, 12};
+  /* read demod bandwidth: mant bit4:3, exp bits 2:0 */
+  uint8_t reg = (SUBGRF_ReadRegister( SUBGHZ_BWSEL ));
+  uint8_t bandwidth_mant = BwMant[( reg >> 3 ) & 0x3];
+  uint8_t bandwidth_exp = reg & 0x7;
+  uint32_t cf_fs = XTAL_FREQ / ( bandwidth_mant * ( 1 << ( bandwidth_exp - 1 )));
+  uint32_t cf_osr = cf_fs / bitRate;
+  uint8_t interp = 1;
+  /* calculate demod interpolation factor */
+  if (cf_osr * interp < 8)
+  {
+    interp = 2;
+  }
+  if (cf_osr * interp < 4)
+  {
+    interp = 4;
+  }
+  /* calculate demod sampling frequency */
+  uint32_t fs = cf_fs* interp;
+  /* get the cfo registers */
+  int32_t cfo_bin = ( SUBGRF_ReadRegister( SUBGHZ_CFO_H ) & 0xF ) << 8;
+  cfo_bin |= SUBGRF_ReadRegister( SUBGHZ_CFO_L );
+  /* negate if 12 bits sign bit is 1 */
+  if (( cfo_bin & 0x800 ) == 0x800 )
+  {
+    cfo_bin |= 0xFFFFF000;
+  }
+  /* calculate cfo in Hz */
+  /* shift by 5 first to not saturate, cfo_bin on 12bits */
+  *cfo = ((int32_t)( cfo_bin * ( fs >> 5 ))) >> ( 12 - 5 );
 }
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

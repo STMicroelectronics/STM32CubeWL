@@ -141,3 +141,5 @@ VP_SYS_M0PLUS_VS_Systick.Signal=SYS_M0PLUS_VS_Systick
 VP_SYS_VS_Systick.Mode=SysTick
 VP_SYS_VS_Systick.Signal=SYS_VS_Systick
 board=custom
+ProjectManager.Example=IPCC_HalfDuplexMode_DualCore
+ProjectManager.ExampleSource=CubeFw

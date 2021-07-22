@@ -98,6 +98,7 @@ extern "C" {
 #ifdef KMS_PLATF_OBJECTS_C
 /* USER CODE BEGIN KMS_PLATF_OBJECTS_CONFIG_Embedded_Objects_Definition */
 /* Place code in a specific section*/
+
 #if defined(__ICCARM__)
 #pragma default_variable_attributes = @ ".USER_embedded_Keys"
 #elif defined(__CC_ARM)
@@ -106,7 +107,10 @@ extern "C" {
 
 KMS_DECLARE_BLOB_STRUCT(, 32)
 
+
 #if defined(__GNUC__)
+#pragma GCC push_options
+#pragma GCC optimize ("O0")
 __attribute__((section(".USER_embedded_Keys")))
 #endif
 /* These objects are used by user tKMS application                 */
@@ -129,6 +133,7 @@ static const kms_obj_keyhead_32_t   Sigfox_Data_Key =
     CKA_LABEL,        12, 0x58464753U, 0x50595243U, 0x00383231U      /* 'SGFX', 'CRYP', '128' */
   }
 };
+
 
 #if defined(__GNUC__)
 __attribute__((section(".USER_embedded_Keys")))
@@ -153,6 +158,7 @@ static const kms_obj_keyhead_32_t   Sigfox_pac =
     0UL, 0UL /* Fill end of table */
   }
 };
+
 
 #if defined(__GNUC__)
 __attribute__((section(".USER_embedded_Keys")))
@@ -206,6 +212,8 @@ static const kms_obj_keyhead_32_t   Sigfox_Public_Key =
 #pragma default_variable_attributes =
 #elif defined(__CC_ARM)
 #pragma arm section code
+#elif defined(__GNUC__)
+#pragma GCC pop_options
 #endif
 
 /* USER CODE END KMS_PLATF_OBJECTS_CONFIG_Embedded_Objects_Definition */
@@ -225,7 +233,22 @@ const kms_obj_keyhead_t * const KMS_PlatfObjects_EmbeddedList[KMS_INDEX_MAX_EMBE
   (kms_obj_keyhead_t *) &Sigfox_pac,                 /* Index = 2 */
   (kms_obj_keyhead_t *) &Sigfox_id,                  /* Index = 3 */
   (kms_obj_keyhead_t *) &Sigfox_Public_Key,          /* Index = 4 */
-
+  (kms_obj_keyhead_t *) NULL,       /* Index = 5 */
+  (kms_obj_keyhead_t *) NULL,       /* Index = 6 */
+  (kms_obj_keyhead_t *) NULL,       /* Index = 7 */
+  (kms_obj_keyhead_t *) NULL,       /* Index = 8 */
+  (kms_obj_keyhead_t *) NULL,       /* Index = 9 */
+  (kms_obj_keyhead_t *) NULL,       /* Index = 10 */
+  (kms_obj_keyhead_t *) NULL,       /* Index = 11 */
+  (kms_obj_keyhead_t *) NULL,       /* Index = 12 */
+  (kms_obj_keyhead_t *) NULL,       /* Index = 13 */
+  (kms_obj_keyhead_t *) NULL,       /* Index = 14 */
+  (kms_obj_keyhead_t *) NULL,       /* Index = 15 */
+  (kms_obj_keyhead_t *) NULL,       /* Index = 16 */
+  (kms_obj_keyhead_t *) NULL,       /* Index = 17 */
+  (kms_obj_keyhead_t *) NULL,       /* Index = 18 */
+  (kms_obj_keyhead_t *) NULL,       /* Index = 19 */
+  (kms_obj_keyhead_t *) NULL,       /* Index = 20 */
 /* USER CODE END KMS_PlatfObjects_EmbeddedList */
 };
 

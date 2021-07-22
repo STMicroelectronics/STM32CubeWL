@@ -86,8 +86,11 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-  /* Configure LED */
-  BSP_LED_Init(LED2);
+
+  /* Configure LED assigned to CPU1 */
+  BSP_LED_Init(LED1);
+  BSP_LED_Init(LED3);
+
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -112,7 +115,9 @@ int main(void)
 
   alarmFlag = 0;
   while(alarmFlag == 0);
-  BSP_LED_On(LED2);
+  
+  /* Turn on LED1 to indicate RTC Alarm A has triggered */ 
+  BSP_LED_On(LED1);
 
   while (1)
   {
@@ -134,6 +139,7 @@ void SystemClock_Config(void)
 
   /** Configure LSE Drive Capability
   */
+  HAL_PWR_EnableBkUpAccess();
   __HAL_RCC_LSEDRIVE_CONFIG(RCC_LSEDRIVE_LOW);
   /** Configure the main internal regulator output voltage
   */
@@ -232,7 +238,7 @@ static void MX_RTC_Init(void)
   */
   sAlarm.AlarmTime.Hours = 0x0;
   sAlarm.AlarmTime.Minutes = 0x10;
-  sAlarm.AlarmTime.Seconds = 0x4;
+  sAlarm.AlarmTime.Seconds = 0x2;
   sAlarm.AlarmTime.SubSeconds = 0x0;
   sAlarm.AlarmTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
   sAlarm.AlarmTime.StoreOperation = RTC_STOREOPERATION_RESET;

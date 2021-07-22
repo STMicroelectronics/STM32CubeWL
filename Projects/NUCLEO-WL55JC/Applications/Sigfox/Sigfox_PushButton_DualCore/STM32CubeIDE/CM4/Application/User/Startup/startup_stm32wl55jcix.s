@@ -14,13 +14,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2020(-2021) STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Apache License, Version 2.0,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/Apache-2.0
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -44,6 +43,52 @@ defined in linker script */
 .word _sbss
 /* end address for the .bss section. defined in linker script */
 .word _ebss
+/* start address for the .MB_MEM1 section. defined in linker script */
+.word _sMB_MEM1
+/* end address for the .MB_MEM1 section. defined in linker script */
+.word _eMB_MEM1
+/* start address for the .MAPPING_TABLE section. defined in linker script */
+.word _sMAPPING_TABLE
+/* end address for the .MAPPING_TABLE section. defined in linker script */
+.word _eMAPPING_TABLE
+
+/* INIT_BSS macro is used to fill the specified region [start : end] with zeros */
+.macro INIT_BSS start, end
+  ldr r0, =\start
+  ldr r1, =\end
+  movs r3, #0
+  bl LoopFillZerobss
+.endm
+
+/* INIT_DATA macro is used to copy data in the region [start : end] starting from 'src' */
+.macro INIT_DATA start, end, src
+  ldr r0, =\start
+  ldr r1, =\end
+  ldr r2, =\src
+  movs r3, #0
+  bl LoopCopyDataInit
+.endm
+
+.section  .text.data_initializers
+CopyDataInit:
+  ldr r4, [r2, r3]
+  str r4, [r0, r3]
+  adds r3, r3, #4
+
+LoopCopyDataInit:
+  adds r4, r0, r3
+  cmp r4, r1
+  bcc  CopyDataInit
+  bx lr
+
+FillZerobss:
+  str  r3, [r0]
+  adds r0, r0, #4
+
+LoopFillZerobss:
+  cmp r0, r1
+  bcc FillZerobss
+  bx lr
 
 /**
  * @brief  This is the code that gets called when the processor first
@@ -61,40 +106,20 @@ Reset_Handler:
   ldr   r0, =_estack
   mov   sp, r0          /* set stack pointer */
 
-/* Call the clock system initialization function.*/
-  bl  SystemInit
+/* Zero fill the bss segments. */
+  INIT_BSS _sbss, _ebss
+
+/* Zero fill the MB_MEM1 segments. */
+  INIT_BSS _sMB_MEM1, _eMB_MEM1
+
+/* Zero fill the MAPPING_TABLE segments. */
+  INIT_BSS _sMAPPING_TABLE, _eMAPPING_TABLE
 
 /* Copy the data segment initializers from flash to SRAM */
-  ldr r0, =_sdata
-  ldr r1, =_edata
-  ldr r2, =_sidata
-  movs r3, #0
-  b LoopCopyDataInit
+  INIT_DATA _sdata, _edata, _sidata
 
-CopyDataInit:
-  ldr r4, [r2, r3]
-  str r4, [r0, r3]
-  adds r3, r3, #4
-
-LoopCopyDataInit:
-  adds r4, r0, r3
-  cmp r4, r1
-  bcc CopyDataInit
-
-/* Zero fill the bss segment. */
-  ldr r2, =_sbss
-  ldr r4, =_ebss
-  movs r3, #0
-  b LoopFillZerobss
-
-FillZerobss:
-  str  r3, [r2]
-  adds r2, r2, #4
-
-LoopFillZerobss:
-  cmp r2, r4
-  bcc FillZerobss
-
+/* Call the clock system initialization function.*/
+  bl  SystemInit
 /* Call static constructors */
   bl __libc_init_array
 /* Call the application's entry point.*/

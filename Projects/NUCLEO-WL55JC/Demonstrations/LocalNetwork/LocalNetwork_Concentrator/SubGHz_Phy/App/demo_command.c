@@ -35,8 +35,8 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /**
- * @brief  Structure defining an AT Command
- */
+  * @brief  Structure defining an AT Command
+  */
 struct ATCommand_s
 {
   const char *string;                       /*< command string, after the "AT" */
@@ -46,7 +46,7 @@ struct ATCommand_s
   ATEerror_t (*run)(const char *param);     /*< \0 after the string - run the command */
 #if !defined(NO_HELP)
   const char *help_string;                  /*< to be printed when ? after the string */
-#endif
+#endif /* !NO_HELP */
 };
 
 /* USER CODE BEGIN PTD */
@@ -56,7 +56,6 @@ struct ATCommand_s
 /* Private define ------------------------------------------------------------*/
 #define CMD_SIZE                        540
 #define CIRC_BUFF_SIZE                  8
-#define HELP_DISPLAY_FLUSH_DELAY        100
 
 /* USER CODE BEGIN PD */
 
@@ -70,8 +69,8 @@ struct ATCommand_s
 /* Private variables ---------------------------------------------------------*/
 
 /**
- * @brief  Array corresponding to the description of each possible AT Error
- */
+  * @brief  Array corresponding to the description of each possible AT Error
+  */
 static const char *const ATError_description[] =
 {
   "\r\nOK\r\n",                     /* AT_OK */
@@ -85,8 +84,8 @@ static const char *const ATError_description[] =
 };
 
 /**
- * @brief  Array of all supported AT Commands
- */
+  * @brief  Array of all supported AT Commands
+  */
 static const struct ATCommand_s ATCommand[] =
 {
   {
@@ -94,7 +93,7 @@ static const struct ATCommand_s ATCommand[] =
     .size_string = sizeof(AT_RESET) - 1,
 #ifndef NO_HELP
     .help_string = "AT"AT_RESET ": Trig a reset of the MCU\r\n",
-#endif
+#endif /* NO_HELP */
     .get = at_return_error,
     .set = at_return_error,
     .run = at_reset,
@@ -105,7 +104,7 @@ static const struct ATCommand_s ATCommand[] =
     .size_string = sizeof(AT_VER) - 1,
 #ifndef NO_HELP
     .help_string = "AT"AT_VER ": Get the version of the FW\r\n",
-#endif
+#endif /* NO_HELP */
     .get = at_version_get,
     .set = at_return_error,
     .run = at_return_error,
@@ -116,7 +115,7 @@ static const struct ATCommand_s ATCommand[] =
     .size_string = sizeof(AT_VL) - 1,
 #ifndef NO_HELP
     .help_string = "AT"AT_VL ": Set the Verbose Level with integer from 0(VLEVEL_OFF) to 3(VLEVEL_H)\r\n",
-#endif
+#endif /* NO_HELP */
     .get = at_verbose_get,
     .set = at_verbose_set,
     .run = at_return_error,
@@ -127,7 +126,7 @@ static const struct ATCommand_s ATCommand[] =
     .size_string = sizeof(AT_LIST_REGIONS) - 1,
 #ifndef NO_HELP
     .help_string = "AT"AT_LIST_REGIONS ": List all available regions and subregions\r\n",
-#endif
+#endif /* NO_HELP */
     .get = at_return_error,
     .set = at_return_error,
     .run = at_list_regions,
@@ -196,7 +195,7 @@ static const struct ATCommand_s ATCommand[] =
     .size_string = sizeof(AT_BEACON_ON) - 1,
 #ifndef NO_HELP
     .help_string = "AT"AT_BEACON_ON ": Start sending beacons (uses REGION and SUBREGION registers)\r\n",
-#endif
+#endif /* NO_HELP */
     .get = at_beacon_get,
     .set = at_beacon_set,
     .run = at_beacon_run,
@@ -207,8 +206,8 @@ static const struct ATCommand_s ATCommand[] =
     .size_string = sizeof(AT_MOD_LORA) - 1,
 #ifndef NO_HELP
     .help_string = "AT"AT_MOD_LORA ": Set modulation for this EUI to LoRa\r\n\t\t"
-        "(uses DE, CR, SF and BW registers) (use AT+MOD_LORA=0xabcd1234)\r\n",
-#endif
+    "(uses DE, CR, SF and BW registers) (use AT+MOD_LORA=0xabcd1234)\r\n",
+#endif /* NO_HELP */
     .get = at_return_error,
     .set = at_mod_lora,
     .run = at_return_error,
@@ -219,8 +218,8 @@ static const struct ATCommand_s ATCommand[] =
     .size_string = sizeof(AT_MOD_FSK) - 1,
 #ifndef NO_HELP
     .help_string = "AT"AT_MOD_FSK ": Set modulation for this EUI to FSK\r\n\t\t"
-        "(uses RISE, BR, FDEV and BT registers) (use AT+MOD_FSK=0xabcd1234)\r\n",
-#endif
+    "(uses RISE, BR, FDEV and BT registers) (use AT+MOD_FSK=0xabcd1234)\r\n",
+#endif /* NO_HELP */
     .get = at_return_error,
     .set = at_mod_fsk,
     .run = at_return_error,
@@ -231,8 +230,8 @@ static const struct ATCommand_s ATCommand[] =
     .size_string = sizeof(AT_MOD_TEST_LORA) - 1,
 #ifndef NO_HELP
     .help_string = "AT"AT_MOD_TEST_LORA ": Test LoRa modulation\r\n\t\t"
-        "(uses DE, CR, SF and BW registers)\r\n",
-#endif
+    "(uses DE, CR, SF and BW registers)\r\n",
+#endif /* NO_HELP */
     .get = at_return_error,
     .set = at_return_error,
     .run = at_mod_test_lora,
@@ -243,8 +242,8 @@ static const struct ATCommand_s ATCommand[] =
     .size_string = sizeof(AT_MOD_TEST_FSK) - 1,
 #ifndef NO_HELP
     .help_string = "AT"AT_MOD_TEST_FSK ": Test FSK modulation\r\n\t\t"
-        "(uses RISE, BR, FDEV and BT registers)\r\n",
-#endif
+    "(uses RISE, BR, FDEV and BT registers)\r\n",
+#endif /* NO_HELP */
     .get = at_return_error,
     .set = at_return_error,
     .run = at_mod_test_fsk,
@@ -341,7 +340,7 @@ void CMD_Process(void)
   {
 #if 0 /* echo On    */
     APP_PRINTF("%c", circBuffer[ridx]);
-#endif
+#endif /* 0 */
 
     if (circBuffer[ridx] == AT_ERROR_RX_CHAR)
     {
@@ -494,10 +493,11 @@ static void parse_cmd(const char *cmd)
     {
       APP_PPRINTF(ATCommand[i].help_string);
     }
-    /* Wait for the message queue to be flushed in order
-       not to disturb following com_error() display */
-    HAL_Delay(HELP_DISPLAY_FLUSH_DELAY);
-#endif
+    while (1 != UTIL_ADV_TRACE_IsBufferEmpty())
+    {
+      /* Wait that all printfs are completed*/
+    }
+#endif /* NO_HELP */
   }
   else
   {
@@ -531,7 +531,7 @@ static void parse_cmd(const char *cmd)
           case '?':
 #ifndef NO_HELP
             APP_PRINTF(Current_ATCommand->help_string);
-#endif
+#endif /* NO_HELP */
             status = AT_OK;
             break;
           default:

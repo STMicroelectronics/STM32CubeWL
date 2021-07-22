@@ -79,6 +79,22 @@ extern "C" {
 #define KMS_NVM_SLOT_NUMBERS                     (10UL)
 
 /**
+  * @brief KMS_VM_DYNAMIC_ENABLED Uncomment the below line to support
+  *        Volatile Memory storage
+  * @note  Mandatory to handle runtime objects creation through specific KMS services
+  */
+//#define KMS_VM_DYNAMIC_ENABLED
+
+/**
+  * @brief KMS_VM_SLOT_NUMBERS Specify here the number of slots to use in the Volatile Memory storage
+  * @note  VM slots correspond to storage slots, it should be at least equal to the number of keys you'll store
+  *        into VM.
+  * @note  Memory impact is a 4 bytes per slot to store slot address in VM.
+  * @note  Mandatory to set if @ref KMS_VM_DYNAMIC_ENABLED is defined
+  */
+//#define KMS_VM_SLOT_NUMBERS                    (50UL)
+
+/**
   * @}
   */
 
@@ -151,6 +167,7 @@ extern "C" {
   *        @ref KMS_AES_ECB
   *        @ref KMS_ECDSA
   * @note  Requires @ref KMS_NVM_DYNAMIC_ENABLED to be enabled to store derived key into NVM
+  *        or @ref KMS_VM_DYNAMIC_ENABLED to be enabled to store derived key into VM
   */
 //#define KMS_DERIVE_KEY
 
@@ -164,18 +181,21 @@ extern "C" {
   * @note  Requires a supported key generation algorithm to be enabled too:
   *        @ref KMS_ECDSA
   * @note  Requires @ref KMS_NVM_DYNAMIC_ENABLED to be enabled to store generated key into NVM
+  *        or @ref KMS_VM_DYNAMIC_ENABLED to be enabled to store generated key into VM
   */
 //#define KMS_GENERATE_KEYS
 
 /**
   * @brief KMS_ATTRIBUTES Uncomment the below line to support attributes manipulation services
-  * @note  Requires @ref KMS_NVM_DYNAMIC_ENABLED to be enabled in order to modify attributes
+  * @note  Requires @ref KMS_NVM_DYNAMIC_ENABLED or @ref KMS_VM_DYNAMIC_ENABLED to be enabled
+  *        in order to modify attributes
   */
 #define KMS_ATTRIBUTES
 
 /**
   * @brief KMS_OBJECTS Uncomment the below line to support objects manipulation services
   * @note  Requires @ref KMS_NVM_DYNAMIC_ENABLED to be enabled to create or delete objects into NVM
+  *        or @ref KMS_VM_DYNAMIC_ENABLED to be enabled to create or delete objects into VM
   */
 //#define KMS_OBJECTS
 

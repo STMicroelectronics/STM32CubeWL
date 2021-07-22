@@ -1200,6 +1200,9 @@
         <name>$PROJ_DIR$/../../../../../../Middlewares/ST/STM32_Key_Management_Services/Modules/kms_sign_verify.c</name>
       </file>
       <file>
+        <name>$PROJ_DIR$/../../../../../../Middlewares/ST/STM32_Key_Management_Services/Modules/kms_vm_storage.c</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$/../../../../../../Middlewares/ST/STM32_Key_Management_Services/niKMS/kms_interface.c</name>
       </file>
       <file>

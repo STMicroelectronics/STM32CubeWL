@@ -1,8 +1,9 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    usart_if.c
   * @author  MCD Application Team
-  * @brief   Configuration of UART MX driver interface for hyperterminal communication
+  * @brief   Configuration of UART driver interface for hyperterminal communication
   ******************************************************************************
   * @attention
   *
@@ -16,6 +17,8 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
+
 /* Includes ------------------------------------------------------------------*/
 #include "usart_if.h"
 
@@ -124,8 +127,6 @@ UTIL_ADV_TRACE_Status_t vcom_DeInit(void)
   HAL_UART_MspDeInit(&hlpuart1);
 
   /* ##-3- Disable the NVIC for DMA ########################################### */
-  /* temporary while waiting CR 50840: MX implementation of  MX_DMA_DeInit() */
-  /* For the time being user should change manually the channel according to the MX settings */
   /* USER CODE BEGIN 1 */
   HAL_NVIC_DisableIRQ(DMA1_Channel5_IRQn);
 

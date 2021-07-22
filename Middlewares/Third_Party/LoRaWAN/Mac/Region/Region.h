@@ -79,511 +79,6 @@ extern "C"
 
 
 /*!
- * Region       | SF
- * ------------ | :-----:
- * AS923        | SF12 - BW125
- * AU915        | SF10 - BW125
- * CN470        | SF12 - BW125
- * CN779        | SF12 - BW125
- * EU433        | SF12 - BW125
- * EU868        | SF12 - BW125
- * IN865        | SF12 - BW125
- * KR920        | SF12 - BW125
- * US915        | SF10 - BW125
- * RU864        | SF12 - BW125
- */
-#define DR_0                                        0
-
-/*!
- * Region       | SF
- * ------------ | :-----:
- * AS923        | SF11 - BW125
- * AU915        | SF9  - BW125
- * CN470        | SF11 - BW125
- * CN779        | SF11 - BW125
- * EU433        | SF11 - BW125
- * EU868        | SF11 - BW125
- * IN865        | SF11 - BW125
- * KR920        | SF11 - BW125
- * US915        | SF9  - BW125
- * RU864        | SF11 - BW125
- */
-#define DR_1                                        1
-
-/*!
- * Region       | SF
- * ------------ | :-----:
- * AS923        | SF10 - BW125
- * AU915        | SF8  - BW125
- * CN470        | SF10 - BW125
- * CN779        | SF10 - BW125
- * EU433        | SF10 - BW125
- * EU868        | SF10 - BW125
- * IN865        | SF10 - BW125
- * KR920        | SF10 - BW125
- * US915        | SF8  - BW125
- * RU864        | SF10 - BW125
- */
-#define DR_2                                        2
-
-/*!
- * Region       | SF
- * ------------ | :-----:
- * AS923        | SF9  - BW125
- * AU915        | SF7  - BW125
- * CN470        | SF9  - BW125
- * CN779        | SF9  - BW125
- * EU433        | SF9  - BW125
- * EU868        | SF9  - BW125
- * IN865        | SF9  - BW125
- * KR920        | SF9  - BW125
- * US915        | SF7  - BW125
- * RU864        | SF9  - BW125
- */
-#define DR_3                                        3
-
-/*!
- * Region       | SF
- * ------------ | :-----:
- * AS923        | SF8  - BW125
- * AU915        | SF8  - BW500
- * CN470        | SF8  - BW125
- * CN779        | SF8  - BW125
- * EU433        | SF8  - BW125
- * EU868        | SF8  - BW125
- * IN865        | SF8  - BW125
- * KR920        | SF8  - BW125
- * US915        | SF8  - BW500
- * RU864        | SF8  - BW125
- */
-#define DR_4                                        4
-
-/*!
- * Region       | SF
- * ------------ | :-----:
- * AS923        | SF7  - BW125
- * AU915        | RFU
- * CN470        | SF7  - BW125
- * CN779        | SF7  - BW125
- * EU433        | SF7  - BW125
- * EU868        | SF7  - BW125
- * IN865        | SF7  - BW125
- * KR920        | SF7  - BW125
- * US915        | RFU
- * RU864        | SF7  - BW125
- */
-#define DR_5                                        5
-
-/*!
- * Region       | SF
- * ------------ | :-----:
- * AS923        | SF7  - BW250
- * AU915        | RFU
- * CN470        | SF12 - BW125
- * CN779        | SF7  - BW250
- * EU433        | SF7  - BW250
- * EU868        | SF7  - BW250
- * IN865        | SF7  - BW250
- * KR920        | RFU
- * US915        | RFU
- * RU864        | SF7  - BW250
- */
-#define DR_6                                        6
-
-/*!
- * Region       | SF
- * ------------ | :-----:
- * AS923        | FSK
- * AU915        | RFU
- * CN470        | SF12 - BW125
- * CN779        | FSK
- * EU433        | FSK
- * EU868        | FSK
- * IN865        | FSK
- * KR920        | RFU
- * US915        | RFU
- * RU864        | FSK
- */
-#define DR_7                                        7
-
-/*!
- * Region       | SF
- * ------------ | :-----:
- * AS923        | RFU
- * AU915        | SF12 - BW500
- * CN470        | RFU
- * CN779        | RFU
- * EU433        | RFU
- * EU868        | RFU
- * IN865        | RFU
- * KR920        | RFU
- * US915        | SF12 - BW500
- * RU864        | RFU
- */
-#define DR_8                                        8
-
-/*!
- * Region       | SF
- * ------------ | :-----:
- * AS923        | RFU
- * AU915        | SF11 - BW500
- * CN470        | RFU
- * CN779        | RFU
- * EU433        | RFU
- * EU868        | RFU
- * IN865        | RFU
- * KR920        | RFU
- * US915        | SF11 - BW500
- * RU864        | RFU
- */
-#define DR_9                                        9
-
-/*!
- * Region       | SF
- * ------------ | :-----:
- * AS923        | RFU
- * AU915        | SF10 - BW500
- * CN470        | RFU
- * CN779        | RFU
- * EU433        | RFU
- * EU868        | RFU
- * IN865        | RFU
- * KR920        | RFU
- * US915        | SF10 - BW500
- * RU864        | RFU
- */
-#define DR_10                                       10
-
-/*!
- * Region       | SF
- * ------------ | :-----:
- * AS923        | RFU
- * AU915        | SF9  - BW500
- * CN470        | RFU
- * CN779        | RFU
- * EU433        | RFU
- * EU868        | RFU
- * IN865        | RFU
- * KR920        | RFU
- * US915        | SF9  - BW500
- * RU864        | RFU
- */
-#define DR_11                                       11
-
-/*!
- * Region       | SF
- * ------------ | :-----:
- * AS923        | RFU
- * AU915        | SF8  - BW500
- * CN470        | RFU
- * CN779        | RFU
- * EU433        | RFU
- * EU868        | RFU
- * IN865        | RFU
- * KR920        | RFU
- * US915        | SF8  - BW500
- * RU864        | RFU
- */
-#define DR_12                                       12
-
-/*!
- * Region       | SF
- * ------------ | :-----:
- * AS923        | RFU
- * AU915        | SF7  - BW500
- * CN470        | RFU
- * CN779        | RFU
- * EU433        | RFU
- * EU868        | RFU
- * IN865        | RFU
- * KR920        | RFU
- * US915        | SF7  - BW500
- * RU864        | RFU
- */
-#define DR_13                                       13
-
-/*!
- * Region       | SF
- * ------------ | :-----:
- * AS923        | RFU
- * AU915        | RFU
- * CN470        | RFU
- * CN779        | RFU
- * EU433        | RFU
- * EU868        | RFU
- * IN865        | RFU
- * KR920        | RFU
- * US915        | RFU
- * RU864        | RFU
- */
-#define DR_14                                       14
-
-/*!
- * Region       | SF
- * ------------ | :-----:
- * AS923        | RFU
- * AU915        | RFU
- * CN470        | RFU
- * CN779        | RFU
- * EU433        | RFU
- * EU868        | RFU
- * IN865        | RFU
- * KR920        | RFU
- * US915        | RFU
- * RU864        | RFU
- */
-#define DR_15                                       15
-
-
-
-/*!
- * Region       | dBM
- * ------------ | :-----:
- * AS923        | Max EIRP
- * AU915        | Max EIRP
- * CN470        | Max EIRP
- * CN779        | Max EIRP
- * EU433        | Max EIRP
- * EU868        | Max EIRP
- * IN865        | Max EIRP
- * KR920        | Max EIRP
- * US915        | Max ERP
- * RU864        | Max EIRP
- */
-#define TX_POWER_0                                  0
-
-/*!
- * Region       | dBM
- * ------------ | :-----:
- * AS923        | Max EIRP - 2
- * AU915        | Max EIRP - 2
- * CN470        | Max EIRP - 2
- * CN779        | Max EIRP - 2
- * EU433        | Max EIRP - 2
- * EU868        | Max EIRP - 2
- * IN865        | Max EIRP - 2
- * KR920        | Max EIRP - 2
- * US915        | Max ERP - 2
- * RU864        | Max EIRP - 2
- */
-#define TX_POWER_1                                  1
-
-/*!
- * Region       | dBM
- * ------------ | :-----:
- * AS923        | Max EIRP - 4
- * AU915        | Max EIRP - 4
- * CN470        | Max EIRP - 4
- * CN779        | Max EIRP - 4
- * EU433        | Max EIRP - 4
- * EU868        | Max EIRP - 4
- * IN865        | Max EIRP - 4
- * KR920        | Max EIRP - 4
- * US915        | Max ERP - 4
- * RU864        | Max EIRP - 4
- */
-#define TX_POWER_2                                  2
-
-/*!
- * Region       | dBM
- * ------------ | :-----:
- * AS923        | Max EIRP - 6
- * AU915        | Max EIRP - 6
- * CN470        | Max EIRP - 6
- * CN779        | Max EIRP - 6
- * EU433        | Max EIRP - 6
- * EU868        | Max EIRP - 6
- * IN865        | Max EIRP - 6
- * KR920        | Max EIRP - 6
- * US915        | Max ERP - 6
- * RU864        | Max EIRP - 6
- */
-#define TX_POWER_3                                  3
-
-/*!
- * Region       | dBM
- * ------------ | :-----:
- * AS923        | Max EIRP - 8
- * AU915        | Max EIRP - 8
- * CN470        | Max EIRP - 8
- * CN779        | Max EIRP - 8
- * EU433        | Max EIRP - 8
- * EU868        | Max EIRP - 8
- * IN865        | Max EIRP - 8
- * KR920        | Max EIRP - 8
- * US915        | Max ERP - 8
- * RU864        | Max EIRP - 8
- */
-#define TX_POWER_4                                  4
-
-/*!
- * Region       | dBM
- * ------------ | :-----:
- * AS923        | Max EIRP - 10
- * AU915        | Max EIRP - 10
- * CN470        | Max EIRP - 10
- * CN779        | Max EIRP - 10
- * EU433        | Max EIRP - 10
- * EU868        | Max EIRP - 10
- * IN865        | Max EIRP - 10
- * KR920        | Max EIRP - 10
- * US915        | Max ERP - 10
- * RU864        | Max EIRP - 10
- */
-#define TX_POWER_5                                  5
-
-/*!
- * Region       | dBM
- * ------------ | :-----:
- * AS923        | Max EIRP - 12
- * AU915        | Max EIRP - 12
- * CN470        | Max EIRP - 12
- * CN779        | -
- * EU433        | -
- * EU868        | Max EIRP - 12
- * IN865        | Max EIRP - 12
- * KR920        | Max EIRP - 12
- * US915        | Max ERP - 12
- * RU864        | Max EIRP - 12
- */
-#define TX_POWER_6                                  6
-
-/*!
- * Region       | dBM
- * ------------ | :-----:
- * AS923        | Max EIRP - 14
- * AU915        | Max EIRP - 14
- * CN470        | Max EIRP - 14
- * CN779        | -
- * EU433        | -
- * EU868        | Max EIRP - 14
- * IN865        | Max EIRP - 14
- * KR920        | Max EIRP - 14
- * US915        | Max ERP - 14
- * RU864        | Max EIRP - 14
- */
-#define TX_POWER_7                                  7
-
-/*!
- * Region       | dBM
- * ------------ | :-----:
- * AS923        | -
- * AU915        | Max EIRP - 16
- * CN470        | -
- * CN779        | -
- * EU433        | -
- * EU868        | -
- * IN865        | Max EIRP - 16
- * KR920        | -
- * US915        | Max ERP - 16
- * RU864        | -
- */
-#define TX_POWER_8                                  8
-
-/*!
- * Region       | dBM
- * ------------ | :-----:
- * AS923        | -
- * AU915        | Max EIRP - 18
- * CN470        | -
- * CN779        | -
- * EU433        | -
- * EU868        | -
- * IN865        | Max EIRP - 18
- * KR920        | -
- * US915        | Max ERP - 18
- * RU864        | -
- */
-#define TX_POWER_9                                  9
-
-/*!
- * Region       | dBM
- * ------------ | :-----:
- * AS923        | -
- * AU915        | Max EIRP - 20
- * CN470        | -
- * CN779        | -
- * EU433        | -
- * EU868        | -
- * IN865        | Max EIRP - 20
- * KR920        | -
- * US915        | Max ERP - 20
- * RU864        | -
- */
-#define TX_POWER_10                                 10
-
-/*!
- * Region       | dBM
- * ------------ | :-----:
- * AS923        | -
- * AU915        | Max EIRP - 22
- * CN470        | -
- * CN779        | -
- * EU433        | -
- * EU868        | -
- * IN865        | -
- * KR920        | -
- * US915        | Max ERP - 22
- * RU864        | -
- */
-#define TX_POWER_11                                 11
-
-/*!
- * Region       | dBM
- * ------------ | :-----:
- * AS923        | -
- * AU915        | Max EIRP - 24
- * CN470        | -
- * CN779        | -
- * EU433        | -
- * EU868        | -
- * IN865        | -
- * KR920        | -
- * US915        | Max ERP - 24
- * RU864        | -
- */
-#define TX_POWER_12                                 12
-
-/*!
- * Region       | dBM
- * ------------ | :-----:
- * AS923        | -
- * AU915        | Max EIRP - 26
- * CN470        | -
- * CN779        | -
- * EU433        | -
- * EU868        | -
- * IN865        | -
- * KR920        | -
- * US915        | Max ERP - 26
- * RU864        | -
- */
-#define TX_POWER_13                                 13
-
-/*!
- * Region       | dBM
- * ------------ | :-----:
- * AS923        | -
- * AU915        | Max EIRP - 28
- * CN470        | -
- * CN779        | -
- * EU433        | -
- * EU868        | -
- * IN865        | -
- * KR920        | -
- * US915        | Max ERP - 28
- * RU864        | -
- */
-#define TX_POWER_14                                 14
-
-/*!
- * RFU
- */
-#define TX_POWER_15                                 15
-
-
-
-/*!
  * Enumeration of phy attributes.
  */
 typedef enum ePhyAttribute
@@ -649,10 +144,12 @@ typedef enum ePhyAttribute
      * Maximum payload possible.
      */
     PHY_MAX_PAYLOAD,
+    /* ST_WORKAROUND_BEGIN: Keep repeater feature */
     /*!
      * Maximum payload possible when repeater support is enabled.
      */
     PHY_MAX_PAYLOAD_REPEATER,
+    /* ST_WORKAROUND_END */
     /*!
      * Duty cycle.
      */
@@ -800,13 +297,13 @@ typedef enum ePhyAttribute
      */
     PHY_BEACON_CHANNEL_DR,
     /*!
-     * The frequency stepwidth between the beacon channels.
-     */
-    PHY_BEACON_CHANNEL_STEPWIDTH,
-    /*!
      * The number of channels for the beacon reception.
      */
     PHY_BEACON_NB_CHANNELS,
+    /*!
+     * The static offset for the downlink channel calculation.
+     */
+    PHY_BEACON_CHANNEL_OFFSET,
     /*!
      * Ping slot channel frequency.
      */
@@ -815,7 +312,7 @@ typedef enum ePhyAttribute
      * The datarate of a ping slot channel.
      */
     PHY_PING_SLOT_CHANNEL_DR,
-    /*
+    /*!
      * The number of channels for the ping slot reception.
      */
     PHY_PING_SLOT_NB_CHANNELS,
@@ -850,11 +347,7 @@ typedef enum eInitType
      * Activates the default channels. Leaves all other active channels
      * active.
      */
-    INIT_TYPE_ACTIVATE_DEFAULT_CHANNELS,
-    /*!
-     * Restores internal context from passed pointer.
-     */
-    INIT_TYPE_RESTORE_CTX
+    INIT_TYPE_ACTIVATE_DEFAULT_CHANNELS
 }InitType_t;
 
 typedef enum eChannelsMask
@@ -989,26 +482,18 @@ typedef struct sSetBandTxDoneParams
 typedef struct sInitDefaultsParams
 {
     /*!
-     * Pointer to region module context to be restored.
+     * Pointer to region NVM group1.
      */
-    void* NvmCtx;
+    void* NvmGroup1;
+    /*!
+     * Pointer to region NVM group2.
+     */
+    void* NvmGroup2;
     /*!
      * Sets the initialization type.
      */
-     InitType_t Type;
+    InitType_t Type;
 }InitDefaultsParams_t;
-
-/*!
- * Parameter structure for the function RegionGetNvmCtx.
- */
-typedef struct sGetNvmCtxParams
-{
-    /*!
-     * Size of module context.
-     */
-     size_t nvmCtxSize;
-}GetNvmCtxParams_t;
-
 
 /*!
  * Parameter structure for the function RegionVerify.
@@ -1114,10 +599,12 @@ typedef struct sRxConfigParams
      * Downlink dwell time.
      */
     uint8_t DownlinkDwellTime;
+    /* ST_WORKAROUND_BEGIN: Keep repeater feature */
     /*!
      * Set to true, if a repeater is supported.
      */
     bool RepeaterSupport;
+    /* ST_WORKAROUND_END */
     /*!
      * Set to true, if RX should be continuous.
      */
@@ -1438,17 +925,6 @@ void RegionSetBandTxDone( LoRaMacRegion_t region, SetBandTxDoneParams_t* txDone 
 void RegionInitDefaults( LoRaMacRegion_t region, InitDefaultsParams_t* params );
 
 /*!
- * \brief Returns a pointer to the internal context and its size.
- *
- * \param [IN] region LoRaWAN region.
- *
- * \param [IN] params Pointer to the function parameters.
- *
- * \retval     Points to a structure where the module store its non-volatile context.
- */
-void* RegionGetNvmCtx( LoRaMacRegion_t region, GetNvmCtxParams_t* params );
-
-/*!
  * \brief Verifies a parameter.
  *
  * \param [IN] region LoRaWAN region.
@@ -1604,7 +1080,7 @@ uint8_t RegionRxParamSetupReq( LoRaMacRegion_t region, RxParamSetupReqParams_t* 
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  */
-uint8_t RegionNewChannelReq( LoRaMacRegion_t region, NewChannelReqParams_t* newChannelReq );
+int8_t RegionNewChannelReq( LoRaMacRegion_t region, NewChannelReqParams_t* newChannelReq );
 
 /*!
  * \brief The function processes a TX ParamSetup Request.
@@ -1628,7 +1104,7 @@ int8_t RegionTxParamSetupReq( LoRaMacRegion_t region, TxParamSetupReqParams_t* t
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  */
-uint8_t RegionDlChannelReq( LoRaMacRegion_t region, DlChannelReqParams_t* dlChannelReq );
+int8_t RegionDlChannelReq( LoRaMacRegion_t region, DlChannelReqParams_t* dlChannelReq );
 
 /*!
  * \brief Alternates the datarate of the channel for the join request.

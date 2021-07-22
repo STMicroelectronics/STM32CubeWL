@@ -34,6 +34,16 @@
  *            Implementation according to LoRaWAN Specification v1.0.2.
  * \{
  */
+/**
+  ******************************************************************************
+  *
+  *          Portions COPYRIGHT 2020 STMicroelectronics
+  *
+  * @file    RegionCN470.h
+  * @author  MCD Application Team
+  * @brief   Region definition for CN470
+  ******************************************************************************
+  */
 #ifndef __REGION_CN470_H__
 #define __REGION_CN470_H__
 
@@ -47,7 +57,7 @@ extern "C"
 /*!
  * LoRaMac maximum number of channels
  */
-#define CN470_MAX_NB_CHANNELS                        96
+#define CN470_MAX_NB_CHANNELS                       96
 
 /*!
  * Minimal datarate that can be used by the node
@@ -82,27 +92,22 @@ extern "C"
 /*!
  * Maximal Rx1 receive datarate offset
  */
-#define CN470_MAX_RX1_DR_OFFSET                     3
-
-/*!
- * Default Rx1 receive datarate offset
- */
-#define CN470_DEFAULT_RX1_DR_OFFSET                 0
+#define CN470_MAX_RX1_DR_OFFSET                     5
 
 /*!
  * Minimal Tx output power that can be used by the node
  */
-#define CN470_MIN_TX_POWER                        TX_POWER_7
+#define CN470_MIN_TX_POWER                          TX_POWER_7
 
 /*!
  * Maximal Tx output power that can be used by the node
  */
-#define CN470_MAX_TX_POWER                        TX_POWER_0
+#define CN470_MAX_TX_POWER                          TX_POWER_0
 
 /*!
  * Default Tx output power used by the node
  */
-#define CN470_DEFAULT_TX_POWER                    TX_POWER_0
+#define CN470_DEFAULT_TX_POWER                      TX_POWER_0
 
 /*!
  * Default Max EIRP
@@ -115,16 +120,6 @@ extern "C"
 #define CN470_DEFAULT_ANTENNA_GAIN                  2.15f
 
 /*!
- * ADR Ack limit
- */
-#define CN470_ADR_ACK_LIMIT                         64
-
-/*!
- * ADR Ack delay
- */
-#define CN470_ADR_ACK_DELAY                         32
-
-/*!
  * Enabled or disabled the duty cycle
  */
 #define CN470_DUTY_CYCLE_ENABLED                    0
@@ -135,41 +130,6 @@ extern "C"
 #define CN470_MAX_RX_WINDOW                         3000
 
 /*!
- * Receive delay 1
- */
-#define CN470_RECEIVE_DELAY1                        1000
-
-/*!
- * Receive delay 2
- */
-#define CN470_RECEIVE_DELAY2                        2000
-
-/*!
- * Join accept delay 1
- */
-#define CN470_JOIN_ACCEPT_DELAY1                    5000
-
-/*!
- * Join accept delay 2
- */
-#define CN470_JOIN_ACCEPT_DELAY2                    6000
-
-/*!
- * Maximum frame counter gap
- */
-#define CN470_MAX_FCNT_GAP                          16384
-
-/*!
- * Ack timeout
- */
-#define CN470_ACKTIMEOUT                            2000
-
-/*!
- * Random ack timeout limits
- */
-#define CN470_ACK_TIMEOUT_RND                       1000
-
-/*!
  * Second reception window channel frequency definition.
  */
 #define CN470_RX_WND_2_FREQ                         505300000
@@ -178,6 +138,11 @@ extern "C"
  * Second reception window channel datarate definition.
  */
 #define CN470_RX_WND_2_DR                           DR_0
+
+/*!
+ * Default uplink dwell time configuration
+ */
+#define CN470_DEFAULT_UPLINK_DWELL_TIME             0
 
 /*
  * CLASS B
@@ -196,11 +161,6 @@ extern "C"
  * Ping slot channel frequency
  */
 #define CN470_PING_SLOT_CHANNEL_FREQ                508300000
-
-/*!
- * Number of possible ping slot channels
- */
-#define CN470_PING_SLOT_NB_CHANNELS                 8
 
 /*!
  * Number of possible beacon channels
@@ -244,9 +204,9 @@ extern "C"
 
 /*!
  * Band 0 definition
- * Band = { DutyCycle, TxMaxPower, LastBandUpdateTime, TimeCredits, MaxTimeCredits, ReadyForTransmission }
+ * Band = { DutyCycle, TxMaxPower, LastBandUpdateTime, LastMaxCreditAssignTime, TimeCredits, MaxTimeCredits, ReadyForTransmission }
  */
-#define CN470_BAND0                                 { 1, CN470_MAX_TX_POWER, 0, 0, 0, 0 } //  100.0 %
+#define CN470_BAND0                                 { 1, CN470_MAX_TX_POWER, 0, 0, 0, 0, 0 } //  100.0 %
 
 /*!
  * Defines the first channel for RX window 1 for CN470 band
@@ -273,6 +233,7 @@ static const uint8_t DataratesCN470[]  = { 12, 11, 10,  9,  8,  7 };
  */
 static const uint32_t BandwidthsCN470[] = { 125000, 125000, 125000, 125000, 125000, 125000 };
 
+/* ST_WORKAROUND_BEGIN: Keep repeater feature */
 /*!
  * Maximum payload with respect to the datarate index. Cannot operate with repeater.
  */
@@ -282,6 +243,7 @@ static const uint8_t MaxPayloadOfDatarateCN470[] = { 51, 51, 51, 115, 242, 242 }
  * Maximum payload with respect to the datarate index. Can operate with repeater.
  */
 static const uint8_t MaxPayloadOfDatarateRepeaterCN470[] = { 51, 51, 51, 115, 222, 222 };
+/* ST_WORKAROUND_END */
 
 /*!
  * \brief The function gets a value of a specific phy attribute.
@@ -305,15 +267,6 @@ void RegionCN470SetBandTxDone( SetBandTxDoneParams_t* txDone );
  * \param [IN] type Sets the initialization type.
  */
 void RegionCN470InitDefaults( InitDefaultsParams_t* params );
-
-/*!
- * \brief Returns a pointer to the internal context and its size.
- *
- * \param [OUT] params Pointer to the function parameters.
- *
- * \retval      Points to a structure where the module store its non-volatile context.
- */
-void* RegionCN470GetNvmCtx( GetNvmCtxParams_t* params );
 
 /*!
  * \brief Verifies a parameter.
@@ -407,7 +360,7 @@ uint8_t RegionCN470RxParamSetupReq( RxParamSetupReqParams_t* rxParamSetupReq );
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  */
-uint8_t RegionCN470NewChannelReq( NewChannelReqParams_t* newChannelReq );
+int8_t RegionCN470NewChannelReq( NewChannelReqParams_t* newChannelReq );
 
 /*!
  * \brief The function processes a TX ParamSetup Request.
@@ -427,12 +380,14 @@ int8_t RegionCN470TxParamSetupReq( TxParamSetupReqParams_t* txParamSetupReq );
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  */
-uint8_t RegionCN470DlChannelReq( DlChannelReqParams_t* dlChannelReq );
+int8_t RegionCN470DlChannelReq( DlChannelReqParams_t* dlChannelReq );
 
 /*!
  * \brief Alternates the datarate of the channel for the join request.
  *
  * \param [IN] currentDr Current datarate.
+ *
+ * \param [IN] type Alternation type.
  *
  * \retval Datarate to apply.
  */
@@ -495,7 +450,7 @@ uint8_t RegionCN470ApplyDrOffset( uint8_t downlinkDwellTime, int8_t dr, int8_t d
  *
  * \param [IN] rxBeaconSetup Pointer to the function parameters
  */
- void RegionCN470RxBeaconSetup( RxBeaconSetup_t* rxBeaconSetup, uint8_t* outDr );
+void RegionCN470RxBeaconSetup( RxBeaconSetup_t* rxBeaconSetup, uint8_t* outDr );
 
 /*! \} defgroup REGIONCN470 */
 

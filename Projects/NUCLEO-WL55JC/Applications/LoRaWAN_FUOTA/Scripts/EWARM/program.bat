@@ -2,15 +2,17 @@
 setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 cls
 
+set "current_dir=%~dp0"
+
 echo ###########################################
 echo # 0- Set all global variables
 echo ###########################################
-call ..\setenv.bat
+call %current_dir%..\setenv.bat
 
 echo ###########################################
 echo # 1- Disable security
 echo ###########################################
-call ..\disable_security.bat || goto :eof
+call %current_dir%..\disable_security.bat || goto :eof
 if %errorlevel% neq 0 goto :eof
 
 echo ###########################################
@@ -25,8 +27,9 @@ if %errorlevel% neq 0 (
 echo ###########################################
 echo # 3- Download binaries
 echo ###########################################
-call :download_file ..\..\LoRaWAN_End_Node_DualCore\Binary\SBSFU_UserApp_M4.bin Big_Binary 0x08000000 || goto :eof
+call :download_file %current_dir%..\..\LoRaWAN_End_Node\EWARM\Binary\BFU_LoRaWAN_End_Node.bin Big_Binary 0x08000000 || goto :eof
 
+echo Power cycle the board (unplug/plug USB cable) to apply the SBSFU security mechanisms...
 exit /B 0
 
 :--------------------------------------

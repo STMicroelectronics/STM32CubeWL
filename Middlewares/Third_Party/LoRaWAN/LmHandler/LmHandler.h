@@ -36,7 +36,8 @@
 #define __LORAMAC_HANDLER_H__
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -49,11 +50,11 @@ extern "C" {
 /*!
  * \brief Join notification parameters
  */
-  typedef struct LmHandlerJoinParams_s
+typedef struct LmHandlerJoinParams_s
 {
-  int8_t Datarate;
-  LmHandlerErrorStatus_t Status;
-  ActivationType_t Mode;
+    int8_t Datarate;
+    LmHandlerErrorStatus_t Status;
+    ActivationType_t Mode;
 } LmHandlerJoinParams_t;
 
 /*!
@@ -61,159 +62,218 @@ extern "C" {
  */
 typedef struct LmHandlerTxParams_s
 {
-  uint8_t IsMcpsConfirm;
-  LoRaMacEventInfoStatus_t Status;
-  LmHandlerMsgTypes_t MsgType;
-  uint8_t AckReceived;
-  int8_t Datarate;
-  uint32_t UplinkCounter;
-  LmHandlerAppData_t AppData;
-  int8_t TxPower;
-  uint8_t Channel;
-} LmHandlerTxParams_t;
+    uint8_t IsMcpsConfirm;
+    LoRaMacEventInfoStatus_t Status;
+    LmHandlerMsgTypes_t MsgType;
+    uint8_t AckReceived;
+    int8_t Datarate;
+    uint32_t UplinkCounter;
+    LmHandlerAppData_t AppData;
+    int8_t TxPower;
+    uint8_t Channel;
+}LmHandlerTxParams_t;
 
 /*!
  * \brief Rx notification parameters
  */
 typedef struct LmHandlerRxParams_s
 {
-  uint8_t IsMcpsIndication;
-  LoRaMacEventInfoStatus_t Status;
-  int8_t Datarate;
-  int8_t Rssi;
-  int8_t Snr;
-  uint32_t DownlinkCounter;
-  int8_t RxSlot;
-} LmHandlerRxParams_t;
+    uint8_t IsMcpsIndication;
+    LoRaMacEventInfoStatus_t Status;
+    int8_t Datarate;
+    int8_t Rssi;
+    int8_t Snr;
+    uint32_t DownlinkCounter;
+    int8_t RxSlot;
+    bool LinkCheck;
+    uint8_t DemodMargin;
+    uint8_t NbGateways;
+}LmHandlerRxParams_t;
 
 /*!
  * \brief Beacon notification parameters
  */
 typedef struct LmHandlerBeaconParams_s
 {
-  LoRaMacEventInfoStatus_t Status;
-  LmHandlerBeaconState_t State;
-  BeaconInfo_t Info;
-} LmHandlerBeaconParams_t;
+    LoRaMacEventInfoStatus_t Status;
+    LmHandlerBeaconState_t State;
+    BeaconInfo_t Info;
+}LmHandlerBeaconParams_t;
 
 /*!
  * \brief LoRaMac handler parameters
  */
 typedef struct LmHandlerParams_s
 {
-  /*!
-   * Active Region
-   */
-  LoRaMacRegion_t ActiveRegion;
-  /*!
-   * Default Class
-   */
-  DeviceClass_t DefaultClass;
-  /*!
-   * Holds the ADR state
-   */
-  bool AdrEnable;
-  /*!
-   * Uplink datarate, when \ref AdrEnable is OFF
-   */
-  int8_t TxDatarate;
-  /*!
-   * LoRaWAN ETSI duty cycle control enable/disable
-   *
-   * \remark Please note that ETSI mandates duty cycled transmissions. Use only for test purposes
-   */
-  bool DutyCycleEnabled;
-  /*!
-   * Periodicity of the ping slots
-   */
-  uint8_t PingPeriodicity;
-} LmHandlerParams_t;
+    /*!
+     * Active Region
+     */
+    LoRaMacRegion_t ActiveRegion;
+    /*!
+     * Default Class
+     */
+    DeviceClass_t DefaultClass;
+    /*!
+     * Holds the ADR state
+     */
+    bool AdrEnable;
+    /*!
+     * Uplink datarate, when \ref AdrEnable is OFF
+     */
+    int8_t TxDatarate;
+    /*!
+     * Enables/Disables a public network usage
+     */
+    bool PublicNetworkEnable;
+    /*!
+    * LoRaWAN ETSI duty cycle control enable/disable
+    *
+    * \remark Please note that ETSI mandates duty cycled transmissions. Use only for test purposes
+    */
+    bool DutyCycleEnabled;
+    /*!
+     * Application data buffer maximum size
+     */
+    uint8_t DataBufferMaxSize;
+    /*!
+     * Application data buffer pointer
+     */
+    uint8_t *DataBuffer;
+    /*!
+     * Periodicity of the ping slots
+     */
+    uint8_t PingPeriodicity;
+}LmHandlerParams_t;
 
 /*!
  * \brief LoRaMac handler callbacks
  */
 typedef struct LmHandlerCallbacks_s
 {
-  /*!
-   * \brief Get the current battery level
-   *
-   * \retval value  Battery level ( 0: very low, 254: fully charged )
-   */
-  uint8_t (*GetBatteryLevel)(void);
-  /*!
-   * \brief Get the current temperature
-   *
-   * \retval value  Temperature in degree Celsius
-   */
-  /*float*/ uint16_t (*GetTemperature)(void);
-  /*!
-   * \brief    Will be called each time a Radio IRQ is handled by the MAC
-   *          layer.
-   *
-   * \warning  Runs in a IRQ context. Should only change variables state.
-   */
-  void (*OnMacProcess)(void);
-  /*!
-   * \brief Notifies the upper layer that a network has been joined
-   *
-   * \param [in] params notification parameters
-   */
-  void (*OnJoinRequest)(LmHandlerJoinParams_t *params);
-  /*!
-   * \brief Notifies upper layer that a frame has been transmitted
-   *
-   * \param [in] params notification parameters
-   */
-  void (*OnTxData)(LmHandlerTxParams_t *params);
-  /*!
-   * \brief Notifies the upper layer that an applicative frame has been received
-   *
-   * \param [in] appData Received applicative data
-   * \param [in] params notification parameters
-   */
-  void (*OnRxData)(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params);
-} LmHandlerCallbacks_t;
+    /*!
+     * Get the current battery level
+     *
+     * \retval value  Battery level ( 0: very low, 254: fully charged )
+     */
+    uint8_t ( *GetBatteryLevel )( void );
+    /*!
+     * Get the current temperature
+     *
+     * \retval value  Temperature in degree Celsius
+     */
+    /*float*/ uint16_t ( *GetTemperature )( void );
+    /*!
+     * Get the board 64 bits unique ID
+     *
+     * \param   [OUT] id unique
+     */
+    void (*GetUniqueId)(uint8_t *id);
+    /*!
+     * Get the board 32 bits unique ID (LSB)
+     *
+     * \retval  devAddr Device Address
+     */
+    uint32_t (*GetDevAddr)(void);
+    /*!
+     *\brief    Will be called each time a Radio IRQ is handled by the MAC
+     *          layer.
+     *
+     *\warning  Runs in a IRQ context. Should only change variables state.
+     */
+    void ( *OnMacProcess )( void );
+    /*!
+     * Notifies the upper layer that the NVM context has changed
+     *
+     * \param [IN] state Indicates if we are storing (true) or
+     *                   restoring (false) the NVM context
+     *
+     * \param [IN] size Number of data bytes which were stored or restored.
+     */
+    void ( *OnNvmDataChange )( LmHandlerNvmContextStates_t state, uint16_t size );
+    /*!
+     * Notifies the upper layer that a network parameters have been set
+     *
+     * \param [IN] params notification parameters
+     */
+    void ( *OnNetworkParametersChange )( CommissioningParams_t *params );
+    /*!
+     * Notifies the upper layer that a network has been joined
+     *
+     * \param [IN] params notification parameters
+     */
+    void ( *OnJoinRequest )( LmHandlerJoinParams_t *params );
+    /*!
+     * Notifies upper layer that a frame has been transmitted
+     *
+     * \param [IN] params notification parameters
+     */
+    void ( *OnTxData )( LmHandlerTxParams_t *params );
+    /*!
+     * Notifies the upper layer that an applicative frame has been received
+     *
+     * \param [IN] appData Received applicative data
+     * \param [IN] params notification parameters
+     */
+    void ( *OnRxData )( LmHandlerAppData_t *appData, LmHandlerRxParams_t *params );
+    /*!
+     * Confirms the LoRaWAN device class change
+     *
+     * \param [IN] deviceClass New end-device class
+     */
+    void ( *OnClassChange )( DeviceClass_t deviceClass );
+    /*!
+     * Notifies the upper layer that the beacon status has changed
+     *
+     * \param [IN] params notification parameters
+     */
+    void ( *OnBeaconStatusChange )( LmHandlerBeaconParams_t *params );
+    /*!
+     * Notifies the upper layer that the system time has been updated.
+     */
+    void ( *OnSysTimeUpdate )( void );
+}LmHandlerCallbacks_t;
 
 /* External variables --------------------------------------------------------*/
 /* Exported macros -----------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 /*!
- * \brief LoRaMac handler initialisation
+ * LoRaMac handler initialisation
  *
  * \param [in] handlerCallbacks LoRaMac handler callbacks
  *
  * \retval status Returns \ref LORAMAC_HANDLER_SUCCESS if package have been
  *                initialized else \ref LORAMAC_HANDLER_ERROR
  */
-LmHandlerErrorStatus_t LmHandlerInit(LmHandlerCallbacks_t *handlerCallbacks);
+LmHandlerErrorStatus_t LmHandlerInit( LmHandlerCallbacks_t *handlerCallbacks );
 
 /*!
- * \brief Indicates if the LoRaMacHandler is busy
- *
+ * Indicates if the LoRaMacHandler is busy
+ * 
  * \retval status [true] Busy, [false] free
  */
-bool LmHandlerIsBusy(void);
+bool LmHandlerIsBusy( void );
 
 /*!
- * \brief Processes the LoRaMac and Radio events. When no pendig operation asks to go in low power mode.
+ * Processes the LoRaMac and Radio events. 
+ * When no pendig operation asks to go in low power mode.
  *
  * \remark This function must be called in the main loop.
  */
-void LmHandlerProcess(void);
+void LmHandlerProcess( void );
 
 /*!
- * \brief Instructs the MAC layer to send a ClassA uplink
+ * Instructs the MAC layer to send a ClassA uplink
  *
- * \param [in] appData Data to be sent
- * \param [in] isTxConfirmed Indicates if the uplink requires an acknowledgement
+ * \param [IN] appData Data to be sent
+ * \param [IN] isTxConfirmed Indicates if the uplink requires an acknowledgement
  * \param [out] nextTxIn Time before next uplink window available
  * \param [in] allowDelayedTx when set to true, the frame will be delayed
  *
  * \retval status Returns \ref LORAMAC_HANDLER_SUCCESS if request has been
  *                processed else \ref LORAMAC_HANDLER_ERROR
  */
-LmHandlerErrorStatus_t LmHandlerSend(LmHandlerAppData_t *appData, LmHandlerMsgTypes_t isTxConfirmed,
-                                     TimerTime_t *nextTxIn, bool allowDelayedTx);
+LmHandlerErrorStatus_t LmHandlerSend( LmHandlerAppData_t *appData, LmHandlerMsgTypes_t isTxConfirmed,
+                                      TimerTime_t *nextTxIn, bool allowDelayedTx );
 
 /*!
  * \brief   Check whether the Device is joined to the network
@@ -280,7 +340,7 @@ LmHandlerErrorStatus_t LmHandlerPackageRegister(uint8_t id, void *params);
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerGetCurrentClass(DeviceClass_t *deviceClass);
+LmHandlerErrorStatus_t LmHandlerGetCurrentClass(DeviceClass_t *deviceClass);
 
 /*!
  * \brief Gets the LoRaWAN Device EUI (if OTAA)
@@ -290,7 +350,7 @@ int32_t LmHandlerGetCurrentClass(DeviceClass_t *deviceClass);
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerGetDevEUI(uint8_t *devEUI);
+LmHandlerErrorStatus_t LmHandlerGetDevEUI(uint8_t *devEUI);
 
 /*!
  * \brief Sets the LoRaWAN Device EUI (if OTAA)
@@ -300,17 +360,17 @@ int32_t LmHandlerGetDevEUI(uint8_t *devEUI);
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerSetDevEUI(uint8_t *devEUI);
+LmHandlerErrorStatus_t LmHandlerSetDevEUI(uint8_t *devEUI);
 
 /*!
- * \brief Gets the LoRaWAN AppEUI (from the Commissionning)
+ * \brief Gets the LoRaWAN AppEUI (from the Commissioning)
  *
  * \param [out] appEUI LoRaWAN AppEUI
  *
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerGetAppEUI(uint8_t *appEUI);
+LmHandlerErrorStatus_t LmHandlerGetAppEUI(uint8_t *appEUI);
 
 /*!
  * \brief Sets the LoRaWAN App EUI (if OTAA)
@@ -320,17 +380,17 @@ int32_t LmHandlerGetAppEUI(uint8_t *appEUI);
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerSetAppEUI(uint8_t *appEUI);
+LmHandlerErrorStatus_t LmHandlerSetAppEUI(uint8_t *appEUI);
 
 /*!
- * \brief Gets the LoRaWAN Network ID (from the Commissionning if ABP or after the Join if OTAA)
+ * \brief Gets the LoRaWAN Network ID (from the Commissioning if ABP or after the Join if OTAA)
  *
  * \param [out] networkId current network ID
  *
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerGetNetworkID(uint32_t *networkId);
+LmHandlerErrorStatus_t LmHandlerGetNetworkID(uint32_t *networkId);
 
 /*!
  * \brief Sets the LoRaWAN Network ID
@@ -340,17 +400,17 @@ int32_t LmHandlerGetNetworkID(uint32_t *networkId);
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerSetNetworkID(uint32_t networkId);
+LmHandlerErrorStatus_t LmHandlerSetNetworkID(uint32_t networkId);
 
 /*!
- * \brief Gets the LoRaWAN Device Address (from the Commissionning if ABP or after the Join if OTAA)
+ * \brief Gets the LoRaWAN Device Address (from the Commissioning if ABP or after the Join if OTAA)
  *
  * \param [out] devAddr current device address
  *
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerGetDevAddr(uint32_t *devAddr);
+LmHandlerErrorStatus_t LmHandlerGetDevAddr(uint32_t *devAddr);
 
 /*!
  * \brief Sets the LoRaWAN Device Address (if ABP)
@@ -360,7 +420,7 @@ int32_t LmHandlerGetDevAddr(uint32_t *devAddr);
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerSetDevAddr(uint32_t devAddr);
+LmHandlerErrorStatus_t LmHandlerSetDevAddr(uint32_t devAddr);
 
 /*!
  * \brief Gets the current active region
@@ -370,7 +430,7 @@ int32_t LmHandlerSetDevAddr(uint32_t devAddr);
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerGetActiveRegion(LoRaMacRegion_t *region);
+LmHandlerErrorStatus_t LmHandlerGetActiveRegion(LoRaMacRegion_t *region);
 
 /*!
  * \brief Sets the current active region
@@ -380,7 +440,7 @@ int32_t LmHandlerGetActiveRegion(LoRaMacRegion_t *region);
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerSetActiveRegion(LoRaMacRegion_t region);
+LmHandlerErrorStatus_t LmHandlerSetActiveRegion(LoRaMacRegion_t region);
 
 /*!
  * \brief Gets the Adaptive data rate (1 = the Network manages the DR, 0 = the device manages the DR)
@@ -390,7 +450,7 @@ int32_t LmHandlerSetActiveRegion(LoRaMacRegion_t region);
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerGetAdrEnable(bool *adrEnable);
+LmHandlerErrorStatus_t LmHandlerGetAdrEnable(bool *adrEnable);
 
 /*!
  * \brief Sets the Adaptive data rate (1 = the Network manages the DR, 0 = the device manages the DR)
@@ -400,7 +460,7 @@ int32_t LmHandlerGetAdrEnable(bool *adrEnable);
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerSetAdrEnable(bool adrEnable);
+LmHandlerErrorStatus_t LmHandlerSetAdrEnable(bool adrEnable);
 
 /*!
  * \brief Gets the current datarate
@@ -410,7 +470,7 @@ int32_t LmHandlerSetAdrEnable(bool adrEnable);
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerGetTxDatarate(int8_t *txDatarate);
+LmHandlerErrorStatus_t LmHandlerGetTxDatarate(int8_t *txDatarate);
 
 /*!
  * \brief Sets the current datarate
@@ -420,7 +480,7 @@ int32_t LmHandlerGetTxDatarate(int8_t *txDatarate);
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerSetTxDatarate(int8_t txDatarate);
+LmHandlerErrorStatus_t LmHandlerSetTxDatarate(int8_t txDatarate);
 
 /*!
  * \brief Gets the duty cycle flag
@@ -430,7 +490,7 @@ int32_t LmHandlerSetTxDatarate(int8_t txDatarate);
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerGetDutyCycleEnable(bool *dutyCycleEnable);
+LmHandlerErrorStatus_t LmHandlerGetDutyCycleEnable(bool *dutyCycleEnable);
 
 /*!
  * \brief Sets the current datarate
@@ -440,7 +500,7 @@ int32_t LmHandlerGetDutyCycleEnable(bool *dutyCycleEnable);
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerSetDutyCycleEnable(bool dutyCycleEnable);
+LmHandlerErrorStatus_t LmHandlerSetDutyCycleEnable(bool dutyCycleEnable);
 
 /*!
  * \brief Gets the current RX_2 datarate and frequency
@@ -450,7 +510,7 @@ int32_t LmHandlerSetDutyCycleEnable(bool dutyCycleEnable);
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerGetRX2Params(RxChannelParams_t *rxParams);
+LmHandlerErrorStatus_t LmHandlerGetRX2Params(RxChannelParams_t *rxParams);
 
 /*!
  * \brief Gets the current TX power
@@ -460,7 +520,7 @@ int32_t LmHandlerGetRX2Params(RxChannelParams_t *rxParams);
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerGetTxPower(int8_t *txPower);
+LmHandlerErrorStatus_t LmHandlerGetTxPower(int8_t *txPower);
 
 /*!
  * \brief Gets the current RX1 delay (after the TX done)
@@ -470,7 +530,7 @@ int32_t LmHandlerGetTxPower(int8_t *txPower);
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerGetRx1Delay(uint32_t *rxDelay);
+LmHandlerErrorStatus_t LmHandlerGetRx1Delay(uint32_t *rxDelay);
 
 /*!
  * \brief Gets the current RX2 delay (after the TX done)
@@ -480,7 +540,7 @@ int32_t LmHandlerGetRx1Delay(uint32_t *rxDelay);
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerGetRx2Delay(uint32_t *rxDelay);
+LmHandlerErrorStatus_t LmHandlerGetRx2Delay(uint32_t *rxDelay);
 
 /*!
  * \brief Gets the current RX1 Join delay (after the TX done)
@@ -490,7 +550,7 @@ int32_t LmHandlerGetRx2Delay(uint32_t *rxDelay);
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerGetJoinRx1Delay(uint32_t *rxDelay);
+LmHandlerErrorStatus_t LmHandlerGetJoinRx1Delay(uint32_t *rxDelay);
 
 /*!
  * \brief Gets the current RX2 Join delay (after the TX done)
@@ -500,7 +560,7 @@ int32_t LmHandlerGetJoinRx1Delay(uint32_t *rxDelay);
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerGetJoinRx2Delay(uint32_t *rxDelay);
+LmHandlerErrorStatus_t LmHandlerGetJoinRx2Delay(uint32_t *rxDelay);
 
 /*!
  * \brief Sets the RX_2 datarate and frequency
@@ -510,7 +570,7 @@ int32_t LmHandlerGetJoinRx2Delay(uint32_t *rxDelay);
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerSetRX2Params(RxChannelParams_t *rxParams);
+LmHandlerErrorStatus_t LmHandlerSetRX2Params(RxChannelParams_t *rxParams);
 
 /*!
  * \brief Sets the TX power
@@ -520,7 +580,7 @@ int32_t LmHandlerSetRX2Params(RxChannelParams_t *rxParams);
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerSetTxPower(int8_t txPower);
+LmHandlerErrorStatus_t LmHandlerSetTxPower(int8_t txPower);
 
 /*!
  * \brief Sets the RX1 delay (after the TX done)
@@ -530,7 +590,7 @@ int32_t LmHandlerSetTxPower(int8_t txPower);
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerSetRx1Delay(uint32_t rxDelay);
+LmHandlerErrorStatus_t LmHandlerSetRx1Delay(uint32_t rxDelay);
 
 /*!
  * \brief Sets the RX2 delay (after the TX done)
@@ -540,7 +600,7 @@ int32_t LmHandlerSetRx1Delay(uint32_t rxDelay);
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerSetRx2Delay(uint32_t rxDelay);
+LmHandlerErrorStatus_t LmHandlerSetRx2Delay(uint32_t rxDelay);
 
 /*!
  * \brief Sets the RX1 delay (after the TX done)
@@ -550,7 +610,7 @@ int32_t LmHandlerSetRx2Delay(uint32_t rxDelay);
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerSetJoinRx1Delay(uint32_t rxDelay);
+LmHandlerErrorStatus_t LmHandlerSetJoinRx1Delay(uint32_t rxDelay);
 
 /*!
  * \brief Sets the RX2 delay (after the TX done)
@@ -560,7 +620,7 @@ int32_t LmHandlerSetJoinRx1Delay(uint32_t rxDelay);
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerSetJoinRx2Delay(uint32_t rxDelay);
+LmHandlerErrorStatus_t LmHandlerSetJoinRx2Delay(uint32_t rxDelay);
 
 /*!
  * \brief Gets the current ClassB Ping periodicity
@@ -570,7 +630,7 @@ int32_t LmHandlerSetJoinRx2Delay(uint32_t rxDelay);
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerGetPingPeriodicity(uint8_t *pingPeriodicity);
+LmHandlerErrorStatus_t LmHandlerGetPingPeriodicity(uint8_t *pingPeriodicity);
 
 /*!
  * \brief Sets the ClassB Ping periodicity
@@ -580,7 +640,7 @@ int32_t LmHandlerGetPingPeriodicity(uint8_t *pingPeriodicity);
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerSetPingPeriodicity(uint8_t pingPeriodicity);
+LmHandlerErrorStatus_t LmHandlerSetPingPeriodicity(uint8_t pingPeriodicity);
 
 /*!
  * \brief Gets the current ClassB Beacon status
@@ -590,8 +650,103 @@ int32_t LmHandlerSetPingPeriodicity(uint8_t pingPeriodicity);
  * \retval -1 LORAMAC_HANDLER_ERROR
  *          0 LORAMAC_HANDLER_SUCCESS
  */
-int32_t LmHandlerGetBeaconState(BeaconState_t *beaconState);
+LmHandlerErrorStatus_t LmHandlerGetBeaconState(BeaconState_t *beaconState);
 
+/*!
+ * \brief Gets the LoRaWAN NwkKey (from the se-identity)
+ *
+ * \param [out] nwkKey LoRaWAN NwkKey
+ *
+ * \retval -1 LORAMAC_HANDLER_ERROR
+ *          0 LORAMAC_HANDLER_SUCCESS
+ */
+LmHandlerErrorStatus_t LmHandlerGetNwkKey( uint8_t *nwkKey );
+
+/*!
+ * \brief Sets the LoRaWAN NwkKey (if OTAA)
+ *
+ * \param [in] nwkKey LoRaWAN NwkKey
+ *
+ * \retval -1 LORAMAC_HANDLER_ERROR
+ *          0 LORAMAC_HANDLER_SUCCESS
+ */
+LmHandlerErrorStatus_t LmHandlerSetNwkKey( uint8_t *nwkKey );
+
+/*!
+ * \brief Gets the LoRaWAN AppKey (from the se-identity)
+ *
+ * \param [out] appKey LoRaWAN AppKey
+ *
+ * \retval -1 LORAMAC_HANDLER_ERROR
+ *          0 LORAMAC_HANDLER_SUCCESS
+ */
+LmHandlerErrorStatus_t LmHandlerGetAppKey( uint8_t *appKey );
+
+/*!
+ * \brief Sets the LoRaWAN AppKey (if OTAA)
+ *
+ * \param [in] appKey LoRaWAN AppKey
+ *
+ * \retval -1 LORAMAC_HANDLER_ERROR
+ *          0 LORAMAC_HANDLER_SUCCESS
+ */
+LmHandlerErrorStatus_t LmHandlerSetAppKey( uint8_t *appKey );
+
+/*!
+ * \brief Gets the LoRaWAN NwkSKey (from the se-identity)
+ *
+ * \param [out] nwkSKey LoRaWAN NwkSKey
+ *
+ * \retval -1 LORAMAC_HANDLER_ERROR
+ *          0 LORAMAC_HANDLER_SUCCESS
+ */
+LmHandlerErrorStatus_t LmHandlerGetNwkSKey( uint8_t *nwkSKey );
+
+/*!
+ * \brief Sets the LoRaWAN NwkSKey (if OTAA)
+ *
+ * \param [in] nwkSKey LoRaWAN NwkSKey
+ *
+ * \retval -1 LORAMAC_HANDLER_ERROR
+ *          0 LORAMAC_HANDLER_SUCCESS
+ */
+LmHandlerErrorStatus_t LmHandlerSetNwkSKey( uint8_t *nwkSKey );
+
+/*!
+ * \brief Gets the LoRaWAN AppSKey (from the se-identity)
+ *
+ * \param [out] appSKey LoRaWAN AppSKey
+ *
+ * \retval -1 LORAMAC_HANDLER_ERROR
+ *          0 LORAMAC_HANDLER_SUCCESS
+ */
+LmHandlerErrorStatus_t LmHandlerGetAppSKey( uint8_t *appSKey );
+
+/*!
+ * \brief Sets the LoRaWAN AppSKey (if OTAA)
+ *
+ * \param [in] appSKey appSKey LoRaWAN AppSKey
+ *
+ * \retval -1 LORAMAC_HANDLER_ERROR
+ *          0 LORAMAC_HANDLER_SUCCESS
+ */
+LmHandlerErrorStatus_t LmHandlerSetAppSKey( uint8_t *appSKey );
+
+/*!
+ * Requests network server time update
+ *
+ * \retval  status Returns \ref LORAMAC_HANDLER_SUCCESS if request has been
+ *                 processed else \ref LORAMAC_HANDLER_ERROR
+ */
+LmHandlerErrorStatus_t LmHandlerDeviceTimeReq( void );
+
+/*!
+ * Requests Link connectivity check
+ *
+ * \retval -1 LORAMAC_HANDLER_ERROR
+ *          0 LORAMAC_HANDLER_SUCCESS
+ */
+LmHandlerErrorStatus_t LmHandlerLinkCheckReq( void );
 #ifdef __cplusplus
 }
 #endif

@@ -26,10 +26,6 @@ extern "C" {
 #endif
 
 /* Exported constants --------------------------------------------------------*/
-extern uint32_t __ICFEDIT_M4_SB_region_ROM_start__;
-#define M4_SB_REGION_ROM_START ((uint32_t)& __ICFEDIT_M4_SB_region_ROM_start__)
-extern uint32_t __ICFEDIT_M4_SB_region_ROM_end__;
-#define M4_SB_REGION_ROM_END ((uint32_t)& __ICFEDIT_M4_SB_region_ROM_end__)
 extern uint32_t __ICFEDIT_intvec_start__;
 #define INTVECT_START ((uint32_t)& __ICFEDIT_intvec_start__)
 extern uint32_t __ICFEDIT_SE_Startup_region_ROM_start__;
@@ -38,6 +34,10 @@ extern uint32_t __ICFEDIT_SE_Code_region_ROM_start__;
 #define SE_CODE_REGION_ROM_START ((uint32_t)& __ICFEDIT_SE_Code_region_ROM_start__)
 extern uint32_t __ICFEDIT_SE_Code_region_ROM_end__;
 #define SE_CODE_REGION_ROM_END ((uint32_t)& __ICFEDIT_SE_Code_region_ROM_end__)
+extern uint32_t __ICFEDIT_User_Key_region_ROM_start__;
+#define USER_KEY_REGION_ROM_START ((uint32_t)& __ICFEDIT_User_Key_region_ROM_start__)
+extern uint32_t __ICFEDIT_User_Key_region_ROM_end__;
+#define USER_KEY_REGION_ROM_END ((uint32_t)& __ICFEDIT_User_Key_region_ROM_end__)
 extern uint32_t __ICFEDIT_SE_IF_region_ROM_start__;
 #define SE_IF_REGION_ROM_START ((uint32_t)& __ICFEDIT_SE_IF_region_ROM_start__)
 extern uint32_t __ICFEDIT_SE_IF_region_ROM_end__;
@@ -67,6 +67,7 @@ extern uint32_t __ICFEDIT_KMS_DataStorage_start__ ;
 #define KMS_DATASTORAGE_START ((uint32_t)& __ICFEDIT_KMS_DataStorage_start__)
 extern uint32_t __ICFEDIT_KMS_DataStorage_end__ ;
 #define KMS_DATASTORAGE_END ((uint32_t)& __ICFEDIT_KMS_DataStorage_end__)
+
 
 #if defined (__ICCARM__) || defined(__GNUC__)
 extern uint32_t __ICFEDIT_SLOT_Active_1_header__;
@@ -103,16 +104,6 @@ extern uint32_t __ICFEDIT_SWAP_start__;
 #define SWAP_START ((uint32_t)& __ICFEDIT_SWAP_start__)
 extern uint32_t __ICFEDIT_SWAP_end__;
 #define SWAP_END ((uint32_t)& __ICFEDIT_SWAP_end__)
-
-/* DualCore specificities */
-#if !defined(CORE_CM0PLUS)
-extern uint32_t __ICFEDIT_region_ROM_end__ ;
-#define C1_AREA_ADDR_END  ((uint32_t)& __ICFEDIT_region_ROM_end__)
-#define C2_BOOT_BASE_ADDR ((uint32_t)& __ICFEDIT_intvec_start__)
-#endif /* CORE_CM0PLUS */
-extern volatile uint32_t __ICFEDIT_M4_M0PLUS_FLAG_region_RAM_start__ ;
-#define M4_M0PLUS_FLAG_RAM_START ((uint32_t)& __ICFEDIT_M4_M0PLUS_FLAG_region_RAM_start__)
-
 #endif /* __ICCARM__ || __GNUC__ */
 
 #ifdef __cplusplus

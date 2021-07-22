@@ -41,9 +41,6 @@
 /* USER CODE BEGIN PD */
 
 /* USER CODE END PD */
-#define DBGMCU_LPM   0   /* if 1 enables/disables the Debug Module during LowPower modes */
-                         /* if 0 it does not modify the DBGMCU_CR_DBG registers */
-                         /* in DualCore few issues are under investigation when 1 */
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
@@ -62,12 +59,90 @@
 
 /* Exported functions --------------------------------------------------------*/
 
-void DBG_Init(void)
+#if defined(CORE_CM4)
+
+/**
+  * @brief Disable debugger (serial wires pins)
+  */
+void DBG_Disable(void)
 {
   /* USER CODE BEGIN DBG_Init_1 */
 
   /* USER CODE END DBG_Init_1 */
-#if defined (DEBUGGER_ON) && ( DEBUGGER_ON == 1 )
+
+#if defined (DEBUGGER_ENABLED) && ( DEBUGGER_ENABLED == 0 ) /* DEBUGGER_DISABLED */
+  /* Put the debugger pin PA13 and P14 in analog for LowPower*/
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+  GPIO_InitStruct.Mode   = GPIO_MODE_ANALOG;
+  GPIO_InitStruct.Pull   = GPIO_NOPULL;
+  GPIO_InitStruct.Pin    = (GPIO_PIN_13 | GPIO_PIN_14);
+  /* make sure clock is enabled before setting the pins with HAL_GPIO_Init() */
+  __HAL_RCC_GPIOA_CLK_ENABLE() ;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+#elif !defined (DEBUGGER_ENABLED)
+#error "DEBUGGER_ENABLED not defined or out of range <0,1>"
+#endif /* DEBUGGER_OFF */
+
+  /* Disabled HAL_DBGMCU_  */
+  DBG_ConfigForLpm(0);
+
+  /* USER CODE BEGIN DBG_Init_Last */
+
+  /* USER CODE END DBG_Init_Last */
+}
+
+/**
+  * @brief Config debugger when working in Low Power Mode
+  * @note  When in Dual Core DbgMcu pins should be better disable only after Cm0 is started
+  */
+void DBG_ConfigForLpm(uint8_t enableDbg)
+{
+  uint8_t enable_dbg = enableDbg;
+  /* USER CODE BEGIN DBG_ConfigForLpm_1 */
+
+  /* USER CODE END DBG_ConfigForLpm_1 */
+
+#if defined (DEBUGGER_ENABLED) && ( DEBUGGER_ENABLED == 0 )
+  enable_dbg = 0;
+#elif !defined (DEBUGGER_ENABLED)
+#error "DEBUGGER_ENABLED not defined or out of range <0,1>"
+#endif /* DEBUGGER_OFF */
+
+  if (enable_dbg == 1)
+  {
+    HAL_DBGMCU_EnableDBGSleepMode();
+    HAL_DBGMCU_EnableDBGStopMode();
+    HAL_DBGMCU_EnableDBGStandbyMode();
+  }
+  else
+  {
+    HAL_DBGMCU_DisableDBGSleepMode();
+    HAL_DBGMCU_DisableDBGStopMode();
+    HAL_DBGMCU_DisableDBGStandbyMode();
+  }
+
+  /* USER CODE BEGIN DBG_ConfigForLpm_Last */
+
+  /* USER CODE END DBG_ConfigForLpm_Last */
+}
+
+#endif /* CORE_CM4 */
+
+/* USER CODE BEGIN EF */
+
+/* USER CODE END EF */
+
+/* Private Functions Definition -----------------------------------------------*/
+void DBG_ProbesInit(void)
+{
+  /* USER CODE BEGIN DBG_ProbesInit_1 */
+
+  /* USER CODE END DBG_ProbesInit_1 */
+
+  /* SW probes */
+
+#if defined (PROBE_PINS_ENABLED) && ( PROBE_PINS_ENABLED == 1 )
   GPIO_InitTypeDef  GPIO_InitStruct = {0};
 
   /* Configure the GPIO pin */
@@ -75,57 +150,49 @@ void DBG_Init(void)
   GPIO_InitStruct.Pull   = GPIO_PULLUP;
   GPIO_InitStruct.Speed  = GPIO_SPEED_FREQ_VERY_HIGH;
 
-  /* make sure a pin is not used simultaneusly by the two cores */
-  /* DGB_LINE1 & DGB_LINE2 for CM4: this mapping can be changed*/
+  /* make sure a pin is not used simultaneously by the two cores */
+  /* PROBE_LINE1 & PROBE_LINE2 for CM0PLUS: this mapping can be changed*/
 #if defined(CORE_CM4)
 
   /* Enable the GPIO_LINES Clock */
-  DGB_LINE3_CLK_ENABLE();
-  DGB_LINE4_CLK_ENABLE();
+  PROBE_LINE3_CLK_ENABLE();
+  PROBE_LINE4_CLK_ENABLE();
 
-  GPIO_InitStruct.Pin    = DGB_LINE3_PIN;
-  HAL_GPIO_Init(DGB_LINE3_PORT, &GPIO_InitStruct);
-  GPIO_InitStruct.Pin    = DGB_LINE4_PIN;
-  HAL_GPIO_Init(DGB_LINE4_PORT, &GPIO_InitStruct);
+  GPIO_InitStruct.Pin    = PROBE_LINE3_PIN;
+  HAL_GPIO_Init(PROBE_LINE3_PORT, &GPIO_InitStruct);
+  GPIO_InitStruct.Pin    = PROBE_LINE4_PIN;
+  HAL_GPIO_Init(PROBE_LINE4_PORT, &GPIO_InitStruct);
 
-  /* Reset debug Pins */
-  HAL_GPIO_WritePin(DGB_LINE3_PORT, DGB_LINE3_PIN, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(DGB_LINE4_PORT, DGB_LINE4_PIN, GPIO_PIN_RESET);
-
-  /******** MCO OUT Config on PA8 *****/
-  HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_SYSCLK, RCC_MCODIV_16);
-
-  /*Debug power up request wakeup CBDGPWRUPREQ*/
-  LL_EXTI_EnableIT_32_63(LL_EXTI_LINE_46);
-
-  /* lowpower DBGmode: just needed for CORE_CM4 */
-#if defined (DBGMCU_LPM) && ( DBGMCU_LPM == 1 )
-  /* careful does not work correctly in dual core: Bugzilla 71087 */
-  HAL_DBGMCU_EnableDBGSleepMode();
-  HAL_DBGMCU_EnableDBGStopMode();
-  HAL_DBGMCU_EnableDBGStandbyMode();
-#elif defined (DBGMCU_LPM) && ( DBGMCU_LPM == 0 )
-  HAL_DBGMCU_DisableDBGSleepMode();
-  HAL_DBGMCU_DisableDBGStopMode();
-  HAL_DBGMCU_DisableDBGStandbyMode();
-#elif !defined (DBGMCU_LPM)
-#error "DBGMCU_LPM not defined or out of range <0,1>"
-#endif /* DBGMCU_LPM */
+  /* Reset probe Pins */
+  HAL_GPIO_WritePin(PROBE_LINE3_PORT, PROBE_LINE3_PIN, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(PROBE_LINE4_PORT, PROBE_LINE4_PIN, GPIO_PIN_RESET);
 
 #else /* CORE_CM0PLUS */
 
   /* Enable the GPIO_LINES Clock */
-  DGB_LINE1_CLK_ENABLE();
-  DGB_LINE2_CLK_ENABLE();
+  PROBE_LINE1_CLK_ENABLE();
+  PROBE_LINE2_CLK_ENABLE();
 
-  GPIO_InitStruct.Pin    = DGB_LINE1_PIN ;
-  HAL_GPIO_Init(DGB_LINE1_PORT, &GPIO_InitStruct);
-  GPIO_InitStruct.Pin    = DGB_LINE2_PIN;
-  HAL_GPIO_Init(DGB_LINE2_PORT, &GPIO_InitStruct);
+  GPIO_InitStruct.Pin    = PROBE_LINE1_PIN;
+  HAL_GPIO_Init(PROBE_LINE1_PORT, &GPIO_InitStruct);
+  GPIO_InitStruct.Pin    = PROBE_LINE2_PIN;
+  HAL_GPIO_Init(PROBE_LINE2_PORT, &GPIO_InitStruct);
 
-  /* Reset debug Pins */
-  HAL_GPIO_WritePin(DGB_LINE1_PORT, DGB_LINE1_PIN, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(DGB_LINE2_PORT, DGB_LINE2_PIN, GPIO_PIN_RESET);
+  /* Reset probe Pins */
+  HAL_GPIO_WritePin(PROBE_LINE1_PORT, PROBE_LINE1_PIN, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(PROBE_LINE2_PORT, PROBE_LINE2_PIN, GPIO_PIN_RESET);
+
+#endif /* CORE_CM4 */
+
+  /* USER CODE BEGIN DBG_ProbesInit_2 */
+
+  /* USER CODE END DBG_ProbesInit_2 */
+#if defined(CORE_CM0PLUS)
+
+  /* HW alternate functions for monitoring RF */
+
+  /* Configure the GPIO pin */
+  GPIO_InitStruct.Speed  = GPIO_SPEED_FREQ_VERY_HIGH;
 
   /*spi dbg*/
   GPIO_InitStruct.Mode   = GPIO_MODE_AF_PP;
@@ -143,7 +210,7 @@ void DBG_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE() ;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /* LDO_rdy & BUCK_rdy */
+  /* LDO_rdy & BUCK_rdy (SMPS) */
   GPIO_InitStruct.Mode   = GPIO_MODE_AF_PP;
   GPIO_InitStruct.Pull   = GPIO_NOPULL;
   GPIO_InitStruct.Pin    = (GPIO_PIN_2);
@@ -158,40 +225,29 @@ void DBG_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-#endif /* CORE_CM4 */
+#endif /* CORE_CM0PLUS */
 
-#elif defined (DEBUGGER_ON) && (DEBUGGER_ON == 0) /* DEBUGGER_OFF */
+#elif !defined (PROBE_PINS_ENABLED)
+#error "PROBE_PINS_ENABLED not defined or out of range <0,1>"
+#endif /* PROBE_PINS_ENABLED */
+
+  /* USER CODE BEGIN DBG_ProbesInit_3 */
+
+  /* USER CODE END DBG_ProbesInit_3 */
 
 #if defined(CORE_CM4)
-  /* Put the debugger pin PA13 and P14 in analog for LowPower*/
-  /* The 4 debug lines above are simply not set in this case */
-  GPIO_InitTypeDef GPIO_InitStruct = {0};
-  GPIO_InitStruct.Mode   = GPIO_MODE_ANALOG;
-  GPIO_InitStruct.Pull   = GPIO_NOPULL;
-  GPIO_InitStruct.Pin    = (GPIO_PIN_13 | GPIO_PIN_14);
-  /* make sure clock is enabled before setting the pins with HAL_GPIO_Init() */
-  __HAL_RCC_GPIOA_CLK_ENABLE() ;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  HAL_DBGMCU_DisableDBGSleepMode();
-  HAL_DBGMCU_DisableDBGStopMode();
-  HAL_DBGMCU_DisableDBGStandbyMode();
-
+#if defined (DEBUGGER_ENABLED) && ( DEBUGGER_ENABLED == 1 )
+  /*Debug power up request wakeup CBDGPWRUPREQ*/
+  LL_EXTI_EnableIT_32_63(LL_EXTI_LINE_46);
+#elif !defined (DEBUGGER_ENABLED)
+#error "DEBUGGER_ENABLED not defined or out of range <0,1>"
+#endif /* DEBUGGER_OFF */
 #endif /* CORE_CM4 */
 
-#else
-#error "DEBUGGER_ON not defined or out of range <0,1>"
-#endif /* DEBUGGER_OFF */
-  /* USER CODE BEGIN DBG_Init_Last */
+  /* USER CODE BEGIN DBG_ProbesInit_Last */
 
-  /* USER CODE END DBG_Init_Last */
+  /* USER CODE END DBG_ProbesInit_Last */
 }
-
-/* USER CODE BEGIN EF */
-
-/* USER CODE END EF */
-
-/* Private Functions Definition -----------------------------------------------*/
 /* USER CODE BEGIN PrFD */
 
 /* USER CODE END PrFD */

@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    sgfx_app.c
@@ -16,8 +17,10 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
+
 #include "st_sigfox_api.h"
 #include "sgfx_app.h"
 #include "sgfx_app_version.h"
@@ -59,7 +62,6 @@ extern RadioEvents_t RfApiRadioEvents;
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -77,14 +79,17 @@ static void CmdProcessNotify(void);
 
 void Sigfox_Init(void)
 {
-  /* USER CODE BEGIN Sigfox_Init_1 */
+  sfx_rc_enum_t sfx_rc = SFX_RC1;
+  sfx_error_t error = 0;
+  /* USER CODE BEGIN Sigfox_Init_0 */
 
-  /* USER CODE END Sigfox_Init_1 */
-  sfx_u8 error = 0;
+  /* USER CODE END Sigfox_Init_0 */
 
   CMD_Init(CmdProcessNotify);
 
-  APP_PPRINTF("ATtention command interface\n\r");
+  /* USER CODE BEGIN Sigfox_Init_1 */
+  BSP_LED_Init(LED_BLUE);
+  BSP_LED_Init(LED_GREEN);
 
   /* Get Sigfox APP version*/
   APP_LOG(TS_OFF, VLEVEL_M, "APP_VERSION:        V%X.%X.%X\r\n",
@@ -103,20 +108,17 @@ void Sigfox_Init(void)
           (uint8_t)(__SUBGHZ_PHY_VERSION >> __APP_VERSION_MAIN_SHIFT),
           (uint8_t)(__SUBGHZ_PHY_VERSION >> __APP_VERSION_SUB1_SHIFT),
           (uint8_t)(__SUBGHZ_PHY_VERSION >> __APP_VERSION_SUB2_SHIFT));
+  APP_PPRINTF("ATtention command interface\n\r");
 
-#if defined(USE_BSP_DRIVER)
-  BSP_LED_Init(LED_BLUE);
-  BSP_LED_Init(LED_GREEN);
-#elif defined(MX_BOARD_PSEUDODRIVER)
-  SYS_LED_Init(SYS_LED_BLUE);
-  SYS_LED_Init(SYS_LED_GREEN);
-#endif /* defined(USE_BSP_DRIVER) */
+  /* USER CODE END Sigfox_Init_1 */
 
-  /*OPen Sifox Lib*/
-  error = st_sigfox_open(E2P_Read_Rc());
+  sfx_rc = E2P_Read_Rc();
+
+  /*Open Sigfox library */
+  error = st_sigfox_open(sfx_rc);
 
   Radio.Init(&RfApiRadioEvents);
-
+  /* USER CODE BEGIN Sigfox_Init_ErrorCheck */
   if (1U == E2P_Read_AtEcho())
   {
     if (error == SFX_ERR_NONE)
@@ -125,17 +127,16 @@ void Sigfox_Init(void)
     }
     else
     {
-      APP_PPRINTF("\r\n\n\rSIGFOX APPLICATION ERROR: %d\n\r\n\r", error);
+      APP_PPRINTF("\r\n\n\rSIGFOX APPLICATION ERROR: 0x%04X\n\r\n\r", error);
     }
   }
-
+  /* USER CODE END Sigfox_Init_ErrorCheck */
   /* Put radio in Sleep waiting next cmd */
   UTIL_SEQ_RegTask(1 << CFG_SEQ_Task_Vcom, UTIL_SEQ_RFU, CMD_Process);
   /* USER CODE BEGIN Sigfox_Init_2 */
 
   /* USER CODE END Sigfox_Init_2 */
 }
-
 /* USER CODE BEGIN EF */
 
 /* USER CODE END EF */
@@ -235,6 +236,9 @@ static sfx_error_t st_sigfox_open(sfx_rc_enum_t sfx_rc)
       error = SIGFOX_API_open(&SgfxRc);
       break;
     }
+    /* USER CODE BEGIN st_sigfox_open_case */
+
+    /* USER CODE END st_sigfox_open_case */
     default:
     {
       error = SFX_ERR_API_OPEN;

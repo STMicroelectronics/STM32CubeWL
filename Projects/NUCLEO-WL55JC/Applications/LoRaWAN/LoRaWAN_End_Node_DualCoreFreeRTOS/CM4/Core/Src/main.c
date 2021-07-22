@@ -119,6 +119,7 @@ void SystemClock_Config(void)
 
   /** Configure LSE Drive Capability
   */
+  HAL_PWR_EnableBkUpAccess();
   __HAL_RCC_LSEDRIVE_CONFIG(RCC_LSEDRIVE_LOW);
   /** Configure the main internal regulator output voltage
   */
@@ -186,6 +187,7 @@ void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
+  __disable_irq();
   while (1)
   {
   }

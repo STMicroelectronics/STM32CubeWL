@@ -130,3 +130,5 @@ VP_SYS_VS_Systick.Signal=SYS_VS_Systick
 VP_TIM1_VS_ControllerModeReset.Mode=Reset Mode
 VP_TIM1_VS_ControllerModeReset.Signal=TIM1_VS_ControllerModeReset
 board=custom
+ProjectManager.Example=TIM_PWMInput
+ProjectManager.ExampleSource=CubeFw

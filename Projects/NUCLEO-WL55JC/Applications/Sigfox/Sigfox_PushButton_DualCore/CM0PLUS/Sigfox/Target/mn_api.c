@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    mn_api.c
@@ -16,31 +17,32 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
 #include "stdint.h"
 #include "stm32wlxx_hal.h"
 
 #include "mn_api.h"
-#include "lptim.h"
-#include "stm32_lpm.h"
+#include "mn_lptim_if.h"
 #include "radio.h"
-#include "sys_debug.h"
-#include "sys_app.h"
-#include "utilities_conf.h"
-#include "sys_conf.h"             /*For led*/
+#include "platform.h"          /*For led*/
 #include "sys_app.h"           /*For log*/
+#include "stm32_lpm.h"
 #include "stm32_timer.h"
 #include "stm32_seq.h"
 #include "utilities_def.h"
-#include "platform.h"
-#include "mn_lptim_if.h"
 
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */
 
 /* External variables ---------------------------------------------------------*/
+/**
+  * @brief LPTIM handle
+  */
+extern LPTIM_HandleTypeDef hlptim1;
+
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -52,7 +54,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /*OOK demod on for debug*/
-#define MN_PROCESS_IN_BG 0
+#define MN_PROCESS_IN_BG 1
 
 #define LPTIM_PERIOD     ((uint32_t)  2)        /* 1/16384~61.03us  */
 
@@ -185,7 +187,7 @@ void MN_API_StopRx(void)
   /* USER CODE BEGIN MN_API_StopRx_1 */
 
   /* USER CODE END MN_API_StopRx_1 */
-  /*no need to stanby xosc, radio will just
+  /*no need to standby xosc, radio will just
     change freq with MN_API_change_frequency*/
   /* USER CODE BEGIN MN_API_StopRx_2 */
 
@@ -232,38 +234,19 @@ void MN_API_Disable16KHzSamplingTimer(void)
 void MN_API_Pattern_Found(int32_t window_type, int32_t pattern, int32_t frequency, int32_t best_rssi)
 {
   /* USER CODE BEGIN MN_API_Pattern_Found_1 */
-
+  BSP_LED_On(LED_BLUE);
   /* USER CODE END MN_API_Pattern_Found_1 */
   /* debug function to display sweep/window detected pattern*/
-#if defined(USE_BSP_DRIVER)
   if (window_type == 0)
   {
-    BSP_LED_On(LED_BLUE);
     APP_LOG(TS_ON, VLEVEL_H, "Sweep detected pattern %d on freq %d at %d\n\r", pattern, frequency, best_rssi);
-    BSP_LED_Off(LED_BLUE);
   }
   else
   {
-    BSP_LED_On(LED_BLUE);
     APP_LOG(TS_ON, VLEVEL_H, "Window detected pattern %d on freq %d at %d\n\r", pattern, frequency, best_rssi);
-    BSP_LED_Off(LED_BLUE);
   }
-#elif defined(MX_BOARD_PSEUDODRIVER)
-  if (window_type == 0)
-  {
-    SYS_LED_On(SYS_LED_BLUE);
-    APP_LOG(TS_ON, VLEVEL_H, "Sweep detected pattern %d on freq %d at %d\n\r", pattern, frequency, best_rssi);
-    SYS_LED_Off(SYS_LED_BLUE);
-  }
-  else
-  {
-    SYS_LED_On(SYS_LED_BLUE);
-    APP_LOG(TS_ON, VLEVEL_H, "Window detected pattern %d on freq %d at %d\n\r", pattern, frequency, best_rssi);
-    SYS_LED_Off(SYS_LED_BLUE);
-  }
-#endif /* defined(USE_BSP_DRIVER) */
   /* USER CODE BEGIN MN_API_Pattern_Found_2 */
-
+  BSP_LED_Off(LED_BLUE);
   /* USER CODE END MN_API_Pattern_Found_2 */
 }
 
@@ -338,7 +321,6 @@ void HAL_LPTIM_AutoReloadMatchCallback(LPTIM_HandleTypeDef *hlptim)
   /* USER CODE END HAL_LPTIM_AutoReloadMatchCallback_1 */
   int16_t rssi = RADIO_NOISE_LEVEL;
 
-  DBG_GPIO_SET_LINE(GPIOB, GPIO_PIN_12);
   /*read rssi*/
   if (RssiReadOnIT_Enable == 1)
   {
@@ -352,12 +334,11 @@ void HAL_LPTIM_AutoReloadMatchCallback(LPTIM_HandleTypeDef *hlptim)
       RssiBuffWriteIdx = 0;
     }
     /*run process_MonarchBackGround in background*/
-    UTIL_SEQ_SetTask(1 << CFG_SEQ_TASK_MONARCH, CFG_SEQ_Prio_0);
+    UTIL_SEQ_SetTask(1 << CFG_SEQ_Task_Monarch, CFG_SEQ_Prio_0);
 #else
     MN_Timer_CB(rssi);
 #endif /* MN_PROCESS_IN_BG==1 */
   }
-  DBG_GPIO_RST_LINE(GPIOB, GPIO_PIN_12);
   /* USER CODE BEGIN HAL_LPTIM_AutoReloadMatchCallback_2 */
 
   /* USER CODE END HAL_LPTIM_AutoReloadMatchCallback_2 */
@@ -370,7 +351,7 @@ static void process_MonarchBackGround(void)
 
   /* USER CODE END process_MonarchBackGround_1 */
   int16_t rssi;
-  DBG_GPIO_SET_LINE(GPIOB, GPIO_PIN_13);
+
   while (RssiBuffWriteIdx != RssiBuffReadIdx)
   {
     rssi = RssiBuff[RssiBuffReadIdx++];
@@ -381,7 +362,6 @@ static void process_MonarchBackGround(void)
     }
     MN_Timer_CB(rssi);
   }
-  DBG_GPIO_RST_LINE(GPIOB, GPIO_PIN_13);
   /* USER CODE BEGIN process_MonarchBackGround_2 */
 
   /* USER CODE END process_MonarchBackGround_2 */

@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    msg_id.h
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __MSG_ID_H__
@@ -98,7 +100,7 @@ typedef enum
   RADIO_STANDBY_ID,
   RADIO_RX_ID,
   RADIO_START_CAD_ID,
-  RADIO_SET_TX_CONTINOUS_WAVE_ID,
+  RADIO_SET_TX_CONTINUOUS_WAVE_ID,
   RADIO_RSSI_ID,
   RADIO_WRITE_ID,
   RADIO_READ_ID,
@@ -192,3 +194,5 @@ typedef enum
 #endif
 
 #endif /* __MSG_ID_H__ */
+
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

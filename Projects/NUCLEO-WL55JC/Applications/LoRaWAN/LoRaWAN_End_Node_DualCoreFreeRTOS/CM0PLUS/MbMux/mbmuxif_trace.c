@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    mbmuxif_trace.c
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
 #include "platform.h"
@@ -25,6 +27,7 @@
 #include "msg_id.h"
 #include "stm32_seq.h"
 #include "stm32_adv_trace.h"
+#include "utilities_def.h"   /* for CFG_SEQ_Evt_MbTraceAckRcv */
 
 /* USER CODE BEGIN Includes */
 
@@ -46,15 +49,43 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+/**
+  * @brief util trace callback
+  */
+static void (*TraceUtilCpltCallback)(void *);
+
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
-
+/**
+  * @brief   TRACE acknowledge callbacks: set event to release waiting task
+  *          and schedule callback to check if other trace need to be sent to CM4
+  * @param   ComObj pointer to the TRACE com param buffer
+  */
 static void MBMUXIF_IsrTraceAckRcvCb(void *ComObj);
-static void (*TraceUtilCpltCallback)(void *);
+
+/**
+  * @brief   Call callback to check if other trace need to be sent to CM4
+  */
+static void MBMUXIF_TaskTraceAckRcv(void);
+
+/**
+  * @brief   The trace utilities inform the mbmuxif which func to call
+  *          once the Mb transmission is completed
+  * @param   cb "stm32_adv_trace.c callback"
+  * @retval  0
+  */
 static UTIL_ADV_TRACE_Status_t MBMUXIF_TraceBufferInit(void (*cb)(void *));
+
+/**
+  * @brief   TraceBufferSend sends the formatted buffer to CM4 which
+  *          posts it to the circular queue for printing
+  * @param   buf string to be printed
+  * @param   bufSize size of buffer
+  * @retval  0 when ok, -1 when circular queue is full
+  */
 static UTIL_ADV_TRACE_Status_t MBMUXIF_TraceBufferSend(uint8_t *buf, uint16_t bufSize);
 
 /* USER CODE BEGIN PFP */
@@ -75,12 +106,6 @@ const UTIL_ADV_TRACE_Driver_s UTIL_TraceDriver =
 /* USER CODE END PTD */
 
 /* Exported functions --------------------------------------------------------*/
-
-/**
-  * @brief Registers TRACE feature to the mailbox
-  * @retval  0: OK; -1: if ch hasn't been registered by CM4
-  * @note    this function is supposed to be called by the System on request (Cmd) of CM4
-  */
 int8_t MBMUXIF_TraceInit(uint8_t verboseLevel)
 {
   int8_t ret;
@@ -92,6 +117,8 @@ int8_t MBMUXIF_TraceInit(uint8_t verboseLevel)
   ret = MBMUX_RegisterFeatureCallback(FEAT_INFO_TRACE_ID, MBMUX_NOTIF_ACK, MBMUXIF_IsrTraceAckRcvCb);
   if (ret >= 0)
   {
+    UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_MbTraceAckRcv), UTIL_SEQ_RFU, MBMUXIF_TaskTraceAckRcv);
+
     /*Initialize the terminal */
     UTIL_ADV_TRACE_Init();
     UTIL_ADV_TRACE_RegisterTimeStampFunction(TimestampNow);
@@ -107,11 +134,6 @@ int8_t MBMUXIF_TraceInit(uint8_t verboseLevel)
   return ret;
 }
 
-/**
-  * @brief gives back the pointer to the com buffer associated to Trace feature Notif
-  * @param none
-  * @retval  return pointer to the com param buffer
-  */
 MBMUX_ComParam_t *MBMUXIF_GetTraceFeatureNotifComPtr(void)
 {
   /* USER CODE BEGIN MBMUXIF_GetTraceFeatureNotifComPtr_1 */
@@ -120,7 +142,7 @@ MBMUX_ComParam_t *MBMUXIF_GetTraceFeatureNotifComPtr(void)
   MBMUX_ComParam_t *com_param_ptr = MBMUX_GetFeatureComPtr(FEAT_INFO_TRACE_ID, MBMUX_NOTIF_ACK);
   if (com_param_ptr == NULL)
   {
-    while (1) {} /* ErrorHandler() : feature isn't registered */
+    Error_Handler(); /* feature isn't registered */
   }
   return com_param_ptr;
   /* USER CODE BEGIN MBMUXIF_GetTraceFeatureNotifComPtr_Last */
@@ -128,11 +150,6 @@ MBMUX_ComParam_t *MBMUXIF_GetTraceFeatureNotifComPtr(void)
   /* USER CODE END MBMUXIF_GetTraceFeatureNotifComPtr_Last */
 }
 
-/**
-  * @brief Sends a Trace-Notif via Ipcc without waiting for the ack
-  * @param none
-  * @retval   none
-  */
 void MBMUXIF_TraceSendNotif_NoWait(void)
 {
   /* USER CODE BEGIN MBMUXIF_TraceSendNotif_NoWait_1 */
@@ -140,7 +157,7 @@ void MBMUXIF_TraceSendNotif_NoWait(void)
   /* USER CODE END MBMUXIF_TraceSendNotif_NoWait_1 */
   if (MBMUX_NotificationSnd(FEAT_INFO_TRACE_ID) != 0)
   {
-    while (1) {} /* ErrorHandler(); */
+    Error_Handler();
   }
   /* USER CODE BEGIN MBMUXIF_TraceSendNotif_NoWait_Last */
 
@@ -152,14 +169,6 @@ void MBMUXIF_TraceSendNotif_NoWait(void)
 /* USER CODE END EFD */
 
 /* Exported services --------------------------------------------------------*/
-
-/**
-  * @brief The trace utilities inform the mbmuxif which func to call
-  *        once the Mb transmission is completed
-  * @param:  "stm32_adv_trace.c callback"
-  * @retval: none
-  */
-
 static UTIL_ADV_TRACE_Status_t MBMUXIF_TraceBufferInit(void (*cb)(void *))
 {
   /* USER CODE BEGIN MBMUXIF_TraceBufferInit_1 */
@@ -172,26 +181,23 @@ static UTIL_ADV_TRACE_Status_t MBMUXIF_TraceBufferInit(void (*cb)(void *))
   /* USER CODE END MBMUXIF_TraceBufferInit_Last */
 }
 
-/**
-  * @brief TraceBufferSend sends the formatted buffer to CM4 which
-  *        posts it to the circular queue for printing
-  * @param:  strFormat: string to be printed
-  * @retval: 0 when ok, -1 when circular queue is full
-  */
 static UTIL_ADV_TRACE_Status_t MBMUXIF_TraceBufferSend(uint8_t *buf, uint16_t bufSize)
 {
   /* USER CODE BEGIN MBMUXIF_TraceBufferSend_1 */
 
   /* USER CODE END MBMUXIF_TraceBufferSend_1 */
   MBMUX_ComParam_t *com_obj;
+  uint32_t *pbuf_validated = NULL;
 
-  /* notify CM4 that CM0PLUS is initialised */
+  /* notify CM4 that CM0PLUS is initialized */
   com_obj = MBMUXIF_GetTraceFeatureNotifComPtr();
   if (com_obj != NULL)
   {
+    pbuf_validated = MBMUX_SEC_VerifySramBufferPtr(com_obj->ParamBuf, com_obj->BufSize);
+
     com_obj->MsgId = TRACE_SEND_MSG_ID;
-    com_obj->ParamBuf[0] = (uint32_t) buf;
-    com_obj->ParamBuf[1] = (uint32_t) bufSize;
+    pbuf_validated[0] = (uint32_t) buf;
+    pbuf_validated[1] = (uint32_t) bufSize;
     com_obj->ParamCnt = 2;
     MBMUXIF_TraceSendNotif_NoWait();
   }
@@ -202,24 +208,28 @@ static UTIL_ADV_TRACE_Status_t MBMUXIF_TraceBufferSend(uint8_t *buf, uint16_t bu
 }
 
 /* Private functions ---------------------------------------------------------*/
-
-/**
-  * @brief  TRACE acknowledge callbacks: set event to release waiting task
-  *             and use callback to check if other trace need to be sent to CM4
-  * @param  pointer to the TRACE com param buffer
-  * @retval  none
-  */
 static void MBMUXIF_IsrTraceAckRcvCb(void *ComObj)
 {
   /* USER CODE BEGIN MBMUXIF_IsrTraceAckRcvCb_1 */
 
   /* USER CODE END MBMUXIF_IsrTraceAckRcvCb_1 */
-  TraceUtilCpltCallback(NULL);
+  UTIL_SEQ_SetEvt(1 << CFG_SEQ_Evt_MbTraceAckRcv); /* not necessary */
+  UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_MbTraceAckRcv), CFG_SEQ_Prio_0);
   /* USER CODE BEGIN MBMUXIF_IsrTraceAckRcvCb_Last */
 
   /* USER CODE END MBMUXIF_IsrTraceAckRcvCb_Last */
 }
 
+static void MBMUXIF_TaskTraceAckRcv(void)
+{
+  /* USER CODE BEGIN MBMUXIF_TaskTraceAckRcv_1 */
+
+  /* USER CODE END MBMUXIF_TaskTraceAckRcv_1 */
+  TraceUtilCpltCallback(NULL);
+  /* USER CODE BEGIN MBMUXIF_TaskTraceAckRcv_Last */
+
+  /* USER CODE END MBMUXIF_TaskTraceAckRcv_Last */
+}
 /* USER CODE BEGIN PrFD */
 
 /* USER CODE END PrFD */

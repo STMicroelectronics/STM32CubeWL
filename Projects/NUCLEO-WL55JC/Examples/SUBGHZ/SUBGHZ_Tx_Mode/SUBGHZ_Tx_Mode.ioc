@@ -75,3 +75,5 @@ VP_SUBGHZ_VS_SUBGHZ.Signal=SUBGHZ_VS_SUBGHZ
 VP_SYS_VS_Systick.Mode=SysTick
 VP_SYS_VS_Systick.Signal=SYS_VS_Systick
 board=custom
+ProjectManager.Example=SUBGHZ_Tx_Mode
+ProjectManager.ExampleSource=CubeFw

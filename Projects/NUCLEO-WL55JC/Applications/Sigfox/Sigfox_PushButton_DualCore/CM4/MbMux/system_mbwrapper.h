@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    system_mbwrapper.h
@@ -17,6 +18,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __SYSTEM_MBWRAPPER_CM4_H__
@@ -48,8 +50,24 @@ extern "C" {
 /* USER CODE END EM */
 
 /* Exported functions ------------------------------------------------------- */
-uint32_t SYS_EE_ReadBuffer_mbwrapper(e_EE_ID EEsgfxID,  uint32_t *data);
-uint32_t SYS_EE_WriteBuffer_mbwrapper(e_EE_ID EEsgfxID,  uint32_t data);
+/**
+  * @brief   Returns the last stored variable data, if found, which corresponds to
+  *          the passed virtual address
+  * @param   EEsgfxID ID of EEPROM Sigfox variable
+  * @param   data to be read
+  *
+  * @retval  error status
+  */
+uint32_t SYS_EE_ReadBuffer_mbwrapper(e_EE_ID EEsgfxID, uint32_t *data);
+
+/**
+  * \brief   Writes/updates variable data in EEPROM emulator.
+  * @param   EEsgfxID ID of EEPROM Sigfox variable
+  * @param   data to be written
+  *
+  * @retval error status
+  */
+uint32_t SYS_EE_WriteBuffer_mbwrapper(e_EE_ID EEsgfxID, uint32_t data);
 /* USER CODE BEGIN EFP */
 
 /* USER CODE END EFP */

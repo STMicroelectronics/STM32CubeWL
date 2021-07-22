@@ -21,9 +21,9 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include <math.h>
-#include "main.h" /*for Mx generated RTC_N_PREDIV_S and RTC_N_PREDIV_A*/
-#include "rtc.h"
 #include "timer_if.h"
+#include "main.h" /*for STM32CubeMX generated RTC_N_PREDIV_S and RTC_N_PREDIV_A*/
+#include "rtc.h"
 #include "stm32_lpm.h"
 #include "utilities_def.h"
 #include "stm32wlxx_ll_rtc.h"
@@ -104,6 +104,17 @@ const UTIL_SYSTIM_Driver_s UTIL_SYSTIMDriver =
 
 /* #define RTIF_DEBUG */
 
+/**
+  * @brief Map UTIL_TIMER_IRQ can be overridden in utilities_conf.h to Map on Task rather then Isr
+  */
+#ifndef UTIL_TIMER_IRQ_MAP_INIT
+#define UTIL_TIMER_IRQ_MAP_INIT()
+#endif /* UTIL_TIMER_IRQ_MAP_INIT */
+
+#ifndef UTIL_TIMER_IRQ_MAP_PROCESS
+#define UTIL_TIMER_IRQ_MAP_PROCESS() UTIL_TIMER_IRQ_Handler()
+#endif /* UTIL_TIMER_IRQ_MAP_PROCESS */
+
 /* USER CODE BEGIN PD */
 
 /* USER CODE END PD */
@@ -153,7 +164,6 @@ static inline uint32_t GetTimerTicks(void);
   * Absolute RTC time in tick is (MSBticks)<<32 + (32bits binary counter)
   * @note MSBticks incremented every time the 32bits RTC timer wraps around (~44days)
   * @param[in] MSBticks
-  * @return none
   */
 static void TIMER_IF_BkUp_Write_MSBticks(uint32_t MSBticks);
 
@@ -173,9 +183,9 @@ static uint32_t TIMER_IF_BkUp_Read_MSBticks(void);
 UTIL_TIMER_Status_t TIMER_IF_Init(void)
 {
   UTIL_TIMER_Status_t ret = UTIL_TIMER_OK;
-  /* USER CODE BEGIN TIMER_IF_Init_1 */
+  /* USER CODE BEGIN TIMER_IF_Init */
 
-  /* USER CODE END TIMER_IF_Init_1 */
+  /* USER CODE END TIMER_IF_Init */
   if (RTC_Initialized == false)
   {
     hrtc.IsEnabled.RtcFeatures = UINT32_MAX;
@@ -183,17 +193,20 @@ UTIL_TIMER_Status_t TIMER_IF_Init(void)
     MX_RTC_Init();
     /*Stop Timer */
     TIMER_IF_StopTimer();
-    /** DeActivate the Alarm A enabled by MX during MX_RTC_Init() */
+    /** DeActivate the Alarm A enabled by STM32CubeMX during MX_RTC_Init() */
     HAL_RTC_DeactivateAlarm(&hrtc, RTC_ALARM_A);
     /*overload RTC feature enable*/
     hrtc.IsEnabled.RtcFeatures = UINT32_MAX;
 
     /*Enable Direct Read of the calendar registers (not through Shadow) */
     HAL_RTCEx_EnableBypassShadow(&hrtc);
-    /*Initialise MSB ticks*/
+    /*Initialize MSB ticks*/
     TIMER_IF_BkUp_Write_MSBticks(0);
 
     TIMER_IF_SetTimerContext();
+
+    /* Register a task to associate to UTIL_TIMER_Irq() interrupt */
+    UTIL_TIMER_IRQ_MAP_INIT();
 
     RTC_Initialized = true;
   }
@@ -277,64 +290,70 @@ uint32_t TIMER_IF_GetTimerContext(void)
 
 uint32_t TIMER_IF_GetTimerElapsedTime(void)
 {
+  uint32_t ret = 0;
   /* USER CODE BEGIN TIMER_IF_GetTimerElapsedTime */
 
   /* USER CODE END TIMER_IF_GetTimerElapsedTime */
-  return ((uint32_t)(GetTimerTicks() - RtcTimerContext));
+  ret = ((uint32_t)(GetTimerTicks() - RtcTimerContext));
   /* USER CODE BEGIN TIMER_IF_GetTimerElapsedTime_Last */
 
   /* USER CODE END TIMER_IF_GetTimerElapsedTime_Last */
+  return ret;
 }
 
 uint32_t TIMER_IF_GetTimerValue(void)
 {
+  uint32_t ret = 0;
   /* USER CODE BEGIN TIMER_IF_GetTimerValue */
 
   /* USER CODE END TIMER_IF_GetTimerValue */
   if (RTC_Initialized == true)
   {
-    return GetTimerTicks();
-  }
-  else
-  {
-    return 0;
+    ret = GetTimerTicks();
   }
   /* USER CODE BEGIN TIMER_IF_GetTimerValue_Last */
 
   /* USER CODE END TIMER_IF_GetTimerValue_Last */
+  return ret;
 }
 
 uint32_t TIMER_IF_GetMinimumTimeout(void)
 {
-  /* USER CODE BEGIN TIMER_IF_GetTimerElapsedTime */
+  uint32_t ret = 0;
+  /* USER CODE BEGIN TIMER_IF_GetMinimumTimeout */
 
-  /* USER CODE END TIMER_IF_GetTimerElapsedTime */
-  return (MIN_ALARM_DELAY);
-  /* USER CODE BEGIN TIMER_IF_GetTimerElapsedTime_Last */
+  /* USER CODE END TIMER_IF_GetMinimumTimeout */
+  ret = (MIN_ALARM_DELAY);
+  /* USER CODE BEGIN TIMER_IF_GetMinimumTimeout_Last */
 
-  /* USER CODE END TIMER_IF_GetTimerElapsedTime_Last */
+  /* USER CODE END TIMER_IF_GetMinimumTimeout_Last */
+  return ret;
 }
 
 uint32_t TIMER_IF_Convert_ms2Tick(uint32_t timeMilliSec)
 {
+  uint32_t ret = 0;
   /* USER CODE BEGIN TIMER_IF_Convert_ms2Tick */
 
   /* USER CODE END TIMER_IF_Convert_ms2Tick */
-  return ((uint32_t)((((uint64_t) timeMilliSec) << RTC_N_PREDIV_S) / 1000));
+  ret = ((uint32_t)((((uint64_t) timeMilliSec) << RTC_N_PREDIV_S) / 1000));
   /* USER CODE BEGIN TIMER_IF_Convert_ms2Tick_Last */
 
   /* USER CODE END TIMER_IF_Convert_ms2Tick_Last */
+  return ret;
 }
 
 uint32_t TIMER_IF_Convert_Tick2ms(uint32_t tick)
 {
-  /* USER CODE BEGIN TIMER_IF_Convert_ms2Tick */
+  uint32_t ret = 0;
+  /* USER CODE BEGIN TIMER_IF_Convert_Tick2ms */
 
-  /* USER CODE END TIMER_IF_Convert_ms2Tick */
-  return ((uint32_t)((((uint64_t)(tick)) * 1000) >> RTC_N_PREDIV_S));
-  /* USER CODE BEGIN TIMER_IF_Convert_ms2Tick_Last */
+  /* USER CODE END TIMER_IF_Convert_Tick2ms */
+  ret = ((uint32_t)((((uint64_t)(tick)) * 1000) >> RTC_N_PREDIV_S));
+  /* USER CODE BEGIN TIMER_IF_Convert_Tick2ms_Last */
 
-  /* USER CODE END TIMER_IF_Convert_ms2Tick_Last */
+  /* USER CODE END TIMER_IF_Convert_Tick2ms_Last */
+  return ret;
 }
 
 void TIMER_IF_DelayMs(uint32_t delay)
@@ -360,7 +379,7 @@ void HAL_RTC_AlarmAEventCallback(RTC_HandleTypeDef *hrtc)
   /* USER CODE BEGIN HAL_RTC_AlarmAEventCallback */
 
   /* USER CODE END HAL_RTC_AlarmAEventCallback */
-  UTIL_TIMER_IRQ_Handler();
+  UTIL_TIMER_IRQ_MAP_PROCESS();
   /* USER CODE BEGIN HAL_RTC_AlarmAEventCallback_Last */
 
   /* USER CODE END HAL_RTC_AlarmAEventCallback_Last */
@@ -383,6 +402,7 @@ void HAL_RTCEx_SSRUEventCallback(RTC_HandleTypeDef *hrtc)
 
 uint32_t TIMER_IF_GetTime(uint16_t *mSeconds)
 {
+  uint32_t seconds = 0;
   /* USER CODE BEGIN TIMER_IF_GetTime */
 
   /* USER CODE END TIMER_IF_GetTime */
@@ -392,16 +412,16 @@ uint32_t TIMER_IF_GetTime(uint16_t *mSeconds)
 
   ticks = (((uint64_t) timerValueMSB) << 32) + timerValueLsb;
 
-  uint32_t seconds = (uint32_t)(ticks >> RTC_N_PREDIV_S);
+  seconds = (uint32_t)(ticks >> RTC_N_PREDIV_S);
 
   ticks = (uint32_t) ticks & RTC_PREDIV_S;
 
   *mSeconds = TIMER_IF_Convert_Tick2ms(ticks);
 
-  return seconds;
   /* USER CODE BEGIN TIMER_IF_GetTime_Last */
 
   /* USER CODE END TIMER_IF_GetTime_Last */
+  return seconds;
 }
 
 void TIMER_IF_BkUp_Write_Seconds(uint32_t Seconds)
@@ -428,24 +448,28 @@ void TIMER_IF_BkUp_Write_SubSeconds(uint32_t SubSeconds)
 
 uint32_t TIMER_IF_BkUp_Read_Seconds(void)
 {
+  uint32_t ret = 0;
   /* USER CODE BEGIN TIMER_IF_BkUp_Read_Seconds */
 
   /* USER CODE END TIMER_IF_BkUp_Read_Seconds */
-  return HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_SECONDS);
+  ret = HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_SECONDS);
   /* USER CODE BEGIN TIMER_IF_BkUp_Read_Seconds_Last */
 
   /* USER CODE END TIMER_IF_BkUp_Read_Seconds_Last */
+  return ret;
 }
 
 uint32_t TIMER_IF_BkUp_Read_SubSeconds(void)
 {
+  uint32_t ret = 0;
   /* USER CODE BEGIN TIMER_IF_BkUp_Read_SubSeconds */
 
   /* USER CODE END TIMER_IF_BkUp_Read_SubSeconds */
-  return HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_SUBSECONDS);
+  ret = HAL_RTCEx_BKUPRead(&hrtc, RTC_BKP_SUBSECONDS);
   /* USER CODE BEGIN TIMER_IF_BkUp_Read_SubSeconds_Last */
 
   /* USER CODE END TIMER_IF_BkUp_Read_SubSeconds_Last */
+  return ret;
 }
 
 /* USER CODE BEGIN EF */

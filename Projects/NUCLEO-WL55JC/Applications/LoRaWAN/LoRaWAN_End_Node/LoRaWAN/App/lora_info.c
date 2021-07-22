@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    lora_info.c
@@ -16,19 +17,16 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
 #include "LoRaMac.h"
 #include "lora_info.h"
+#include "sys_app.h" /* APP_PRINTF */
 
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */
-
-/* External variables ---------------------------------------------------------*/
-/* USER CODE BEGIN EV */
-
-/* USER CODE END EV */
 
 /* Private typedef -----------------------------------------------------------*/
 
@@ -112,6 +110,10 @@ void LoraInfo_Init(void)
   if (loraInfo.Region == 0)
   {
     APP_PRINTF("error: At least one region shall be defined in the MW: check lorawan_conf.h \r\n");
+    while (1 != UTIL_ADV_TRACE_IsBufferEmpty())
+    {
+      /* Wait that all printfs are completed*/
+    }
     while (1) {} /* At least one region shall be defined */
   }
 
@@ -126,7 +128,7 @@ void LoraInfo_Init(void)
   loraInfo.ActivationMode = 3;
 #else /* LORAWAN_KMS == 1 */
   loraInfo.Kms = 1;
-  loraInfo.ActivationMode = ACTIVATION_BY_PERSONALISATION + (OVER_THE_AIR_ACTIVATION << 1);
+  loraInfo.ActivationMode = ACTIVATION_BY_PERSONALIZATION + (OVER_THE_AIR_ACTIVATION << 1);
 #endif /* LORAWAN_KMS */
   /* USER CODE BEGIN LoraInfo_Init_2 */
 

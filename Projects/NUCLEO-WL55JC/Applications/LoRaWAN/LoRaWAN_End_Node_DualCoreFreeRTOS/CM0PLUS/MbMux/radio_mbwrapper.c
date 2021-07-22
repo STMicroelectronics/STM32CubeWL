@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    radio_mbwrapper.c
@@ -17,6 +18,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
 #include "platform.h"
@@ -47,7 +49,6 @@
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
-UTIL_MEM_PLACE_IN_SECTION("MB_MEM2") uint8_t aRadioMbWrapRxBuffer[RADIO_RX_BUF_SIZE];
 
 /* USER CODE BEGIN PD */
 
@@ -59,7 +60,15 @@ UTIL_MEM_PLACE_IN_SECTION("MB_MEM2") uint8_t aRadioMbWrapRxBuffer[RADIO_RX_BUF_S
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-static  RadioEvents_t    radioevents_mbwrapper;
+/**
+  * @brief radio buffer to exchange data between CM4 and CM0+
+  */
+UTIL_MEM_PLACE_IN_SECTION("MB_MEM2") uint8_t aRadioMbWrapRxBuffer[RADIO_RX_BUF_SIZE];
+
+/**
+  * @brief local structure of radio callbacks for command processes
+  */
+static  RadioEvents_t radioevents_mbwrapper;
 
 /* USER CODE BEGIN PV */
 
@@ -79,10 +88,10 @@ static void RadioTxTimeout_mbwrapper(void);
 /*!
  * \brief Rx Done callback prototype.
  *
- * \param [IN] payload Received buffer pointer
- * \param [IN] size    Received buffer size
- * \param [IN] rssi    RSSI value computed while receiving the frame [dBm]
- * \param [IN] snr     Raw SNR value given by the radio hardware
+ * \param[in] payload Received buffer pointer
+ * \param[in] size    Received buffer size
+ * \param[in] rssi    RSSI value computed while receiving the frame [dBm]
+ * \param[in] snr     Raw SNR value given by the radio hardware
  *                     FSK : N/A ( set to 0 )
  *                     LoRa: SNR value in dB
  */
@@ -108,12 +117,14 @@ void Process_Radio_Cmd(MBMUX_ComParam_t *ComObj)
   /* USER CODE BEGIN Process_Radio_Cmd_1 */
 
   /* USER CODE END Process_Radio_Cmd_1 */
-  uint32_t *com_buffer = ComObj->ParamBuf;;
+  uint32_t *com_buffer = NULL;
   uint32_t ret_uint;
   int32_t ret_int;
   RadioState_t status;
 
   APP_LOG(TS_ON, VLEVEL_H, ">CM0PLUS(Radio)\r\n");
+
+  com_buffer = MBMUX_SEC_VerifySramBufferPtr(ComObj->ParamBuf, ComObj->BufSize);
 
   /* process Command */
   switch (ComObj->MsgId)
@@ -242,7 +253,7 @@ void Process_Radio_Cmd(MBMUX_ComParam_t *ComObj)
       ComObj->ReturnVal = 0; /* */
       break;
 
-    case RADIO_SET_TX_CONTINOUS_WAVE_ID:
+    case RADIO_SET_TX_CONTINUOUS_WAVE_ID:
       Radio.SetTxContinuousWave(com_buffer[0], (int8_t) com_buffer[1], (uint16_t) com_buffer[2]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
@@ -411,16 +422,26 @@ static void RadioRxDone_mbwrapper(uint8_t *payload, uint16_t size, int16_t rssi,
 
   /* USER CODE END RadioRxDone_mbwrapper_1 */
   MBMUX_ComParam_t *com_obj;
-  uint32_t *com_buffer ;
+  uint32_t *com_buffer = NULL ;
   uint16_t i = 0;
 
   /* copy data from Cm0 private memory to shared memory */
-  UTIL_MEM_cpy_8(aRadioMbWrapRxBuffer, payload, size);
+  if (payload != NULL)
+  {
+    UTIL_MEM_cpy_8(aRadioMbWrapRxBuffer, payload, size);
+  }
 
   com_obj = MBMUXIF_GetRadioFeatureNotifComPtr();
   com_obj->MsgId = RADIO_RX_DONE_CB_ID;
-  com_buffer = com_obj->ParamBuf;
-  com_buffer[i++] = (uint32_t) aRadioMbWrapRxBuffer;
+  com_buffer = MBMUX_SEC_VerifySramBufferPtr(com_obj->ParamBuf, com_obj->BufSize);
+  if (payload == NULL)
+  {
+    com_buffer[i++] = (uint32_t)NULL;
+  }
+  else
+  {
+    com_buffer[i++] = (uint32_t) aRadioMbWrapRxBuffer;
+  }
   com_buffer[i++] = (uint32_t) size;
   com_buffer[i++] = (uint32_t) rssi;
   com_buffer[i++] = (uint32_t) snr;
@@ -435,7 +456,7 @@ static void RadioRxDone_mbwrapper(uint8_t *payload, uint16_t size, int16_t rssi,
   /* once event is received and semaphore released: */
 
   /* Notice: current needs don't require to copy back data from aRadioMbWrapRxBuffer to payload
-     this migh be requested just if the buffer should be processed by the applic and the stack */
+     this might be requested just if the buffer should be processed by the application and the stack */
   /* UTIL_MEM_cpy_8(payload, aRadioMbWrapRxBuffer, size); */
   return;
   /* USER CODE BEGIN RadioRxDone_mbwrapper_2 */

@@ -1,8 +1,9 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    mcu_api.h
   * @author  MCD Application Team
-  * @brief   defines the interfaace to mcu_api.c
+  * @brief   defines the interface to mcu_api.c
   ******************************************************************************
   * @attention
   *
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 /*!
 \if SIGFOX PATTERN
 ----------------------------------------------
@@ -180,7 +182,7 @@ sfx_u8 MCU_API_free(sfx_u8 *ptr);
 /*!******************************************************************
   * \fn sfx_u8 MCU_API_get_voltage_temperature(sfx_u16 *voltage_idle, sfx_u16 *voltage_tx, sfx_s16 *temperature)
   * \brief Get voltage and temperature for Out of band frames
-  * Value must respect the units bellow for <B>backend compatibility</B>
+  * Value must respect the units below for <B>backend compatibility</B>
   *
   * \param[in] none
   * \param[out] sfx_u16 *voltage_idle             Device's voltage in Idle state (mV)
@@ -209,28 +211,6 @@ sfx_u8 MCU_API_get_voltage_temperature(sfx_u16 *voltage_idle,
   * \retval MCU_ERR_API_DLY:                      Delay error
   *******************************************************************/
 sfx_u8 MCU_API_delay(sfx_delay_t delay_type);
-
-/*!******************************************************************
-  * \fn sfx_u8 MCU_API_aes_128_cbc_encrypt(sfx_u8 *encrypted_data, sfx_u8 *data_to_encrypt, sfx_u8 aes_block_len, sfx_u8 key[16], sfx_credentials_use_key_t use_key)
-  * \brief Encrypt a complete buffer with Secret or Test key.<BR>
-  * The secret key corresponds to the private key provided from the CRA.
-  * <B>These keys must be stored in a secure place.</B> <BR>
-  * Can be hardcoded or soft coded (iv vector contains '0')
-  *
-  * \param[out] sfx_u8 *encrypted_data            Result of AES Encryption
-  * \param[in] sfx_u8 *data_to_encrypt            Input data to Encrypt
-  * \param[in] sfx_u8 aes_block_len               Input data length (should be a multiple of an AES block size, ie. AES_BLOCK_SIZE bytes)
-  * \param[in] sfx_u8 key[16]                     Input key
-  * \param[in] sfx_credentials_use_key_t use_key  Key to use - private key or input key
-  *
-  * \retval SFX_ERR_NONE:                         No error
-  * \retval MCU_ERR_API_AES:                      AES Encryption error
-  *******************************************************************/
-sfx_u8 MCU_API_aes_128_cbc_encrypt(sfx_u8 *encrypted_data,
-                                   sfx_u8 *data_to_encrypt,
-                                   sfx_u8 aes_block_len,
-                                   sfx_u8 key[16],
-                                   sfx_credentials_use_key_t use_key);
 
 /*!******************************************************************
   * \fn sfx_u8 MCU_API_get_nv_mem(sfx_u8 read_data[SFX_NVMEM_BLOCK_SIZE])
@@ -340,7 +320,7 @@ sfx_u8 MCU_API_timer_wait_for_end(void);
   *
   * \param[in] sfx_bool status                    Is SFX_TRUE when result ok else SFX_FALSE
   *                                               See SIGFOX_API_test_mode summary
-  * \param[out] rssi                              RSSI of the received frame
+  * \param[in] rssi                              RSSI of the received frame
   *
   * \retval SFX_ERR_NONE:                         No error
   * \retval MCU_ERR_API_TEST_REPORT:              Report test result error

@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    sgfx_command.c
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
 #include <string.h>
@@ -37,7 +39,6 @@
 /* #define NO_HELP */
 /* #define NO_KEY_ADDR_EUI */
 #define CMD_SIZE                        64
-#define HELP_DISPLAY_FLUSH_DELAY        100
 
 /* USER CODE BEGIN PD */
 
@@ -194,7 +195,7 @@ static const struct ATCommand_s ATCommand[] =
     .string = AT_SENDH,
     .size_string = sizeof(AT_SENDH) - 1,
 #ifndef NO_HELP
-    .help_string = "AT"AT_SENDH "=<PayloadLength>,<Payload>,<Opt downlink>,<Opt TxRepeat><CR>. Send a Hexa frame to the sigfox network\r\n",
+    .help_string = "AT"AT_SENDH "=<PayloadLength>,<Payload>,<Opt downlink>,<Opt TxRepeat><CR>. Send a Hex frame to the sigfox network\r\n",
 #endif /* !NO_HELP */
     .get = AT_return_error,
     .set = AT_SendHexFrame,
@@ -332,6 +333,9 @@ static const struct ATCommand_s ATCommand[] =
     .set = AT_verbose_set,
     .run = AT_return_error,
   },
+  /* USER CODE BEGIN ATCommand */
+
+  /* USER CODE END ATCommand */
 };
 
 static char command[CMD_SIZE];
@@ -345,15 +349,13 @@ static uint32_t IsBusy = 0;
 /* Private function prototypes -----------------------------------------------*/
 /**
   * @brief  Parse a command and process it
-  * @param  The command
-  * @retval None
+  * @param  cmd The command
   */
 static void parse_cmd(const char *cmd);
 
 /**
   * @brief  Print a string corresponding to an ATEerror_t
-  * @param  The AT error code
-  * @retval None
+  * @param  error_type The AT error code
   */
 static void com_error(ATEerror_t error_type);
 
@@ -362,20 +364,17 @@ static void com_error(ATEerror_t error_type);
   * @param  rxChar th char received
   * @param  size
   * @param  error
-  * @retval None
   */
 static void CMD_GetChar(uint8_t *rxChar, uint16_t size, uint8_t error);
 
 /**
-  * @brief  CNotifies the upper layer that a charchter has been receveid
-  * @param  None
-  * @retval None
+  * @brief  CNotifies the upper layer that a character has been received
   */
 static void (*NotifyCb)(void);
 
 /**
   * @brief  Remove backspace and its preceding character in the Command string
-  * @param  Command string to process
+  * @param  cmd string to process
   * @retval 0 when OK, otherwise error
   */
 static int32_t CMD_ProcessBackSpace(char *cmd);
@@ -550,9 +549,12 @@ static void parse_cmd(const char *cmd)
     {
       AT_PPRINTF(ATCommand[i].help_string);
     }
-    /* Wait for the message queue to be flushed in order
-       not to disturb following com_error() display */
-    HAL_Delay(HELP_DISPLAY_FLUSH_DELAY);
+
+    while (1 != UTIL_ADV_TRACE_IsBufferEmpty())
+    {
+      /* Wait that all printfs are completed*/
+    }
+
 #endif /* !NO_HELP */
   }
   else

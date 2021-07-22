@@ -155,6 +155,7 @@ void SystemClock_Config(void)
 
   /** Configure LSE Drive Capability
   */
+  HAL_PWR_EnableBkUpAccess();
   __HAL_RCC_LSEDRIVE_CONFIG(RCC_LSEDRIVE_LOW);
   /** Configure the main internal regulator output voltage
   */

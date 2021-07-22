@@ -241,7 +241,23 @@ extern "C" {
 #define SUBGHZ_PCR                                  0x091A
 /*Sub-GHz radio SMPS control 2 register */
 #define SUBGHZ_SMPSC2R                              0x0923
-
+/*Sub-GHz radio Rx Bandwidth selector register */
+#define SUBGHZ_BWSEL                                0x0807
+/*Sub-GHz radio CFO High register */
+#define SUBGHZ_CFO_H                                0x06B0
+/*Sub-GHz radio CFO Low register */
+#define SUBGHZ_CFO_L                                0x06B1
+/*Sub-GHz radio rxAddrPtr register*/
+#define SUBGHZ_RX_ADR_PTR                           0x0803
+/*Sub-GHz radio txAddrPtr register*/
+#define SUBGHZ_TX_ADR_PTR                           0x0802
+/*Sub-GHz radio rtx register*/
+#define SUBGHZ_RTXPLDLEN                            0x06BB
+/*Sub-GHz radio pktCtl1 register*/
+#define SUBGHZ_PKTCTL1                              0x06B4
+/*Sub-GHz radio pktCtl1a register*/
+#define SUBGHZ_PKTCTL1A                             0x06B8
+  
 #define SMPS_CLK_DET_ENABLE ((uint8_t) (1<<6))
 
 #define SMPS_DRV_20  ((uint8_t) ((0x0)<<1))
@@ -1198,6 +1214,21 @@ uint8_t SUBGRF_SetRfTxPower(  int8_t power );
  * \retval  Value of the radio wake-up time.
  */
 uint32_t SUBGRF_GetRadioWakeUpTime( void );
+
+/*!
+ * \brief Returns the known FSK bandwidth registers value
+ *
+ * \param [IN] bandwidth Bandwidth value in Hz
+ * \retval regValue Bandwidth register value.
+ */
+uint8_t SUBGRF_GetFskBandwidthRegValue( uint32_t bandwidth );
+/*!
+ * \brief SUBGRF_GetCFO get the frequency offset between the remote transmitter and the radio receiver
+ *
+ * \param [in] bitrate     gfsk bitrate
+ * \param [OUT] cfo        carrier frequency offset in Hertz
+ */
+void SUBGRF_GetCFO( uint32_t BitRate, int32_t * Cfo);
 
 #ifdef __cplusplus
 }

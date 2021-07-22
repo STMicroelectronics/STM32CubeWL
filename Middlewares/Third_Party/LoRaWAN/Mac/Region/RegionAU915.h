@@ -34,6 +34,16 @@
  *            Implementation according to LoRaWAN Specification v1.0.2.
  * \{
  */
+/**
+  ******************************************************************************
+  *
+  *          Portions COPYRIGHT 2020 STMicroelectronics
+  *
+  * @file    RegionAU915.h
+  * @author  MCD Application Team
+  * @brief   Region definition for AU915
+  ******************************************************************************
+  */
 #ifndef __REGION_AU915_H__
 #define __REGION_AU915_H__
 
@@ -57,7 +67,7 @@ extern "C"
 /*!
  * Maximal datarate that can be used by the node
  */
-#define AU915_TX_MAX_DATARATE                       DR_13
+#define AU915_TX_MAX_DATARATE                       DR_6
 
 /*!
  * Minimal datarate that can be used by the node
@@ -88,12 +98,7 @@ extern "C"
 /*!
  * Maximal Rx1 receive datarate offset
  */
-#define AU915_MAX_RX1_DR_OFFSET                     6
-
-/*!
- * Default Rx1 receive datarate offset
- */
-#define AU915_DEFAULT_RX1_DR_OFFSET                 0
+#define AU915_MAX_RX1_DR_OFFSET                     5
 
 /*!
  * Minimal Tx output power that can be used by the node
@@ -116,11 +121,6 @@ extern "C"
 #define AU915_DEFAULT_UPLINK_DWELL_TIME             1
 
 /*!
- * Default downlink dwell time configuration
- */
-#define AU915_DEFAULT_DOWNLINK_DWELL_TIME           0
-
-/*!
  * Default Max EIRP
  */
 #define AU915_DEFAULT_MAX_EIRP                      30.0f
@@ -131,16 +131,6 @@ extern "C"
 #define AU915_DEFAULT_ANTENNA_GAIN                  2.15f
 
 /*!
- * ADR Ack limit
- */
-#define AU915_ADR_ACK_LIMIT                         64
-
-/*!
- * ADR Ack delay
- */
-#define AU915_ADR_ACK_DELAY                         32
-
-/*!
  * Enabled or disabled the duty cycle
  */
 #define AU915_DUTY_CYCLE_ENABLED                    0
@@ -149,41 +139,6 @@ extern "C"
  * Maximum RX window duration
  */
 #define AU915_MAX_RX_WINDOW                         3000
-
-/*!
- * Receive delay 1
- */
-#define AU915_RECEIVE_DELAY1                        1000
-
-/*!
- * Receive delay 2
- */
-#define AU915_RECEIVE_DELAY2                        2000
-
-/*!
- * Join accept delay 1
- */
-#define AU915_JOIN_ACCEPT_DELAY1                    5000
-
-/*!
- * Join accept delay 2
- */
-#define AU915_JOIN_ACCEPT_DELAY2                    6000
-
-/*!
- * Maximum frame counter gap
- */
-#define AU915_MAX_FCNT_GAP                          16384
-
-/*!
- * Ack timeout
- */
-#define AU915_ACKTIMEOUT                            2000
-
-/*!
- * Random ack timeout limits
- */
-#define AU915_ACK_TIMEOUT_RND                       1000
 
 /*!
  * Second reception window channel frequency definition.
@@ -213,11 +168,6 @@ extern "C"
  */
 #define AU915_PING_SLOT_CHANNEL_FREQ                923300000
 
-/*!
- * Number of possible ping slot channels
- */
-#define AU915_PING_SLOT_NB_CHANNELS                 8
-  
 /*!
  * Number of possible beacon channels
  */
@@ -264,9 +214,9 @@ extern "C"
 
 /*!
  * Band 0 definition
- * Band = { DutyCycle, TxMaxPower, LastBandUpdateTime, TimeCredits, MaxTimeCredits, ReadyForTransmission }
+ * Band = { DutyCycle, TxMaxPower, LastBandUpdateTime, LastMaxCreditAssignTime, TimeCredits, MaxTimeCredits, ReadyForTransmission }
  */
-#define AU915_BAND0                                 { 1, AU915_MAX_TX_POWER, 0, 0, 0, 0 } //  100.0 %
+#define AU915_BAND0                                 { 1, AU915_MAX_TX_POWER, 0, 0, 0, 0, 0 } //  100.0 %
 
 /*!
  * Defines the first channel for RX window 1 for US band
@@ -307,6 +257,7 @@ static const int8_t DatarateOffsetsAU915[7][6] =
     { DR_13, DR_13, DR_12, DR_11, DR_10, DR_9  }, // DR_6
 };
 
+/* ST_WORKAROUND_BEGIN: Keep repeater feature */
 /*!
  * Maximum payload with respect to the datarate index. Cannot operate with repeater.
  * The table is valid for the dwell time configuration of 0 for uplinks.
@@ -332,6 +283,7 @@ static const uint8_t MaxPayloadOfDatarateDwell1AU915[] = { 0, 0, 11, 53, 125, 24
  * repeater support.
  */
 static const uint8_t MaxPayloadOfDatarateRepeaterDwell1AU915[] = { 0, 0, 11, 53, 125, 242, 242, 0, 33, 109, 222, 222, 222, 222 };
+/* ST_WORKAROUND_END */
 
 /*!
  * \brief The function gets a value of a specific phy attribute.
@@ -355,15 +307,6 @@ void RegionAU915SetBandTxDone( SetBandTxDoneParams_t* txDone );
  * \param [IN] type Sets the initialization type.
  */
 void RegionAU915InitDefaults( InitDefaultsParams_t* params );
-
-/*!
- * \brief Returns a pointer to the internal context and its size.
- *
- * \param [OUT] params Pointer to the function parameters.
- *
- * \retval      Points to a structure where the module store its non-volatile context.
- */
-void* RegionAU915GetNvmCtx( GetNvmCtxParams_t* params );
 
 /*!
  * \brief Verifies a parameter.
@@ -457,7 +400,7 @@ uint8_t RegionAU915RxParamSetupReq( RxParamSetupReqParams_t* rxParamSetupReq );
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  */
-uint8_t RegionAU915NewChannelReq( NewChannelReqParams_t* newChannelReq );
+int8_t RegionAU915NewChannelReq( NewChannelReqParams_t* newChannelReq );
 
 /*!
  * \brief The function processes a TX ParamSetup Request.
@@ -477,7 +420,7 @@ int8_t RegionAU915TxParamSetupReq( TxParamSetupReqParams_t* txParamSetupReq );
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  */
-uint8_t RegionAU915DlChannelReq( DlChannelReqParams_t* dlChannelReq );
+int8_t RegionAU915DlChannelReq( DlChannelReqParams_t* dlChannelReq );
 
 /*!
  * \brief Alternates the datarate of the channel for the join request.

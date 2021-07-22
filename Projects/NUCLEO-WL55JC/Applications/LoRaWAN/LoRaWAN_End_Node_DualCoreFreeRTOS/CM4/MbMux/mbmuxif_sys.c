@@ -1,8 +1,9 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    mbmuxif_sys.c
   * @author  MCD Application Team
-  * @brief   allows CM4 applic to handle the SYSTEM MBMUX channel.
+  * @brief   allows CM4 application to handle the SYSTEM MBMUX channel.
   ******************************************************************************
   * @attention
   *
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
 #include "platform.h"
@@ -53,10 +55,10 @@
 
 /* Private variables ---------------------------------------------------------*/
 static FLASH_OBProgramInitTypeDef OptionsBytesStruct;
-static __IO uint8_t AllowSeqencerForSysCmd = 0;
+static __IO uint8_t AllowSequencerForSysCmd = 0;
 static __IO uint8_t MbSystemRespRcvFlag;
 
-UTIL_MEM_PLACE_IN_SECTION("MAPPING_TABLE") static  MBMUX_ComTable_t MBSYS_RefTable UTIL_MEM_ALIGN(4) ;
+UTIL_MEM_PLACE_IN_SECTION("MAPPING_TABLE") static  MBMUX_ComTable_t MBSYS_RefTable UTIL_MEM_ALIGN(16) ;
 
 MBMUX_ComTable_t *pMb_RefTable = &MBSYS_RefTable;
 MBMUX_ComParam_t *SystemComObj;
@@ -64,11 +66,9 @@ MBMUX_ComParam_t *SystemComObj;
 UTIL_MEM_PLACE_IN_SECTION("MB_MEM1") uint32_t aSystemCmdRespBuff[MAX_PARAM_OF_SYS_CMD_FUNCTIONS];/*shared*/
 UTIL_MEM_PLACE_IN_SECTION("MB_MEM1") uint32_t aSystemNotifAckBuff[MAX_PARAM_OF_SYS_NOTIF_FUNCTIONS];/*shared*/
 UTIL_MEM_PLACE_IN_SECTION("MB_MEM1") uint32_t aSystemPrioACmdRespBuff[MAX_PARAM_OF_SYS_PRIOA_CMD_FUNCTIONS];/*shared*/
-UTIL_MEM_PLACE_IN_SECTION("MB_MEM1") uint32_t
-aSystemPrioANotifAckBuff[MAX_PARAM_OF_SYS_PRIOA_NOTIF_FUNCTIONS];/*shared*/
+UTIL_MEM_PLACE_IN_SECTION("MB_MEM1") uint32_t aSystemPrioANotifAckBuff[MAX_PARAM_OF_SYS_PRIOA_NOTIF_FUNCTIONS];/*shared*/
 UTIL_MEM_PLACE_IN_SECTION("MB_MEM1") uint32_t aSystemPrioBCmdRespBuff[MAX_PARAM_OF_SYS_PRIOB_CMD_FUNCTIONS];/*shared*/
-UTIL_MEM_PLACE_IN_SECTION("MB_MEM1") uint32_t
-aSystemPrioBNotifAckBuff[MAX_PARAM_OF_SYS_PRIOB_NOTIF_FUNCTIONS];/*shared*/
+UTIL_MEM_PLACE_IN_SECTION("MB_MEM1") uint32_t aSystemPrioBNotifAckBuff[MAX_PARAM_OF_SYS_PRIOB_NOTIF_FUNCTIONS];/*shared*/
 
 static osSemaphoreId_t Sem_MbSystemRespRcv;
 
@@ -91,12 +91,45 @@ static void Thd_SysNotifRcvProcess(void *argument);
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
+/**
+  * @brief  SYSTEM response callbacks: set event to release waiting task
+  * @param  ComObj pointer to the SYSTEM com param buffer
+  */
 static void MBMUXIF_IsrSystemRespRcvCb(void *ComObj);
+
+/**
+  * @brief  SYSTEM notification callbacks: schedules a task in order to quit the ISR
+  * @param  ComObj pointer to the SYSTEM com param buffer
+  */
 static void MBMUXIF_IsrSystemNotifRcvCb(void *ComObj);
+
+/**
+  * @brief  SYSTEM task to process the notification
+  */
 static void MBMUXIF_TaskSystemNotifRcv(void);
+
+/**
+  * @brief  SYSTEM PRIO_A response callbacks: available for new usage
+  * @param  ComObj pointer to the SYSTEM com param buffer
+  */
 static void MBMUXIF_IsrSystemPrioARespRcvCb(void *ComObj);
+
+/**
+  * @brief  SYSTEM PRIO_A notification callbacks: used by RTC
+  * @param  ComObj pointer to the SYSTEM com param buffer
+  */
 static void MBMUXIF_IsrSystemPrioANotifRcvCb(void *ComObj);
+
+/**
+  * @brief  SYSTEM PRIO_B response callbacks: available for new usage
+  * @param  ComObj pointer to the SYSTEM com param buffer
+  */
 static void MBMUXIF_IsrSystemPrioBRespRcvCb(void *ComObj);
+
+/**
+  * @brief  SYSTEM PRIO_B notification callbacks: available for new usage
+  * @param  ComObj pointer to the SYSTEM com param buffer
+  */
 static void MBMUXIF_IsrSystemPrioBNotifRcvCb(void *ComObj);
 
 /* USER CODE BEGIN PFP */
@@ -104,47 +137,54 @@ static void MBMUXIF_IsrSystemPrioBNotifRcvCb(void *ComObj);
 /* USER CODE END PFP */
 
 /* Exported functions --------------------------------------------------------*/
-
-/**
-  * @brief Inits the MBMUX and registers SYS channel to the mailbox and SYS task to the sequencer
-  * @param none
-  * @retval   0: OK; -1: no more ipcc channel available; -2: feature not provided by CM0PLUS
-  */
 int8_t MBMUXIF_SystemInit(void)
 {
   int8_t ret;
+  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
 
   /* USER CODE BEGIN MBMUXIF_SystemInit_1 */
 
   /* USER CODE END MBMUXIF_SystemInit_1 */
 
+  /* Get Chip Revision Identifier (cut) */
+  MBSYS_RefTable.ChipRevId = LL_DBGMCU_GetRevisionID();
   /* Get the Dual boot configuration status */
   HAL_FLASHEx_OBGetConfig(&OptionsBytesStruct);
 
   if (OptionsBytesStruct.IPCCdataBufAddr != (uint32_t) pMb_RefTable)
   {
-    APP_PPRINTF("\r\n WARNING: There is a difference between the MAPPING_TABLE placement in memory: 0x%X \r\n",  (uint32_t) pMb_RefTable);
-    APP_PPRINTF(" and the address calculated according to the IPCCDBA option byte: 0x%X \r\n", OptionsBytesStruct.IPCCdataBufAddr);
-    APP_PPRINTF(" The execution enters now in a while(1){}  \r\n");
-    APP_PPRINTF(" please check the CM4\\MbMux\\mbmuxif_sys.c or update the scatter file \r\n\r\n");
+    APP_PPRINTF("There is a difference between the MAPPING_TABLE placement in memory: 0x%X \r\n", (uint32_t) pMb_RefTable);
+    APP_PPRINTF("and the address calculated according to the IPCCDBA option byte: 0x%X \r\n",
+                OptionsBytesStruct.IPCCdataBufAddr);
+    APP_PPRINTF("IPCCDBA is automatically updated\n\rSystem restarting...\r\n\r\n");
+    APP_PPRINTF("Please check the CM4\\MbMux\\mbmuxif_sys.c for more info \r\n\r\n");
 
-    /* USER CODE BEGIN MBMUXIF_SystemInit_Prevent_OB_Programming */
-      /* If you are sure you need to reprogram the IPCCDBA set #if to 0 (to avoid while(1){}) */
-      /* Please first check the  CM4 scatter file.*/
-      /* Make sure that the MAPPING_TABLE is placed in SRAM2 (memory with retention) */
-      /* Examples of scatter files available in the LoraWAN and Sigfox DualCore Applications pack*/
-      /* */
-      /* After HAL_FLASH_OB_Launch you will have to unplug and plug the board from power after this operation.*/
-      /* Additionally possible Issue under investigation, i.e.: */
-      /* In some cases happen that unplugging the chip power is not sufficient */
-      /* if so you need to reboot from RAM putting the BOOT0 pin to 3v3 */
-      /* attach with Cube Programmer and full erase the chip memory. */
-      /* */
-      /* PS: of course if you are attached with the debugger, it will not respond anymore after HAL_FLASH_OB_Launch*/
-#if 1
-    /* USER CODE END MBMUXIF_SystemInit_Prevent_OB_Programming */
-    while(1){}
-#else
+    while (1 != UTIL_ADV_TRACE_IsBufferEmpty())
+    {
+      /* Wait that all printfs are completed*/
+    }
+
+    /* Next code reprograms the IPCCDBA option byte which automatically resets the chip. */
+    /* It might be that this is not what you want. In that case check your linker file. */
+    /* en.STM32CubeWL.zip example places MAPPING_TABLE in SRAM2 (specifically to 0x20008000) */
+    /* due to its memory retention properties requested for Low Power STANDBY mode. */
+    /* This address also matches the factory default value of IPCCDBA (i.e. 0x800) */
+    /* In fact IPCCdataBufAddr = RAM_BASE_ADDR + IPCCDBA<<0x800 is 0x20008000. */
+    /* On the other hand STM32CubeMX generates standard linker files which don't define MAPPING_TABLE */
+    /* You can get inspired for your linker file by the ones in the Repository at the correspondent Apps: */
+    /*    C:\Users\<username>\STM32Cube\Repository\STM32Cube_FW_WL_V1.0.0\Projects\<board>\Applications\... */
+    /* When using "repository linker file" next code is not supposed to be executed */
+
+    if (MBSYS_RefTable.ChipRevId == 0x1001)
+    {
+      /* w.a. for cut 1.1 : problems to write on FLASH when MSI clock with frq > 16Mhz*/
+      HAL_RCC_GetOscConfig(&RCC_OscInitStruct);
+      RCC_OscInitStruct.MSIClockRange = RCC_MSIRANGE_8;
+      if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+      {
+        Error_Handler();
+      }
+    }
 
     /* write FLASH->IPCCBR option byte */
     /* Unlock the Flash to enable the flash control register access *************/
@@ -156,7 +196,7 @@ int8_t MBMUXIF_SystemInit(void)
     HAL_FLASH_OB_Unlock();
 
     /*Write IPCCDBA Option Byte based on (FLASH_IPCC_data_buffer - SRAM1_BASE) >> 4*/
-    OptionsBytesStruct.OptionType  = OPTIONBYTE_IPCC_BUF_ADDR;
+    OptionsBytesStruct.OptionType = OPTIONBYTE_IPCC_BUF_ADDR;
     OptionsBytesStruct.IPCCdataBufAddr = (uint32_t) pMb_RefTable;
 
     if (HAL_FLASHEx_OBProgram(&OptionsBytesStruct) != HAL_OK)
@@ -186,12 +226,10 @@ int8_t MBMUXIF_SystemInit(void)
     (void) HAL_FLASH_OB_Lock();
     /* Lock the Flash to disable the flash control register access  *********/
     (void) HAL_FLASH_Lock();
-#endif
   }
   Sem_MbSystemRespRcv = osSemaphoreNew(1, 0, NULL);   /*< Create the semaphore and make it busy at initialization */
 
-  MBSYS_RefTable.ChipRevId = LL_DBGMCU_GetRevisionID();
-
+  /* Init MailBoxMultiplexer */
   MBMUX_Init(pMb_RefTable);
 
   ret = MBMUX_RegisterFeature(FEAT_INFO_SYSTEM_ID, MBMUX_CMD_RESP, MBMUXIF_IsrSystemRespRcvCb, aSystemCmdRespBuff, sizeof(aSystemCmdRespBuff));
@@ -204,16 +242,13 @@ int8_t MBMUXIF_SystemInit(void)
     ret = 0;
     Thd_SysNotifRcvProcessId = osThreadNew(Thd_SysNotifRcvProcess, NULL, &Thd_SysNotifRcvProcess_attr);
   }
+  /* USER CODE BEGIN MBMUXIF_SystemInit_2 */
 
-#if defined (DEBUGGER_ON) && (DEBUGGER_ON == 1)
+  /* USER CODE END MBMUXIF_SystemInit_2 */
+
   /* hold Cm0 from executing MBMUXIF_SystemInit after booting (after PWR_CR4_C2BOOT is set by Cm4)*/
   /* it allows Cm0 debugging step by step its own MBMUXIF_SystemInit */
   MBMUXIF_SetCpusSynchroFlag(CPUS_BOOT_SYNC_PREVENT_CPU2_TO_START);
-#elif defined (DEBUGGER_ON) && (DEBUGGER_ON == 0) /* DEBUGGER_OFF */
-  MBMUXIF_SetCpusSynchroFlag(CPUS_BOOT_SYNC_ALLOW_CPU2_TO_START);
-#else
-#warning "DEBUGGER_ON not defined or out of range <0,1>"
-#endif /* DEBUGGER_ON */
 
   /* USER CODE BEGIN MBMUXIF_SystemInit_Last */
 
@@ -221,14 +256,9 @@ int8_t MBMUXIF_SystemInit(void)
   return ret;
 }
 
-/**
-  * @brief Registers to the mailbox a SYSTEM feature channel used on higher PRIORITY
-  * @param none
-  * @retval   0: OK; -1: no more ipcc channel available; -2: feature not provided by CM0PLUS
-  */
 int8_t MBMUXIF_SystemPrio_Add(FEAT_INFO_IdTypeDef SystemPrioFeat)
 {
-  int8_t ret=0;
+  int8_t ret = 0;
 
   /* USER CODE BEGIN MBMUXIF_SystemPrio_Add_1 */
 
@@ -277,14 +307,6 @@ int8_t MBMUXIF_SystemPrio_Add(FEAT_INFO_IdTypeDef SystemPrioFeat)
   return ret;
 }
 
-/**
-  * @brief Set synchro flag between the two CPUs
-  * @param flag: 0xFFFF: hold Cm0 before it runs its MBMUX_Init,
-  *              0x5555: Cm0 allowed to run its MBMUX_Init
-  *              0xAAAA: Cm0 has completed initialisation
-  *              0x9999: RTC PRIO CHANNEL has been registered
-  * @retval  none
-  */
 void MBMUXIF_SetCpusSynchroFlag(uint16_t flag)
 {
   pMb_RefTable->SynchronizeCpusAtBoot = flag;
@@ -293,26 +315,16 @@ void MBMUXIF_SetCpusSynchroFlag(uint16_t flag)
   /* USER CODE END MBMUXIF_SetCpusSynchroFlag */
 }
 
-/**
-  * @brief gives green light to Cm0 to Initialised MBMUX on its side
-  * @param none
-  * @retval  none
-  */
-void MBMUXIF_WaitCm0MbmuxIsInitialised(void)
+void MBMUXIF_WaitCm0MbmuxIsInitialized(void)
 {
   while (pMb_RefTable->SynchronizeCpusAtBoot != CPUS_BOOT_SYNC_CPU2_INIT_COMPLETED)
   {
   }
-  /* USER CODE BEGIN MBMUXIF_WaitCm0MbmuxIsInitialised */
+  /* USER CODE BEGIN MBMUXIF_WaitCm0MbmuxIsInitialized */
 
-  /* USER CODE END MBMUXIF_WaitCm0MbmuxIsInitialised */
+  /* USER CODE END MBMUXIF_WaitCm0MbmuxIsInitialized */
 }
 
-/**
-  * @brief gives back the pointer to the com buffer associated to System feature Cmd
-  * @param none
-  * @retval  return pointer to the com param buffer
-  */
 MBMUX_ComParam_t *MBMUXIF_GetSystemFeatureCmdComPtr(FEAT_INFO_IdTypeDef SystemPrioFeat)
 {
   MBMUX_ComParam_t *com_param_ptr = MBMUX_GetFeatureComPtr(SystemPrioFeat, MBMUX_CMD_RESP);
@@ -321,30 +333,19 @@ MBMUX_ComParam_t *MBMUXIF_GetSystemFeatureCmdComPtr(FEAT_INFO_IdTypeDef SystemPr
   /* USER CODE END MBMUXIF_GetSystemFeatureCmdComPtr */
   if (com_param_ptr == NULL)
   {
-    while (1) {} /* ErrorHandler() : feature isn't registered */
+    Error_Handler(); /* feature isn't registered */
   }
   return com_param_ptr;
 }
 
-/**
-  * @brief To allow SystemCmd to use the sequencer (hence entering in low power)
-  * @note  For compatib with RTOS, the sequencer (scheduler) is not used until the main loop process is reached (after Init). The applic can call this API at the end of the Init
-  * @param none
-  * @retval   none
-  */
 void MBMUXIF_SystemAllowSequencerForSysCmd(void)
 {
-  AllowSeqencerForSysCmd = 1;
+  AllowSequencerForSysCmd = 1;
   /* USER CODE BEGIN MBMUXIF_SystemAllowSequencerForSysCmd */
 
   /* USER CODE END MBMUXIF_SystemAllowSequencerForSysCmd */
 }
 
-/**
-  * @brief Sends a System-Cmd via Ipcc and Wait for the response
-  * @param none
-  * @retval   none
-  */
 void MBMUXIF_SystemSendCmd(FEAT_INFO_IdTypeDef SystemPrioFeat)
 {
   /* USER CODE BEGIN MBMUXIF_SystemSendCmd_1 */
@@ -357,7 +358,7 @@ void MBMUXIF_SystemSendCmd(FEAT_INFO_IdTypeDef SystemPrioFeat)
     MbSystemRespRcvFlag = 0;  /* To avoid using Sequencer during Init sequence for SysCmd  */
     if (MBMUX_CommandSnd(FEAT_INFO_SYSTEM_ID) == 0)
     {
-      if (AllowSeqencerForSysCmd)
+      if (AllowSequencerForSysCmd)
       {
         osSemaphoreAcquire(Sem_MbSystemRespRcv, osWaitForever);
       }
@@ -374,20 +375,15 @@ void MBMUXIF_SystemSendCmd(FEAT_INFO_IdTypeDef SystemPrioFeat)
   }
   else
   {
-  /* USER CODE BEGIN MBMUXIF_SystemSendCmd_2 */
+    /* USER CODE BEGIN MBMUXIF_SystemSendCmd_2 */
 
-  /* USER CODE END MBMUXIF_SystemSendCmd_2 */
+    /* USER CODE END MBMUXIF_SystemSendCmd_2 */
   }
   /* USER CODE BEGIN MBMUXIF_SystemSendCmd_Last */
 
   /* USER CODE END MBMUXIF_SystemSendCmd_Last */
 }
 
-/**
-  * @brief Sends a System-Ack  via Ipcc without waiting for the ack
-  * @param none
-  * @retval   none
-  */
 void MBMUXIF_SystemSendAck(FEAT_INFO_IdTypeDef SystemPrioFeat)
 {
   /* USER CODE BEGIN MBMUXIF_SystemSendAck_1 */
@@ -402,17 +398,11 @@ void MBMUXIF_SystemSendAck(FEAT_INFO_IdTypeDef SystemPrioFeat)
   /* USER CODE END MBMUXIF_SystemSendAck_Last */
 }
 
-/* USER CODE BEGIN ExpoF */
+/* USER CODE BEGIN EF */
 
-/* USER CODE END ExpoF */
+/* USER CODE END EF */
 
 /* Exported services --------------------------------------------------------*/
-
-/**
-  * @brief   Gets the pointer to CM0PLUS capabilities info table
-  * @param   none
-  * @retval  pointer to CM0PLUS capabilities info table
-  */
 FEAT_INFO_List_t *MBMUXIF_SystemSendCm0plusInfoListReq(void)
 {
   MBMUX_ComParam_t *com_obj;
@@ -439,14 +429,9 @@ FEAT_INFO_List_t *MBMUXIF_SystemSendCm0plusInfoListReq(void)
   return (FEAT_INFO_List_t *) ret;   /* need to verify */
 }
 
-/**
-  * @brief returns the pointer to the Capability Info table of a given feature
-  * @param e_featID ID of the feature from which retrieve the ptr
-  * @retval  LoRaMacInfoTable pointer
-  */
 FEAT_INFO_Param_t *MBMUXIF_SystemGetFeatCapabInfoPtr(FEAT_INFO_IdTypeDef e_featID)
 {
-  FEAT_INFO_List_t *p_cm0plus_supprted_features_list = NULL;
+  FEAT_INFO_List_t *p_cm0plus_supported_features_list = NULL;
   FEAT_INFO_Param_t  *p_feature = NULL;
   uint8_t i;
   uint8_t cm0plus_nr_of_supported_features;
@@ -456,15 +441,15 @@ FEAT_INFO_Param_t *MBMUXIF_SystemGetFeatCapabInfoPtr(FEAT_INFO_IdTypeDef e_featI
 
   /* USER CODE END MBMUXIF_SystemGetFeatCapabInfoPtr_1 */
 
-  p_cm0plus_supprted_features_list = MBMUXIF_SystemSendCm0plusInfoListReq();
+  p_cm0plus_supported_features_list = MBMUXIF_SystemSendCm0plusInfoListReq();
 
-  if (p_cm0plus_supprted_features_list != NULL)
+  if (p_cm0plus_supported_features_list != NULL)
   {
-    cm0plus_nr_of_supported_features = p_cm0plus_supprted_features_list->Feat_Info_Cnt;
+    cm0plus_nr_of_supported_features = p_cm0plus_supported_features_list->Feat_Info_Cnt;
 
     for (i = 0; i < cm0plus_nr_of_supported_features;  i++)
     {
-      p_feature = i + p_cm0plus_supprted_features_list->Feat_Info_TableAddress;
+      p_feature = i + p_cm0plus_supported_features_list->Feat_Info_TableAddress;
       if (p_feature->Feat_Info_Feature_Id == e_featID)
       {
         found = 1;
@@ -484,12 +469,6 @@ FEAT_INFO_Param_t *MBMUXIF_SystemGetFeatCapabInfoPtr(FEAT_INFO_IdTypeDef e_featI
   return  p_feature;
 }
 
-/**
-  * @brief Asks CM0PLUS to register its Cmd and Ack callbacks relative to the requested feature
-  * @param e_featID  identifier of the feature (Lora, Sigfox, etc).
-  * @param ComType  0 for CMd/Resp, 1 for Notif/Ack
-  * @retval   0 ok, else error code
-  */
 int8_t MBMUXIF_SystemSendCm0plusRegistrationCmd(FEAT_INFO_IdTypeDef e_featID)
 {
   MBMUX_ComParam_t *com_obj;
@@ -524,11 +503,6 @@ int8_t MBMUXIF_SystemSendCm0plusRegistrationCmd(FEAT_INFO_IdTypeDef e_featID)
 /* USER CODE END ExpoS */
 
 /* Private functions ---------------------------------------------------------*/
-/**
-  * @brief  SYSTEM response callbacks: set event to release waiting task
-  * @param  pointer to the SYSTEM com param buffer
-  * @retval  none
-  */
 static void MBMUXIF_IsrSystemRespRcvCb(void *ComObj)
 {
   /* USER CODE BEGIN MBMUXIF_IsrSystemRespRcvCb_1 */
@@ -537,7 +511,7 @@ static void MBMUXIF_IsrSystemRespRcvCb(void *ComObj)
 
   /* During "SystemInit sequence" Flag is used instead of Sequencer */
   MbSystemRespRcvFlag = 1;
-  if (AllowSeqencerForSysCmd) /* To avoid using Sequencer during Init sequence */
+  if (AllowSequencerForSysCmd) /* To avoid using Sequencer during Init sequence */
   {
     osSemaphoreRelease(Sem_MbSystemRespRcv);
   }
@@ -546,11 +520,6 @@ static void MBMUXIF_IsrSystemRespRcvCb(void *ComObj)
   /* USER CODE END MBMUXIF_IsrSystemRespRcvCb_Last */
 }
 
-/**
-  * @brief  SYSTEM notification callbacks: schedules a task in order to quit the ISR
-  * @param  pointer to the SYSTEM com param buffer
-  * @retval  none
-  */
 static void MBMUXIF_IsrSystemNotifRcvCb(void *ComObj)
 {
   /* USER CODE BEGIN MBMUXIF_IsrSystemNotifRcvCb_1 */
@@ -579,11 +548,6 @@ static void Thd_SysNotifRcvProcess(void *argument)
   /* USER CODE END Thd_SysNotifRcvProcess_Last */
 }
 
-/**
-  * @brief  SYSTEM task to process the notification
-  * @param  pointer to the SYSTEM com param buffer
-  * @retval  none
-  */
 static void MBMUXIF_TaskSystemNotifRcv(void)
 {
   /* USER CODE BEGIN MBMUXIF_TaskSystemNotifRcv_1 */
@@ -595,11 +559,6 @@ static void MBMUXIF_TaskSystemNotifRcv(void)
   /* USER CODE END MBMUXIF_TaskSystemNotifRcv_Last */
 }
 
-/**
-  * @brief  SYSTEM PRIO_A response callbacks: available for new usage
-  * @param  pointer to the SYSTEM com param buffer
-  * @retval  none
-  */
 static void MBMUXIF_IsrSystemPrioARespRcvCb(void *ComObj)
 {
   /* USER CODE BEGIN MBMUXIF_IsrSystemPrioARespRcvCb */
@@ -607,11 +566,6 @@ static void MBMUXIF_IsrSystemPrioARespRcvCb(void *ComObj)
   /* USER CODE END MBMUXIF_IsrSystemPrioARespRcvCb */
 }
 
-/**
-  * @brief  SYSTEM PRIO_A notification callbacks: used by RTC
-  * @param  pointer to the SYSTEM com param buffer
-  * @retval  none
-  */
 static void MBMUXIF_IsrSystemPrioANotifRcvCb(void *ComObj)
 {
   /* USER CODE BEGIN MBMUXIF_IsrSystemPrioANotifRcvCb_1 */
@@ -625,11 +579,6 @@ static void MBMUXIF_IsrSystemPrioANotifRcvCb(void *ComObj)
   /* USER CODE END MBMUXIF_IsrSystemPrioANotifRcvCb_Last */
 }
 
-/**
-  * @brief  SYSTEM PRIO_B response callbacks: available for new usage
-  * @param  pointer to the SYSTEM com param buffer
-  * @retval  none
-  */
 static void MBMUXIF_IsrSystemPrioBRespRcvCb(void *ComObj)
 {
   /* USER CODE BEGIN MBMUXIF_IsrSystemPrioBRespRcvCb */
@@ -637,11 +586,6 @@ static void MBMUXIF_IsrSystemPrioBRespRcvCb(void *ComObj)
   /* USER CODE END MBMUXIF_IsrSystemPrioBRespRcvCb */
 }
 
-/**
-  * @brief  SYSTEM PRIO_B notification callbacks: available for new usage
-  * @param  pointer to the SYSTEM com param buffer
-  * @retval  none
-  */
 static void MBMUXIF_IsrSystemPrioBNotifRcvCb(void *ComObj)
 {
   /* USER CODE BEGIN MBMUXIF_IsrSystemPrioBNotifRcvCb */

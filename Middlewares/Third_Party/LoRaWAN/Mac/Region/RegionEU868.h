@@ -34,6 +34,16 @@
  *            Implementation according to LoRaWAN Specification v1.0.2.
  * \{
  */
+/**
+  ******************************************************************************
+  *
+  *          Portions COPYRIGHT 2020 STMicroelectronics
+  *
+  * @file    RegionEU868.h
+  * @author  MCD Application Team
+  * @brief   Region definition for EU868
+  ******************************************************************************
+  */
 #ifndef __REGION_EU868_H__
 #define __REGION_EU868_H__
 
@@ -95,11 +105,6 @@ extern "C"
 #define EU868_MAX_RX1_DR_OFFSET                     5
 
 /*!
- * Default Rx1 receive datarate offset
- */
-#define EU868_DEFAULT_RX1_DR_OFFSET                 0
-
-/*!
  * Minimal Tx output power that can be used by the node
  */
 #define EU868_MIN_TX_POWER                          TX_POWER_7
@@ -125,16 +130,6 @@ extern "C"
 #define EU868_DEFAULT_ANTENNA_GAIN                  2.15f
 
 /*!
- * ADR Ack limit
- */
-#define EU868_ADR_ACK_LIMIT                         64
-
-/*!
- * ADR Ack delay
- */
-#define EU868_ADR_ACK_DELAY                         32
-
-/*!
  * Enabled or disabled the duty cycle
  */
 #define EU868_DUTY_CYCLE_ENABLED                    1
@@ -143,41 +138,6 @@ extern "C"
  * Maximum RX window duration
  */
 #define EU868_MAX_RX_WINDOW                         3000
-
-/*!
- * Receive delay 1
- */
-#define EU868_RECEIVE_DELAY1                        1000
-
-/*!
- * Receive delay 2
- */
-#define EU868_RECEIVE_DELAY2                        2000
-
-/*!
- * Join accept delay 1
- */
-#define EU868_JOIN_ACCEPT_DELAY1                    5000
-
-/*!
- * Join accept delay 2
- */
-#define EU868_JOIN_ACCEPT_DELAY2                    6000
-
-/*!
- * Maximum frame counter gap
- */
-#define EU868_MAX_FCNT_GAP                          16384
-
-/*!
- * Ack timeout
- */
-#define EU868_ACKTIMEOUT                            2000
-
-/*!
- * Random ack timeout limits
- */
-#define EU868_ACK_TIMEOUT_RND                       1000
 
 #if ( EU868_DEFAULT_DATARATE > DR_5 )
 #error "A default DR higher than DR_5 may lead to connectivity loss."
@@ -192,6 +152,11 @@ extern "C"
  * Second reception window channel datarate definition.
  */
 #define EU868_RX_WND_2_DR                           DR_0
+
+/*!
+ * Default uplink dwell time configuration
+ */
+#define EU868_DEFAULT_UPLINK_DWELL_TIME             0
 
 /*
  * CLASS B
@@ -243,40 +208,40 @@ extern "C"
 
 /*!
  * Band 0 definition
- * Band = { DutyCycle, TxMaxPower, LastBandUpdateTime, TimeCredits, MaxTimeCredits, ReadyForTransmission }
+ * Band = { DutyCycle, TxMaxPower, LastBandUpdateTime, LastMaxCreditAssignTime, TimeCredits, MaxTimeCredits, ReadyForTransmission }
  */
-#define EU868_BAND0                                 { 100 , EU868_MAX_TX_POWER, 0, 0, 0, 0 } //  1.0 %
+#define EU868_BAND0                                 { 100 , EU868_MAX_TX_POWER, 0, 0, 0, 0, 0 } //  1.0 %
 
 /*!
  * Band 1 definition
- * Band = { DutyCycle, TxMaxPower, LastBandUpdateTime, TimeCredits, MaxTimeCredits, ReadyForTransmission }
+ * Band = { DutyCycle, TxMaxPower, LastBandUpdateTime, LastMaxCreditAssignTime, TimeCredits, MaxTimeCredits, ReadyForTransmission }
  */
-#define EU868_BAND1                                 { 100 , EU868_MAX_TX_POWER, 0, 0, 0, 0 } //  1.0 %
+#define EU868_BAND1                                 { 100 , EU868_MAX_TX_POWER, 0, 0, 0, 0, 0 } //  1.0 %
 
 /*!
  * Band 2 definition
- * Band = { DutyCycle, TxMaxPower, LastBandUpdateTime, TimeCredits, MaxTimeCredits, ReadyForTransmission }
+ * Band = { DutyCycle, TxMaxPower, LastBandUpdateTime, LastMaxCreditAssignTime, TimeCredits, MaxTimeCredits, ReadyForTransmission }
  */
-#define EU868_BAND2                                 { 1000, EU868_MAX_TX_POWER, 0, 0, 0, 0 } //  0.1 %
+#define EU868_BAND2                                 { 1000, EU868_MAX_TX_POWER, 0, 0, 0, 0, 0 } //  0.1 %
 
 /*!
  * Band 3 definition
- * Band = { DutyCycle, TxMaxPower, LastBandUpdateTime, TimeCredits, MaxTimeCredits, ReadyForTransmission }
+ * Band = { DutyCycle, TxMaxPower, LastBandUpdateTime, LastMaxCreditAssignTime, TimeCredits, MaxTimeCredits, ReadyForTransmission }
  */
-#define EU868_BAND3                                 { 10  , EU868_MAX_TX_POWER, 0, 0, 0, 0 } // 10.0 %
+#define EU868_BAND3                                 { 10  , EU868_MAX_TX_POWER, 0, 0, 0, 0, 0 } // 10.0 %
 
 /*!
  * Band 4 definition
- * Band = { DutyCycle, TxMaxPower, LastBandUpdateTime, TimeCredits, MaxTimeCredits, ReadyForTransmission }
+ * Band = { DutyCycle, TxMaxPower, LastBandUpdateTime, LastMaxCreditAssignTime, TimeCredits, MaxTimeCredits, ReadyForTransmission }
  */
-#define EU868_BAND4                                 { 100 , EU868_MAX_TX_POWER, 0, 0, 0, 0 } //  1.0 %
+#define EU868_BAND4                                 { 100 , EU868_MAX_TX_POWER, 0, 0, 0, 0, 0 } //  1.0 %
 
 /*!
  * Band 5 definition
  * Band = { DutyCycle, TxMaxPower, LastJoinTxDoneTime, LastTxDoneTime, TimeOff,
  *          DutyCycleTimePeriod, MaxAllowedTimeOnAir, AggregatedTimeOnAir, StartTimeOfPeriod }
  */
-#define EU868_BAND5                                 { 1000, EU868_MAX_TX_POWER, 0, 0, 0, 0 } //  0.1 %
+#define EU868_BAND5                                 { 1000, EU868_MAX_TX_POWER, 0, 0, 0, 0, 0 } //  0.1 %
 
 /*!
  * LoRaMac default channel 1
@@ -311,6 +276,7 @@ static const uint8_t DataratesEU868[]  = { 12, 11, 10,  9,  8,  7,  7, 50 };
  */
 static const uint32_t BandwidthsEU868[] = { 125000, 125000, 125000, 125000, 125000, 125000, 250000, 0 };
 
+/* ST_WORKAROUND_BEGIN: Keep repeater feature */
 /*!
  * Maximum payload with respect to the datarate index. Cannot operate with repeater.
  */
@@ -320,6 +286,7 @@ static const uint8_t MaxPayloadOfDatarateEU868[] = { 51, 51, 51, 115, 242, 242, 
  * Maximum payload with respect to the datarate index. Can operate with repeater.
  */
 static const uint8_t MaxPayloadOfDatarateRepeaterEU868[] = { 51, 51, 51, 115, 222, 222, 222, 222 };
+/* ST_WORKAROUND_END */
 
 /*!
  * \brief The function gets a value of a specific phy attribute.
@@ -343,15 +310,6 @@ void RegionEU868SetBandTxDone( SetBandTxDoneParams_t* txDone );
  * \param [IN] type Sets the initialization type.
  */
 void RegionEU868InitDefaults( InitDefaultsParams_t* params );
-
-/*!
- * \brief Returns a pointer to the internal context and its size.
- *
- * \param [OUT] params Pointer to the function parameters.
- *
- * \retval      Points to a structure where the module store its non-volatile context.
- */
-void* RegionEU868GetNvmCtx( GetNvmCtxParams_t* params );
 
 /*!
  * \brief Verifies a parameter.
@@ -445,7 +403,7 @@ uint8_t RegionEU868RxParamSetupReq( RxParamSetupReqParams_t* rxParamSetupReq );
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  */
-uint8_t RegionEU868NewChannelReq( NewChannelReqParams_t* newChannelReq );
+int8_t RegionEU868NewChannelReq( NewChannelReqParams_t* newChannelReq );
 
 /*!
  * \brief The function processes a TX ParamSetup Request.
@@ -465,7 +423,7 @@ int8_t RegionEU868TxParamSetupReq( TxParamSetupReqParams_t* txParamSetupReq );
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  */
-uint8_t RegionEU868DlChannelReq( DlChannelReqParams_t* dlChannelReq );
+int8_t RegionEU868DlChannelReq( DlChannelReqParams_t* dlChannelReq );
 
 /*!
  * \brief Alternates the datarate of the channel for the join request.

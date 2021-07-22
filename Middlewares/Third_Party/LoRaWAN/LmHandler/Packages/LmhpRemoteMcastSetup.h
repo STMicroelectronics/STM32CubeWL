@@ -19,27 +19,13 @@
  *
  * \author    Miguel Luis ( Semtech )
  */
-/**
-  ******************************************************************************
-  *
-  *          Portions COPYRIGHT 2020 STMicroelectronics
-  *
-  * @file    LmhpRemoteMcastSetup.h
-  * @author  MCD Application Team
-  * @brief   Header for Remote Multicast Package module
-  ******************************************************************************
-  */
 #ifndef __LMHP_REMOTE_MCAST_SETUP_H__
 #define __LMHP_REMOTE_MCAST_SETUP_H__
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-/* Includes ------------------------------------------------------------------*/
+#include "LoRaMac.h"
+#include "LmHandlerTypes.h"
 #include "LmhPackage.h"
 
-/* Exported defines ----------------------------------------------------------*/
 /*!
  * Remote multicast setup package identifier.
  *
@@ -47,16 +33,6 @@ extern "C" {
  */
 #define PACKAGE_ID_REMOTE_MCAST_SETUP               2
 
-/* Exported constants --------------------------------------------------------*/
-/* Exported types ------------------------------------------------------------*/
-/* External variables --------------------------------------------------------*/
-/* Exported macros -----------------------------------------------------------*/
-/* Exported functions ------------------------------------------------------- */
-LmhPackage_t *LmhpRemoteMcastSetupPackageFactory(void);
+LmhPackage_t *LmhpRemoteMcastSetupPackageFactory( void );
 
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif /* __LMHP_REMOTE_MCAST_SETUP_H__ */
+#endif // __LMHP_REMOTE_MCAST_SETUP_H__

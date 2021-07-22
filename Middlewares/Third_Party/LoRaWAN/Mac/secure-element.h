@@ -35,6 +35,16 @@
  * \{
  *
  */
+/**
+  ******************************************************************************
+  *
+  *          Portions COPYRIGHT 2020 STMicroelectronics
+  *
+  * @file    secure-element.h
+  * @author  MCD Application Team
+  * @brief   Secure Element driver API
+  ******************************************************************************
+  */
 #ifndef __SECURE_ELEMENT_H__
 #define __SECURE_ELEMENT_H__
 
@@ -45,16 +55,7 @@ extern "C"
 
 #include <stdint.h>
 #include "LoRaMacCrypto.h"
-
-/*!
- * Secure-element keys size in bytes
- */
-#define SE_KEY_SIZE             16
-
-/*!
- * Secure-element EUI size in bytes
- */
-#define SE_EUI_SIZE             8
+#include "secure-element-nvm.h"
 
 /*!
  * Return values.
@@ -95,45 +96,53 @@ typedef enum eSecureElementStatus
     SECURE_ELEMENT_FAIL_ENCRYPT,
 }SecureElementStatus_t;
 
+/* ST_WORKAROUND_BEGIN: Add unique ID callback as input parameter */
 /*!
- * Signature of callback function to be called by the Secure Element driver when the
- * non volatile context have to be stored.
+ * \brief   get the board 64 bits unique ID
  *
+ * \param   [OUT] id unique
  */
-typedef void ( *SecureElementNvmEvent )( void );
-
+typedef void ( *SecureElementGetUniqueId )(uint8_t *id);
+    
 /*!
  * Initialization of Secure Element driver
  *
- * \param[IN]     seNvmCtxChanged           - Callback function which will be called  when the
- *                                            non-volatile context have to be stored.
- * \retval                                  - Status of the operation
- */
-SecureElementStatus_t SecureElementInit( SecureElementNvmEvent seNvmCtxChanged );
-
-/*!
- * Remove previously generated derived keys with "label" from memory 
- *
- * \param[IN]     kms_key_label       - string of char to be searched in the key label
- * \retval                            - Status of the operation
- */
-SecureElementStatus_t SecureElementDeleteDerivedKeys(uint8_t* kms_key_label);
-
-/*!
- * Restores the internal nvm context from passed pointer.
- *
- * \param[IN]     seNvmCtx         - Pointer to non-volatile module context to be restored.
+ * \param[IN]     nvm              - Pointer to the non-volatile memory data
+ *                                   structure.
+ * \param[IN]     seGetUniqueId    - Get unique ID callback
  * \retval                         - Status of the operation
  */
-SecureElementStatus_t SecureElementRestoreNvmCtx( void* seNvmCtx );
+SecureElementStatus_t SecureElementInit( SecureElementNvmData_t* nvm, SecureElementGetUniqueId seGetUniqueId );
+/* ST_WORKAROUND_END */
+
+/* ST_WORKAROUND_BEGIN: Add KMS specific functions */
+/*!
+ * Gets key item from key list.
+ *
+ * \param[IN]  keyID          - Key identifier
+ * \param[OUT] keyItem        - Key item reference
+ * \retval                    - Status of the operation
+ */
+SecureElementStatus_t SecureElementGetKeyByID( KeyIdentifier_t keyID, Key_t **keyItem );
 
 /*!
- * Returns a pointer to the internal non-volatile context.
+ * Remove previously generated dynamic keys with "label" from memory
  *
- * \param[IN]     seNvmCtxSize    - Size of the module non volatile context
- * \retval                        - Points to a structure where the module store its non volatile context
+ * \param[IN]     keyID               - Key identifier
+ * \param[OUT]    key_label           - string of char to identifying targetKeyID label
+ * \retval                            - Status of the operation
  */
-void* SecureElementGetNvmCtx( size_t* seNvmCtxSize );
+SecureElementStatus_t SecureElementDeleteDynamicKeys( KeyIdentifier_t keyID, uint32_t *key_label );
+
+/*!
+ * Sets a the KMS object handler for a given keyID (reserved to Kms)
+ *
+ * \param[IN]  keyID          - Key identifier
+ * \param[IN]  key            - Key value
+ * \retval                    - Status of the operation
+ */
+SecureElementStatus_t SecureElementSetObjHandler( KeyIdentifier_t keyID, uint32_t keyIndex );
+/* ST_WORKAROUND_END */
 
 /*!
  * Sets a key
@@ -143,15 +152,6 @@ void* SecureElementGetNvmCtx( size_t* seNvmCtxSize );
  * \retval                    - Status of the operation
  */
 SecureElementStatus_t SecureElementSetKey( KeyIdentifier_t keyID, uint8_t* key );
-
-/*!
- * Sets a the KMS object handler for a given keyID (reserved to Kms)
- *
- * \param[IN]  keyID          - Key identifier
- * \param[IN]  key            - Key value
- * \retval                    - Status of the operation
- */
-SecureElementStatus_t SecureElementSetObjHandler(KeyIdentifier_t keyID, uint32_t keyIndex);
 
 /*!
  * Computes a CMAC of a message using provided initial Bx block
@@ -190,13 +190,12 @@ SecureElementStatus_t SecureElementAesEncrypt( uint8_t* buffer, uint16_t size, K
 /*!
  * Derives and store a key
  *
- * \param[IN]  version        - LoRaWAN specification version currently in use.
  * \param[IN]  input          - Input data from which the key is derived ( 16 byte )
  * \param[IN]  rootKeyID      - Key identifier of the root key to use to perform the derivation
  * \param[IN]  targetKeyID    - Key identifier of the key which will be derived
  * \retval                    - Status of the operation
  */
-SecureElementStatus_t SecureElementDeriveAndStoreKey( Version_t version, uint8_t* input, KeyIdentifier_t rootKeyID, KeyIdentifier_t targetKeyID );
+SecureElementStatus_t SecureElementDeriveAndStoreKey( uint8_t* input, KeyIdentifier_t rootKeyID, KeyIdentifier_t targetKeyID );
 
 /*!
  * Process JoinAccept message.

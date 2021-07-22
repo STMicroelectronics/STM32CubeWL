@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    mn_lptim_if.c
@@ -16,12 +17,13 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
-#include "lptim.h"
 #include "mn_lptim_if.h"
 
 /* USER CODE BEGIN Includes */
+
 /* USER CODE END Includes */
 
 /* External variables ---------------------------------------------------------*/
@@ -63,25 +65,29 @@ extern LPTIM_HandleTypeDef hlptim1;
 void MN_LPTIM_IF_Init(void)
 {
   /* USER CODE BEGIN MN_LPTIM_IF_Init_0 */
+
   /* USER CODE END MN_LPTIM_IF_Init_0 */
 
-  /* Force the LPTIM1 Periheral Clock Reset */
+  /* Force the LPTIM1 Peripheral Clock Reset */
   __HAL_RCC_LPTIM1_FORCE_RESET();
-  /* Release the LPTIM1 Periheral Clock Reset */
+  /* Release the LPTIM1 Peripheral Clock Reset */
   __HAL_RCC_LPTIM1_RELEASE_RESET();
 
   /* USER CODE BEGIN MN_LPTIM_IF_Init_1 */
+
   /* USER CODE END MN_LPTIM_IF_Init_1 */
 
   MX_LPTIM1_Init();
 
   /* USER CODE BEGIN MN_LPTIM_IF_Init_2 */
+
   /* USER CODE END MN_LPTIM_IF_Init_2 */
 
   /* w.a.: LL_EXTI_LINE_X should be enabled in HAL_LPTIM_MspInit */
   LL_EXTI_EnableIT_0_31(LL_EXTI_LINE_29);
 
   /* USER CODE BEGIN MN_LPTIM_IF_Init_3 */
+
   /* USER CODE END MN_LPTIM_IF_Init_3 */
 }
 
@@ -90,6 +96,7 @@ void MN_LPTIM_IF_DeInit(void)
   RCC_PeriphCLKInitTypeDef RCC_PeriphCLKInitStruct;
 
   /* USER CODE BEGIN MN_LPTIM_IF_DeInit_0 */
+
   /* USER CODE END MN_LPTIM_IF_DeInit_0 */
 
   if (HAL_LPTIM_DeInit(&hlptim1) != HAL_OK)
@@ -98,6 +105,7 @@ void MN_LPTIM_IF_DeInit(void)
   }
 
   /* USER CODE BEGIN MN_LPTIM_IF_DeInit_1 */
+
   /* USER CODE END MN_LPTIM_IF_DeInit_1 */
 
   /* Select the PCLK clock as LPTIM1 peripheral clock */
@@ -106,15 +114,17 @@ void MN_LPTIM_IF_DeInit(void)
   HAL_RCCEx_PeriphCLKConfig(&RCC_PeriphCLKInitStruct);
 
   /* USER CODE BEGIN MN_LPTIM_IF_DeInit_2 */
+
   /* USER CODE END MN_LPTIM_IF_DeInit_2 */
 
-  /* Force the LPTIM1 Periheral Clock Reset */
+  /* Force the LPTIM1 Peripheral Clock Reset */
   __HAL_RCC_LPTIM1_FORCE_RESET();
 
-  /* Release the LPTIM1 Periheral Clock Reset */
+  /* Release the LPTIM1 Peripheral Clock Reset */
   __HAL_RCC_LPTIM1_RELEASE_RESET();
 
   /* USER CODE BEGIN MN_LPTIM_IF_DeInit_3 */
+
   /* USER CODE END MN_LPTIM_IF_DeInit_3 */
 
 }

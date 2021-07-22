@@ -226,6 +226,7 @@
                     <name>CCDefines</name>
                     <state>CORE_CM0PLUS</state>
                     <state>KMS_ENABLED</state>
+                    <state>USE_HAL_DRIVER</state>
                     <state>STM32WL55xx</state>
                     <state>MBEDTLS_CONFIG_FILE="mbedtls_config.h"</state>
                 </option>
@@ -358,8 +359,9 @@
                     <state>$PROJ_DIR$/../CM0PLUS/LoRaWAN/Target</state>
                     <state>$PROJ_DIR$/../CM0PLUS/MbMux</state>
                     <state>$PROJ_DIR$/../Common/Board</state>
-                    <state>$PROJ_DIR$/../Common/MbMux</state>
                     <state>$PROJ_DIR$/../Common/System</state>
+                    <state>$PROJ_DIR$/../Common/MbMux</state>
+                    <state>$PROJ_DIR$/../../../../../../Drivers/BSP/STM32WLxx_Nucleo</state>
                     <state>$PROJ_DIR$/../../../../../../Utilities/trace/adv_trace</state>
                     <state>$PROJ_DIR$/../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc</state>
                     <state>$PROJ_DIR$/../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc/Legacy</state>
@@ -1069,115 +1071,124 @@
     <group>
         <name>Application</name>
         <group>
-            <name>Core</name>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\ca_low_level.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\ipcc.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\ipcc_if.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\kms_low_level.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\main.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\nvms_low_level.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\rtc.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\stm32_lpm_if.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\stm32wlxx_it.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\subghz.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\sys_app.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\Common\System\sys_debug.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\timer_if.c</name>
-            </file>
-        </group>
-        <group>
             <name>EWARM</name>
             <file>
                 <name>$PROJ_DIR$\startup_stm32wl55xx_cm0plus.s</name>
             </file>
         </group>
         <group>
-            <name>KMS</name>
+            <name>User</name>
             <group>
-                <name>App</name>
-                <file>
-                    <name>$PROJ_DIR$\..\CM0PLUS\KMS\App\app_kms.c</name>
-                </file>
+                <name>CM0PLUS</name>
+                <group>
+                    <name>Core</name>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\ca_low_level.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\ipcc.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\ipcc_if.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\kms_low_level.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\main.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\nvms_low_level.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\rtc.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\stm32_lpm_if.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\stm32wlxx_hal_msp.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\stm32wlxx_it.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\subghz.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\sys_app.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\timer_if.c</name>
+                    </file>
+                </group>
+                <group>
+                    <name>KMS</name>
+                    <group>
+                        <name>App</name>
+                        <file>
+                            <name>$PROJ_DIR$\..\CM0PLUS\KMS\App\app_kms.c</name>
+                        </file>
+                    </group>
+                </group>
+                <group>
+                    <name>LoRaWAN</name>
+                    <group>
+                        <name>App</name>
+                        <file>
+                            <name>$PROJ_DIR$\..\CM0PLUS\LoRaWAN\App\app_lorawan.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\CM0PLUS\LoRaWAN\App\lora_app.c</name>
+                        </file>
+                    </group>
+                    <group>
+                        <name>Target</name>
+                        <file>
+                            <name>$PROJ_DIR$\..\CM0PLUS\LoRaWAN\Target\radio_board_if.c</name>
+                        </file>
+                    </group>
+                </group>
+                <group>
+                    <name>MbMux</name>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\MbMux\features_info.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\MbMux\LmHandler_mbwrapper.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\MbMux\lora_info.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\MbMux\mbmux.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\MbMux\mbmuxif_lora.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\MbMux\mbmuxif_radio.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\MbMux\mbmuxif_sys.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\MbMux\mbmuxif_trace.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\MbMux\radio_mbwrapper.c</name>
+                    </file>
+                </group>
             </group>
-        </group>
-        <group>
-            <name>LoRaWAN</name>
             <group>
-                <name>App</name>
-                <file>
-                    <name>$PROJ_DIR$\..\CM0PLUS\LoRaWAN\App\app_lorawan.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\CM0PLUS\LoRaWAN\App\lora_app.c</name>
-                </file>
+                <name>Common</name>
+                <group>
+                    <name>System</name>
+                    <file>
+                        <name>$PROJ_DIR$\..\Common\System\sys_debug.c</name>
+                    </file>
+                </group>
             </group>
-            <group>
-                <name>Target</name>
-                <file>
-                    <name>$PROJ_DIR$\..\CM0PLUS\LoRaWAN\Target\radio_board_if.c</name>
-                </file>
-            </group>
-        </group>
-        <group>
-            <name>MbMux</name>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\MbMux\features_info.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\MbMux\LmHandler_mbwrapper.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\MbMux\lora_info.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\MbMux\mbmux.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\MbMux\mbmuxif_kms.c</name>
-                <excluded>
-                    <configuration>LoRaWAN_AT_Slave_DualCore_CM0PLUS</configuration>
-                </excluded>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\MbMux\mbmuxif_lora.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\MbMux\mbmuxif_radio.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\MbMux\mbmuxif_sys.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\MbMux\mbmuxif_trace.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\MbMux\radio_mbwrapper.c</name>
-            </file>
         </group>
     </group>
     <group>
@@ -1190,9 +1201,6 @@
         <name>Drivers</name>
         <group>
             <name>BSP</name>
-            <excluded>
-                <configuration>LoRaWAN_AT_Slave_DualCore_CM0PLUS</configuration>
-            </excluded>
             <group>
                 <name>STM32WLxx_Nucleo</name>
                 <file>
@@ -1267,6 +1275,12 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_subghz.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_tim.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_tim_ex.c</name>
             </file>
         </group>
     </group>
@@ -1362,6 +1376,9 @@
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\ST\STM32_Key_Management_Services\Modules\kms_sign_verify.c</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\ST\STM32_Key_Management_Services\Modules\kms_vm_storage.c</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\ST\STM32_Key_Management_Services\Interface\CryptoApi\HAL\mac_stm32hal.c</name>
             </file>
             <file>
@@ -1373,102 +1390,90 @@
         </group>
         <group>
             <name>LoRaWAN</name>
-            <group>
-                <name>Crypto</name>
-                <file>
-                    <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Crypto\cmac.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Crypto\lorawan_aes.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Crypto\soft-se.c</name>
-                </file>
-            </group>
-            <group>
-                <name>LmHandler</name>
-                <file>
-                    <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\LmHandler\LmHandler.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\LmHandler\Packages\LmhpCompliance.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\LmHandler\NvmCtxMgmt.c</name>
-                </file>
-            </group>
-            <group>
-                <name>Mac</name>
-                <group>
-                    <name>Region</name>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\Region.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionAS923.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionAU915.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCN470.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCN779.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCommon.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionEU433.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionEU868.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionIN865.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionKR920.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionRU864.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionUS915.c</name>
-                    </file>
-                </group>
-                <file>
-                    <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\LoRaMac.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\LoRaMacAdr.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\LoRaMacClassB.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\LoRaMacCommands.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\LoRaMacConfirmQueue.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\LoRaMacCrypto.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\LoRaMacParser.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\LoRaMacSerializer.c</name>
-                </file>
-            </group>
-            <group>
-                <name>Utilities</name>
-                <file>
-                    <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Utilities\utilities.c</name>
-                </file>
-            </group>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Crypto\cmac.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\LmHandler\LmHandler.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\LmHandler\Packages\LmhpCompliance.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\LoRaMac.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\LoRaMacAdr.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\LoRaMacClassB.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\LoRaMacCommands.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\LoRaMacConfirmQueue.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\LoRaMacCrypto.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\LoRaMacParser.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\LoRaMacSerializer.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Crypto\lorawan_aes.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\LmHandler\NvmDataMgmt.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\Region.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionAS923.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionAU915.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionBaseUS.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCN470.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCN779.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCommon.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionEU433.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionEU868.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionIN865.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionKR920.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionRU864.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionUS915.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Crypto\soft-se.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Utilities\utilities.c</name>
+            </file>
         </group>
         <group>
             <name>mbed-crypto</name>
@@ -1489,6 +1494,9 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\SubGHz_Phy\stm32_radio_driver\radio_driver.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\SubGHz_Phy\stm32_radio_driver\radio_fw.c</name>
             </file>
         </group>
     </group>

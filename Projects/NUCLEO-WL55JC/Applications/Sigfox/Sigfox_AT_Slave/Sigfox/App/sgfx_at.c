@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    sgfx_at.c
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
 #include <stdbool.h>
@@ -24,7 +26,7 @@
 #include "sgfx_at.h"
 #include "sigfox_types.h"
 #include "st_sigfox_api.h"
-#include "usart.h"
+#include "usart_if.h"
 #include "stm32_tiny_sscanf.h"
 #include "sgfx_app_version.h"
 #include "sgfx_eeprom_if.h"
@@ -77,67 +79,81 @@
 
 /* Private function prototypes -----------------------------------------------*/
 #ifdef MN_ON
+
+/**
+  * @brief      monarch scan callback
+  * @param[out] rc_bit_mask bit mask of detected region configuration
+  * @param[out] rssi of the detected monarch signal
+  * @retval     SFX_ERR_NONE
+  */
 static sfx_u8 app_callback_handler(sfx_u8 rc_bit_mask, sfx_s16 rssi);
+
+/**
+  * @brief  rf test mode call back starting a while wait loop
+  */
+static void sfx_monarch_test_mode_wait_start_cb(void);
+
+/**
+  * @brief  rf test mode call back exiting a while wait loop
+  */
+static void sfx_monarch_test_mode_wait_end_cb(void);
 #endif /* MN_ON */
 /**
 
   * @brief  Print n bytes as %02x
-  * @param  the pointer containing the bytes to print
-  * @param  n th number of bytes
-  * @retval None
+  * @param  pt pointer containing the bytes to print
+  * @param  n number of bytes
   */
 static void print_n(uint8_t *pt, uint32_t n);
 
 /**
-  * @brief  Print receveid n bytes as %02x
-  * @param  the pointer containing the bytes to print
-  * @param  n th number of bytes
-  * @retval None
+  * @brief  Print received n bytes as %02x
+  * @param  pt pointer containing the bytes to print
+  * @param  n number of bytes
   */
 static void print_rx(uint8_t *pt, uint32_t n);
 
 /**
   * @brief  Print an unsigned int
-  * @param  the value to print
-  * @retval None
+  * @param  value to print
   */
 static void print_u(uint32_t value);
 
 /**
   * @brief  get the length and the number of parameters of the string
-  * @param  the string
-  * @param  the output vector
-  * @param  the length of the output vector
-  * @retval None
+  * @param  str the string
+  * @param  data output vector
+  * @param  dataSize length of the output vector
   */
 static ErrorStatus stringToData(const char *str, uint8_t *data, uint32_t *dataSize);
 
 /**
-  * @brief  check if Char is an Hex value
-  * @param  none
-  * @retval none
+  * @brief  Check if character in parameter is alphanumeric
+  * @param  Char for the alphanumeric check
+  * @retval ERROR or SUCCESS
   */
 static ErrorStatus isHex(char Char);
 
 /**
-  * @brief  Converts hexa string to a nibble ( 0x0X )
-  * @param  hexa string
-  * @retval the nibble. Returns 0xF0 in case input was not an hexa string (a..f; A..F or 0..9)
+  * @brief  Converts hex string to a nibble ( 0x0X )
+  * @param  Char hex string
+  * @retval the nibble. Returns 0xF0 in case input was not an hex string (a..f; A..F or 0..9)
   */
 static uint8_t Char2Nibble(char Char);
 
 /**
-  * @brief  reopens Sigfox anr rerestores radio configuration as from EEPROM
-  * @param  none
-  * @retval none
+  * @brief  reopens Sigfox and restores radio configuration as from EEPROM
+  * @param  sfx_rc region configuration
+  * @param  config_words configuration parameters
+  * @return sfx_error_t status
   */
 static sfx_error_t SIGFOX_reopen_and_reconf(sfx_rc_enum_t sfx_rc,  sfx_u32 *config_words);
 
 /**
   * @brief  run testmode 12
   * @note   specific for SE_MON_FDL lib as HW SE do not support public switch key
-  * @param  none
-  * @retval none
+  * @param  rc_enum region configuration
+  * @return sfx_error_t status
   */
 static sfx_error_t testmode_12(sfx_rc_enum_t rc_enum);
 
@@ -211,7 +227,7 @@ ATEerror_t AT_SendBit(const char *param)
       }
       else
       {
-        APP_LOG(TS_OFF, VLEVEL_H, "ERROR 0x%02X\r\n", error);
+        APP_LOG(TS_OFF, VLEVEL_H, "ERROR 0x%04X\r\n", error);
         return AT_LIB_ERROR;
       }
     }
@@ -230,7 +246,7 @@ ATEerror_t AT_SendBit(const char *param)
     }
     else
     {
-      APP_LOG(TS_OFF, VLEVEL_H, "ERROR 0x%02X\r\n", error);
+      APP_LOG(TS_OFF, VLEVEL_H, "ERROR 0x%04X\r\n", error);
       return AT_LIB_ERROR;
     }
   }
@@ -280,7 +296,7 @@ ATEerror_t AT_SendFrame(const char *param)
       }
       else
       {
-        APP_LOG(TS_OFF, VLEVEL_H, "ERROR 0x%02X\r\n", error);
+        APP_LOG(TS_OFF, VLEVEL_H, "ERROR 0x%04X\r\n", error);
         return AT_LIB_ERROR;
       }
     }
@@ -299,7 +315,7 @@ ATEerror_t AT_SendFrame(const char *param)
     }
     else
     {
-      APP_LOG(TS_OFF, VLEVEL_H, "ERROR 0x%02X\r\n", error);
+      APP_LOG(TS_OFF, VLEVEL_H, "ERROR 0x%04X\r\n", error);
       return AT_LIB_ERROR;
     }
   }
@@ -360,7 +376,7 @@ ATEerror_t AT_SendHexFrame(const char *param)
       }
       else
       {
-        APP_LOG(TS_OFF, VLEVEL_H, "ERROR 0x%02X\r\n", error);
+        APP_LOG(TS_OFF, VLEVEL_H, "ERROR 0x%04X\r\n", error);
         return AT_LIB_ERROR;
       }
     }
@@ -379,7 +395,7 @@ ATEerror_t AT_SendHexFrame(const char *param)
     }
     else
     {
-      APP_LOG(TS_OFF, VLEVEL_H, "ERROR 0x%02X\r\n", error);
+      APP_LOG(TS_OFF, VLEVEL_H, "ERROR 0x%04X\r\n", error);
       return AT_LIB_ERROR;
     }
   }
@@ -708,7 +724,6 @@ ATEerror_t AT_scan_mn(const char *param)
 
   sfx_u8 rc_capabilities_bit_mask = 0x7F; /*all RCs from RC1 to RC7*/
   sfx_u16 timer = 5;
-  sfx_timer_unit_enum_t unit = SFX_TIME_S;
 
   sfx_rc_enum_t sfx_rc = E2P_Read_Rc();
 
@@ -722,7 +737,7 @@ ATEerror_t AT_scan_mn(const char *param)
   }
   SIGFOX_API_close();
 
-  SIGFOX_MONARCH_API_execute_rc_scan(rc_capabilities_bit_mask, timer, unit, app_callback_handler);
+  SIGFOX_MONARCH_API_execute_rc_scan(rc_capabilities_bit_mask, timer, SFX_TIME_S, app_callback_handler);
 
   UTIL_SEQ_WaitEvt(1 << CFG_SEQ_Evt_Monarch);
 
@@ -795,10 +810,21 @@ static sfx_u8 app_callback_handler(sfx_u8 rc_bit_mask, sfx_s16 rssi)
 
   UTIL_SEQ_SetEvt(1 << CFG_SEQ_Evt_Monarch);
 
-  return rc_bit_mask;
+  return SFX_ERR_NONE;
   /* USER CODE BEGIN app_callback_handler_2 */
 
   /* USER CODE END app_callback_handler_2 */
+}
+
+static void sfx_monarch_test_mode_wait_start_cb(void)
+{
+  UTIL_SEQ_WaitEvt(1 << CFG_SEQ_Evt_Monarch);
+
+}
+
+static void sfx_monarch_test_mode_wait_end_cb(void)
+{
+  UTIL_SEQ_SetEvt(1 << CFG_SEQ_Evt_Monarch);
 }
 #endif /* MN_ON */
 
@@ -890,7 +916,9 @@ ATEerror_t AT_test_mode(const char *param)
   if ((test_mode >= 7) && (test_mode <= 10))
   {
 #ifdef MN_ON
-    sfx_error = ADDON_SIGFOX_RF_PROTOCOL_API_monarch_test_mode(rc, tm, rc_capabilities_bit_mask);
+    sfx_error = ST_ADDON_SIGFOX_RF_PROTOCOL_API_monarch_test_mode_async(rc, tm, rc_capabilities_bit_mask,
+                                                                        sfx_monarch_test_mode_wait_start_cb,
+                                                                        sfx_monarch_test_mode_wait_end_cb);
 #else
     at_status = AT_ERROR;
 #endif /* MN_ON */
@@ -1349,9 +1377,9 @@ ATEerror_t AT_rssi_cal_get(const char *param)
   AT_PRINTF("%d dB\r\n", rssi_cal);
 
   return AT_OK;
-  /* USER CODE BEGIN AT_rssi_cal_get_1 */
+  /* USER CODE BEGIN AT_rssi_cal_get_2 */
 
-  /* USER CODE END AT_rssi_cal_get_1 */
+  /* USER CODE END AT_rssi_cal_get_2 */
 }
 
 ATEerror_t AT_echo_set(const char *param)
@@ -1500,7 +1528,7 @@ static ErrorStatus stringToData(const char *str, uint8_t *data, uint32_t *dataSi
     hex[0] = *str++;
     hex[1] = *str++;
 
-    /*check if input is hexa */
+    /*check if input is hex */
     if ((isHex(hex[0]) == ERROR) || (isHex(hex[1]) == ERROR))
     {
       return ERROR;

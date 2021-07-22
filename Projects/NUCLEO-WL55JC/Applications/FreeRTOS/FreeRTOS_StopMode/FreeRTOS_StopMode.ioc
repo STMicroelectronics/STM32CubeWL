@@ -179,3 +179,5 @@ VP_LPTIM1_VS_LPTIM_counterModeInternalClock.Signal=LPTIM1_VS_LPTIM_counterModeIn
 VP_SYS_VS_tim17.Mode=TIM17
 VP_SYS_VS_tim17.Signal=SYS_VS_tim17
 board=custom
+ProjectManager.Example=FreeRTOS_StopMode
+ProjectManager.ExampleSource=CubeFw

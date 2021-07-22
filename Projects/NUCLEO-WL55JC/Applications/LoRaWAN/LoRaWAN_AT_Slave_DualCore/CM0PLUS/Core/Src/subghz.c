@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under Ultimate Liberty license
@@ -30,11 +30,21 @@ SUBGHZ_HandleTypeDef hsubghz;
 void MX_SUBGHZ_Init(void)
 {
 
+  /* USER CODE BEGIN SUBGHZ_Init 0 */
+
+  /* USER CODE END SUBGHZ_Init 0 */
+
+  /* USER CODE BEGIN SUBGHZ_Init 1 */
+
+  /* USER CODE END SUBGHZ_Init 1 */
   hsubghz.Init.BaudratePrescaler = SUBGHZSPI_BAUDRATEPRESCALER_4;
   if (HAL_SUBGHZ_Init(&hsubghz) != HAL_OK)
   {
     Error_Handler();
   }
+  /* USER CODE BEGIN SUBGHZ_Init 2 */
+
+  /* USER CODE END SUBGHZ_Init 2 */
 
 }
 

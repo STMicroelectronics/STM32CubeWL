@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    app_subghz_phy.h
@@ -16,6 +17,8 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
+
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __APP_SUBGHZ_PHY_H__
 #define __APP_SUBGHZ_PHY_H__
@@ -52,15 +55,11 @@ extern "C" {
 /* Exported functions prototypes ---------------------------------------------*/
 /**
   * @brief  Init SubGHz Radio Application
-  * @param None
-  * @retval None
   */
 void MX_SubGHz_Phy_Init(void);
 
 /**
   * @brief  SubGHz Radio Application Process
-  * @param None
-  * @retval None
   */
 void MX_SubGHz_Phy_Process(void);
 

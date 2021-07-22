@@ -40,6 +40,10 @@ extern "C" {
 #endif
 /* Includes ------------------------------------------------------------------*/
 
+
+
+
+/*******************************************Radio LORA enum*****************************************/
 typedef enum
 {
     GENERIC_FSK = 0,
@@ -47,7 +51,6 @@ typedef enum
     GENERIC_BPSK,
 }GenericModems_t;
 
-/*******************************************Radio LORA enum*****************************************/
 /*!
  * @brief Represents the possible spreading factor values in LoRa packet types
  */
@@ -124,10 +127,11 @@ typedef enum
  */
 typedef enum
 {
-    RADIO_LORA_LOWDR_OPT_OFF                         = 0x00,  /*Force to 0*/
-    RADIO_LORA_LOWDR_OPT_ON                          = 0x01,  /*Force to 1*/
-    RADIO_LORA_LOWDR_OPT_AUTO                        = 0x02,  /*Force to 1 when SF11 or SF12, 0 otherwise*/
+    RADIO_LORA_LOWDR_OPT_OFF                         = 0x00,  /*Forced to 0*/
+    RADIO_LORA_LOWDR_OPT_ON                          = 0x01,  /*Forced to 1*/
+    RADIO_LORA_LOWDR_OPT_AUTO                        = 0x02,  /*Forced to 1 when SF11 or SF12, 0 otherwise*/
 }RADIO_Ld_Opt_t;
+
 /*******************************************Radio FSK enum*****************************************/
 
 /*!
@@ -170,7 +174,8 @@ typedef enum
 typedef enum
 {
     RADIO_FSK_PACKET_FIXED_LENGTH               = 0x00,         //!< The packet is known on both sides, no header included in the packet
-    RADIO_FSK_PACKET_VARIABLE_LENGTH            = 0x01,         //!< The packet is on variable size, header included
+    RADIO_FSK_PACKET_VARIABLE_LENGTH            = 0x01,         //!< 1 byte  packet length field inserted after the sync word*/
+    RADIO_FSK_PACKET_2BYTES_LENGTH              = 0x02          //!< 2 bytes packet length field inserted after the sync word, payload size greater than 255 bytes */
 }RADIO_FSK_PacketLengthModes_t;
 
 /*!
@@ -188,14 +193,18 @@ typedef enum
 }RADIO_FSK_CrcTypes_t;
 
 /*!
- * @brief Radio whitening mode activated or deactivated
+ * @brief Radio whitening mode Off, CCIT or ibm
  */
 typedef enum
 {
-    RADIO_FSK_DC_FREE_OFF                       = 0x00,
-    RADIO_FSK_DC_FREEWHITENING                  = 0x01,
+    RADIO_FSK_DC_FREE_OFF                       = 0x00, /*whitening Off*/
+    RADIO_FSK_DC_FREEWHITENING                  = 0x01, /*whitening CCIT*/
+    RADIO_FSK_DC_IBM_WHITENING                  = 0x02, /*whitening IBM*/
 }RADIO_FSK_DcFree_t;
 
+/*!
+ * @brief Radio Lora generic Rx parameters
+ */
 typedef struct{
   uint32_t StopTimerOnPreambleDetect; /*0 inactive, otherwise active*/
   RADIO_LoRaSpreadingFactors_t SpreadingFactor;
@@ -209,59 +218,79 @@ typedef struct{
   RADIO_LoRaIQModes_t IqInverted;
 } generic_param_rx_lora_t;
 
+/*!
+ * @brief Radio FSK generic Rx parameters
+ */
 typedef struct{
   uint32_t StopTimerOnPreambleDetect;
   RADIO_FSK_ModShapings_t ModulationShaping;
   uint32_t Bandwidth;
-  uint32_t BitRate; /*BitRate*/
-  uint32_t PreambleLen; /*in Byte*/
+  uint32_t BitRate;                                   /* BitRate */
+  uint32_t PreambleLen;                               /* Preamble length in Byte */
   RADIO_FSK_PreambleDetection_t PreambleMinDetect;
-  uint8_t SyncWordLength; /*in Byte*/
-  uint8_t* SyncWord; /*SyncWord Buffer*/
-  uint32_t MaxPayloadLength; /*maximum Payload length to listen*/
-  uint16_t whiteSeed; /*WhiteningSeed*/
+  uint8_t SyncWordLength;                             /* SyncWord Buffer length in Byte*/
+  uint8_t* SyncWord;                                  /* SyncWord Buffer, 8 bytes max */
+  uint32_t MaxPayloadLength;                          /* maximum Payload length to listen */
+  uint16_t whiteSeed;                                 /* WhiteningSeed, whitening can also be disabled by setting this field to 0 */
   RADIO_FSK_AddressComp_t           AddrComp;
-  RADIO_FSK_PacketLengthModes_t     LengthMode;        //!< If the header is explicit, it will be transmitted in the GFSK packet. If the header is implicit, it will not be transmitted
-  RADIO_FSK_CrcTypes_t              CrcLength;         //!< Size of the CRC block in the GFSK packet
-  uint16_t CrcPolynomial;
+  RADIO_FSK_PacketLengthModes_t     LengthMode;       /* If the header is explicit, it will be transmitted in the GFSK packet. If the header is implicit, it will not be transmitted */
+  RADIO_FSK_CrcTypes_t              CrcLength;        /* Size of the CRC block in the GFSK packet */
+  uint16_t CrcPolynomial;                             /* Polynomial of the Crc*/
+  uint16_t CrcSeed;                                   /* Seed of the Crc*/
   RADIO_FSK_DcFree_t                Whitening;
 } generic_param_rx_fsk_t;
 
+/*!
+ * @brief Radio generic Rx Configuration
+ */
 typedef struct{
   generic_param_rx_fsk_t fsk;
   generic_param_rx_lora_t lora;
 } RxConfigGeneric_t;
 
+/*!
+ * @brief Radio BPSK generic Tx parameters
+ */
 typedef struct{
-  uint32_t BitRate; /*BitRate*/
+  uint32_t BitRate;                                   /*BitRate*/
 } generic_param_tx_bpsk_t;
 
+/*!
+ * @brief Radio Lora generic Tx parameters
+ */
 typedef struct{
   RADIO_LoRaSpreadingFactors_t SpreadingFactor;
   RADIO_LoRaBandwidths_t Bandwidth;
   RADIO_LoRaCodingRates_t Coderate;
-  RADIO_Ld_Opt_t LowDatarateOptimize;/*0 inactive, otherwise active*/
+  RADIO_Ld_Opt_t LowDatarateOptimize;                 /*0 inactive, otherwise active*/
   uint16_t PreambleLen;
   RADIO_LoRaPacketLengthsMode_t LengthMode;
   RADIO_LoRaCrcModes_t CrcMode;
   RADIO_LoRaIQModes_t IqInverted;
 } generic_param_tx_lora_t;
 
+/*!
+ * @brief Radio FSK generic Tx parameters
+ */
 typedef struct{
   RADIO_FSK_ModShapings_t ModulationShaping;
   uint32_t Bandwidth;
-  uint32_t BitRate; /*BitRate*/
-  uint32_t FrequencyDeviation; /*FrequencyDeviation*/
-  uint32_t PreambleLen; /*in Byte*/
-  uint8_t SyncWordLength; /*in Byte*/
-  uint8_t* SyncWord; /*SyncWord Buffer*/
-  uint16_t whiteSeed; /*WhiteningSeed*/
-  RADIO_FSK_PacketLengthModes_t     HeaderType;        //!< If the header is explicit, it will be transmitted in the GFSK packet. If the header is implicit, it will not be transmitted
-  RADIO_FSK_CrcTypes_t              CrcLength;         //!< Size of the CRC block in the GFSK packet
+  uint32_t BitRate;                                   /* BitRate */
+  uint32_t FrequencyDeviation;                        /* FrequencyDeviation */
+  uint32_t PreambleLen;                               /* in Byte */
+  uint8_t SyncWordLength;                             /* in Byte */
+  uint8_t* SyncWord;                                  /* SyncWord Buffer, 8 bytes max */
+  uint16_t whiteSeed;                                 /* Whitening seed, whitening can be disabled by setting this field to 0 */
+  RADIO_FSK_PacketLengthModes_t     HeaderType;       /* If the header is explicit, it will be transmitted in the GFSK packet. If the header is implicit, it will not be transmitted */
+  RADIO_FSK_CrcTypes_t              CrcLength;        /* Size of the CRC block in the GFSK packet */
   uint16_t CrcPolynomial;
+  uint16_t CrcSeed;
   RADIO_FSK_DcFree_t                Whitening;
 } generic_param_tx_fsk_t;
 
+/*!
+ * @brief Radio generic Tx Configuration
+ */
 typedef struct{
   generic_param_tx_fsk_t fsk;
   generic_param_tx_lora_t lora;

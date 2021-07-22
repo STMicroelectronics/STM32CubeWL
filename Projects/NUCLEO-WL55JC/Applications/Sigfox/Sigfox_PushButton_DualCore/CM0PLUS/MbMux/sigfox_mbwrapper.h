@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    sigfox_mbwrapper.h
@@ -17,6 +18,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __SIGFOX_MBWRAPPER_CM0PLUS_H__
@@ -57,8 +59,19 @@ extern "C" {
 /* Exported functions prototypes ---------------------------------------------*/
 void Process_Sigfox_Cmd(MBMUX_ComParam_t *ComObj);
 
+/*!
+  * @brief   Measures the battery level
+  * @return  Battery level [0: node is connected to an external
+  *          power source, 1..254: battery level, where 1 is the minimum
+  *          and 254 is the maximum value, 255: the node was not able
+  *          to measure the battery level]
+  */
 uint16_t GetBatteryLevel_mbwrapper(void);
 
+/*!
+  * @brief   Measures the temperature level
+  * @return  Temperature level
+  */
 int16_t GetTemperatureLevel_mbwrapper(void);
 
 /* USER CODE BEGIN EFP */

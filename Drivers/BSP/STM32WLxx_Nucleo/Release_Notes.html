@@ -21,14 +21,12 @@
 <div class="row">
 <div class="col-sm-12 col-lg-4">
 <center>
-<h1 id="release-notes-for-stm32wlxx_nucleo">Release Notes for <mark>STM32WLxx_Nucleo</mark></h1>
+<h1 id="release-notes-for">Release Notes for</h1>
+<h1 id="stm32wlxx_nucleo"><mark>STM32WLxx_Nucleo</mark></h1>
 <p>Copyright © 2020 STMicroelectronics<br />
 </p>
 <a href="https://www.st.com" class="logo"><img src="_htmresc/st_logo_2020.png" alt="ST logo" /></a>
 </center>
-<h1 id="license">License</h1>
-<p>This software component is licensed by ST under BSD 3-Clause license, the “License”; You may not use this component except in compliance with the License. You may obtain a copy of the License at:</p>
-<p><a href="https://opensource.org/licenses/BSD-3-Clause">https://opensource.org/licenses/BSD-3-Clause</a></p>
 <h1 id="purpose">Purpose</h1>
 <p>This driver provides a set of functions to manage:</p>
 <ul>
@@ -38,18 +36,37 @@
 <div class="col-sm-12 col-lg-8">
 <h1 id="update-history">Update History</h1>
 <div class="collapse">
-<input type="checkbox" id="collapse-section1" checked aria-hidden="true"> <label for="collapse-section1" aria-hidden="true"><strong>V1.0.0 / 28-October-2020</strong></label>
+<input type="checkbox" id="collapse-section2" checked aria-hidden="true"> <label for="collapse-section2" aria-hidden="true"><strong>V1.1.0 / 16-June-2021</strong></label>
 <div>
 <h2 id="main-changes">Main Changes</h2>
-<p><strong>First Official Release</strong></p>
+<p><strong>Maintenance Release</strong></p>
 <h2 id="contents">Contents</h2>
-<p>First official release of board drivers for <strong>NUCLEO-WL55JC board (MB1389 C-01)</strong> in line with STM32Cube BSP drivers development guidelines (UM2298 - revision 2)</p>
+<ul>
+<li>Move some radio definitions (TCXO, DSDC) from stm32wlxx_nucleo_conf.h to stm32wlxx_nucleo_radio.h</li>
+<li>Add 2 interfaces to check BSP_RADIO_IsTCXO and BSP_RADIO_IsDCDC definitions</li>
+<li>Remove radio API BSP_RADIO_GetWakeUpTime from stm32wlxx_nucleo_radio.c</li>
+</ul>
 <h2 id="known-limitations">Known Limitations</h2>
 <p>None</p>
 <h2 id="dependencies">Dependencies</h2>
 <p>None</p>
 <h2 id="notes">Notes</h2>
-<p>stm32l5xx_nucleo_conf_template.h file must be copied in user application as stm32l5xx_nucleo_conf.h with optional configuration update</p>
+<p>stm32wlxx_nucleo_conf_template.h file must be copied in user application as stm32wlxx_nucleo_conf.h with optional configuration update</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section1" aria-hidden="true"> <label for="collapse-section1" aria-hidden="true"><strong>V1.0.0 / 28-October-2020</strong></label>
+<div>
+<h2 id="main-changes-1">Main Changes</h2>
+<p><strong>First Official Release</strong></p>
+<h2 id="contents-1">Contents</h2>
+<p>First official release of board drivers for <strong>NUCLEO-WL55JC board (MB1389 C-01)</strong> in line with STM32Cube BSP drivers development guidelines (UM2298 - revision 2)</p>
+<h2 id="known-limitations-1">Known Limitations</h2>
+<p>None</p>
+<h2 id="dependencies-1">Dependencies</h2>
+<p>None</p>
+<h2 id="notes-1">Notes</h2>
+<p>stm32wlxx_nucleo_conf_template.h file must be copied in user application as stm32wlxx_nucleo_conf.h with optional configuration update</p>
 </div>
 </div>
 </div>

@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    radio_mbwrapper.h
@@ -17,6 +18,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __RADIO_MBWRAPPER_CM4_H__
@@ -54,6 +56,10 @@ extern "C" {
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
+/**
+  * @brief This function processes the radio events callbacks from CM0+
+  * @param ComObj exchange buffer parameter
+  */
 void Process_Radio_Notif(MBMUX_ComParam_t *ComObj);
 
 /* USER CODE BEGIN EFP */

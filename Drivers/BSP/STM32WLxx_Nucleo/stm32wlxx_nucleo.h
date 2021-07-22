@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2020(-2021) STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -146,7 +145,7 @@ typedef enum
   * @brief STM32WLXX NUCLEO BSP Driver version number
   */
 #define __STM32WLXX_NUCLEO_BSP_VERSION_MAIN   (0x01U) /*!< [31:24] main version */
-#define __STM32WLXX_NUCLEO_BSP_VERSION_SUB1   (0x00U) /*!< [23:16] sub1 version */
+#define __STM32WLXX_NUCLEO_BSP_VERSION_SUB1   (0x01U) /*!< [23:16] sub1 version */
 #define __STM32WLXX_NUCLEO_BSP_VERSION_SUB2   (0x00U) /*!< [15:8]  sub2 version */
 #define __STM32WLXX_NUCLEO_BSP_VERSION_RC     (0x00U) /*!< [7:0]  release candidate */ 
 #define __STM32WLXX_NUCLEO_BSP_VERSION        ((__STM32WLXX_NUCLEO_BSP_VERSION_MAIN << 24)\
@@ -205,6 +204,7 @@ typedef enum
 #else
 #define BUTTON_SW1_EXTI_IRQn                    EXTI0_IRQn
 #endif
+#define H_EXTI_0                                hpb_exti[BUTTON_SW1]
 
 #define BUTTON_SW2_PIN                          GPIO_PIN_1
 #define BUTTON_SW2_GPIO_PORT                    GPIOA
@@ -216,6 +216,7 @@ typedef enum
 #else
 #define BUTTON_SW2_EXTI_IRQn                    EXTI1_IRQn
 #endif
+#define H_EXTI_1                                hpb_exti[BUTTON_SW2]
 
 #define BUTTON_SW3_PIN                          GPIO_PIN_6
 #define BUTTON_SW3_GPIO_PORT                    GPIOC
@@ -227,6 +228,7 @@ typedef enum
 #else
 #define BUTTON_SW3_EXTI_IRQn                    EXTI9_5_IRQn
 #endif
+#define H_EXTI_6                                hpb_exti[BUTTON_SW3]
 
 #define BUTTONx_GPIO_CLK_ENABLE(__INDEX__)    do { if ((__INDEX__) == BUTTON_SW1) BUTTON_SW1_GPIO_CLK_ENABLE(); else \
                                               if ((__INDEX__) == BUTTON_SW2) BUTTON_SW2_GPIO_CLK_ENABLE(); else \

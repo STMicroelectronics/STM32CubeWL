@@ -1,12 +1,12 @@
 /**
   @page SubGHz_Phy_PingPong Readme file
- 
+
   @verbatim
   ******************** (C) COPYRIGHT 2020 STMicroelectronics *******************
-  * @file    Applications/SubGHz_Phy/SubGHz_Phy_PingPong/readme.txt 
+  * @file    Applications/SubGHz_Phy/SubGHz_Phy_PingPong/readme.txt
   * @author  MCD Application Team
-  * @brief   This application is a simple demo application software between 2 
-  *          LoRa Objects: a STM32WL Nucleo board and whatever other LoRA Radio  
+  * @brief   This application is a simple demo application software between 2
+  *          LoRa Objects: a STM32WL Nucleo board and whatever other LoRa Radio
   *          board embedding SubGHz_Phy_PingPong application too
   ******************************************************************************
   * @attention
@@ -24,20 +24,21 @@
 
 @par Description
 
-This directory contains a set of source files that implements a Ping-Pong application 
+This directory contains a set of source files that implements a Ping-Pong application
 between two PingPong Devices.
 
-The PingPong Device can be 
-   - a STM32WL Nucleo board 
-   - a Lora Radio expansion board or a B-L072Z-LRWAN1
-It is a simple RX/TX RF link between the two PingPong Devices, one will called be Ping the other will be called Pong. 
-By default, each PingPong Device starts as a master and will transmit a "Ping" message, and then wait for an answer. 
+The PingPong Device can be
+   - a STM32WL Nucleo board
+   - a LoRa Radio expansion board or a B-L072Z-LRWAN1
+The applications aims to show a simple RX/TX RF link between the two PingPong devices,
+one will be called Ping the other will be called Pong.
+By default, each PingPong Device starts as a master and will transmit a "Ping" message, and then wait for an answer.
+At start-up, each PingPong Device has its two LEDs blinking.
+When boards will synchronize (Tx window of one board aligned with Rx window of the other board)
+the Ping Device (board receiving "Ping" msg) will blink green LED and the Pong Device (board receiving "Pong" msg) will blink red LED.
 The first PingPong Device receiving a "Ping" message will become a slave and answers the master with a "Pong" message.
-At start, on STM32WL Nucleo board, if you see the 3 LEDs blinking on the 2 PingPong Device 
-it means that both boards have their RX windows synchronised (and TX windows too). The RX window of the first board 
-should NOT be perfectly synchronised with the second board, there should be one TX window in front of one RX window. 
-You only have to reset one of the two boards, to get rid of this issue.
-When boards are sending and receiving: Blue LED blinks on "Ping" msg received, Red LED blinks on "Pong" msg.
+
+Logs via hyperterminal complement LEDs indicators.
 
   ******************************************************************************
 
@@ -45,10 +46,9 @@ When boards are sending and receiving: Blue LED blinks on "Ping" msg received, R
 
 Applications, SubGHz_Phy, PingPong, SingleCore
 
-@par Directory contents 
+@par Directory contents
 
 
-  - SubGHz_Phy_PingPong/Core/Inc/board_resources.h                              Header for driver at.c module
   - SubGHz_Phy_PingPong/Core/Inc/dma.h                                          This file contains all the function prototypes for
                                                                                 the dma.c file
   - SubGHz_Phy_PingPong/Core/Inc/main.h                                         : Header for main.c file.
@@ -79,7 +79,6 @@ Applications, SubGHz_Phy, PingPong, SingleCore
   - SubGHz_Phy_PingPong/SubGHz_Phy/Target/radio_conf.h                          Header of Radio configuration
   - SubGHz_Phy_PingPong/SubGHz_Phy/Target/timer.h                               Wrapper to timer server
 
-  - SubGHz_Phy_PingPong/Core/Src/board_resources.c                              Source file
   - SubGHz_Phy_PingPong/Core/Src/dma.c                                          This file provides code for the configuration
                                                                                 of all the requested memory to memory DMA transfers.
   - SubGHz_Phy_PingPong/Core/Src/main.c                                         : Main program body
@@ -97,27 +96,25 @@ Applications, SubGHz_Phy, PingPong, SingleCore
   - SubGHz_Phy_PingPong/Core/Src/timer_if.c                                     Configure RTC Alarm, Tick and Calendar manager
   - SubGHz_Phy_PingPong/Core/Src/usart.c                                        This file provides code for the configuration
                                                                                 of the USART instances.
-  - SubGHz_Phy_PingPong/Core/Src/usart_if.c                                     Configuration of UART MX driver interface for hyperterminal communication
-  - SubGHz_Phy_PingPong/STM32CubeIDE/Application/Core/syscalls.c                STM32CubeIDE Minimal System calls file
-  - SubGHz_Phy_PingPong/STM32CubeIDE/Application/Core/sysmem.c                  STM32CubeIDE System Memory calls file
+  - SubGHz_Phy_PingPong/Core/Src/usart_if.c                                     Configuration of UART driver interface for hyperterminal communication
+  - SubGHz_Phy_PingPong/STM32CubeIDE/Application/User/Core/syscalls.c           STM32CubeIDE Minimal System calls file
+  - SubGHz_Phy_PingPong/STM32CubeIDE/Application/User/Core/sysmem.c             STM32CubeIDE System Memory calls file
   - SubGHz_Phy_PingPong/SubGHz_Phy/App/app_subghz_phy.c                         Application of the SubGHz_Phy Middleware
   - SubGHz_Phy_PingPong/SubGHz_Phy/App/subghz_phy_app.c                         Application of the SubGHz_Phy Middleware
   - SubGHz_Phy_PingPong/SubGHz_Phy/Target/radio_board_if.c                      This file provides an interface layer between MW and Radio Board
 
 
-@par Hardware and Software environment 
+@par Hardware and Software environment
 
   - This example runs on the STM32WLxx Nucleo board.
 
-  - STM32WLxx Nucleo board Set-up    
-    - Connect the Nucleo board to your PC with a USB cable type A to micro-B 
+  - STM32WLxx Nucleo board Set-up
+    - Connect the Nucleo board to your PC with a USB cable type A to micro-B
       to ST-LINK connector.
     - Please ensure that the ST-LINK connector jumpers are fitted.
 
   - Configure the software via the configuration files:
-    - sys_conf.h, radio_conf.h, mw_log_conf.h, radio_board_if.h, main.h, etc
-    - Careful: 
-        - STM32WLxx Nucleo requires IS_TCXO_SUPPORTED=1
+    - sys_conf.h, radio_conf.h, mw_log_conf.h, main.h, etc
 
   -Set Up:
 
@@ -128,15 +125,20 @@ Applications, SubGHz_Phy, PingPong, SingleCore
              |                        |          |                        |
              --------------------------          --------------------------
 
-@par How to use it ? 
+@par How to use it ?
 In order to make the program work, you must do the following :
-  - Open your preferred toolchain 
+  - Open your preferred toolchain
   - Rebuild all files and load your image into target memory
   - Do the same for second board
   - Reset the two boards
   - Run the example on two boards
   - Open two Terminals, each connected to their respective PingPong Device
   - UART Config = 115200, 8b, 1 stopbit, no parity, no flow control
+
+@par How to debug ?
+  - make sure the flag DEBUGGER_ENABLED to 1 in sys_conf.h
+  - simpler to define the flag LOW_POWER_DISABLE to 1 as well
+  - compile, download and attach
 
  * <h3><center>&copy; COPYRIGHT STMicroelectronics</center></h3>
  */

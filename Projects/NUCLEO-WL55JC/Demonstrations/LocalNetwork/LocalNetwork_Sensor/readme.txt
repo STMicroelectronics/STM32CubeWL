@@ -1,12 +1,12 @@
 /**
   @page LocalNetwork_Sensor Readme file
- 
+
   @verbatim
   ******************** (C) COPYRIGHT 2020 STMicroelectronics *******************
-  * @file    Demonstrations/LocalNetwork/LocalNetwork_Sensor/readme.txt 
+  * @file    Demonstrations/LocalNetwork/LocalNetwork_Sensor/readme.txt
   * @author  MCD Application Team
-  * @brief   This application is a demo software of a Sensor sending 
-  *          Sensor data to the demo concentrator modem 
+  * @brief   This application is a demo software of a Sensor sending
+  *          Sensor data to the demo concentrator modem
   *          external host
   ******************************************************************************
   * @attention
@@ -24,8 +24,8 @@
 
 @par Description
 
-This directory contains a set of source files that implements Sensor sending Sensor 
-data to the demo concentrator 
+This directory contains a set of source files that implements Sensor sending Sensor
+data to the demo concentrator.
 
 This application is targeting the STM32WLxx Nucleo board embedding the STM32WLxx.
   ******************************************************************************
@@ -34,7 +34,7 @@ This application is targeting the STM32WLxx Nucleo board embedding the STM32WLxx
 
 Demonstrations, SubGHz_Phy, LocalNetwork, Sensor
 
-@par Directory contents 
+@par Directory contents
 
 
   - LocalNetwork_Sensor/Core/Inc/adc.h                                          This file contains all the function prototypes for
@@ -89,22 +89,24 @@ Demonstrations, SubGHz_Phy, LocalNetwork, Sensor
   - LocalNetwork_Sensor/Core/Src/timer_if.c                                     Configure RTC Alarm, Tick and Calendar manager
   - LocalNetwork_Sensor/Core/Src/usart.c                                        This file provides code for the configuration
                                                                                 of the USART instances.
-  - LocalNetwork_Sensor/Core/Src/usart_if.c                                     Configuration of UART MX driver interface for hyperterminal communication
+  - LocalNetwork_Sensor/Core/Src/usart_if.c                                     Configuration of UART driver interface for hyperterminal communication
   - LocalNetwork_Sensor/STM32CubeIDE/Application/Core/syscalls.c                STM32CubeIDE Minimal System calls file
   - LocalNetwork_Sensor/STM32CubeIDE/Application/Core/sysmem.c                  STM32CubeIDE System Memory calls file
   - LocalNetwork_Sensor/SubGHz_Phy/App/demo_sensor.c                            Concentrator behavior module for STM32WL Concentrator Demo.
   - LocalNetwork_Sensor/SubGHz_Phy/Target/radio_board_if.c                      This file provides an interface layer between MW and Radio Board
 
 
-@par Hardware and Software environment 
+@par Hardware and Software environment
 
   - This example runs on the STM32WLxx Nucleo board.
 
-  - STM32WLxx Nucleo board Set-up    
-    - Connect the Nucleo board to your PC with a USB cable type A to micro-B 
+  - STM32WLxx Nucleo board Set-up
+    - Connect the Nucleo board to your PC with a USB cable type A to micro-B
       to ST-LINK connector.
     - Please ensure that the ST-LINK connector jumpers are fitted.
-    - STM32WLxx Nucleo requires IS_TCXO_SUPPORTED=1
+
+  - Configure the software via the configuration files:
+    - sys_conf.h, radio_conf.h, mw_log_conf.h, main.h, etc
 
   -Set Up:
 
@@ -115,9 +117,9 @@ Demonstrations, SubGHz_Phy, LocalNetwork, Sensor
              |                        |          |                        |
              --------------------------          --------------------------
 
-@par How to use it ? 
+@par How to use it ?
 In order to make the program work, you must do the following :
-  - Open your preferred toolchain 
+  - Open your preferred toolchain
   - Rebuild all files and load your image into target memory
   - Run the example
   - Open a Terminal, connected the Demo/Sensor
@@ -126,6 +128,11 @@ In order to make the program work, you must do the following :
   - Use another Nucleo with Demo/Concentrator binary (please see Demo/Concentrator project)  and start it with AT+BEACON_ON (default beacon frequency is EU)
   - the Demo/Sensor will automatically acquire the beacon and a time slot will be reserved.
   - the Demo/Sensor will send sensor data at reserved time slot.
+
+@par How to debug ?
+  - make sure the flag DEBUGGER_ENABLED to 1 in sys_conf.h
+  - simpler to define the flag LOW_POWER_DISABLE to 1 as well
+  - compile, download and attach
 
  * <h3><center>&copy; COPYRIGHT STMicroelectronics</center></h3>
  */

@@ -1,8 +1,9 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    mbmuxif_trace.h
   * @author  MCD Application Team
-  * @brief   API for CM4 applic to register and handle TRACE via MBMUX
+  * @brief   API for CM4 application to register and handle TRACE via MBMUX
   ******************************************************************************
   * @attention
   *
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __MBMUXIF_TRACE_CM4_H__
@@ -52,7 +54,15 @@ extern "C" {
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
+/**
+  * @brief  Registers TRACE feature to the mailbox
+  * @retval 0: OK; -1: no more ipcc channel available; -2: feature not provided by CM0PLUS
+  */
 int8_t MBMUXIF_TraceInit(void);
+
+/**
+  * @brief  Sends a Trace-Ack  via Ipcc without waiting for the ack
+  */
 void MBMUXIF_TraceSendAck(void);
 /* USER CODE BEGIN EFP */
 

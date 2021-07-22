@@ -28,82 +28,33 @@
  *
  * \author    Daniel Jaeckle ( STACKFORCE )
 */
-#include "utilities.h"
-
+/**
+  ******************************************************************************
+  *
+  *          Portions COPYRIGHT 2020 STMicroelectronics
+  *
+  * @file    RegionCN470.c
+  * @author  MCD Application Team
+  * @brief   Region implementation for CN470
+  ******************************************************************************
+  */
+#include "radio.h"
 #include "RegionCommon.h"
 #include "RegionCN470.h"
+#include "RegionBaseUS.h"
+#include "lorawan_conf.h"  /* REGION_* */
 
 // Definitions
 #define CHANNELS_MASK_SIZE              6
 
-/*!
- * Region specific context
- */
-typedef struct sRegionCN470NvmCtx
-{
-    /*!
-     * LoRaMAC channels
-     */
-    ChannelParams_t Channels[ CN470_MAX_NB_CHANNELS ];
-    /*!
-     * LoRaMac bands
-     */
-    Band_t Bands[ CN470_MAX_NB_BANDS ];
-    /*!
-     * LoRaMac channels mask
-     */
-    uint16_t ChannelsMask[ CHANNELS_MASK_SIZE ];
-    /*!
-     * LoRaMac channels default mask
-     */
-    uint16_t ChannelsDefaultMask[ CHANNELS_MASK_SIZE ];
-}RegionCN470NvmCtx_t;
-
+#if defined( REGION_CN470 )
 /*
  * Non-volatile module context.
  */
-static RegionCN470NvmCtx_t NvmCtx;
+static RegionNvmDataGroup1_t* RegionNvmGroup1;
+static RegionNvmDataGroup2_t* RegionNvmGroup2;
 
 // Static functions
-static int8_t GetNextLowerTxDr( int8_t dr, int8_t minDr )
-{
-    uint8_t nextLowerDr = 0;
-
-    if( dr == minDr )
-    {
-        nextLowerDr = minDr;
-    }
-    else
-    {
-        nextLowerDr = dr - 1;
-    }
-    return nextLowerDr;
-}
-
-static uint32_t GetBandwidth( uint32_t drIndex )
-{
-    switch( BandwidthsCN470[drIndex] )
-    {
-        default:
-        case 125000:
-            return 0;
-        case 250000:
-            return 1;
-        case 500000:
-            return 2;
-    }
-}
-
-static int8_t LimitTxPower( int8_t txPower, int8_t maxBandTxPower, int8_t datarate, uint16_t* channelsMask )
-{
-    int8_t txPowerResult = txPower;
-
-    // Limit tx power to the band max
-    txPowerResult =  MAX( txPower, maxBandTxPower );
-
-    return txPowerResult;
-}
-
 static bool VerifyRfFreq( uint32_t freq )
 {
     // Check radio driver support
@@ -131,15 +82,17 @@ static bool VerifyRfFreq( uint32_t freq )
 static TimerTime_t GetTimeOnAir( int8_t datarate, uint16_t pktLen )
 {
     int8_t phyDr = DataratesCN470[datarate];
-    uint32_t bandwidth = GetBandwidth( datarate );
+    uint32_t bandwidth = RegionCommonGetBandwidth( datarate, BandwidthsCN470 );
 
     return Radio.TimeOnAir( MODEM_LORA, bandwidth, phyDr, 1, 8, false, pktLen, true );
 }
+#endif /* REGION_CN470 */
 
 PhyParam_t RegionCN470GetPhyParam( GetPhyParams_t* getPhy )
 {
     PhyParam_t phyParam = { 0 };
 
+#if defined( REGION_CN470 )
     switch( getPhy->Attribute )
     {
         case PHY_MIN_RX_DR:
@@ -159,7 +112,16 @@ PhyParam_t RegionCN470GetPhyParam( GetPhyParams_t* getPhy )
         }
         case PHY_NEXT_LOWER_TX_DR:
         {
-            phyParam.Value = GetNextLowerTxDr( getPhy->Datarate, CN470_TX_MIN_DATARATE );
+            RegionCommonGetNextLowerTxDrParams_t nextLowerTxDrParams =
+            {
+                .CurrentDr = getPhy->Datarate,
+                .MaxDr = ( int8_t )CN470_TX_MAX_DATARATE,
+                .MinDr = ( int8_t )CN470_TX_MIN_DATARATE,
+                .NbChannels = CN470_MAX_NB_CHANNELS,
+                .ChannelsMask = RegionNvmGroup2->ChannelsMask,
+                .Channels = RegionNvmGroup2->Channels,
+            };
+            phyParam.Value = RegionCommonGetNextLowerTxDr( &nextLowerTxDrParams );
             break;
         }
         case PHY_MAX_TX_POWER:
@@ -174,12 +136,12 @@ PhyParam_t RegionCN470GetPhyParam( GetPhyParams_t* getPhy )
         }
         case PHY_DEF_ADR_ACK_LIMIT:
         {
-            phyParam.Value = CN470_ADR_ACK_LIMIT;
+            phyParam.Value = REGION_COMMON_DEFAULT_ADR_ACK_LIMIT;
             break;
         }
         case PHY_DEF_ADR_ACK_DELAY:
         {
-            phyParam.Value = CN470_ADR_ACK_DELAY;
+            phyParam.Value = REGION_COMMON_DEFAULT_ADR_ACK_DELAY;
             break;
         }
         case PHY_MAX_PAYLOAD:
@@ -187,11 +149,13 @@ PhyParam_t RegionCN470GetPhyParam( GetPhyParams_t* getPhy )
             phyParam.Value = MaxPayloadOfDatarateCN470[getPhy->Datarate];
             break;
         }
+        /* ST_WORKAROUND_BEGIN: Keep repeater feature */
         case PHY_MAX_PAYLOAD_REPEATER:
         {
             phyParam.Value = MaxPayloadOfDatarateRepeaterCN470[getPhy->Datarate];
             break;
         }
+        /* ST_WORKAROUND_END */
         case PHY_DUTY_CYCLE:
         {
             phyParam.Value = CN470_DUTY_CYCLE_ENABLED;
@@ -204,37 +168,37 @@ PhyParam_t RegionCN470GetPhyParam( GetPhyParams_t* getPhy )
         }
         case PHY_RECEIVE_DELAY1:
         {
-            phyParam.Value = CN470_RECEIVE_DELAY1;
+            phyParam.Value = REGION_COMMON_DEFAULT_RECEIVE_DELAY1;
             break;
         }
         case PHY_RECEIVE_DELAY2:
         {
-            phyParam.Value = CN470_RECEIVE_DELAY2;
+            phyParam.Value = REGION_COMMON_DEFAULT_RECEIVE_DELAY2;
             break;
         }
         case PHY_JOIN_ACCEPT_DELAY1:
         {
-            phyParam.Value = CN470_JOIN_ACCEPT_DELAY1;
+            phyParam.Value = REGION_COMMON_DEFAULT_JOIN_ACCEPT_DELAY1;
             break;
         }
         case PHY_JOIN_ACCEPT_DELAY2:
         {
-            phyParam.Value = CN470_JOIN_ACCEPT_DELAY2;
+            phyParam.Value = REGION_COMMON_DEFAULT_JOIN_ACCEPT_DELAY2;
             break;
         }
         case PHY_MAX_FCNT_GAP:
         {
-            phyParam.Value = CN470_MAX_FCNT_GAP;
+            phyParam.Value = REGION_COMMON_DEFAULT_MAX_FCNT_GAP;
             break;
         }
         case PHY_ACK_TIMEOUT:
         {
-            phyParam.Value = ( CN470_ACKTIMEOUT + randr( -CN470_ACK_TIMEOUT_RND, CN470_ACK_TIMEOUT_RND ) );
+            phyParam.Value = ( REGION_COMMON_DEFAULT_ACK_TIMEOUT + randr( -REGION_COMMON_DEFAULT_ACK_TIMEOUT_RND, REGION_COMMON_DEFAULT_ACK_TIMEOUT_RND ) );
             break;
         }
         case PHY_DEF_DR1_OFFSET:
         {
-            phyParam.Value = CN470_DEFAULT_RX1_DR_OFFSET;
+            phyParam.Value = REGION_COMMON_DEFAULT_RX1_DR_OFFSET;
             break;
         }
         case PHY_DEF_RX2_FREQUENCY:
@@ -249,12 +213,12 @@ PhyParam_t RegionCN470GetPhyParam( GetPhyParams_t* getPhy )
         }
         case PHY_CHANNELS_MASK:
         {
-            phyParam.ChannelsMask = NvmCtx.ChannelsMask;
+            phyParam.ChannelsMask = RegionNvmGroup2->ChannelsMask;
             break;
         }
         case PHY_CHANNELS_DEFAULT_MASK:
         {
-            phyParam.ChannelsMask = NvmCtx.ChannelsDefaultMask;
+            phyParam.ChannelsMask = RegionNvmGroup2->ChannelsDefaultMask;
             break;
         }
         case PHY_MAX_NB_CHANNELS:
@@ -264,13 +228,17 @@ PhyParam_t RegionCN470GetPhyParam( GetPhyParams_t* getPhy )
         }
         case PHY_CHANNELS:
         {
-            phyParam.Channels = NvmCtx.Channels;
+            phyParam.Channels = RegionNvmGroup2->Channels;
             break;
         }
         case PHY_DEF_UPLINK_DWELL_TIME:
+        {
+            phyParam.Value = CN470_DEFAULT_UPLINK_DWELL_TIME;
+            break;
+        }
         case PHY_DEF_DOWNLINK_DWELL_TIME:
         {
-            phyParam.Value = 0;
+            phyParam.Value = REGION_COMMON_DEFAULT_DOWNLINK_DWELL_TIME;
             break;
         }
         case PHY_DEF_MAX_EIRP:
@@ -285,7 +253,9 @@ PhyParam_t RegionCN470GetPhyParam( GetPhyParams_t* getPhy )
         }
         case PHY_BEACON_CHANNEL_FREQ:
         {
-            phyParam.Value = CN470_BEACON_CHANNEL_FREQ;
+            phyParam.Value = RegionBaseUSCalcDownlinkFrequency( getPhy->Channel,
+                                                                CN470_BEACON_CHANNEL_FREQ,
+                                                                CN470_BEACON_CHANNEL_STEPWIDTH );
             break;
         }
         case PHY_BEACON_FORMAT:
@@ -300,16 +270,6 @@ PhyParam_t RegionCN470GetPhyParam( GetPhyParams_t* getPhy )
             phyParam.Value = CN470_BEACON_CHANNEL_DR;
             break;
         }
-        case PHY_BEACON_CHANNEL_STEPWIDTH:
-        {
-            phyParam.Value = CN470_BEACON_CHANNEL_STEPWIDTH;
-            break;
-        }
-        case PHY_PING_SLOT_NB_CHANNELS:
-        {
-            phyParam.Value = CN470_PING_SLOT_NB_CHANNELS;
-            break;
-        }
         case PHY_BEACON_NB_CHANNELS:
         {
             phyParam.Value = CN470_BEACON_NB_CHANNELS;
@@ -317,12 +277,19 @@ PhyParam_t RegionCN470GetPhyParam( GetPhyParams_t* getPhy )
         }
         case PHY_PING_SLOT_CHANNEL_FREQ:
         {
-            phyParam.Value = CN470_PING_SLOT_CHANNEL_FREQ;
+            phyParam.Value = RegionBaseUSCalcDownlinkFrequency( getPhy->Channel,
+                                                                CN470_PING_SLOT_CHANNEL_FREQ,
+                                                                CN470_BEACON_CHANNEL_STEPWIDTH );
             break;
         }
         case PHY_PING_SLOT_CHANNEL_DR:
         {
             phyParam.Value = CN470_PING_SLOT_CHANNEL_DR;
+            break;
+        }
+        case PHY_PING_SLOT_NB_CHANNELS:
+        {
+            phyParam.Value = CN470_BEACON_NB_CHANNELS;
             break;
         }
         case PHY_SF_FROM_DR:
@@ -332,7 +299,7 @@ PhyParam_t RegionCN470GetPhyParam( GetPhyParams_t* getPhy )
         }
         case PHY_BW_FROM_DR:
         {
-            phyParam.Value = GetBandwidth( getPhy->Datarate );
+            phyParam.Value = RegionCommonGetBandwidth( getPhy->Datarate, BandwidthsCN470 );
             break;
         }
         default:
@@ -341,17 +308,21 @@ PhyParam_t RegionCN470GetPhyParam( GetPhyParams_t* getPhy )
         }
     }
 
+#endif /* REGION_CN470 */
     return phyParam;
 }
 
 void RegionCN470SetBandTxDone( SetBandTxDoneParams_t* txDone )
 {
-    RegionCommonSetBandTxDone( &NvmCtx.Bands[NvmCtx.Channels[txDone->Channel].Band],
+#if defined( REGION_CN470 )
+    RegionCommonSetBandTxDone( &RegionNvmGroup1->Bands[RegionNvmGroup2->Channels[txDone->Channel].Band],
                                txDone->LastTxAirTime, txDone->Joined, txDone->ElapsedTimeSinceStartUp );
+#endif /* REGION_CN470 */
 }
 
 void RegionCN470InitDefaults( InitDefaultsParams_t* params )
 {
+#if defined( REGION_CN470 )
     Band_t bands[CN470_MAX_NB_BANDS] =
     {
         CN470_BAND0
@@ -361,40 +332,48 @@ void RegionCN470InitDefaults( InitDefaultsParams_t* params )
     {
         case INIT_TYPE_DEFAULTS:
         {
-            // Default bands
-            memcpy1( ( uint8_t* )NvmCtx.Bands, ( uint8_t* )bands, sizeof( Band_t ) * CN470_MAX_NB_BANDS );
+            if( ( params->NvmGroup1 == NULL ) || ( params->NvmGroup2 == NULL ) )
+            {
+                return;
+            }
 
-            // Channels
+            RegionNvmGroup1 = (RegionNvmDataGroup1_t*) params->NvmGroup1;
+            RegionNvmGroup2 = (RegionNvmDataGroup2_t*) params->NvmGroup2;
+
+            // Default bands
+            memcpy1( ( uint8_t* )RegionNvmGroup1->Bands, ( uint8_t* )bands, sizeof( Band_t ) * CN470_MAX_NB_BANDS );
+
+            // Default channels
             for( uint8_t i = 0; i < CN470_MAX_NB_CHANNELS; i++ )
             {
                 // 125 kHz channels
-                NvmCtx.Channels[i].Frequency = 470300000 + i * 200000;
-                NvmCtx.Channels[i].DrRange.Value = ( DR_5 << 4 ) | DR_0;
-                NvmCtx.Channels[i].Band = 0;
+                RegionNvmGroup2->Channels[i].Frequency = 470300000 + i * 200000;
+                RegionNvmGroup2->Channels[i].DrRange.Value = ( DR_5 << 4 ) | DR_0;
+                RegionNvmGroup2->Channels[i].Band = 0;
             }
 
-            // Initialize channels default mask
+            // Default ChannelsMask
             /* ST_WORKAROUND_BEGIN: Hybrid mode */
 #if ( HYBRID_ENABLED == 1 )
-            NvmCtx.ChannelsDefaultMask[0] = 0x00FF;
-            NvmCtx.ChannelsDefaultMask[1] = 0x0000;
-            NvmCtx.ChannelsDefaultMask[2] = 0x0000;
-            NvmCtx.ChannelsDefaultMask[3] = 0x0000;
-            NvmCtx.ChannelsDefaultMask[4] = 0x0000;
-            NvmCtx.ChannelsDefaultMask[5] = 0x0000;
+            RegionNvmGroup2->ChannelsDefaultMask[0] = 0x00FF;
+            RegionNvmGroup2->ChannelsDefaultMask[1] = 0x0000;
+            RegionNvmGroup2->ChannelsDefaultMask[2] = 0x0000;
+            RegionNvmGroup2->ChannelsDefaultMask[3] = 0x0000;
+            RegionNvmGroup2->ChannelsDefaultMask[4] = 0x0000;
+            RegionNvmGroup2->ChannelsDefaultMask[5] = 0x0000;
 #else
-            NvmCtx.ChannelsDefaultMask[0] = 0xFFFF;
-            NvmCtx.ChannelsDefaultMask[1] = 0xFFFF;
-            NvmCtx.ChannelsDefaultMask[2] = 0xFFFF;
-            NvmCtx.ChannelsDefaultMask[3] = 0xFFFF;
-            NvmCtx.ChannelsDefaultMask[4] = 0xFFFF;
-            NvmCtx.ChannelsDefaultMask[5] = 0xFFFF;
+            RegionNvmGroup2->ChannelsDefaultMask[0] = 0xFFFF;
+            RegionNvmGroup2->ChannelsDefaultMask[1] = 0xFFFF;
+            RegionNvmGroup2->ChannelsDefaultMask[2] = 0xFFFF;
+            RegionNvmGroup2->ChannelsDefaultMask[3] = 0xFFFF;
+            RegionNvmGroup2->ChannelsDefaultMask[4] = 0xFFFF;
+            RegionNvmGroup2->ChannelsDefaultMask[5] = 0xFFFF;
 #endif /* HYBRID_ENABLED == 1 */
             /* ST_WORKAROUND_END */
 
 
             // Copy channels default mask
-            RegionCommonChanMaskCopy( NvmCtx.ChannelsMask, NvmCtx.ChannelsDefaultMask, CHANNELS_MASK_SIZE );
+            RegionCommonChanMaskCopy( RegionNvmGroup2->ChannelsMask, RegionNvmGroup2->ChannelsDefaultMask, CHANNELS_MASK_SIZE );
             break;
         }
         case INIT_TYPE_RESET_TO_DEFAULT_CHANNELS:
@@ -404,15 +383,7 @@ void RegionCN470InitDefaults( InitDefaultsParams_t* params )
         case INIT_TYPE_ACTIVATE_DEFAULT_CHANNELS:
         {
             // Copy channels default mask
-            RegionCommonChanMaskCopy( NvmCtx.ChannelsMask, NvmCtx.ChannelsDefaultMask, CHANNELS_MASK_SIZE );
-            break;
-        }
-        case INIT_TYPE_RESTORE_CTX:
-        {
-            if( params->NvmCtx != 0 )
-            {
-                memcpy1( (uint8_t*) &NvmCtx, (uint8_t*) params->NvmCtx, sizeof( NvmCtx ) );
-            }
+            RegionCommonChanMaskCopy( RegionNvmGroup2->ChannelsMask, RegionNvmGroup2->ChannelsDefaultMask, CHANNELS_MASK_SIZE );
             break;
         }
         default:
@@ -420,16 +391,12 @@ void RegionCN470InitDefaults( InitDefaultsParams_t* params )
             break;
         }
     }
-}
-
-void* RegionCN470GetNvmCtx( GetNvmCtxParams_t* params )
-{
-    params->nvmCtxSize = sizeof( RegionCN470NvmCtx_t );
-    return &NvmCtx;
+#endif /* REGION_CN470 */
 }
 
 bool RegionCN470Verify( VerifyParams_t* verify, PhyAttribute_t phyAttribute )
 {
+#if defined( REGION_CN470 )
     switch( phyAttribute )
     {
         case PHY_FREQUENCY:
@@ -458,10 +425,14 @@ bool RegionCN470Verify( VerifyParams_t* verify, PhyAttribute_t phyAttribute )
         default:
             return false;
     }
+#else
+    return false;
+#endif /* REGION_CN470 */
 }
 
 void RegionCN470ApplyCFList( ApplyCFListParams_t* applyCFList )
 {
+#if defined( REGION_CN470 )
     // Size of the optional CF list must be 16 byte
     if( applyCFList->Size != 16 )
     {
@@ -477,48 +448,54 @@ void RegionCN470ApplyCFList( ApplyCFListParams_t* applyCFList )
     // ChMask0 - ChMask5 must be set (every ChMask has 16 bit)
     for( uint8_t chMaskItr = 0, cntPayload = 0; chMaskItr <= 5; chMaskItr++, cntPayload+=2 )
     {
-        NvmCtx.ChannelsMask[chMaskItr] = (uint16_t) (0x00FF & applyCFList->Payload[cntPayload]);
-        NvmCtx.ChannelsMask[chMaskItr] |= (uint16_t) (applyCFList->Payload[cntPayload+1] << 8);
+        RegionNvmGroup2->ChannelsMask[chMaskItr] = (uint16_t) (0x00FF & applyCFList->Payload[cntPayload]);
+        RegionNvmGroup2->ChannelsMask[chMaskItr] |= (uint16_t) (applyCFList->Payload[cntPayload+1] << 8);
     }
+#endif /* REGION_CN470 */
 }
 
 bool RegionCN470ChanMaskSet( ChanMaskSetParams_t* chanMaskSet )
 {
+#if defined( REGION_CN470 )
     switch( chanMaskSet->ChannelsMaskType )
     {
         case CHANNELS_MASK:
         {
-            RegionCommonChanMaskCopy( NvmCtx.ChannelsMask, chanMaskSet->ChannelsMaskIn, 6 );
+            RegionCommonChanMaskCopy( RegionNvmGroup2->ChannelsMask, chanMaskSet->ChannelsMaskIn, CHANNELS_MASK_SIZE );
             break;
         }
         case CHANNELS_DEFAULT_MASK:
         {
-            RegionCommonChanMaskCopy( NvmCtx.ChannelsDefaultMask, chanMaskSet->ChannelsMaskIn, 6 );
+            RegionCommonChanMaskCopy( RegionNvmGroup2->ChannelsDefaultMask, chanMaskSet->ChannelsMaskIn, CHANNELS_MASK_SIZE );
             break;
         }
         default:
             return false;
     }
     return true;
+#else
+    return false;
+#endif /* REGION_CN470 */
 }
 
 void RegionCN470ComputeRxWindowParameters( int8_t datarate, uint8_t minRxSymbols, uint32_t rxError, RxConfigParams_t *rxConfigParams )
 {
-    /* ST_WORKAROUND_BEGIN: remove float/double */
-    uint32_t tSymbol = 0;
-    /* ST_WORKAROUND_END */
+#if defined( REGION_CN470 )
+    uint32_t tSymbolInUs = 0;
 
     // Get the datarate, perform a boundary check
     rxConfigParams->Datarate = MIN( datarate, CN470_RX_MAX_DATARATE );
-    rxConfigParams->Bandwidth = GetBandwidth( rxConfigParams->Datarate );
+    rxConfigParams->Bandwidth = RegionCommonGetBandwidth( rxConfigParams->Datarate, BandwidthsCN470 );
 
-    tSymbol = RegionCommonComputeSymbolTimeLoRa( DataratesCN470[rxConfigParams->Datarate], BandwidthsCN470[rxConfigParams->Datarate] );
+    tSymbolInUs = RegionCommonComputeSymbolTimeLoRa( DataratesCN470[rxConfigParams->Datarate], BandwidthsCN470[rxConfigParams->Datarate] );
 
-    RegionCommonComputeRxWindowParameters( tSymbol, minRxSymbols, rxError, Radio.GetWakeupTime( ), &rxConfigParams->WindowTimeout, &rxConfigParams->WindowOffset );
+    RegionCommonComputeRxWindowParameters( tSymbolInUs, minRxSymbols, rxError, Radio.GetWakeupTime( ), &rxConfigParams->WindowTimeout, &rxConfigParams->WindowOffset );
+#endif /* REGION_CN470 */
 }
 
 bool RegionCN470RxConfig( RxConfigParams_t* rxConfig, int8_t* datarate )
 {
+#if defined( REGION_CN470 )
     int8_t dr = rxConfig->Datarate;
     uint8_t maxPayload = 0;
     int8_t phyDr = 0;
@@ -542,7 +519,7 @@ bool RegionCN470RxConfig( RxConfigParams_t* rxConfig, int8_t* datarate )
 
     // Radio configuration
     Radio.SetRxConfig( MODEM_LORA, rxConfig->Bandwidth, phyDr, 1, 0, 8, rxConfig->WindowTimeout, false, 0, false, 0, 0, true, rxConfig->RxContinuous );
-
+    /* ST_WORKAROUND_BEGIN: Keep repeater feature */
     if( rxConfig->RepeaterSupport == true )
     {
         maxPayload = MaxPayloadOfDatarateRepeaterCN470[dr];
@@ -552,53 +529,65 @@ bool RegionCN470RxConfig( RxConfigParams_t* rxConfig, int8_t* datarate )
         maxPayload = MaxPayloadOfDatarateCN470[dr];
     }
     Radio.SetMaxPayloadLength( MODEM_LORA, maxPayload + LORAMAC_FRAME_PAYLOAD_OVERHEAD_SIZE );
+    /* ST_WORKAROUND_END */
+
     /* ST_WORKAROUND_BEGIN: Print Rx config */
     RegionCommonRxConfigPrint(rxConfig->RxSlot, frequency, dr);
     /* ST_WORKAROUND_END */
 
     *datarate = (uint8_t) dr;
     return true;
+#else
+    return false;
+#endif /* REGION_CN470 */
 }
 
 bool RegionCN470TxConfig( TxConfigParams_t* txConfig, int8_t* txPower, TimerTime_t* txTimeOnAir )
 {
+#if defined( REGION_CN470 )
     int8_t phyDr = DataratesCN470[txConfig->Datarate];
-    int8_t txPowerLimited = LimitTxPower( txConfig->TxPower, NvmCtx.Bands[NvmCtx.Channels[txConfig->Channel].Band].TxMaxPower, txConfig->Datarate, NvmCtx.ChannelsMask );
+    int8_t txPowerLimited = RegionCommonLimitTxPower( txConfig->TxPower, RegionNvmGroup1->Bands[RegionNvmGroup2->Channels[txConfig->Channel].Band].TxMaxPower );
+    uint32_t bandwidth = RegionCommonGetBandwidth( txConfig->Datarate, BandwidthsCN470 );
     int8_t phyTxPower = 0;
 
     // Calculate physical TX power
     phyTxPower = RegionCommonComputeTxPower( txPowerLimited, txConfig->MaxEirp, txConfig->AntennaGain );
 
     // Setup the radio frequency
-    Radio.SetChannel( NvmCtx.Channels[txConfig->Channel].Frequency );
+    Radio.SetChannel( RegionNvmGroup2->Channels[txConfig->Channel].Frequency );
 
-    Radio.SetTxConfig( MODEM_LORA, phyTxPower, 0, 0, phyDr, 1, 8, false, true, 0, 0, false, 4000 );
+    Radio.SetTxConfig( MODEM_LORA, phyTxPower, 0, bandwidth, phyDr, 1, 8, false, true, 0, 0, false, 4000 );
     /* ST_WORKAROUND_BEGIN: Print Tx config */
-    RegionCommonTxConfigPrint(NvmCtx.Channels[txConfig->Channel].Frequency, txConfig->Datarate);
+    RegionCommonTxConfigPrint(RegionNvmGroup2->Channels[txConfig->Channel].Frequency, txConfig->Datarate);
     /* ST_WORKAROUND_END */
 
     // Setup maximum payload length of the radio driver
     Radio.SetMaxPayloadLength( MODEM_LORA, txConfig->PktLen );
+
     // Update time-on-air
     *txTimeOnAir = GetTimeOnAir( txConfig->Datarate, txConfig->PktLen );
-    *txPower = txPowerLimited;
 
+    *txPower = txPowerLimited;
     return true;
+#else
+    return false;
+#endif /* REGION_CN470 */
 }
 
 uint8_t RegionCN470LinkAdrReq( LinkAdrReqParams_t* linkAdrReq, int8_t* drOut, int8_t* txPowOut, uint8_t* nbRepOut, uint8_t* nbBytesParsed )
 {
     uint8_t status = 0x07;
+#if defined( REGION_CN470 )
     RegionCommonLinkAdrParams_t linkAdrParams = { 0 };
     uint8_t nextIndex = 0;
     uint8_t bytesProcessed = 0;
-    uint16_t channelsMask[6] = { 0, 0, 0, 0, 0, 0 };
+    uint16_t channelsMask[CHANNELS_MASK_SIZE] = { 0, 0, 0, 0, 0, 0 };
     GetPhyParams_t getPhy;
     PhyParam_t phyParam;
     RegionCommonLinkAdrReqVerifyParams_t linkAdrVerifyParams;
 
     // Initialize local copy of channels mask
-    RegionCommonChanMaskCopy( channelsMask, NvmCtx.ChannelsMask, 6 );
+    RegionCommonChanMaskCopy( channelsMask, RegionNvmGroup2->ChannelsMask, CHANNELS_MASK_SIZE );
 
     while( bytesProcessed < linkAdrReq->PayloadSize )
     {
@@ -633,7 +622,7 @@ uint8_t RegionCN470LinkAdrReq( LinkAdrReqParams_t* linkAdrReq, int8_t* drOut, in
             for( uint8_t i = 0; i < 16; i++ )
             {
                 if( ( ( linkAdrParams.ChMask & ( 1 << i ) ) != 0 ) &&
-                    ( NvmCtx.Channels[linkAdrParams.ChMaskCtrl * 16 + i].Frequency == 0 ) )
+                    ( RegionNvmGroup2->Channels[linkAdrParams.ChMaskCtrl * 16 + i].Frequency == 0 ) )
                 {// Trying to enable an undefined channel
                     status &= 0xFE; // Channel mask KO
                 }
@@ -659,7 +648,7 @@ uint8_t RegionCN470LinkAdrReq( LinkAdrReqParams_t* linkAdrReq, int8_t* drOut, in
     linkAdrVerifyParams.ChannelsMask = channelsMask;
     linkAdrVerifyParams.MinDatarate = ( int8_t )phyParam.Value;
     linkAdrVerifyParams.MaxDatarate = CN470_TX_MAX_DATARATE;
-    linkAdrVerifyParams.Channels = NvmCtx.Channels;
+    linkAdrVerifyParams.Channels = RegionNvmGroup2->Channels;
     linkAdrVerifyParams.MinTxPower = CN470_MIN_TX_POWER;
     linkAdrVerifyParams.MaxTxPower = CN470_MAX_TX_POWER;
     linkAdrVerifyParams.Version = linkAdrReq->Version;
@@ -671,7 +660,7 @@ uint8_t RegionCN470LinkAdrReq( LinkAdrReqParams_t* linkAdrReq, int8_t* drOut, in
     if( status == 0x07 )
     {
         // Copy Mask
-        RegionCommonChanMaskCopy( NvmCtx.ChannelsMask, channelsMask, 6 );
+        RegionCommonChanMaskCopy( RegionNvmGroup2->ChannelsMask, channelsMask, 6 );
     }
 
     // Update status variables
@@ -680,12 +669,14 @@ uint8_t RegionCN470LinkAdrReq( LinkAdrReqParams_t* linkAdrReq, int8_t* drOut, in
     *nbRepOut = linkAdrParams.NbRep;
     *nbBytesParsed = bytesProcessed;
 
+#endif /* REGION_CN470 */
     return status;
 }
 
 uint8_t RegionCN470RxParamSetupReq( RxParamSetupReqParams_t* rxParamSetupReq )
 {
     uint8_t status = 0x07;
+#if defined( REGION_CN470 )
 
     // Verify radio frequency
     if( VerifyRfFreq( rxParamSetupReq->Frequency ) == false )
@@ -705,32 +696,40 @@ uint8_t RegionCN470RxParamSetupReq( RxParamSetupReqParams_t* rxParamSetupReq )
         status &= 0xFB; // Rx1DrOffset range KO
     }
 
+#endif /* REGION_CN470 */
     return status;
 }
 
-uint8_t RegionCN470NewChannelReq( NewChannelReqParams_t* newChannelReq )
+int8_t RegionCN470NewChannelReq( NewChannelReqParams_t* newChannelReq )
 {
-    // Datarate and frequency KO
-    return 0;
+    // Do not accept the request
+    return -1;
 }
 
 int8_t RegionCN470TxParamSetupReq( TxParamSetupReqParams_t* txParamSetupReq )
 {
+    // Do not accept the request
     return -1;
 }
 
-uint8_t RegionCN470DlChannelReq( DlChannelReqParams_t* dlChannelReq )
+int8_t RegionCN470DlChannelReq( DlChannelReqParams_t* dlChannelReq )
 {
-    return 0;
+    // Do not accept the request
+    return -1;
 }
 
 int8_t RegionCN470AlternateDr( int8_t currentDr, AlternateDrType_t type )
 {
+#if defined( REGION_CN470 )
     return currentDr;
+#else
+    return -1;
+#endif /* REGION_CN470 */
 }
 
 LoRaMacStatus_t RegionCN470NextChannel( NextChanParams_t* nextChanParams, uint8_t* channel, TimerTime_t* time, TimerTime_t* aggregatedTimeOff )
 {
+#if defined( REGION_CN470 )
     uint8_t nbEnabledChannels = 0;
     uint8_t nbRestrictedChannels = 0;
     uint8_t enabledChannels[CN470_MAX_NB_CHANNELS] = { 0 };
@@ -739,24 +738,24 @@ LoRaMacStatus_t RegionCN470NextChannel( NextChanParams_t* nextChanParams, uint8_
     LoRaMacStatus_t status = LORAMAC_STATUS_NO_CHANNEL_FOUND;
 
     // Count 125kHz channels
-    if( RegionCommonCountChannels( NvmCtx.ChannelsMask, 0, 6 ) == 0 )
+    if( RegionCommonCountChannels( RegionNvmGroup2->ChannelsMask, 0, CHANNELS_MASK_SIZE ) == 0 )
     { // Reactivate default channels
-        NvmCtx.ChannelsMask[0] = 0xFFFF;
-        NvmCtx.ChannelsMask[1] = 0xFFFF;
-        NvmCtx.ChannelsMask[2] = 0xFFFF;
-        NvmCtx.ChannelsMask[3] = 0xFFFF;
-        NvmCtx.ChannelsMask[4] = 0xFFFF;
-        NvmCtx.ChannelsMask[5] = 0xFFFF;
+        RegionNvmGroup2->ChannelsMask[0] = 0xFFFF;
+        RegionNvmGroup2->ChannelsMask[1] = 0xFFFF;
+        RegionNvmGroup2->ChannelsMask[2] = 0xFFFF;
+        RegionNvmGroup2->ChannelsMask[3] = 0xFFFF;
+        RegionNvmGroup2->ChannelsMask[4] = 0xFFFF;
+        RegionNvmGroup2->ChannelsMask[5] = 0xFFFF;
     }
 
     // Search how many channels are enabled
     countChannelsParams.Joined = nextChanParams->Joined;
     countChannelsParams.Datarate = nextChanParams->Datarate;
-    countChannelsParams.ChannelsMask = NvmCtx.ChannelsMask;
-    countChannelsParams.Channels = NvmCtx.Channels;
-    countChannelsParams.Bands = NvmCtx.Bands;
+    countChannelsParams.ChannelsMask = RegionNvmGroup2->ChannelsMask;
+    countChannelsParams.Channels = RegionNvmGroup2->Channels;
+    countChannelsParams.Bands = RegionNvmGroup1->Bands;
     countChannelsParams.MaxNbChannels = CN470_MAX_NB_CHANNELS;
-    countChannelsParams.JoinChannels = 0;
+    countChannelsParams.JoinChannels = NULL;
 
     identifyChannelsParam.AggrTimeOff = nextChanParams->AggrTimeOff;
     identifyChannelsParam.LastAggrTx = nextChanParams->LastAggrTx;
@@ -778,6 +777,9 @@ LoRaMacStatus_t RegionCN470NextChannel( NextChanParams_t* nextChanParams, uint8_
         *channel = enabledChannels[randr( 0, nbEnabledChannels - 1 )];
     }
     return status;
+#else
+    return LORAMAC_STATUS_NO_CHANNEL_FOUND;
+#endif /* REGION_CN470 */
 }
 
 LoRaMacStatus_t RegionCN470ChannelAdd( ChannelAddParams_t* channelAdd )
@@ -792,18 +794,21 @@ bool RegionCN470ChannelsRemove( ChannelRemoveParams_t* channelRemove  )
 
 void RegionCN470SetContinuousWave( ContinuousWaveParams_t* continuousWave )
 {
-    int8_t txPowerLimited = LimitTxPower( continuousWave->TxPower, NvmCtx.Bands[NvmCtx.Channels[continuousWave->Channel].Band].TxMaxPower, continuousWave->Datarate, NvmCtx.ChannelsMask );
+#if defined( REGION_CN470 )
+    int8_t txPowerLimited = RegionCommonLimitTxPower( continuousWave->TxPower, RegionNvmGroup1->Bands[RegionNvmGroup2->Channels[continuousWave->Channel].Band].TxMaxPower );
     int8_t phyTxPower = 0;
-    uint32_t frequency = NvmCtx.Channels[continuousWave->Channel].Frequency;
+    uint32_t frequency = RegionNvmGroup2->Channels[continuousWave->Channel].Frequency;
 
     // Calculate physical TX power
     phyTxPower = RegionCommonComputeTxPower( txPowerLimited, continuousWave->MaxEirp, continuousWave->AntennaGain );
 
     Radio.SetTxContinuousWave( frequency, phyTxPower, continuousWave->Timeout );
+#endif /* REGION_CN470 */
 }
 
 uint8_t RegionCN470ApplyDrOffset( uint8_t downlinkDwellTime, int8_t dr, int8_t drOffset )
 {
+#if defined( REGION_CN470 )
     int8_t datarate = dr - drOffset;
 
     if( datarate < 0 )
@@ -811,10 +816,14 @@ uint8_t RegionCN470ApplyDrOffset( uint8_t downlinkDwellTime, int8_t dr, int8_t d
         datarate = DR_0;
     }
     return datarate;
+#else
+    return 0;
+#endif /* REGION_CN470 */
 }
 
 void RegionCN470RxBeaconSetup( RxBeaconSetup_t* rxBeaconSetup, uint8_t* outDr )
 {
+#if defined( REGION_CN470 )
     RegionCommonRxBeaconSetupParams_t regionCommonRxBeaconSetup;
 
     regionCommonRxBeaconSetup.Datarates = DataratesCN470;
@@ -829,4 +838,5 @@ void RegionCN470RxBeaconSetup( RxBeaconSetup_t* rxBeaconSetup, uint8_t* outDr )
 
     // Store downlink datarate
     *outDr = CN470_BEACON_CHANNEL_DR;
+#endif /* REGION_CN470 */
 }

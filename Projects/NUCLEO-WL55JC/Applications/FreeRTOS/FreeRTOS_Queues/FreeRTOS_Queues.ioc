@@ -165,3 +165,5 @@ VP_FREERTOS_VS_CMSIS_V2.Signal=FREERTOS_VS_CMSIS_V2
 VP_SYS_VS_tim17.Mode=TIM17
 VP_SYS_VS_tim17.Signal=SYS_VS_tim17
 board=custom
+ProjectManager.Example=FreeRTOS_Queues
+ProjectManager.ExampleSource=CubeFw

@@ -1,21 +1,21 @@
 /**
- ******************************************************************************
- * @file    demo_sensor.c
- * @author  MCD Application Team
- * @brief   Concentrator behavior module for STM32WL Concentrator Demo.
- ******************************************************************************
- * @attention
- *
- * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
- * All rights reserved.</center></h2>
- *
- * This software component is licensed by ST under Ultimate Liberty license
- * SLA0044, the "License"; You may not use this file except in compliance with
- * the License. You may obtain a copy of the License at:
- *                             www.st.com/SLA0044
- *
- ******************************************************************************
- */
+  ******************************************************************************
+  * @file    demo_sensor.c
+  * @author  MCD Application Team
+  * @brief   Concentrator behavior module for STM32WL Concentrator Demo.
+  ******************************************************************************
+  * @attention
+  *
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
+  * All rights reserved.</center></h2>
+  *
+  * This software component is licensed by ST under Ultimate Liberty license
+  * SLA0044, the "License"; You may not use this file except in compliance with
+  * the License. You may obtain a copy of the License at:
+  *                             www.st.com/SLA0044
+  *
+  ******************************************************************************
+  */
 
 #include <string.h>
 
@@ -61,9 +61,9 @@ typedef struct
   UTIL_TIMER_Object_t SyncTimer;        /**<Timer when sync is expected*/
   UTIL_TIMER_Object_t ReceiveTimer;     /**<Timer for RX timeout when receiving Beacon or Sync*/
   UTIL_TIMER_Object_t CadTimer;         /**<Timer for CAD timeout when scanning*/
-  const DEMO_Region_t* Region;  /**<Pointer to tuned region*/
+  const DEMO_Region_t *Region;  /**<Pointer to tuned region*/
   uint32_t RegionNr;            /**<Number of tuned region*/
-  const DEMO_Subregion_t* Subregion;  /**<Pointer to tuned subregion*/
+  const DEMO_Subregion_t *Subregion;  /**<Pointer to tuned subregion*/
   void (*GetDataCallback)(void); /**<Callback called before transmission*/
   void (*ActivityCallback)(void); /**<Callback called on every activity to blink LEDs or something*/
   uint32_t SubregionNr;         /**<Number of tuned subregion*/
@@ -79,29 +79,29 @@ typedef struct
 } SENS_Global_t;
 static SENS_Global_t SENS; /*Global variables of this module*/
 
-static void ReceiveBeacon(void* context);
-static void ReceiveSync(void* context);
-static void Transmit(void* context);
-static void ReceiveTimeout(void* context);
-static void CadTimeout(void* context);
+static void ReceiveBeacon(void *context);
+static void ReceiveSync(void *context);
+static void Transmit(void *context);
+static void ReceiveTimeout(void *context);
+static void CadTimeout(void *context);
 static void StartScanning(void);
 static void OneScan(void);
 static void ChangeState(SENS_State_t State);
-static bool ValidReceivedBeacon(DEMO_packet_beacon_t* Beacon);
-static bool ValidReceivedSync(DEMO_packet_sync_t* Sync, uint32_t Size, uint32_t RadioRandom);
-static void ProcessCodingChanges(DEMO_packet_sync_t* Sync, uint32_t Size);
+static bool ValidReceivedBeacon(DEMO_packet_beacon_t *Beacon);
+static bool ValidReceivedSync(DEMO_packet_sync_t *Sync, uint32_t Size, uint32_t RadioRandom);
+static void ProcessCodingChanges(DEMO_packet_sync_t *Sync, uint32_t Size);
 
-static void TxDone (void);
-static void TxTimeout (void);
-static void RxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr);
-static void RxTimeout (void);
-static void RxError (void);
-static void FhssChangeChannel (uint8_t currentChannel);
-static void CadDone (bool channelActivityDetected);
+static void TxDone(void);
+static void TxTimeout(void);
+static void RxDone(uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr);
+static void RxTimeout(void);
+static void RxError(void);
+static void FhssChangeChannel(uint8_t currentChannel);
+static void CadDone(bool channelActivityDetected);
 
 /**
- * @brief Structure with handlers for radio events.
- */
+  * @brief Structure with handlers for radio events.
+  */
 static RadioEvents_t SENS_RadioEvents;
 
 
@@ -109,11 +109,11 @@ static RadioEvents_t SENS_RadioEvents;
 
 
 /**
- * @brief Initialize Sensor and start scanning for Beacon.
- * @param GetDataCallback called before transmission, quickly add data to transmit, do block in the callback
- * @param ActivityCallback called on every activity to blink LED or something
- */
-int SENS_Init (void (*GetDataCallback)(void), void (*ActivityCallback)(void))
+  * @brief Initialize Sensor and start scanning for Beacon.
+  * @param GetDataCallback called before transmission, quickly add data to transmit, do block in the callback
+  * @param ActivityCallback called on every activity to blink LED or something
+  */
+int SENS_Init(void (*GetDataCallback)(void), void (*ActivityCallback)(void))
 {
   UTILS_ENTER_CRITICAL_SECTION();
 
@@ -152,9 +152,9 @@ int SENS_Init (void (*GetDataCallback)(void), void (*ActivityCallback)(void))
 
   /*Init radio timers*/
   UTIL_TIMER_Create(&SENS.BeaconTimer, 0, UTIL_TIMER_ONESHOT, ReceiveBeacon, NULL);
-  UTIL_TIMER_Create(&SENS.SyncTimer, 0, UTIL_TIMER_ONESHOT,ReceiveSync, NULL);
-  UTIL_TIMER_Create(&SENS.TransmitTimer, 0, UTIL_TIMER_ONESHOT,Transmit, NULL);
-  UTIL_TIMER_Create(&SENS.ReceiveTimer, 0, UTIL_TIMER_ONESHOT,ReceiveTimeout, NULL);
+  UTIL_TIMER_Create(&SENS.SyncTimer, 0, UTIL_TIMER_ONESHOT, ReceiveSync, NULL);
+  UTIL_TIMER_Create(&SENS.TransmitTimer, 0, UTIL_TIMER_ONESHOT, Transmit, NULL);
+  UTIL_TIMER_Create(&SENS.ReceiveTimer, 0, UTIL_TIMER_ONESHOT, ReceiveTimeout, NULL);
   UTIL_TIMER_Create(&SENS.CadTimer, SENS_CAD_TIMEOUT, UTIL_TIMER_ONESHOT, CadTimeout, NULL);
 
   /*Start scanning*/
@@ -169,10 +169,10 @@ int SENS_Init (void (*GetDataCallback)(void), void (*ActivityCallback)(void))
 }
 
 /**
- * @brief Store data to send in next packet.
- * @param Data structure
- */
-void SENS_WriteSensorData(const DEMO_data_1_0_t* Data)
+  * @brief Store data to send in next packet.
+  * @param Data structure
+  */
+void SENS_WriteSensorData(const DEMO_data_1_0_t *Data)
 {
   APP_LOG(TS_ON, VLEVEL_M, "Sensor data written\r\n");
 
@@ -183,26 +183,26 @@ void SENS_WriteSensorData(const DEMO_data_1_0_t* Data)
 }
 
 /**
- * @brief Get state of the sensor connection.
- * @return one of SENS_State_t
- */
+  * @brief Get state of the sensor connection.
+  * @return one of SENS_State_t
+  */
 SENS_State_t SENS_GetState(void)
 {
   return SENS.State;
 }
 
 /**
- * @brief Start receiving for Beacon.
- * @param context not used
- */
-static void ReceiveBeacon(void* context)
+  * @brief Start receiving for Beacon.
+  * @param context not used
+  */
+static void ReceiveBeacon(void *context)
 {
-  if(SENS.State != SENS_STATE_Scan)
+  if (SENS.State != SENS_STATE_Scan)
   {
     Radio.Standby();      /*Prepare for RX*/
     Radio.SetChannel(SENS.Region->beacon_freq); /*Frequency*/
-    
-    if (SENS.RegionNr==1)
+
+    if (SENS.RegionNr == 1)
     {
       /*For FCC, force beacon at 500kHZ/SF12*/
       Radio.SetRxConfig(MODEM_LORA,
@@ -234,7 +234,7 @@ static void ReceiveBeacon(void* context)
                         0, 0, /*No hopping*/
                         0,  /*IQ not inverted*/
                         1); /*Continuous receive mode*/
-     }
+    }
   }
   Radio.Rx(0);
 
@@ -246,8 +246,8 @@ static void ReceiveBeacon(void* context)
   {
     /*Set to the latest time a Beacon can come*/
     UTIL_TIMER_Stop(&SENS.ReceiveTimer);
-    UTIL_TIMER_SetPeriod(&SENS.ReceiveTimer, DEMO_MAX_END_OF_PACKET_RX + 2*SENS.Missed*SENS_TIMING_TOLERANCE
-                  + SENS_TIMING_PRERECEIVE + Radio.GetWakeupTime());    /*Add time of initialization to timeout*/
+    UTIL_TIMER_SetPeriod(&SENS.ReceiveTimer, DEMO_MAX_END_OF_PACKET_RX + 2 * SENS.Missed * SENS_TIMING_TOLERANCE
+                         + SENS_TIMING_PRERECEIVE + Radio.GetWakeupTime());    /*Add time of initialization to timeout*/
     APP_LOG(TS_ON, VLEVEL_M, "Receive for beacon\r\n");
   }
   else
@@ -255,7 +255,7 @@ static void ReceiveBeacon(void* context)
     /*Receive for whole period*/
     UTIL_TIMER_Stop(&SENS.ReceiveTimer);
     UTIL_TIMER_SetPeriod(&SENS.ReceiveTimer, SENS_LOST_DUTY_RX
-                  + SENS_TIMING_PRERECEIVE + Radio.GetWakeupTime());    /*Add time of initialization to timeout*/
+                         + SENS_TIMING_PRERECEIVE + Radio.GetWakeupTime());    /*Add time of initialization to timeout*/
     APP_LOG(TS_ON, VLEVEL_L, "Receive for the whole period\r\n");
   }
   UTIL_TIMER_Start(&SENS.ReceiveTimer);
@@ -265,16 +265,16 @@ static void ReceiveBeacon(void* context)
 }
 
 /**
- * @brief Start receiving for Sync.
- * @param context not used
- */
-static void ReceiveSync(void* context)
+  * @brief Start receiving for Sync.
+  * @param context not used
+  */
+static void ReceiveSync(void *context)
 {
-  const DEMO_Channel_t* channel;
+  const DEMO_Channel_t *channel;
 
   Radio.Standby();      /*Prepare for RX*/
 
-  if(SENS.Subregion->hopping == true)
+  if (SENS.Subregion->hopping == true)
   {
     /*Select one of available channels, depending only on seed*/
     channel = &(SENS.Subregion->channels[SENS.Seed % SENS.Subregion->channels_n]);
@@ -305,7 +305,7 @@ static void ReceiveSync(void* context)
   /*Set to the latest time a packet can come*/
   UTIL_TIMER_Stop(&SENS.ReceiveTimer);
   UTIL_TIMER_SetPeriod(&SENS.ReceiveTimer, DEMO_MAX_END_OF_PACKET_RX
-                + SENS_TIMING_PRERECEIVE + Radio.GetWakeupTime());    /*Add time of initialization to timeout*/
+                       + SENS_TIMING_PRERECEIVE + Radio.GetWakeupTime());    /*Add time of initialization to timeout*/
   UTIL_TIMER_Start(&SENS.ReceiveTimer);
 
   /*Notify*/
@@ -314,32 +314,32 @@ static void ReceiveSync(void* context)
 }
 
 /**
- * @brief Start transmitting in sensor slot.
- * @param context not used
- * @note This function doesn't use Radio.SetTxConfig() because it allows only LoRaWAN modulation
- *    and it doesn't use Radio.Send() because it highly depends on SetTxConfig.
- */
-static void Transmit(void* context)
+  * @brief Start transmitting in sensor slot.
+  * @param context not used
+  * @note This function doesn't use Radio.SetTxConfig() because it allows only LoRaWAN modulation
+  *    and it doesn't use Radio.Send() because it highly depends on SetTxConfig.
+  */
+static void Transmit(void *context)
 {
-  const DEMO_Channel_t* channel;      /*Pointer to channel used to transmit*/
+  const DEMO_Channel_t *channel;      /*Pointer to channel used to transmit*/
   uint8_t ant_switch;
   PacketParams_t pck_params;
   ModulationParams_t mod_params;
 
   /*Application Callback*/
-  if(SENS.GetDataCallback != NULL)
+  if (SENS.GetDataCallback != NULL)
   {
     SENS.GetDataCallback();     /*Get new data to transmit*/
   }
 
   /*Select channel*/
-  if(SENS.Subregion->hopping == true)
+  if (SENS.Subregion->hopping == true)
   {
     /*Get number of used channels*/
     uint32_t channel_count = SENS.Subregion->channels_n;
     /*Get the right number in pseudorandom sequence*/
     uint32_t pseudorandom = SENS.Seed;
-    for(int i = 1; i < SENS.Codings.hdr.slot; i++)
+    for (int i = 1; i < SENS.Codings.hdr.slot; i++)
     {
       pseudorandom = DEMO_PSEUDORANDOM_NEXT(pseudorandom);
     }
@@ -387,7 +387,7 @@ static void Transmit(void* context)
     mod_params.PacketType = PACKET_TYPE_LORA;
     mod_params.Params.LoRa.SpreadingFactor = DEMO_GetSpreadingFactor(&(SENS.Codings.lora));
     mod_params.Params.LoRa.Bandwidth = DEMO_GetBandwidth(&(SENS.Codings.lora));
-    mod_params.Params.LoRa.CodingRate= DEMO_GetCoderate(&(SENS.Codings.lora));
+    mod_params.Params.LoRa.CodingRate = DEMO_GetCoderate(&(SENS.Codings.lora));
     mod_params.Params.LoRa.LowDatarateOptimize = SENS.Codings.lora.de;
 
     pck_params.PacketType = PACKET_TYPE_LORA;
@@ -449,7 +449,7 @@ static void Transmit(void* context)
     {
       paSelect = RFO_HP;
     }
-    SUBGRF_SetTxParams( paSelect, channel->power, DEMO_GetRampUp(&(SENS.Codings.fsk)) );
+    SUBGRF_SetTxParams(paSelect, channel->power, DEMO_GetRampUp(&(SENS.Codings.fsk)));
     ant_switch = paSelect;
   }
 
@@ -460,28 +460,28 @@ static void Transmit(void* context)
                          IRQ_RADIO_NONE);
 
   /*Set DBG pin PB13*/
-#ifdef LET_SUBGHZ_MW_USING_DGB_LINE2_PIN
-  DBG_GPIO_SET_LINE(DGB_LINE2_PORT, DGB_LINE2_PIN);
-#endif
+#ifdef LET_SUBGHZ_MW_USING_PROBE_LINE2_PIN
+  PROBE_GPIO_SET_LINE(PROBE_LINE2_PORT, PROBE_LINE2_PIN);
+#endif /* LET_SUBGHZ_MW_USING_PROBE_LINE2_PIN */
 
   /*Send*/
   SUBGRF_SetSwitch(ant_switch, RFSWITCH_TX);  /*Set RF switch*/
   SUBGRF_SendPayload(SENS.Packet, SENS.Codings.hdr.data_lim, 0);
   SENS.Header.packet_cnt++;   /*Count number of sent packets*/
-  
-  APP_LOG(TS_ON, VLEVEL_M, "Tx at %d\r\n",channel->freq);
+
+  APP_LOG(TS_ON, VLEVEL_M, "Tx at %d\r\n", channel->freq);
 
   /*Notification*/
   (*SENS.ActivityCallback)();
 }
 
 /**
- * @brief Timeout when planned receive was unsuccessful.
- * @param context not used
- */
-static void ReceiveTimeout(void* context)
+  * @brief Timeout when planned receive was unsuccessful.
+  * @param context not used
+  */
+static void ReceiveTimeout(void *context)
 {
-  if(SENS.State == SENS_STATE_Scan)
+  if (SENS.State == SENS_STATE_Scan)
   {
     SENS.ReceivingBeacon = false;
     Radio.Standby();
@@ -492,7 +492,7 @@ static void ReceiveTimeout(void* context)
   Radio.Sleep();
 
 
-  if(SENS.ReceivingBeacon == true)  /*Beacon was missed*/
+  if (SENS.ReceivingBeacon == true) /*Beacon was missed*/
   {
     SENS.ReceivingBeacon = false;
 
@@ -510,7 +510,7 @@ static void ReceiveTimeout(void* context)
 
       APP_LOG(TS_ON, VLEVEL_L, "Missed Beacon %u\r\n", SENS.Missed);
 
-      if(SENS.Missed >= SENS_MAX_MISSED_TO_LOST)
+      if (SENS.Missed >= SENS_MAX_MISSED_TO_LOST)
       {
         SENS.Codings.hdr.slot = 0;   /*Reset slot*/
         SENS.TxDutyCounter = 0; /*Reset duty cycle*/
@@ -521,15 +521,15 @@ static void ReceiveTimeout(void* context)
       {
         /*Start timer for next Beacon*/
         UTIL_TIMER_Stop(&SENS.BeaconTimer);
-        UTIL_TIMER_SetPeriod(&SENS.BeaconTimer, (SENS.Missed + 1)*(DEMO_SLOT_NUMBER*1000)
-                            - SENS_TIMING_PRERECEIVE - Radio.GetWakeupTime()  /*Start the radio this earlier*/
-                            - SENS.Missed*SENS_TIMING_TOLERANCE  /*Subtract tolerance*/
-                            + SENS.BeaconTime - UTIL_TIMER_GetCurrentTime()); /*Make the timer absolute to the last known period start*/
+        UTIL_TIMER_SetPeriod(&SENS.BeaconTimer, (SENS.Missed + 1) * (DEMO_SLOT_NUMBER * 1000)
+                             - SENS_TIMING_PRERECEIVE - Radio.GetWakeupTime()  /*Start the radio this earlier*/
+                             - SENS.Missed * SENS_TIMING_TOLERANCE /*Subtract tolerance*/
+                             + SENS.BeaconTime - UTIL_TIMER_GetCurrentTime()); /*Make the timer absolute to the last known period start*/
         UTIL_TIMER_Start(&SENS.BeaconTimer);
       }
     }
   }
-  else if(SENS.ReceivingSync == true)   /*Sync was missed*/
+  else if (SENS.ReceivingSync == true)  /*Sync was missed*/
   {
     SENS.ReceivingSync = false;
     APP_LOG(TS_ON, VLEVEL_L, "Missed Sync\r\n");
@@ -541,10 +541,10 @@ static void ReceiveTimeout(void* context)
 }
 
 /**
- * @brief CAD didn't finish in time.
- * @param context not used
- */
-static void CadTimeout (void* context)
+  * @brief CAD didn't finish in time.
+  * @param context not used
+  */
+static void CadTimeout(void *context)
 {
   /*Reinit radio*/
   Radio.Init(&SENS_RadioEvents);
@@ -557,8 +557,8 @@ static void CadTimeout (void* context)
 }
 
 /**
- * @brief Start the scanning process.
- */
+  * @brief Start the scanning process.
+  */
 static void StartScanning(void)
 {
   /*Init or reinit radio, without reinit CadTimeout() happens often*/
@@ -570,7 +570,7 @@ static void StartScanning(void)
   ChangeState(SENS_STATE_Scan);
 
   /*Disable STOP while scanning*/
-  UTIL_LPM_SetStopMode(1<<CFG_LPM_SENS_Id, UTIL_LPM_DISABLE);
+  UTIL_LPM_SetStopMode(1 << CFG_LPM_SENS_Id, UTIL_LPM_DISABLE);
 
   /*Set Region to overflow, so the scan starts with Region 0*/
   SENS.RegionNr = DEMO_Regions_n;
@@ -585,18 +585,18 @@ static void StartScanning(void)
 
 
 /**
- * @brief Start scanning for a Beacon.
- */
+  * @brief Start scanning for a Beacon.
+  */
 static void OneScan(void)
 {
-  if(SENS.State != SENS_STATE_Scan)
+  if (SENS.State != SENS_STATE_Scan)
   {
     return;
   }
 
   /*Check valid RegionNR or continue iterating*/
   SENS.RegionNr++;
-  if(SENS.RegionNr >= DEMO_Regions_n)
+  if (SENS.RegionNr >= DEMO_Regions_n)
   {
     SENS.RegionNr = 0;
 #if SENS_SCAN_TESTING != 0
@@ -611,7 +611,7 @@ static void OneScan(void)
 
   /*Tune radio*/
   Radio.SetChannel(SENS.Region->beacon_freq); /*Frequency*/
-  if (SENS.RegionNr==1) /*FCC*/
+  if (SENS.RegionNr == 1) /*FCC*/
   {
     /*For FCC, force beacon at 500kHZ/SF12*/
     Radio.SetRxConfig(MODEM_LORA,
@@ -643,45 +643,55 @@ static void OneScan(void)
                       0, 0, /*No hopping*/
                       0,  /*IQ not inverted*/
                       1); /*Continuous receive mode*/
-   }
+  }
   /*Configure CAD*/
   SUBGRF_SetCadParams(LORA_CAD_02_SYMBOL,       /*Detect n symbols*/
                       SENS_SCAN_CadDetPeak,     /*Sensitivity settings*/
                       SENS_SCAN_CadDetMin,      /*Sensitivity settings*/
                       LORA_CAD_RX,      /*Receive after CAD was successful*/
-                      100*64);    /*(n * 15.625) us timeout*/
+                      100 * 64);  /*(n * 15.625) us timeout*/
 
   UTIL_TIMER_Start(&(SENS.CadTimer)); /*Start timeout*/
   Radio.StartCad();     /*Start Scanning*/
 }
 
 /**
- * @brief Change sensor communication state.
- * @param State new state
- */
+  * @brief Change sensor communication state.
+  * @param State new state
+  */
 static void ChangeState(SENS_State_t State)
 {
-  if(SENS.State != State)
+  if (SENS.State != State)
   {
     SENS.State = State;
     APP_LOG(TS_ON, VLEVEL_L, "   ==== State: ");
-    switch(State)
+    switch (State)
     {
-      case SENS_STATE_Connect: APP_LOG(TS_OFF, VLEVEL_L, "Connected"); break;
-      case SENS_STATE_Lost: APP_LOG(TS_OFF, VLEVEL_L, "Lost"); break;
-      case SENS_STATE_Scan: APP_LOG(TS_OFF, VLEVEL_L, "Scan"); break;
-      case SENS_STATE_Sync: APP_LOG(TS_OFF, VLEVEL_L, "Sync"); break;
-      default: APP_LOG(TS_OFF, VLEVEL_L, "Dead"); break;
+      case SENS_STATE_Connect:
+        APP_LOG(TS_OFF, VLEVEL_L, "Connected");
+        break;
+      case SENS_STATE_Lost:
+        APP_LOG(TS_OFF, VLEVEL_L, "Lost");
+        break;
+      case SENS_STATE_Scan:
+        APP_LOG(TS_OFF, VLEVEL_L, "Scan");
+        break;
+      case SENS_STATE_Sync:
+        APP_LOG(TS_OFF, VLEVEL_L, "Sync");
+        break;
+      default:
+        APP_LOG(TS_OFF, VLEVEL_L, "Dead");
+        break;
     }
     APP_LOG(TS_OFF, VLEVEL_L, " ====\r\n");
   }
 }
 
 /**
- * @brief Process valid beacon packet.
- * @param Beacon 4 B beacon packet
- */
-static bool ValidReceivedBeacon(DEMO_packet_beacon_t* Beacon)
+  * @brief Process valid beacon packet.
+  * @param Beacon 4 B beacon packet
+  */
+static bool ValidReceivedBeacon(DEMO_packet_beacon_t *Beacon)
 {
   if ((Beacon->version_major != VERSION_MAJOR) /*Concentrator with the correct version*/
       || ((SENS.State == SENS_STATE_Connect) && (SENS.SubregionNr != Beacon->subregion)))      /*Check subregion*/
@@ -695,17 +705,18 @@ static bool ValidReceivedBeacon(DEMO_packet_beacon_t* Beacon)
   /*Start timer for Sync*/
   UTIL_TIMER_Stop(&SENS.SyncTimer);
   UTIL_TIMER_SetPeriod(&SENS.SyncTimer, 1000 - Beacon->offset
-                - SENS_TIMING_PRERECEIVE - Radio.GetWakeupTime());
+                       - SENS_TIMING_PRERECEIVE - Radio.GetWakeupTime());
   UTIL_TIMER_Start(&SENS.SyncTimer);
 
   /*Start timer for next Beacon*/
   UTIL_TIMER_Stop(&SENS.BeaconTimer);
   UTIL_TIMER_SetPeriod(&SENS.BeaconTimer, DEMO_SLOT_NUMBER * 1000 - Beacon->offset
-                - SENS_TIMING_PRERECEIVE - Radio.GetWakeupTime());
+                       - SENS_TIMING_PRERECEIVE - Radio.GetWakeupTime());
   UTIL_TIMER_Start(&SENS.BeaconTimer);
 
   /*Print info*/
-  APP_LOG(TS_ON, VLEVEL_M, "Beacon received, seed = 0x%02hhx, offset = %hu ms\r\n", Beacon->seed, Beacon->offset);     /*Print info*/
+  APP_LOG(TS_ON, VLEVEL_M, "Beacon received, seed = 0x%02x, offset = %hu ms\r\n", Beacon->seed,
+          Beacon->offset);     /*Print info*/
 
   /*Process Beacon and change state*/
   if ((SENS.State == SENS_STATE_Scan)
@@ -713,10 +724,10 @@ static bool ValidReceivedBeacon(DEMO_packet_beacon_t* Beacon)
   {
     SENS.Codings.hdr.slot = 0;     /*Reset slot*/
     SENS.TxDutyCounter = 0; /*Reset duty cycle*/
-    UTIL_LPM_SetStopMode(1<<CFG_LPM_SENS_Id, UTIL_LPM_ENABLE); /*Re-enable STOP mode*/
+    UTIL_LPM_SetStopMode(1 << CFG_LPM_SENS_Id, UTIL_LPM_ENABLE); /*Re-enable STOP mode*/
     ChangeState(SENS_STATE_Sync);     /*Change lower states to sync*/
   }
-  if(SENS.State != SENS_STATE_Connect)
+  if (SENS.State != SENS_STATE_Connect)
   {
     SENS.SubregionNr = Beacon->subregion; /*Store subregion*/
     SENS.Subregion = &(SENS.Region->subregions[Beacon->subregion]);
@@ -732,17 +743,17 @@ static bool ValidReceivedBeacon(DEMO_packet_beacon_t* Beacon)
 }
 
 /**
- * @brief Process successfully received Sync
- * @param Sync pointer to Sync structure
- * @param Size number of bytes received
- * @param RadioRandom one random value obtained from the radio before it was put to sleep
- */
-static bool ValidReceivedSync(DEMO_packet_sync_t* Sync, uint32_t Size, uint32_t RadioRandom)
+  * @brief Process successfully received Sync
+  * @param Sync pointer to Sync structure
+  * @param Size number of bytes received
+  * @param RadioRandom one random value obtained from the radio before it was put to sleep
+  */
+static bool ValidReceivedSync(DEMO_packet_sync_t *Sync, uint32_t Size, uint32_t RadioRandom)
 {
-  
-  HAL_GPIO_WritePin(DGB_LINE3_PORT, DGB_LINE3_PIN, GPIO_PIN_SET);
-  HAL_GPIO_WritePin(DGB_LINE3_PORT, DGB_LINE3_PIN, GPIO_PIN_RESET);
-  
+
+  PROBE_GPIO_WRITE(PROBE_LINE3_PORT, PROBE_LINE3_PIN, GPIO_PIN_SET);
+  PROBE_GPIO_WRITE(PROBE_LINE3_PORT, PROBE_LINE3_PIN, GPIO_PIN_RESET);
+
   if ((Sync->subregion != SENS.SubregionNr) /*Subregion must fit*/
       || (Sync->seed != SENS.Seed)    /*Seed must fit*/
       || (Sync->version_major != VERSION_MAJOR)) /*Only concentrator with the correct version*/
@@ -757,9 +768,9 @@ static bool ValidReceivedSync(DEMO_packet_sync_t* Sync, uint32_t Size, uint32_t 
   APP_LOG(TS_ON, VLEVEL_M, "Sync received, occupied = bs");
   char oc_str[17] = "..............\r\n";
   uint16_t oc_shift = Sync->occupied >> 2;
-  for(int i = 0; i < (DEMO_SLOT_NUMBER - 2); oc_shift >>= 1, i++)
+  for (int i = 0; i < (DEMO_SLOT_NUMBER - 2); oc_shift >>= 1, i++)
   {
-    if(oc_shift & 0x1)
+    if (oc_shift & 0x1)
     {
       oc_str[i] = '0';
     }
@@ -797,7 +808,7 @@ static bool ValidReceivedSync(DEMO_packet_sync_t* Sync, uint32_t Size, uint32_t 
       /*Make the timer absolute to the period start*/
       UTIL_TIMER_Stop(&SENS.TransmitTimer);
       UTIL_TIMER_SetPeriod(&SENS.TransmitTimer,
-                    SENS.Codings.hdr.slot * 1000 + SENS.BeaconTime - UTIL_TIMER_GetCurrentTime() - Radio.GetWakeupTime());
+                           SENS.Codings.hdr.slot * 1000 + SENS.BeaconTime - UTIL_TIMER_GetCurrentTime() - Radio.GetWakeupTime());
       UTIL_TIMER_Start(&SENS.TransmitTimer); /*Start timer for the transmission slot*/
     }
     else
@@ -810,16 +821,16 @@ static bool ValidReceivedSync(DEMO_packet_sync_t* Sync, uint32_t Size, uint32_t 
 }
 
 /**
- * @brief Process coding changes and apply the first one with correct slot.
- * @param Sync received sync packet
- * @param Size number of bytes received
- */
-static void ProcessCodingChanges(DEMO_packet_sync_t* Sync, uint32_t Size)
+  * @brief Process coding changes and apply the first one with correct slot.
+  * @param Sync received sync packet
+  * @param Size number of bytes received
+  */
+static void ProcessCodingChanges(DEMO_packet_sync_t *Sync, uint32_t Size)
 {
   DEMO_coding_combined_t combined;
   uint32_t Len = Size - 4;       /*Get number of bytes in codings*/
 
-  for(uint32_t offset = 0; (offset + sizeof(DEMO_coding_combined_t)) <= Len; )  /*While there is enough data for header*/
+  for (uint32_t offset = 0; (offset + sizeof(DEMO_coding_combined_t)) <= Len;)  /*While there is enough data for header*/
   {
     memcpy(&combined, &(Sync->codings[offset]), sizeof(DEMO_coding_combined_t)); /*Copy header to parseable structure*/
 
@@ -827,7 +838,7 @@ static void ProcessCodingChanges(DEMO_packet_sync_t* Sync, uint32_t Size)
     {
       offset += sizeof(DEMO_coding_connect_t);
 
-      if(offset + sizeof(uint32_t) > Len)     /*No space left for eui*/
+      if (offset + sizeof(uint32_t) > Len)    /*No space left for eui*/
       {
         return;
       }
@@ -840,7 +851,7 @@ static void ProcessCodingChanges(DEMO_packet_sync_t* Sync, uint32_t Size)
           && ((Sync->occupied & (1 << combined.connect.slot)) != 0))
       {
         SENS.Codings.hdr.slot = combined.connect.slot;
-        APP_LOG(TS_ON, VLEVEL_M, "Connected to slot = %hhu\r\n", SENS.Codings.hdr.slot);
+        APP_LOG(TS_ON, VLEVEL_M, "Connected to slot = %u\r\n", SENS.Codings.hdr.slot);
         ChangeState(SENS_STATE_Connect); /*Connected*/
       }
 
@@ -852,7 +863,7 @@ static void ProcessCodingChanges(DEMO_packet_sync_t* Sync, uint32_t Size)
 
       if (combined.hdr.mode == true)     /*LoRa*/
       {
-        if(offset + sizeof(DEMO_coding_lora_t) > Len)     /*No space left for the rest of the coding*/
+        if (offset + sizeof(DEMO_coding_lora_t) > Len)    /*No space left for the rest of the coding*/
         {
           return;
         }
@@ -866,13 +877,13 @@ static void ProcessCodingChanges(DEMO_packet_sync_t* Sync, uint32_t Size)
           DEMO_ValidateCodingLora(&(SENS.Codings.lora));
           SENS.TxDutyCounter = 0;
           APP_LOG(TS_ON, VLEVEL_M, "Changed to LoRa f = %u Hz, ", SENS.Subregion->channels[SENS.Codings.hdr.chan_nr].freq);
-          APP_LOG(TS_OFF, VLEVEL_M, "period = %hhu, data_lim = %hhu B\r\n", SENS.Codings.hdr.period, SENS.Codings.hdr.data_lim);
+          APP_LOG(TS_OFF, VLEVEL_M, "period = %u, data_lim = %u B\r\n", SENS.Codings.hdr.period, SENS.Codings.hdr.data_lim);
         }
         offset += sizeof(DEMO_coding_lora_t);
       }
       else    /*FSK*/
       {
-        if(offset + sizeof(DEMO_coding_fsk_t) > Len)     /*No space left for the rest of the coding*/
+        if (offset + sizeof(DEMO_coding_fsk_t) > Len)    /*No space left for the rest of the coding*/
         {
           return;
         }
@@ -886,7 +897,7 @@ static void ProcessCodingChanges(DEMO_packet_sync_t* Sync, uint32_t Size)
           DEMO_ValidateCodingFsk(&(SENS.Codings.fsk));
           SENS.TxDutyCounter = 0;
           APP_LOG(TS_ON, VLEVEL_M, "Changed to FSK f = %u Hz, ", SENS.Subregion->channels[SENS.Codings.hdr.chan_nr].freq);
-          APP_LOG(TS_OFF, VLEVEL_M, "period = %hhu, data_lim = %hhu B\r\n", SENS.Codings.hdr.period, SENS.Codings.hdr.data_lim);
+          APP_LOG(TS_OFF, VLEVEL_M, "period = %u, data_lim = %u B\r\n", SENS.Codings.hdr.period, SENS.Codings.hdr.data_lim);
         }
         offset += sizeof(DEMO_coding_fsk_t);
       }
@@ -895,9 +906,9 @@ static void ProcessCodingChanges(DEMO_packet_sync_t* Sync, uint32_t Size)
 }
 
 /*!
- * \brief  Tx Done callback.
- */
-static void TxDone (void)
+  * \brief  Tx Done callback.
+  */
+static void TxDone(void)
 {
   /*Put radio to sleep*/
   Radio.Sleep();
@@ -908,9 +919,9 @@ static void TxDone (void)
 }
 
 /*!
- * \brief  Tx Timeout callback.
- */
-static void TxTimeout (void)
+  * \brief  Tx Timeout callback.
+  */
+static void TxTimeout(void)
 {
   /*Put radio to sleep*/
   Radio.Sleep();
@@ -919,16 +930,16 @@ static void TxTimeout (void)
 }
 
 /*!
- * \brief Rx Done callback.
- *
- * \param [IN] payload Received buffer pointer
- * \param [IN] size    Received buffer size
- * \param [IN] rssi    RSSI value computed while receiving the frame [dBm]
- * \param [IN] snr     Raw SNR value given by the radio hardware
- *                     FSK : N/A ( set to 0 )
- *                     LoRa: SNR value in dB
- */
-static void RxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr)
+  * \brief Rx Done callback.
+  *
+  * \param [IN] payload Received buffer pointer
+  * \param [IN] size    Received buffer size
+  * \param [IN] rssi    RSSI value computed while receiving the frame [dBm]
+  * \param [IN] snr     Raw SNR value given by the radio hardware
+  *                     FSK : N/A ( set to 0 )
+  *                     LoRa: SNR value in dB
+  */
+static void RxDone(uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr)
 {
   if (SENS.ReceivingBeacon == true) /*Receiving beacon*/
   {
@@ -966,7 +977,7 @@ static void RxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr)
     Radio.Sleep(); /*Turn off the radio*/
 
     /*Process Beacon*/
-    if(ValidReceivedBeacon(&beacon) == true)
+    if (ValidReceivedBeacon(&beacon) == true)
     {
 #if SENS_SCAN_TESTING != 0
       SENS.Debug.CntSuccess++;
@@ -993,7 +1004,7 @@ static void RxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr)
     }
   }
   else if ((SENS.ReceivingSync == true) /*Receiving Sync*/
-      && ((SENS.State == SENS_STATE_Connect) || (SENS.State == SENS_STATE_Sync))) /*Only in sync*/
+           && ((SENS.State == SENS_STATE_Connect) || (SENS.State == SENS_STATE_Sync))) /*Only in sync*/
   {
     if (size < 4) /*Sync must be at least 4 bytes*/
     {
@@ -1009,7 +1020,7 @@ static void RxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr)
     memcpy(&sync, payload, size);
 
     /*Process Sync*/
-    if(ValidReceivedSync(&sync, size, radio_random) == true)
+    if (ValidReceivedSync(&sync, size, radio_random) == true)
     {
       /*Sync was OK*/
     }
@@ -1029,11 +1040,11 @@ static void RxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr)
 }
 
 /*!
- * \brief  Rx Timeout callback.
- */
-static void RxTimeout (void)
+  * \brief  Rx Timeout callback.
+  */
+static void RxTimeout(void)
 {
-  if(SENS.State == SENS_STATE_Scan)
+  if (SENS.State == SENS_STATE_Scan)
   {
     Radio.Standby();
     OneScan();
@@ -1046,29 +1057,29 @@ static void RxTimeout (void)
 }
 
 /*!
- * \brief Rx Error callback.
- */
-static void RxError (void)
+  * \brief Rx Error callback.
+  */
+static void RxError(void)
 {
   APP_LOG(TS_ON, VLEVEL_L, "Receive error\r\n");
 }
 
 /*!
- * \brief  FHSS Change Channel callback.
- *
- * \param [IN] currentChannel   Index number of the current channel
- */
-static void FhssChangeChannel (uint8_t currentChannel)
+  * \brief  FHSS Change Channel callback.
+  *
+  * \param [IN] currentChannel   Index number of the current channel
+  */
+static void FhssChangeChannel(uint8_t currentChannel)
 {
   UNUSED(currentChannel);
 }
 
 /*!
- * \brief CAD Done callback.
- *
- * \param [IN] channelDetected    Channel Activity detected during the CAD
- */
-static void CadDone (bool channelActivityDetected)
+  * \brief CAD Done callback.
+  *
+  * \param [IN] channelDetected    Channel Activity detected during the CAD
+  */
+static void CadDone(bool channelActivityDetected)
 {
   UTIL_TIMER_Stop(&(SENS.CadTimer)); /*Stop timeout*/
 

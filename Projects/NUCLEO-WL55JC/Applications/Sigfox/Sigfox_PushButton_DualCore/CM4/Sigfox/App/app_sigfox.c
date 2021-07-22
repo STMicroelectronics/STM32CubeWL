@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    app_sigfox.c
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
 #include "app_sigfox.h"
@@ -77,11 +79,11 @@ void MX_Sigfox_Process(void)
 
   /* USER CODE END MX_Sigfox_Process_1 */
   UTIL_SEQ_Run(UTIL_SEQ_DEFAULT);
-
   /* USER CODE BEGIN MX_Sigfox_Process_2 */
 
   /* USER CODE END MX_Sigfox_Process_2 */
 }
+
 /* USER CODE BEGIN EF */
 
 /* USER CODE END EF */

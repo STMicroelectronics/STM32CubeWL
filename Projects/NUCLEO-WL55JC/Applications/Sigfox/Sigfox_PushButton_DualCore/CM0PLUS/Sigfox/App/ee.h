@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    ee.h
@@ -16,6 +17,7 @@
   *
   *****************************************************************************
   */
+/* USER CODE END Header */
 
 #ifndef EE_H__
 #define EE_H__
@@ -35,7 +37,7 @@
   *
   * - M_BEGIN, M_END and DBG() macro definitions.
   *
-  * - Hadrwae flash driver definitions:
+  * - Hardware flash driver definitions:
   *
   *      * HW_FLASH_PAGE_SIZE (in bytes)
   *
@@ -66,7 +68,7 @@
   *
   * Notes
   * -----
-  * - a corrupted word in FLASH detected by the user aoftware shall be set to 0.
+  * - a corrupted word in FLASH detected by the user software shall be set to 0.
   *   The EEPROM emulation software will then handle it properly.
   */
 

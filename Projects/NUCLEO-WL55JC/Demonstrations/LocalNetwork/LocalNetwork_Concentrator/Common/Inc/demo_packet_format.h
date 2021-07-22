@@ -30,10 +30,10 @@ extern "C" {
 
 
 /**
- * @brief Beacon data structure.
- * Always 4 B.
- * Beacon packet doesn't have length or CRC.
- */
+  * @brief Beacon data structure.
+  * Always 4 B.
+  * Beacon packet doesn't have length or CRC.
+  */
 typedef  struct
 {
   uint8_t version_major :3;   /**<Major version of concentrator*/
@@ -56,16 +56,16 @@ typedef  struct
 #define DEMO_HDR_CONNECT_MARK           0x0 /*This value marks connect header*/
 
 /**
- * @brief Slot coding and connect header.
- */
+  * @brief Slot coding and connect header.
+  */
 typedef struct
-  {
-    uint8_t slot :4;     /**<Slot number to change, [2 .. DEMO_SLOT_NUMBER]*/
-    uint8_t mode :1;     /**<true for LoRa, false for FSK*/
-    uint8_t period :3;   /**<Number of beacons skipped before another transmission*/
-    uint8_t data_lim :5; /**<Limit length of sensor's packet [byte]*/
-    uint8_t chan_nr :3;  /**<Set different channel due to different channel constrains (not used when hopping)*/
-    /**Following are DEMO_coding_lora_t or DEMO_coding_fsk_t*/
+{
+  uint8_t slot :4;     /**<Slot number to change, [2 .. DEMO_SLOT_NUMBER]*/
+  uint8_t mode :1;     /**<true for LoRa, false for FSK*/
+  uint8_t period :3;   /**<Number of beacons skipped before another transmission*/
+  uint8_t data_lim :5; /**<Limit length of sensor's packet [byte]*/
+  uint8_t chan_nr :3;  /**<Set different channel due to different channel constrains (not used when hopping)*/
+  /**Following are DEMO_coding_lora_t or DEMO_coding_fsk_t*/
 } DEMO_coding_hdr_t;    /**<Header for a coding change*/
 
 #define DEMO_HDR_PARAM_PERIOD_MAX    7  /*Maximum period*/
@@ -78,54 +78,54 @@ typedef union
 } __packed DEMO_coding_combined_t;               /**<Combined header put into Sync*/
 
 /**
- * @brief Slot coding specific for LoRa.
- */
+  * @brief Slot coding specific for LoRa.
+  */
 typedef struct
 {
-  uint8_t de :1;        ///< LowDataRateOptimize, used when symbol length > 16 ms
+  uint8_t de :1;        /**<LowDataRateOptimize, used when symbol length > 16 ms*/
 
   /**
-   * Error coding rate
-   *   001 - 4/5
-   *   010 - 4/6
-   *   011 - 4/7
-   *   100 - 4/8
-   */
+    * Error coding rate
+    *   001 - 4/5
+    *   010 - 4/6
+    *   011 - 4/7
+    *   100 - 4/8
+    */
   uint8_t cr :3;
 
   /**
-   * Signal bandwidth
-   *   0000 - 7.8 kHz
-   *   0001 - 10.4 kHz
-   *   0010 - 15.6 kHz
-   *   0011 - 20.8kHz
-   *   0100 - 31.25 kHz
-   *   0101 - 41.7 kHz
-   *   0110 - 62.5 kHz
-   *   0111 - 125 kHz
-   *   1000 - 250 kHz
-   *   1001 - 500 kHz
-   */
+    * Signal bandwidth
+    *   0000 - 7.8 kHz
+    *   0001 - 10.4 kHz
+    *   0010 - 15.6 kHz
+    *   0011 - 20.8kHz
+    *   0100 - 31.25 kHz
+    *   0101 - 41.7 kHz
+    *   0110 - 62.5 kHz
+    *   0111 - 125 kHz
+    *   1000 - 250 kHz
+    *   1001 - 500 kHz
+    */
   uint8_t bw :4;
 
   /**
-   * SF rate (expressed as a base-2 logarithm)
-   *   6  - 64 chips / symbol
-   *   7  - 128 chips / symbol
-   *   8  - 256 chips / symbol
-   *   9  - 512 chips / symbol
-   *   10 - 1024 chips / symbol
-   *   11 - 2048 chips / symbol
-   *   12 - 4096 chips / symbol
-   */
+    * SF rate (expressed as a base-2 logarithm)
+    *   6  - 64 chips / symbol
+    *   7  - 128 chips / symbol
+    *   8  - 256 chips / symbol
+    *   9  - 512 chips / symbol
+    *   10 - 1024 chips / symbol
+    *   11 - 2048 chips / symbol
+    *   12 - 4096 chips / symbol
+    */
   uint8_t sf :4;
 
   uint8_t :4;
 } __packed DEMO_coding_lora_t;
 
 /**
- * @brief LoRa parameters limits.
- */
+  * @brief LoRa parameters limits.
+  */
 #define DEMO_LORA_PARAM_CR_MIN      1
 #define DEMO_LORA_PARAM_SF_MIN      6
 #define DEMO_LORA_PARAM_BW_MIN      0
@@ -135,43 +135,43 @@ typedef struct
 #define DEMO_LORA_PARAM_BW_MAX      9
 
 /**
- * @brief Change of FSK coding.
- */
+  * @brief Change of FSK coding.
+  */
 typedef struct
 {
   uint32_t br :24;      /**<Data rate [600..300000 bits/s]*/
 
   /**
-   * Power Ramp Time
-   * 0 -   10 us
-   * 1 -   20 us
-   * 2 -   40 us
-   * 3 -   80 us
-   * 4 -  200 us
-   * 5 -  800 us
-   * 6 - 1700 us
-   * 7 - 3400 us
-   */
+    * Power Ramp Time
+    * 0 -   10 us
+    * 1 -   20 us
+    * 2 -   40 us
+    * 3 -   80 us
+    * 4 -  200 us
+    * 5 -  800 us
+    * 6 - 1700 us
+    * 7 - 3400 us
+    */
   uint32_t rise :3;
   uint32_t :5;
   uint32_t fdev :24;    /**<Frequency Deviation [Hz]*/
 
   /**
-   * Gaussian Shaping BT
-   * Lower number means wider spreading.
-   * 0 - Off
-   * 1 - 0.3
-   * 2 - 0.5
-   * 3 - 0.7
-   * 4 -   1
-   **/
+    * Gaussian Shaping BT
+    * Lower number means wider spreading.
+    * 0 - Off
+    * 1 - 0.3
+    * 2 - 0.5
+    * 3 - 0.7
+    * 4 -   1
+    **/
   uint32_t bt :3;
   uint32_t :5;
 } __packed DEMO_coding_fsk_t;
 
 /**
- * @brief FSK parameters limits.
- */
+  * @brief FSK parameters limits.
+  */
 #define DEMO_FSK_PARAM_RISE_MIN      0
 #define DEMO_FSK_PARAM_BR_MIN        600
 #define DEMO_FSK_PARAM_FDEV_MIN      0
@@ -185,26 +185,26 @@ typedef struct
 #define DEMO_SYNC_CODINGS_LEN        23 /*This many bytes are for coding changes*/
 
 /**
- * @brief Sync data structure. Maximally 27 B.
- */
+  * @brief Sync data structure. Maximally 27 B.
+  */
 typedef struct
 {
   /**
-   * @brief Mask of occupied frequencies for 16 slots.
-   * Each slot is true if a node is connected, false if the slot is free to take.
-   * False also means that default coding is used.
-   * Bits 0 and 1 are not used by sensors, but by concentrator.
-   */
+    * @brief Mask of occupied frequencies for 16 slots.
+    * Each slot is true if a node is connected, false if the slot is free to take.
+    * False also means that default coding is used.
+    * Bits 0 and 1 are not used by sensors, but by concentrator.
+    */
   uint16_t occupied;
   uint8_t version_major:3;    /**<Major version of concentrator*/
   uint8_t subregion:5;  /**<Subregion number*/
   uint8_t seed;         /**<Seed for hopping*/
 
   /**
-   * @brief List of slot coding changes or connect accept structures.
-   * Contains list of DEMO_coding_combined_t
-   * each followed by DEMO_coding_lora_t, DEMO_coding_gfsk_t or 4 B eui to connect.
-   */
+    * @brief List of slot coding changes or connect accept structures.
+    * Contains list of DEMO_coding_combined_t
+    * each followed by DEMO_coding_lora_t, DEMO_coding_gfsk_t or 4 B eui to connect.
+    */
   uint8_t codings[DEMO_SYNC_CODINGS_LEN];
 } __packed DEMO_packet_sync_t;
 
@@ -212,8 +212,8 @@ typedef struct
 #define DEMO_SENSOR_MAX_PAYLOAD    26   /*Maximal payload for sensor*/
 
 /**
- * @brief Sensor packet data structure.
- */
+  * @brief Sensor packet data structure.
+  */
 typedef struct
 {
   uint32_t eui;         /**<Lower part of EUI read from HW*/

@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    app_sigfox.h
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __APP_SIGFOX_H__
@@ -38,6 +40,7 @@ extern "C" {
 /* Exported constants --------------------------------------------------------*/
 #define DEFAULT_RC SFX_RC1
 /* USER CODE BEGIN EC */
+
 /* USER CODE END EC */
 
 /* External variables --------------------------------------------------------*/
@@ -53,15 +56,11 @@ extern "C" {
 /* Exported functions prototypes ---------------------------------------------*/
 /**
   * @brief  Init Sigfox Application
-  * @param None
-  * @retval None
   */
 void MX_Sigfox_Init(void);
 
 /**
   * @brief  entry Sigfox Process or scheduling
-  * @param None
-  * @retval None
   */
 void MX_Sigfox_Process(void);
 

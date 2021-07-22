@@ -217,15 +217,15 @@ void DMA1_Channel1_IRQHandler(void)
   /* Using LL interface, use :                                             */
   /* - LL_DMA_IsActiveFlag_TC1() to check complete DMA1 Interrupt */
   /* - LL_DMA_IsActiveFlag_TE1() to check error DMA1 Interrupt    */
-  /* - LL_DMA_ClearFlag_GI1() to clear all DMA1 Interrupts        */
+  /* - LL_DMA_ClearFlag_TC1() to clear all DMA1 Interrupts        */
   if(LL_DMA_IsActiveFlag_TC1(DMA1) == 1)
   {
-    LL_DMA_ClearFlag_GI1(DMA1);
+    LL_DMA_ClearFlag_TC1(DMA1);
     TransferComplete();
   }
   else if(LL_DMA_IsActiveFlag_TE1(DMA1) == 1)
   {
-    LL_DMA_ClearFlag_GI1(DMA1);
+    LL_DMA_ClearFlag_TC1(DMA1);
     TransferError();
   }
 

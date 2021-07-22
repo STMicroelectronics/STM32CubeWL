@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    sys_app.c
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
 #include <stdio.h>
@@ -25,9 +27,9 @@
 #include "stm32_seq.h"
 #include "stm32_systime.h"
 #include "stm32_lpm.h"
+#include "timer_if.h"
 #include "utilities_def.h"
 #include "sys_debug.h"
-#include "timer_if.h"
 
 /* USER CODE BEGIN Includes */
 
@@ -47,8 +49,8 @@
 #define MAX_TS_SIZE (int) 16
 
 /**
- * Defines the maximum battery level
- */
+  * Defines the maximum battery level
+  */
 #define LORAWAN_MAX_BAT   254
 /* USER CODE BEGIN PD */
 
@@ -66,15 +68,9 @@
 
 /* Private function prototypes -----------------------------------------------*/
 /**
-  * @brief  Set all pins such to minimized consumption (necessary for some STM32 families)
-  * @param none
-  * @retval None
-  */
-static void Gpio_PreInit(void);
-/**
   * @brief Returns sec and msec based on the systime in use
-  * @param none
-  * @retval  none
+  * @param buff to update with timestamp
+  * @param size of updated buffer
   */
 static void TimestampNow(uint8_t *buff, uint16_t *size);
 
@@ -82,16 +78,12 @@ static void TimestampNow(uint8_t *buff, uint16_t *size);
   * @brief  it calls UTIL_ADV_TRACE_VSNPRINTF
   */
 static void tiny_snprintf_like(char *buf, uint32_t maxsize, const char *strFormat, ...);
+
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Exported functions ---------------------------------------------------------*/
-/**
-  * @brief initialises the system (dbg pins, trace, mbmux, systiemr, LPM, ...)
-  * @param none
-  * @retval  none
-  */
 void SystemApp_Init(void)
 {
   /* USER CODE BEGIN SystemApp_Init_1 */
@@ -100,13 +92,15 @@ void SystemApp_Init(void)
 
   /* Ensure that MSI is wake-up system clock */
   __HAL_RCC_WAKEUPSTOP_CLK_CONFIG(RCC_STOP_WAKEUPCLOCK_MSI);
-  /*Initialises timer and RTC*/
+
+  /*Initialize timer and RTC*/
   UTIL_TIMER_Init();
 
-  Gpio_PreInit();
+  /* Debug config : disable serial wires and DbgMcu pins settings */
+  DBG_Disable();
 
-  /* Configure the debug mode*/
-  DBG_Init();
+  /* Initializes the SW probes pins and the monitor RF pins via Alternate Function */
+  DBG_ProbesInit();
 
   /*Initialize the terminal */
   UTIL_ADV_TRACE_Init();
@@ -114,6 +108,7 @@ void SystemApp_Init(void)
 
   /*Set verbose LEVEL*/
   UTIL_ADV_TRACE_SetVerboseLevel(VERBOSE_LEVEL);
+
   /*Initialize the temperature and Battery measurement services */
   SYS_InitMeasurement();
 
@@ -128,6 +123,7 @@ void SystemApp_Init(void)
 #elif !defined (LOW_POWER_DISABLE)
 #error LOW_POWER_DISABLE not defined
 #endif /* LOW_POWER_DISABLE */
+
   /* USER CODE BEGIN SystemApp_Init_2 */
 
   /* USER CODE END SystemApp_Init_2 */
@@ -135,8 +131,6 @@ void SystemApp_Init(void)
 
 /**
   * @brief redefines __weak function in stm32_seq.c such to enter low power
-  * @param none
-  * @retval  none
   */
 void UTIL_SEQ_Idle(void)
 {
@@ -157,9 +151,10 @@ uint8_t GetBatteryLevel(void)
   /* USER CODE BEGIN GetBatteryLevel_0 */
 
   /* USER CODE END GetBatteryLevel_0 */
+
   batteryLevelmV = (uint16_t) SYS_GetBatteryLevel();
 
-  /* Convert batterey level from mV to linea scale: 1 (very low) to 254 (fully charged) */
+  /* Convert battery level from mV to linear scale: 1 (very low) to 254 (fully charged) */
   if (batteryLevelmV > VDD_BAT)
   {
     batteryLevel = LORAWAN_MAX_BAT;
@@ -178,22 +173,27 @@ uint8_t GetBatteryLevel(void)
   /* USER CODE BEGIN GetBatteryLevel_2 */
 
   /* USER CODE END GetBatteryLevel_2 */
+
   return batteryLevel;  /* 1 (very low) to 254 (fully charged) */
 }
 
 uint16_t GetTemperatureLevel(void)
 {
+  uint16_t temperatureLevel = 0;
+
+  temperatureLevel = (uint16_t)(SYS_GetTemperatureLevel() / 256);
   /* USER CODE BEGIN GetTemperatureLevel */
 
   /* USER CODE END GetTemperatureLevel */
-  return (uint16_t)(SYS_GetTemperatureLevel() / 256);
+  return temperatureLevel;
 }
 
-/* USER CODE BEGIN ExF */
+/* USER CODE BEGIN EF */
 
-/* USER CODE END ExF */
+/* USER CODE END EF */
 
 /* Private functions ---------------------------------------------------------*/
+
 static void TimestampNow(uint8_t *buff, uint16_t *size)
 {
   /* USER CODE BEGIN TimestampNow_1 */
@@ -205,45 +205,6 @@ static void TimestampNow(uint8_t *buff, uint16_t *size)
   /* USER CODE BEGIN TimestampNow_2 */
 
   /* USER CODE END TimestampNow_2 */
-}
-
-static void Gpio_PreInit(void)
-{
-  /* USER CODE BEGIN Gpio_PreInit_1 */
-
-  /* USER CODE END Gpio_PreInit_1 */
-  GPIO_InitTypeDef GPIO_InitStruct = {0};
-
-  /* Configure all IOs in analog input              */
-  /* Except PA143 and PA14 (SWCLK and SWD) for debug*/
-  /* PA13 and PA14 are configured in debug_init     */
-  /* Configure all GPIO as analog to reduce current consumption on non used IOs */
-  /* Enable GPIOs clock */
-  __HAL_RCC_GPIOA_CLK_ENABLE();
-  __HAL_RCC_GPIOB_CLK_ENABLE();
-  __HAL_RCC_GPIOC_CLK_ENABLE();
-  __HAL_RCC_GPIOH_CLK_ENABLE();
-
-  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  /* All GPIOs except debug pins (SWCLK and SWD) */
-  GPIO_InitStruct.Pin = GPIO_PIN_All & (~(GPIO_PIN_13 | GPIO_PIN_14));
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  /* All GPIOs */
-  GPIO_InitStruct.Pin = GPIO_PIN_All;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-  HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
-
-  /* Disable GPIOs clock */
-  __HAL_RCC_GPIOA_CLK_DISABLE();
-  __HAL_RCC_GPIOB_CLK_DISABLE();
-  __HAL_RCC_GPIOC_CLK_DISABLE();
-  __HAL_RCC_GPIOH_CLK_DISABLE();
-  /* USER CODE BEGIN Gpio_PreInit_2 */
-
-  /* USER CODE END Gpio_PreInit_2 */
 }
 
 /* Disable StopMode when traces need to be printed */
@@ -290,10 +251,7 @@ static void tiny_snprintf_like(char *buf, uint32_t maxsize, const char *strForma
 /* HAL overload functions ---------------------------------------------------------*/
 
 /**
-  * @brief This function configures the source of the time base.
-  * @brief  don't enable systick
-  * @param TickPriority: Tick interrupt priority.
-  * @retval HAL status
+  * @note This function overwrites the __weak one from HAL
   */
 HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
 {
@@ -308,13 +266,11 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
 }
 
 /**
-  * @brief Provide a tick value in millisecond measured using RTC
   * @note This function overwrites the __weak one from HAL
-  * @retval tick value
   */
 uint32_t HAL_GetTick(void)
 {
-  /* TIMER_IF can be based onother counter the SysTick e.g. RTC */
+  /* TIMER_IF can be based on other counter the SysTick e.g. RTC */
   /* USER CODE BEGIN HAL_GetTick_1 */
 
   /* USER CODE END HAL_GetTick_1 */
@@ -325,13 +281,11 @@ uint32_t HAL_GetTick(void)
 }
 
 /**
-  * @brief This function provides delay (in ms)
-  * @param Delay: specifies the delay time length, in milliseconds.
-  * @retval None
+  * @note This function overwrites the __weak one from HAL
   */
 void HAL_Delay(__IO uint32_t Delay)
 {
-  /* TIMER_IF can be based onother counter the SysTick e.g. RTC */
+  /* TIMER_IF can be based on other counter the SysTick e.g. RTC */
   /* USER CODE BEGIN HAL_Delay_1 */
 
   /* USER CODE END HAL_Delay_1 */

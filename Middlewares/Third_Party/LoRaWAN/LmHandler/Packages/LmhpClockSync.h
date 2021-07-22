@@ -19,27 +19,13 @@
  *
  * \author    Miguel Luis ( Semtech )
  */
-/**
-  ******************************************************************************
-  *
-  *          Portions COPYRIGHT 2020 STMicroelectronics
-  *
-  * @file    LmhpClockSync.h
-  * @author  MCD Application Team
-  * @brief   Header for Clock Synchronisation Package module
-  ******************************************************************************
-  */
 #ifndef __LMHP_CLOCK_SYNC_H__
 #define __LMHP_CLOCK_SYNC_H__
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-/* Includes ------------------------------------------------------------------*/
+#include "LoRaMac.h"
+#include "LmHandlerTypes.h"
 #include "LmhPackage.h"
 
-/* Exported defines ----------------------------------------------------------*/
 /*!
  * Clock sync package identifier.
  *
@@ -47,17 +33,17 @@ extern "C" {
  */
 #define PACKAGE_ID_CLOCK_SYNC                       1
 
-/* Exported constants --------------------------------------------------------*/
-/* Exported types ------------------------------------------------------------*/
-/* External variables --------------------------------------------------------*/
-/* Exported macros -----------------------------------------------------------*/
-/* Exported functions ------------------------------------------------------- */
-LmhPackage_t *LmphClockSyncPackageFactory(void);
+/*!
+ * Clock sync package parameters
+ *
+ * This package doesn't require parameters
+ */
+//typedef struct LmhpClockSyncParams_s
+//{
+//}LmhpClockSyncParams_t;
 
-LmHandlerErrorStatus_t LmhpClockSyncAppTimeReq(void);
+LmhPackage_t *LmhpClockSyncPackageFactory( void );
 
-#ifdef __cplusplus
-}
-#endif
+LmHandlerErrorStatus_t LmhpClockSyncAppTimeReq( void );
 
-#endif /* __LMHP_CLOCK_SYNC_H__ */
+#endif // __LMHP_CLOCK_SYNC_H__

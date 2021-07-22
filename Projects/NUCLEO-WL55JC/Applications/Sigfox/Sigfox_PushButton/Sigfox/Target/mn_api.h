@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    mn_api.h
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __MN_API_H__
@@ -53,14 +55,14 @@ extern "C" {
 
 /* Exported functions prototypes ---------------------------------------------*/
 /**
-  * @brief Initialises the Monarch Low level
-  * @param Callback for rssi samplep rocess
+  * @brief Initialize the Monarch Low level
+  * @param Callback for rssi sample process
   * @retval None
   */
 void MN_API_Init(void (*MN_API_Timer_CB)(int16_t rssi));
 
 /**
-  * @brief DeInitialises the Monarch Low level
+  * @brief DeInitialize the Monarch Low level
   * @param None
   * @retval None
   */
@@ -116,7 +118,7 @@ void MN_API_Pattern_Found(int32_t window_type, int32_t pattern, int32_t frequenc
   * @brief starts timer
   * @param timer_value_ms timer value in ms
   * @param call back when timer elapses
-  * @note Argurment can be left unused
+  * @note Argument can be left unused
   * @retval None
   */void MN_API_TimerSart(uint32_t timer_value_ms, void (*TimeoutHandle)(void *Argument));
 

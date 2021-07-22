@@ -1,0 +1,24 @@
+/*###ICF### Set of symbols used in SE and SB_SFU projects ****/
+
+/* Slots  must be aligned on 2048 bytes (0x800) */
+
+/* Active slot #1 (56 kbytes) */
+define exported symbol  __ICFEDIT_SLOT_Active_1_header__= 0x0803F800;
+define exported symbol  __ICFEDIT_SLOT_Active_1_start__ = 0x0801C000;
+define exported symbol  __ICFEDIT_SLOT_Active_1_end__   = 0x08029FFF;
+
+/* Active slot #2 (100 kbytes) */
+define exported symbol  __ICFEDIT_SLOT_Active_2_header__= 0x0803F000;
+define exported symbol  __ICFEDIT_SLOT_Active_2_start__ = 0x08003000;
+define exported symbol  __ICFEDIT_SLOT_Active_2_end__   = 0x0801BFFF;
+
+/* Slot download 1 region (2 kbytes) */
+define exported symbol  __ICFEDIT_SLOT_Blob_Dwl_1_start__= 0x08002800;
+define exported symbol  __ICFEDIT_SLOT_Blob_Dwl_1_end__  = 0x08002FFF;
+
+/* Slots not configured */
+define exported symbol  __ICFEDIT_SLOT_Active_3_header__= 0x00000000;
+define exported symbol  __ICFEDIT_SLOT_Active_3_start__ = 0x00000000;
+define exported symbol  __ICFEDIT_SLOT_Active_3_end__   = 0x00000000;
+
+

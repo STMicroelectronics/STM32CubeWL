@@ -28,7 +28,7 @@
   *
   *          Portions COPYRIGHT 2020 STMicroelectronics
   *
-  * @file    se-identity_template.c
+  * @file    se-identity_template.h
   * @author  MCD Application Team
   * @brief   Secure Element identity and keys
   ******************************************************************************

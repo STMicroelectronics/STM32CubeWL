@@ -25,47 +25,46 @@
 extern "C"
 {
 #endif
-  /* Includes ------------------------------------------------------------------*/
+/* Includes ------------------------------------------------------------------*/
 #include <stdint.h>
 #include "utilities_conf.h"
 
 /* Exported types ------------------------------------------------------------*/
-  /* Exported constants --------------------------------------------------------*/
+/* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
-/* ---- Memory mapping macros --------------------------------------- */
+/* ---- Memory mapping macros ----------------------------------------------- */
 #define UTIL_MEM_PLACE_IN_SECTION( __x__ ) UTIL_PLACE_IN_SECTION( __x__ ) 
-#define UTIL_MEM_ALIGN  ALIGN
-  
+#define UTIL_MEM_ALIGN ALIGN
 
-  /* Exported functions ------------------------------------------------------- */
-  /**
-  * @brief  This API copies one buffer to another
-  * @param  dst: output buffer to be filled
-  * @param  src: input buffer
-  * @param  size: size of 8b data
-  * @retval None
-  */
-  void UTIL_MEM_cpy_8( void *dst, const void *src, uint16_t size );
-  
-  /**
-  * @brief  This API copies one buffer to another in reverse
-  * @param  dst: output buffer to be filled
-  * @param  src: input buffer
-  * @param  size: size of 8b data
-  * @retval None
-  */
-  void UTIL_MEM_cpyr_8( void *dst, const void *src, uint16_t size );
-  
-  /**
-  * @brief  This API copies one value into buffer
-  * @param  dst: output buffer to be filled
-  * @param  value: value 
-  * @param  size: size of 8b data
-  * @retval None
-  */
-  void UTIL_MEM_set_8( void *dst, uint8_t value, uint16_t size );
-  
-  
+/* Exported functions ------------------------------------------------------- */
+/**
+* @brief  This API copies one buffer to another
+* @param  dst: output buffer to be filled
+* @param  src: input buffer
+* @param  size: size of 8b data
+* @retval None
+*/
+void UTIL_MEM_cpy_8( void *dst, const void *src, uint16_t size );
+
+/**
+* @brief  This API copies one buffer to another in reverse
+* @param  dst: output buffer to be filled
+* @param  src: input buffer
+* @param  size: size of 8b data
+* @retval None
+*/
+void UTIL_MEM_cpyr_8( void *dst, const void *src, uint16_t size );
+
+/**
+* @brief  This API fills a buffer with value
+* @param  dst: output buffer to be filled
+* @param  value: value 
+* @param  size: size of 8b data
+* @retval None
+*/
+void UTIL_MEM_set_8( void *dst, uint8_t value, uint16_t size );
+
+
 #ifdef __cplusplus
 }
 #endif

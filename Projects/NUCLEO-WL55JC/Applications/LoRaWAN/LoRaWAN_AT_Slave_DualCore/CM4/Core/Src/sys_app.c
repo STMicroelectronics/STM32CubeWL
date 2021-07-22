@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    sys_app.c
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
 #include <stdio.h>
@@ -25,15 +27,17 @@
 #include "stm32_seq.h"
 #include "stm32_systime.h"
 #include "stm32_lpm.h"
+#include "timer_if.h"
 #include "utilities_def.h"
 #include "sys_debug.h"
-#include "timer_if.h"
 #include "msg_id.h"
 #include "mbmuxif_sys.h"
 #include "mbmuxif_trace.h"
-#include "mbmuxif_lora.h"
 #include "mbmuxif_radio.h"
-/*#include "mbmuxif_kms.h"*/
+#include "mbmuxif_lora.h"
+#ifdef ALLOW_KMS_VIA_MBMUX /* currently not supported */
+/* #include "mbmuxif_kms.h" */
+#endif /* ALLOW_KMS_VIA_MBMUX */
 
 /* USER CODE BEGIN Includes */
 
@@ -68,23 +72,21 @@
 /* Private variables ---------------------------------------------------------*/
 uint32_t InstanceIndex;
 uint8_t SYS_Cm0plusRdyNotificationFlag = 0;
+
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
+/**
+  * @brief Initialize MBMUX, wait CM0PLUS is ready, gets CM0PLUS capabilities, Initialize other features
+  */
 static void MBMUXIF_Init(void);
 
 /**
-  * @brief  Set all pins such to minimized consumption (necessary for some STM32 families)
-  * @param none
-  * @retval None
-  */
-static void Gpio_PreInit(void);
-/**
   * @brief Returns sec and msec based on the systime in use
-  * @param none
-  * @retval  none
+  * @param buff to update with timestamp
+  * @param size of updated buffer
   */
 static void TimestampNow(uint8_t *buff, uint16_t *size);
 
@@ -92,15 +94,12 @@ static void TimestampNow(uint8_t *buff, uint16_t *size);
   * @brief  it calls UTIL_ADV_TRACE_VSNPRINTF
   */
 static void tiny_snprintf_like(char *buf, uint32_t maxsize, const char *strFormat, ...);
+
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
+
 /* Exported functions ---------------------------------------------------------*/
-/**
-  * @brief initialises the system (dbg pins, trace, mbmux, systiemr, LPM, ...)
-  * @param none
-  * @retval  none
-  */
 void SystemApp_Init(void)
 {
   /* USER CODE BEGIN SystemApp_Init_1 */
@@ -110,10 +109,8 @@ void SystemApp_Init(void)
   /* Ensure that MSI is wake-up system clock */
   __HAL_RCC_WAKEUPSTOP_CLK_CONFIG(RCC_STOP_WAKEUPCLOCK_MSI);
 
-  Gpio_PreInit();
-
-  /* Configure the debug mode*/
-  DBG_Init();
+  /* Initializes the SW probes pins and the monitor RF pins via Alternate Function */
+  DBG_ProbesInit();
 
   /*Initialize the terminal */
   UTIL_ADV_TRACE_Init();
@@ -121,6 +118,7 @@ void SystemApp_Init(void)
 
   /*Set verbose LEVEL*/
   UTIL_ADV_TRACE_SetVerboseLevel(VERBOSE_LEVEL);
+
   /*Initialize the temperature and Battery measurement services */
   SYS_InitMeasurement();
 
@@ -141,14 +139,14 @@ void SystemApp_Init(void)
 
   UTIL_TIMER_Init();
 
+  /* Debug config : disable serial wires and DbgMcu pins settings */
+  DBG_Disable();
+
   /* USER CODE BEGIN SystemApp_Init_2 */
 
   /* USER CODE END SystemApp_Init_2 */
 }
 
-/**
-  * @brief  Process System Notifications
-  */
 void Process_Sys_Notif(MBMUX_ComParam_t *ComObj)
 {
   /* USER CODE BEGIN Process_Sys_Notif_1 */
@@ -160,14 +158,24 @@ void Process_Sys_Notif(MBMUX_ComParam_t *ComObj)
 
   switch (notif_ack_id)
   {
+    case SYS_RTC_ALARM_MSG_ID:
+      /* USER CODE BEGIN Process_Sys_Notif_RTC_ALARM */
+
+      /* USER CODE END Process_Sys_Notif_RTC_ALARM */
+      break;
     case SYS_OTHER_MSG_ID:
       APP_LOG(TS_ON, VLEVEL_H, "CM4<(System)\r\n");
       /* prepare ack buffer*/
       ComObj->ParamCnt = 0;
-      ComObj->ReturnVal = 7; /* dummy value for test */
-      break;
+      ComObj->ReturnVal = 0; /* dummy value  */
+      /* USER CODE BEGIN Process_Sys_Notif_OTHER */
 
+      /* USER CODE END Process_Sys_Notif_OTHER */
+      break;
     default:
+      /* USER CODE BEGIN Process_Sys_Notif_DEFAULT */
+
+      /* USER CODE END Process_Sys_Notif_DEFAULT */
       break;
   }
 
@@ -179,16 +187,16 @@ void Process_Sys_Notif(MBMUX_ComParam_t *ComObj)
   /* USER CODE END Process_Sys_Notif_2 */
 }
 
-void UTIL_SEQ_EvtIdle(uint32_t task_id_bm, uint32_t evt_waited_bm)
+void UTIL_SEQ_EvtIdle(uint32_t TaskId_bm, uint32_t EvtWaited_bm)
 {
   /**
     * overwrites the __weak UTIL_SEQ_EvtIdle() in stm32_seq.c
-    * all to process all tack except task_id_bm
+    * all to process all tack except TaskId_bm
     */
   /* USER CODE BEGIN UTIL_SEQ_EvtIdle_1 */
 
   /* USER CODE END UTIL_SEQ_EvtIdle_1 */
-  UTIL_SEQ_Run(~task_id_bm);
+  UTIL_SEQ_Run(~TaskId_bm);
   /* USER CODE BEGIN UTIL_SEQ_EvtIdle_2 */
 
   /* USER CODE END UTIL_SEQ_EvtIdle_2 */
@@ -197,8 +205,6 @@ void UTIL_SEQ_EvtIdle(uint32_t task_id_bm, uint32_t evt_waited_bm)
 
 /**
   * @brief redefines __weak function in stm32_seq.c such to enter low power
-  * @param none
-  * @retval  none
   */
 void UTIL_SEQ_Idle(void)
 {
@@ -222,7 +228,7 @@ uint8_t GetBatteryLevel(void)
 
   batteryLevelmV = (uint16_t) SYS_GetBatteryLevel();
 
-  /* Convert batterey level from mV to linea scale: 1 (very low) to 254 (fully charged) */
+  /* Convert battery level from mV to linear scale: 1 (very low) to 254 (fully charged) */
   if (batteryLevelmV > VDD_BAT)
   {
     batteryLevel = LORAWAN_MAX_BAT;
@@ -256,51 +262,46 @@ uint16_t GetTemperatureLevel(void)
   return temperatureLevel;
 }
 
-/* USER CODE BEGIN ExF */
+/* USER CODE BEGIN EF */
 
-/* USER CODE END ExF */
+/* USER CODE END EF */
 
 /* Private functions ---------------------------------------------------------*/
-
-/**
-  * @brief Test: Initialize MBMUX, wait CM0PLUS is ready, gets CM0PLUS capabilities, Initialises other features
-  * @param none
-  * @retval none
-  */
 static void MBMUXIF_Init(void)
 {
   /* USER CODE BEGIN MBMUXIF_Init_1 */
 
   /* USER CODE END MBMUXIF_Init_1 */
-  FEAT_INFO_List_t *p_cm0plus_supprted_features_list;
+  FEAT_INFO_List_t *p_cm0plus_supported_features_list;
   int8_t init_status;
 
-  APP_LOG(TS_ON, VLEVEL_H, "\r\nCM4: System Initialisation started \r\n");
+  APP_LOG(TS_ON, VLEVEL_H, "\r\nCM4: System Initialization started \r\n");
 
   init_status = MBMUXIF_SystemInit();
   if (init_status < 0)
   {
-    while (1) {}
+    Error_Handler();
   }
 
   /* start CM0PLUS */
-  /* Note: when debugging in order to connect with the deggugger CPUU2 shall be start using workspace CM4 starts CM0PLUS */
-  /* On the other hand is up to the devepoper make sure the CM0PLUS debugger is run after CM4 debugger */
+  /* Note: when debugging in order to connect with the debugger CPU2 shall be start using workspace CM4 starts CM0PLUS */
+  /* On the other hand is up to the developer make sure the CM0PLUS debugger is run after CM4 debugger */
   HAL_PWREx_ReleaseCore(PWR_CORE_CPU2);
-  /* CM4 has started and it has reset the mailbox and initialised the MbMux; */
-  /* once CM0PLUS is also initialised it send a SYS notification */
+
+  /* CM4 has started and it has reset the mailbox and initialized the MbMux; */
+  /* once CM0PLUS is also initialized it send a SYS notification */
   MBMUXIF_SetCpusSynchroFlag(CPUS_BOOT_SYNC_ALLOW_CPU2_TO_START);
 
-  APP_LOG(TS_ON, VLEVEL_H, "CM4: System Initialisation done: Wait for CM0PLUS \r\n");
+  APP_LOG(TS_ON, VLEVEL_H, "CM4: System Initialization done: Wait for CM0PLUS \r\n");
 
-  MBMUXIF_WaitCm0MbmuxIsInitialised();
+  MBMUXIF_WaitCm0MbmuxIsInitialized();
 
-  APP_LOG(TS_ON, VLEVEL_H, "CM0PLUS: System Initialisation started \r\n");
+  APP_LOG(TS_ON, VLEVEL_H, "CM0PLUS: System Initialization started \r\n");
 
-  p_cm0plus_supprted_features_list = MBMUXIF_SystemSendCm0plusInfoListReq();
-  MBMUX_SetCm0plusFeatureListPtr(p_cm0plus_supprted_features_list);
+  p_cm0plus_supported_features_list = MBMUXIF_SystemSendCm0plusInfoListReq();
+  MBMUX_SetCm0plusFeatureListPtr(p_cm0plus_supported_features_list);
 
-  APP_LOG(TS_ON, VLEVEL_H, "System Initialisation CM4-CM0PLUS completed \r\n");
+  APP_LOG(TS_ON, VLEVEL_H, "System Initialization CM4-CM0PLUS completed \r\n");
 
   init_status = MBMUXIF_SystemPrio_Add(FEAT_INFO_SYSTEM_NOTIF_PRIO_A_ID);
   if (init_status < 0)
@@ -349,45 +350,6 @@ static void TimestampNow(uint8_t *buff, uint16_t *size)
   /* USER CODE END TimestampNow_2 */
 }
 
-static void Gpio_PreInit(void)
-{
-  /* USER CODE BEGIN Gpio_PreInit_1 */
-
-  /* USER CODE END Gpio_PreInit_1 */
-  GPIO_InitTypeDef GPIO_InitStruct = {0};
-
-  /* Configure all IOs in analog input              */
-  /* Except PA143 and PA14 (SWCLK and SWD) for debug*/
-  /* PA13 and PA14 are configured in debug_init     */
-  /* Configure all GPIO as analog to reduce current consumption on non used IOs */
-  /* Enable GPIOs clock */
-  __HAL_RCC_GPIOA_CLK_ENABLE();
-  __HAL_RCC_GPIOB_CLK_ENABLE();
-  __HAL_RCC_GPIOC_CLK_ENABLE();
-  __HAL_RCC_GPIOH_CLK_ENABLE();
-
-  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  /* All GPIOs except debug pins (SWCLK and SWD) */
-  GPIO_InitStruct.Pin = GPIO_PIN_All & (~(GPIO_PIN_13 | GPIO_PIN_14));
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  /* All GPIOs */
-  GPIO_InitStruct.Pin = GPIO_PIN_All;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-  HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
-
-  /* Disable GPIOs clock */
-  __HAL_RCC_GPIOA_CLK_DISABLE();
-  __HAL_RCC_GPIOB_CLK_DISABLE();
-  __HAL_RCC_GPIOC_CLK_DISABLE();
-  __HAL_RCC_GPIOH_CLK_DISABLE();
-  /* USER CODE BEGIN Gpio_PreInit_2 */
-
-  /* USER CODE END Gpio_PreInit_2 */
-}
-
 /* Disable StopMode when traces need to be printed */
 void UTIL_ADV_TRACE_PreSendHook(void)
 {
@@ -428,13 +390,11 @@ static void tiny_snprintf_like(char *buf, uint32_t maxsize, const char *strForma
 /* USER CODE BEGIN PrFD */
 
 /* USER CODE END PrFD */
+
 /* HAL overload functions ---------------------------------------------------------*/
 
 /**
-  * @brief This function configures the source of the time base.
-  * @brief  don't enable systick
-  * @param TickPriority: Tick interrupt priority.
-  * @retval HAL status
+  * @note This function overwrites the __weak one from HAL
   */
 HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
 {
@@ -449,13 +409,11 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
 }
 
 /**
-  * @brief Provide a tick value in millisecond measured using RTC
   * @note This function overwrites the __weak one from HAL
-  * @retval tick value
   */
 uint32_t HAL_GetTick(void)
 {
-  /* TIMER_IF can be based onother counter the SysTick e.g. RTC */
+  /* TIMER_IF can be based on other counter the SysTick e.g. RTC */
   /* USER CODE BEGIN HAL_GetTick_1 */
 
   /* USER CODE END HAL_GetTick_1 */
@@ -466,13 +424,11 @@ uint32_t HAL_GetTick(void)
 }
 
 /**
-  * @brief This function provides delay (in ms)
-  * @param Delay: specifies the delay time length, in milliseconds.
-  * @retval None
+  * @note This function overwrites the __weak one from HAL
   */
 void HAL_Delay(__IO uint32_t Delay)
 {
-  /* TIMER_IF can be based onother counter the SysTick e.g. RTC */
+  /* TIMER_IF can be based on other counter the SysTick e.g. RTC */
   /* USER CODE BEGIN HAL_Delay_1 */
 
   /* USER CODE END HAL_Delay_1 */
@@ -487,4 +443,3 @@ void HAL_Delay(__IO uint32_t Delay)
 /* USER CODE END Overload_HAL_weaks */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-

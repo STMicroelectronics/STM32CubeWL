@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    sigfox_mbwrapper.c
@@ -17,6 +18,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
 #include "platform.h"
@@ -31,7 +33,7 @@
 #include "st_sigfox_api.h"
 #include "sigfox_monarch_api.h"
 #include "sigfox_info.h"
-
+#include "utilities_def.h"
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */
@@ -70,7 +72,22 @@ UTIL_MEM_PLACE_IN_SECTION("MB_MEM2") uint8_t aSigfoxMbWrapShare2Buffer[SIGFOX_MB
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
+/*!
+  * @brief This is the function that will be called by the Sigfox Library when the scan is completed
+  * @param[out] rc_bit_mask  rc  Value of the RC found. There could be only 1 RC or 0 ( not found )
+  * @param[out] rssi         RSSI value of the RC found. if rc = 0, rssi is not valid ( is set to 0 too )
+  */
 static sfx_u8 app_monarch_rcscan_wrapper(sfx_u8 rc_bit_mask, sfx_s16 rssi);
+
+/**
+  * @brief  rf test mode call back starting a while wait loop
+  */
+static void sfx_monarch_test_mode_wait_start_cb(void);
+
+/**
+  * @brief  rf test mode call back exiting a while wait loop
+  */
+static void sfx_monarch_test_mode_wait_end_cb(void);
 
 /* USER CODE BEGIN PFP */
 
@@ -82,7 +99,7 @@ void Process_Sigfox_Cmd(MBMUX_ComParam_t *ComObj)
   /* USER CODE BEGIN Process_Sigfox_Cmd_1 */
 
   /* USER CODE END Process_Sigfox_Cmd_1 */
-  uint32_t *com_buffer = ComObj->ParamBuf;
+  uint32_t *com_buffer = NULL;
   sfx_u32 config_words[SIZE_CONF_WORDS];
   sfx_u8 frame_ul[SGFX_MAX_PAYLOAD_SIZE];
   sfx_u8 frame_dwnl[SGFX_DWNL_SIZE];
@@ -92,6 +109,8 @@ void Process_Sigfox_Cmd(MBMUX_ComParam_t *ComObj)
   /* init */
 
   APP_LOG(TS_ON, VLEVEL_H, " * CM0PLUS Sigfox command received\n\r");
+
+  com_buffer = MBMUX_SEC_VerifySramBufferPtr(ComObj->ParamBuf, ComObj->BufSize);
 
   /* process Command */
   switch (ComObj->MsgId)
@@ -203,7 +222,9 @@ void Process_Sigfox_Cmd(MBMUX_ComParam_t *ComObj)
       break;
 
     case SIGFOX_API_MONARCH_TEST_MODE_ID:
-      status = ADDON_SIGFOX_RF_PROTOCOL_API_monarch_test_mode((sfx_rc_enum_t) com_buffer[0], (sfx_test_mode_t) com_buffer[1], (sfx_u8)  com_buffer[2]);
+      status = ST_ADDON_SIGFOX_RF_PROTOCOL_API_monarch_test_mode_async((sfx_rc_enum_t) com_buffer[0], (sfx_test_mode_t) com_buffer[1], (sfx_u8)  com_buffer[2],
+                                                                       sfx_monarch_test_mode_wait_start_cb,
+                                                                       sfx_monarch_test_mode_wait_end_cb);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
       ComObj->ReturnVal = (uint32_t) status;
@@ -243,48 +264,6 @@ void Process_Sigfox_Cmd(MBMUX_ComParam_t *ComObj)
   /* USER CODE END Process_Sigfox_Cmd_2 */
 }
 
-/* USER CODE BEGIN EF */
-
-/* USER CODE END EF */
-
-/* Private Functions Definition -----------------------------------------------*/
-/*!
-  * \brief   This is the function that will be called by the Sigfox Library when the scan is completed
-  *
-  *                     \param[out] sfx_u8       rc  Value of the RC found. There could be only 1 RC or 0 ( not found )
-  *                     \param[out] rssi         RSSI value of the RC found. if rc = 0, rssi is not valid ( is set to 0 too )
-  */
-static sfx_u8 app_monarch_rcscan_wrapper(sfx_u8 rc_bit_mask, sfx_s16 rssi)
-{
-  /* USER CODE BEGIN app_monarch_rcscan_wrapper_1 */
-
-  /* USER CODE END app_monarch_rcscan_wrapper_1 */
-  MBMUX_ComParam_t *com_obj;
-  uint32_t ret;
-
-  com_obj = MBMUXIF_GetSigfoxFeatureNotifComPtr();
-  com_obj->MsgId = SIGFOX_MONARCH_RC_SCAN_CB_ID;
-  com_obj->ParamBuf[0] = (uint32_t) rc_bit_mask;
-  com_obj->ParamBuf[1] = (uint32_t) rssi;
-  com_obj->ParamCnt = 2;
-  MBMUXIF_SigfoxSendNotif();
-  /* waiting for event */
-  /* once event is received and semaphore released: */
-  ret = com_obj->ReturnVal;
-  return (sfx_u8) ret;
-  /* USER CODE BEGIN app_monarch_rcscan_wrapper_2 */
-
-  /* USER CODE END app_monarch_rcscan_wrapper_2 */
-}
-
-/*!
-  * \brief   Measures the battery level
-  *
-  * \statusval  Battery level [0: node is connected to an external
-  *          power source, 1..254: battery level, where 1 is the minimum
-  *          and 254 is the maximum value, 255: the node was not able
-  *          to measure the battery level]
-  */
 uint16_t GetBatteryLevel_mbwrapper(void)
 {
   /* USER CODE BEGIN GetBatteryLevel_mbwrapper_1 */
@@ -307,12 +286,6 @@ uint16_t GetBatteryLevel_mbwrapper(void)
 
   /* USER CODE END GetBatteryLevel_mbwrapper_2 */
 }
-
-/*!
-  * \brief   Measures the temperature level
-  *
-  * \retval  Temperature level
-  */
 
 int16_t GetTemperatureLevel_mbwrapper(void)
 {
@@ -337,6 +310,64 @@ int16_t GetTemperatureLevel_mbwrapper(void)
   /* USER CODE END GetTemperatureLevel_mbwrapper_2 */
 }
 
+/* USER CODE BEGIN EF */
+
+/* USER CODE END EF */
+
+/* Private Functions Definition -----------------------------------------------*/
+static sfx_u8 app_monarch_rcscan_wrapper(sfx_u8 rc_bit_mask, sfx_s16 rssi)
+{
+  /* USER CODE BEGIN app_monarch_rcscan_wrapper_1 */
+
+  /* USER CODE END app_monarch_rcscan_wrapper_1 */
+  MBMUX_ComParam_t *com_obj;
+  uint32_t *com_buffer = NULL;
+  uint32_t ret;
+
+  com_obj = MBMUXIF_GetSigfoxFeatureNotifComPtr();
+  com_obj->MsgId = SIGFOX_MONARCH_RC_SCAN_CB_ID;
+
+  com_buffer = MBMUX_SEC_VerifySramBufferPtr(com_obj->ParamBuf, com_obj->BufSize);
+  com_buffer[0] = (uint32_t) rc_bit_mask;
+  com_buffer[1] = (uint32_t) rssi;
+  com_obj->ParamCnt = 2;
+  MBMUXIF_SigfoxSendNotif();
+  /* waiting for event */
+  /* once event is received and semaphore released: */
+  ret = com_obj->ReturnVal;
+  return (sfx_u8) ret;
+  /* USER CODE BEGIN app_monarch_rcscan_wrapper_2 */
+
+  /* USER CODE END app_monarch_rcscan_wrapper_2 */
+}
+
+static void sfx_monarch_test_mode_wait_start_cb(void)
+{
+  /* USER CODE BEGIN sfx_monarch_test_mode_wait_start_cb_1 */
+
+  /* USER CODE END sfx_monarch_test_mode_wait_start_cb_1 */
+
+  /* don't exit this function until test_mode_wait_end callback is called */
+  UTIL_SEQ_WaitEvt(1 << CFG_SEQ_Evt_Monarch);
+
+  /* USER CODE BEGIN sfx_monarch_test_mode_wait_start_cb_2 */
+
+  /* USER CODE END sfx_monarch_test_mode_wait_start_cb_2 */
+}
+
+static void sfx_monarch_test_mode_wait_end_cb(void)
+{
+  /* USER CODE BEGIN sfx_monarch_test_mode_wait_end_cb_1 */
+
+  /* USER CODE END sfx_monarch_test_mode_wait_end_cb_1 */
+
+  /* release from the test_mode_wait */
+  UTIL_SEQ_SetEvt(1 << CFG_SEQ_Evt_Monarch);
+
+  /* USER CODE BEGIN sfx_monarch_test_mode_wait_end_cb_2 */
+
+  /* USER CODE END sfx_monarch_test_mode_wait_end_cb_2 */
+}
 /* USER CODE BEGIN PrFD */
 
 /* USER CODE END PrFD */

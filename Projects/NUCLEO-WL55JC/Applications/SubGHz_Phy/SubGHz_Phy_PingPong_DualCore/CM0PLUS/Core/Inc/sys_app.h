@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    sys_app.h
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __SYS_APP_H__
@@ -37,6 +39,10 @@ extern "C" {
 /* Exported defines ----------------------------------------------------------*/
 /* currently not supported */
 /* #define ALLOW_KMS_VIA_MBMUX */
+
+/* USER CODE BEGIN ED */
+
+/* USER CODE END ED */
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
@@ -71,29 +77,27 @@ extern "C" {
 
 /* Exported functions prototypes ---------------------------------------------*/
 /**
-  * @brief initialises the system (dbg pins, trace, systiemr, LPM, ...)
-  * @param none
-  * @retval  none
+  * @brief initialize MBMUXIF System and send a notification to Cm4 when ready
   */
 void SystemApp_Init(void);
 
 /**
-  * @brief  callback to get the board 64 bits unique ID
-  * @param  unique ID
-  * @retval none
+  * @brief Returns sec and msec based on the systime in use
+  * @param buff to update with timestamp
+  * @param size of updated buffer
   */
-void GetUniqueId(uint8_t *id);
+void TimestampNow(uint8_t *buff, uint16_t *size);
 
 /**
-  * @brief  callback to get the board 32 bits unique ID (LSB)
-  * @param  none
-  * @retval devAddr Device Address
+  * @brief  Process System Command
+  * @param  ComObj exchange buffer parameter
   */
-uint32_t GetDevAddr(void);
-
-void TimestampNow(uint8_t *buff, uint16_t *size);
 void Process_Sys_Cmd(MBMUX_ComParam_t *ComObj);
 #ifdef ALLOW_KMS_VIA_MBMUX /* currently not supported */
+/**
+  * @brief  Process KMS Command
+  * @param  ComObj exchange buffer parameter
+  */
 void Process_Kms_Cmd(MBMUX_ComParam_t *ComObj);
 #endif /* ALLOW_KMS_VIA_MBMUX */
 

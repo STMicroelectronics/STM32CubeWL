@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    utilities_conf.h
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
  */
+/* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __UTILITIES_CONF_H__
@@ -35,7 +37,6 @@ extern "C" {
 #include "stm32_tiny_vsnprintf.h"
 
 #include "mbmuxif_trace.h"
-
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */

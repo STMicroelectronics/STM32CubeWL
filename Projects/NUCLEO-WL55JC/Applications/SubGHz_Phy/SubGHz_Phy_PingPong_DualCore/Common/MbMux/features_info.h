@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    features_info.h
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __SYSTEM_INFO_H
@@ -36,7 +38,7 @@ extern "C" {
 /**
   * @brief Feature enumeration
   * @note This is the list of all available feature so far,
-          the one available in a fiven build are listed in the Feat_Info_Table[]
+          the one available in a given build are listed in the Feat_Info_Table[]
           to keep compatibility, in order to add a feature
           use a new value to the bottom without changing the existing order
   */
@@ -113,7 +115,6 @@ typedef struct
 /* Exported functions ------------------------------------------------------- */
 /**
   * @brief  Init configuration params by calling specific feature xxx_info.c
-  * @return void
   */
 void FEAT_INFO_Init(void);
 /**

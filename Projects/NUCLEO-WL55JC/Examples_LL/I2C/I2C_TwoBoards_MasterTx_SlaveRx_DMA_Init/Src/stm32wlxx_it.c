@@ -210,7 +210,7 @@ void DMA1_Channel1_IRQHandler(void)
 #ifdef SLAVE_BOARD
   if (LL_DMA_IsActiveFlag_TC1(DMA1))
   {
-    LL_DMA_ClearFlag_GI1(DMA1);
+    LL_DMA_ClearFlag_TC1(DMA1);
     DMA1_Transfer_Complete_Callback();
   }
   else if (LL_DMA_IsActiveFlag_TE1(DMA1))
@@ -235,7 +235,7 @@ void DMA1_Channel2_IRQHandler(void)
 #else
   if (LL_DMA_IsActiveFlag_TC2(DMA1))
   {
-    LL_DMA_ClearFlag_GI2(DMA1);
+    LL_DMA_ClearFlag_TC2(DMA1);
     DMA1_Transfer_Complete_Callback();
   }
   else if (LL_DMA_IsActiveFlag_TE2(DMA1))

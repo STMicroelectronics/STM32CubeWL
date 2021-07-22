@@ -53,10 +53,10 @@ extern "C" {
 #define DEMO_SYNCWORD_FSK_SENS   {0x60, 0x6D, 0xC9, 0xE2, 0x00, 0x00, 0x00, 0x00}
 
 /**
- * @brief Convert bw used in regional settings to input for Radio.SetTxConfig()
- * This allows only higher bandwidth.
- * For proper bandwidth use DEMO_GetBandwidth().
- */
+  * @brief Convert bw used in regional settings to input for Radio.SetTxConfig()
+  * This allows only higher bandwidth.
+  * For proper bandwidth use DEMO_GetBandwidth().
+  */
 #define DEMO_BW_TO_SETTXCONFIG(bw)      (((((uint32_t)(bw)) - 7) < 3) ? ((bw) - 7) : 0) /*0 = 125 kHz ... 2 = 500 kHz*/
 
 /*Generate next pseudorandom value*/
@@ -65,8 +65,8 @@ extern "C" {
 #define DEMO_PSEUDORANDOM_FIRST(rnd)    ((rnd) & 0xff)
 
 /**
- * Pack of all codings.
- */
+  * Pack of all codings.
+  */
 typedef struct
 {
   DEMO_coding_hdr_t hdr;    /**<Modulation header, indicates whether lora or fsk is used*/
@@ -75,102 +75,102 @@ typedef struct
 } DEMO_codings_t;
 
 /**
- * @brief Calculate sensor's packet length.
- * @param Coding packet coding
- * @param Payload number of bytes in payload
- * @return packet length [ms]
- */
-uint32_t DEMO_TimeOnAirLora (const DEMO_coding_lora_t* Coding, uint32_t Payload);
+  * @brief Calculate sensor's packet length.
+  * @param Coding packet coding
+  * @param Payload number of bytes in payload
+  * @return packet length [ms]
+  */
+uint32_t DEMO_TimeOnAirLora(const DEMO_coding_lora_t *Coding, uint32_t Payload);
 
 /**
- * @brief Calculate sensor's packet length.
- * @param Coding packet coding
- * @param Payload number of bytes in payload
- * @return packet length [ms]
- */
-uint32_t DEMO_TimeOnAirFsk (const DEMO_coding_fsk_t* Coding, uint32_t payload);
+  * @brief Calculate sensor's packet length.
+  * @param Coding packet coding
+  * @param Payload number of bytes in payload
+  * @return packet length [ms]
+  */
+uint32_t DEMO_TimeOnAirFsk(const DEMO_coding_fsk_t *Coding, uint32_t payload);
 
 /**
- * @brief Get the longest payload that can be sent in the given subregion.
- * @param Coding packet coding
- * @param Subregion local subregion
- * @param packet_time if not NULL, length of the packet will be written there [ms]
- * @return number of bytes which can be sent
- */
-uint32_t DEMO_MaxPayloadLora (const DEMO_coding_lora_t* Coding,
-                              const DEMO_Subregion_t* Subregion, uint32_t* packet_time);
+  * @brief Get the longest payload that can be sent in the given subregion.
+  * @param Coding packet coding
+  * @param Subregion local subregion
+  * @param packet_time if not NULL, length of the packet will be written there [ms]
+  * @return number of bytes which can be sent
+  */
+uint32_t DEMO_MaxPayloadLora(const DEMO_coding_lora_t *Coding,
+                             const DEMO_Subregion_t *Subregion, uint32_t *packet_time);
 
 /**
- * @brief Get the longest payload that can be sent in the given subregion.
- * @param Coding packet coding
- * @param Subregion local subregion
- * @param packet_time if not NULL, length of the packet will be written there [ms]
- * @return number of bytes which can be sent
- */
-uint32_t DEMO_MaxPayloadFsk (const DEMO_coding_fsk_t* coding,
-                             const DEMO_Subregion_t* Subregion, uint32_t* packet_time);
+  * @brief Get the longest payload that can be sent in the given subregion.
+  * @param Coding packet coding
+  * @param Subregion local subregion
+  * @param packet_time if not NULL, length of the packet will be written there [ms]
+  * @return number of bytes which can be sent
+  */
+uint32_t DEMO_MaxPayloadFsk(const DEMO_coding_fsk_t *coding,
+                            const DEMO_Subregion_t *Subregion, uint32_t *packet_time);
 
 /**
- * @brief Set coding to default.
- * @param Codings structure to clear
- * @param SlotNr clear structure for this slot
- * @param Region default coding is the same as beacon
- */
-void DEMO_DefaultCoding (DEMO_codings_t* Codings, uint32_t SlotNr, const DEMO_Region_t* Region);
+  * @brief Set coding to default.
+  * @param Codings structure to clear
+  * @param SlotNr clear structure for this slot
+  * @param Region default coding is the same as beacon
+  */
+void DEMO_DefaultCoding(DEMO_codings_t *Codings, uint32_t SlotNr, const DEMO_Region_t *Region);
 
 /**
- * @brief Check if the sensor coding is the default coding.
- * @param Sensor structure for Sensor
- * @return true if the coding is default
- */
-bool DEMO_IsCodingDefault (const DEMO_codings_t* Codings, const DEMO_Region_t* Region);
+  * @brief Check if the sensor coding is the default coding.
+  * @param Sensor structure for Sensor
+  * @return true if the coding is default
+  */
+bool DEMO_IsCodingDefault(const DEMO_codings_t *Codings, const DEMO_Region_t *Region);
 
 /**
- * @brief Get modulation bandwidth.
- * @param Coding modulation
- * @return bandwidth [Hz]
- */
-uint32_t DEMO_BandwidthLora (const DEMO_coding_lora_t* Coding);
+  * @brief Get modulation bandwidth.
+  * @param Coding modulation
+  * @return bandwidth [Hz]
+  */
+uint32_t DEMO_BandwidthLora(const DEMO_coding_lora_t *Coding);
 
 /**
- * @brief Get modulation bandwidth.
- * @param Coding modulation
- * @return bandwidth [Hz]
- */
-uint32_t DEMO_BandwidthFsk (const DEMO_coding_fsk_t* Coding);
+  * @brief Get modulation bandwidth.
+  * @param Coding modulation
+  * @return bandwidth [Hz]
+  */
+uint32_t DEMO_BandwidthFsk(const DEMO_coding_fsk_t *Coding);
 
 /**
- * @brief Validate and copy coding header.
- * @param Hdr structure to validate
- * @param Subregion pointer to subregion used to validate
- */
-void DEMO_ValidateCodingHdr(DEMO_coding_hdr_t* Hdr, const DEMO_Subregion_t* Subregion);
+  * @brief Validate and copy coding header.
+  * @param Hdr structure to validate
+  * @param Subregion pointer to subregion used to validate
+  */
+void DEMO_ValidateCodingHdr(DEMO_coding_hdr_t *Hdr, const DEMO_Subregion_t *Subregion);
 
 /**
- * @brief Validate and copy coding parameters.
- * @param Coding structure to validate
- */
-void DEMO_ValidateCodingLora(DEMO_coding_lora_t* Coding);
+  * @brief Validate and copy coding parameters.
+  * @param Coding structure to validate
+  */
+void DEMO_ValidateCodingLora(DEMO_coding_lora_t *Coding);
 
 /**
- * @brief Validate and copy coding parameters.
- * @param Coding structure to validate
- */
-void DEMO_ValidateCodingFsk(DEMO_coding_fsk_t* Coding);
+  * @brief Validate and copy coding parameters.
+  * @param Coding structure to validate
+  */
+void DEMO_ValidateCodingFsk(DEMO_coding_fsk_t *Coding);
 
 /**
- * @brief Get number of free slots.
- * @param Occupied mask of occupied slots
- * @return number of free slots
- */
+  * @brief Get number of free slots.
+  * @param Occupied mask of occupied slots
+  * @return number of free slots
+  */
 uint32_t DEMO_CountFreeSlots(uint16_t Occupied);
 
 /**
- * @brief Pick one slot from the slots marked as free in Occupied mask.
- * @param Occupied mask of occupied slots, true if occupied, slot 0 and slot 1 are reserved
- * @param Random random input for the random selection (should be much larger than number of channels)
- * @return selected slot number
- */
+  * @brief Pick one slot from the slots marked as free in Occupied mask.
+  * @param Occupied mask of occupied slots, true if occupied, slot 0 and slot 1 are reserved
+  * @param Random random input for the random selection (should be much larger than number of channels)
+  * @return selected slot number
+  */
 uint32_t DEMO_ChooseRandomSlot(uint16_t Occupied, uint32_t Random);
 
 #ifdef __cplusplus

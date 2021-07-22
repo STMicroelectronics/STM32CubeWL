@@ -64,11 +64,6 @@ osMessageQueueId_t osqueueHandle;
 const osMessageQueueAttr_t osqueue_attributes = {
   .name = "osqueue"
 };
-/* Definitions for osSemaphore */
-osSemaphoreId_t osSemaphoreHandle;
-const osSemaphoreAttr_t osSemaphore_attributes = {
-  .name = "osSemaphore"
-};
 /* USER CODE BEGIN PV */
 uint32_t   osQueueMsg;
 uint32_t Queue_value = 100;
@@ -132,8 +127,6 @@ int main(void)
   /* USER CODE END RTOS_MUTEX */
 
   /* Create the semaphores(s) */
-  /* creation of osSemaphore */
-//  osSemaphoreHandle = osSemaphoreNew(1, 1, &osSemaphore_attributes);
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */

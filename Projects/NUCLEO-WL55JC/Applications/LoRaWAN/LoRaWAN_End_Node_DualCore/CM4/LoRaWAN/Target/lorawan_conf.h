@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    lorawan_conf.h
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __LORAWAN_CONF_H__
@@ -25,7 +27,6 @@
 extern "C" {
 #endif
 /* Includes ------------------------------------------------------------------*/
-#include "stm32_systime.h"
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */

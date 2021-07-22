@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    sigfox_info.c
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
 #include "sigfox_info.h"
@@ -58,9 +60,7 @@ UTIL_MEM_PLACE_IN_SECTION("MB_MEM2") SigfoxInfo_t SigfoxInfoTable;
 
 /* Private function prototypes -----------------------------------------------*/
 /**
-  * @brief initialises the SigfoxInfo capabilities table
-  * @param none
-  * @retval  none
+  * @brief initialize the SigfoxInfo capabilities table
   */
 static void StoreValueInFeatureListTable(void);
 
@@ -69,11 +69,6 @@ static void StoreValueInFeatureListTable(void);
 /* USER CODE END PFP */
 
 /* Exported functions --------------------------------------------------------*/
-/**
-  * @brief initialises the SigfoxInfo capabilities table
-  * @param none
-  * @retval  none
-  */
 void SigfoxInfo_Init(void)
 {
   /* USER CODE BEGIN SigfoxInfo_Init_1 */
@@ -95,11 +90,6 @@ void SigfoxInfo_Init(void)
   /* USER CODE END SigfoxInfo_Init_2 */
 }
 
-/**
-  * @brief returns the pointer to the SigfoxInfo capabilities table
-  * @param none
-  * @retval  SigfoxInfoTable pointer
-  */
 SigfoxInfo_t *SigfoxInfo_GetPtr(void)
 {
   /* USER CODE BEGIN SigfoxInfo_GetPtr_1 */
@@ -146,7 +136,7 @@ static void StoreValueInFeatureListTable(void)
 
   if (found)
   {
-    p_feature->Feat_Info_Config_Size = sizeof(SigfoxInfo_t)/sizeof(uint32_t);
+    p_feature->Feat_Info_Config_Size = sizeof(SigfoxInfo_t) / sizeof(uint32_t);
     p_feature->Feat_Info_Config_Ptr = &SigfoxInfoTable;
   }
   else

@@ -101,14 +101,21 @@ int main(void)
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
-  MX_RTC_Init();
   /* USER CODE BEGIN 2 */
 
   /* Check and handle if the system was resumed from StandBy mode */
-  if(__HAL_PWR_GET_FLAG(PWR_FLAG_SB) != RESET)
+  if(__HAL_PWR_GET_FLAG(PWR_FLAG_SB) == RESET)
+  {
+    MX_RTC_Init();
+  }
+  else
   {
     /* Clear Standby flag */
     __HAL_PWR_CLEAR_FLAG(PWR_FLAG_SB);
+
+    /* Enable access to RTC domain for following wake-up source configuration */
+    HAL_PWR_EnableBkUpAccess();
+    __HAL_RCC_RTCAPB_CLK_ENABLE();    
   }
   
   /* Insert 5 seconds delay */

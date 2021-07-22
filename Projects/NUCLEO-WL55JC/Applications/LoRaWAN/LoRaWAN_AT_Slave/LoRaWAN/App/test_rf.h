@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    test_rf.h
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __TEST_RF_H__
@@ -88,50 +90,47 @@ typedef struct
 /* Exported functions ------------------------------------------------------- */
 /**
   * @brief RF Tone test command
-  * @param [IN] none
   * @retval status 0 ok, -1 ko
   */
 int32_t TST_TxTone(void);
 
 /**
   * @brief RF Receive  test command
-  * @param  [IN] none
   * @retval status 0 ok, -1 ko
   */
 int32_t TST_RxRssi(void);
 
 /**
   * @brief RF Transmit LORA test command
-  * @Note Transmits [0x00, 0x11, 0x22, ... 0xFF]
-  * @param [IN] nb of packets
+  * @note Transmits [0x00, 0x11, 0x22, ... 0xFF]
+  * @param[in] nb_packet nb of packets
   * @retval status 0 ok, -1 ko
   */
 int32_t TST_TX_Start(int32_t nb_packet);
 
 /**
   * @brief RF Receive LORA test command
-  * @param [IN] nb of packets
+  * @param[in] nb_packet nb of packets
   * @retval status 0 ok, -1 ko
   */
 int32_t TST_RX_Start(int32_t nb_packet);
 
 /**
   * @brief RF Set Radio Configuration test command
-  * @param [IN] Param
+  * @param[in] Param Pointer config param
   * @retval status 0 ok, -1 ko
   */
 int32_t TST_set_config(testParameter_t *Param);
 
 /**
   * @brief RF Get Radio Configuration test command
-  * @param [IN] Pointer config param
+  * @param[in] Param Pointer config param
   * @retval LoRa status
   */
 int32_t TST_get_config(testParameter_t *Param);
 
 /**
   * @brief RF test stop
-  * @param [IN] None
   * @retval LoRa status
   */
 int32_t TST_stop(void);

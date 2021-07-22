@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    utilities_def.h
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __UTILITIES_DEF_H__
@@ -40,9 +42,11 @@ extern "C" {
   */
 typedef enum
 {
+  /* USER CODE BEGIN CFG_LPM_Id_t_0 */
+
+  /* USER CODE END CFG_LPM_Id_t_0 */
   CFG_LPM_APPLI_Id,
   CFG_LPM_UART_TX_Id,
-  CFG_LPM_TCXO_WA_Id,
   CFG_LPM_SGFX_MN_Id,
   /* USER CODE BEGIN CFG_LPM_Id_t */
 
@@ -96,6 +100,7 @@ typedef enum
   CFG_SEQ_Evt_MbSystemAckRcv,
   CFG_SEQ_Evt_MbTraceAckRcv,
   CFG_SEQ_Evt_MbSigfoxAckRcv,
+  CFG_SEQ_Evt_Monarch,
   CFG_SEQ_Evt_MbRadioAckRcv,
   CFG_SEQ_Evt_Timeout,
   CFG_SEQ_Evt_TxTimeout,

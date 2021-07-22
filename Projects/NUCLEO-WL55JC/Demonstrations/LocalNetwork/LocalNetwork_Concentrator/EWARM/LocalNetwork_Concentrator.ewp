@@ -16,15 +16,15 @@
                 <debug>1</debug>
                 <option>
                     <name>ExePath</name>
-                    <state>LocalNetwork_Concentrator\Exe</state>
+                    <state>LocalNetwork_Concentrator/Exe</state>
                 </option>
                 <option>
                     <name>ObjPath</name>
-                    <state>LocalNetwork_Concentrator\Obj</state>
+                    <state>LocalNetwork_Concentrator/Obj</state>
                 </option>
                 <option>
                     <name>ListPath</name>
-                    <state>LocalNetwork_Concentrator\List</state>
+                    <state>LocalNetwork_Concentrator/List</state>
                 </option>
                 <option>
                     <name>GEndianMode</name>
@@ -32,11 +32,11 @@
                 </option>
                 <option>
                     <name>Input description</name>
-                    <state>Full formatting, with multibyte support.</state>
+                    <state>No specifier n, no float nor long long, no scan set, no assignment suppressing, with multibyte support.</state>
                 </option>
                 <option>
                     <name>Output description</name>
-                    <state>Full formatting, with multibyte support.</state>
+                    <state>No specifier a, A, no specifier n, no float nor long long, with multibyte support.</state>
                 </option>
                 <option>
                     <name>GOutputBinary</name>
@@ -108,7 +108,7 @@
                 <option>
                     <name>GeneralMisraRules04</name>
                     <version>0</version>
-                    <state>011111111111111110111111111111111111111111111010110100111111111111110111111111111111111111111111111111110111111011111111111111111111111111111</state>
+                    <state>011111111111111110111111111111011111111111111011110100111111111111111111111111111111111111111111101111111111111011111111111111111111111111111</state>
                 </option>
                 <option>
                     <name>RTConfigPath2</name>
@@ -219,10 +219,14 @@
                 <wantNonLocal>1</wantNonLocal>
                 <debug>1</debug>
                 <option>
+                    <name>CCOptimizationNoSizeConstraints</name>
+                    <state>0</state>
+                </option>
+                <option>
                     <name>CCDefines</name>
-                    <state>STM32WL55xx</state>
                     <state>CORE_CM4</state>
                     <state>USE_HAL_DRIVER</state>
+                    <state>STM32WL55xx</state>
                 </option>
                 <option>
                     <name>CCPreprocFile</name>
@@ -424,11 +428,11 @@
                 </option>
                 <option>
                     <name>IccStaticDestr</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>IccCppInlineSemantics</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>IccCmsis</name>
@@ -436,10 +440,6 @@
                 </option>
                 <option>
                     <name>IccFloatSemantics</name>
-                    <state>0</state>
-                </option>
-                <option>
-                    <name>CCOptimizationNoSizeConstraints</name>
                     <state>0</state>
                 </option>
                 <option>
@@ -780,7 +780,7 @@
                 </option>
                 <option>
                     <name>IlinkIcfFile</name>
-                    <state>$PROJ_DIR$\stm32wl55xx_flash_cm4.icf</state>
+                    <state>$PROJ_DIR$/stm32wl55xx_flash_cm4.icf</state>
                 </option>
                 <option>
                     <name>IlinkIcfFileSlave</name>
@@ -1233,6 +1233,9 @@
             <name>SubGHz_Phy</name>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\SubGHz_Phy\stm32_radio_driver\radio.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\SubGHz_Phy\stm32_radio_driver\radio_fw.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\SubGHz_Phy\stm32_radio_driver\radio_driver.c</name>

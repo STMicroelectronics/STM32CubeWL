@@ -27,7 +27,7 @@
   *
   * @file    utilities.h
   * @author  MCD Application Team
-  * @brief   Header for driver utilities.c module
+  * @brief   Helper functions implementation
   ******************************************************************************
   */
 
@@ -36,7 +36,8 @@
 #define __UTILITIES_H__
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -79,6 +80,7 @@ extern "C" {
 #define MAX( a, b ) ( ( ( a ) > ( b ) ) ? ( a ) : ( b ) )
 #endif
 
+/* ST_WORKAROUND_BEGIN: Add global ceiling div macro */
 /**
   * \brief Calculates ceiling( X / N )
   *
@@ -89,6 +91,7 @@ extern "C" {
 #ifndef DIVC
 #define DIVC( X, N )                ( ( ( X ) + ( N ) - 1 ) / ( N ) )
 #endif
+/* ST_WORKAROUND_END */
 
 /*!
  * \brief Returns 2 raised to the power of n
@@ -168,6 +171,45 @@ void memset1( uint8_t *dst, uint8_t value, uint16_t size );
  */
 int8_t Nibble2HexChar( uint8_t a );
 
+/*!
+ * \brief Computes a CCITT 32 bits CRC
+ *
+ * \param [IN] buffer   Data buffer used to compute the CRC
+ * \param [IN] length   Data buffer length
+ *
+ * \retval crc          The computed buffer of length CRC
+ */
+uint32_t Crc32( uint8_t *buffer, uint16_t length );
+
+/*!
+ * \brief Computes the initial value of the CCITT 32 bits CRC. This function
+ *        can be used with functions \ref Crc32Update and \ref Crc32Finalize.
+ *
+ * \retval crc          Initial crc value.
+ */
+uint32_t Crc32Init( void );
+
+/*!
+ * \brief Updates the value of the crc value.
+ *
+ * \param [IN] crcInit  Previous or initial crc value.
+ * \param [IN] buffer   Data pointer.
+ * \param [IN] length   Length of the data.
+ *
+ * \retval crc          Updated crc value.
+ */
+uint32_t Crc32Update( uint32_t crcInit, uint8_t *buffer, uint16_t length );
+
+/*!
+ * \brief Finalizes the crc value after the calls to \ref Crc32Update.
+ *
+ * \param [IN] crc      Recent crc value.
+ *
+ * \retval crc          Updated crc value.
+ */
+uint32_t Crc32Finalize( uint32_t crc );
+
+/* ST_WORKAROUND: Moved CRITICAL_SECTION_ macro from utilities to *_conf.h header files */
 #ifdef __cplusplus
 }
 #endif

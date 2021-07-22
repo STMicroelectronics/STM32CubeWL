@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    app_lorawan.h
@@ -16,6 +17,8 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
+
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __APP_LORAWAN_H__
 #define __APP_LORAWAN_H__
@@ -52,15 +55,11 @@ extern "C" {
 /* Exported Functions Prototypes------------------------------------------------------- */
 /**
   * @brief  Init Lora Application
-  * @param None
-  * @retval None
   */
 void MX_LoRaWAN_Init(void);
 
 /**
   * @brief  Entry Lora Process or scheduling
-  * @param None
-  * @retval None
   */
 void MX_LoRaWAN_Process(void);
 

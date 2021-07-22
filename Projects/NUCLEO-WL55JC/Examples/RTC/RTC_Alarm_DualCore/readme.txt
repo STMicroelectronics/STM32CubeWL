@@ -19,7 +19,7 @@
   @endverbatim
 
 @par Example Description
-This multicore project shows how CM4 uses the Alarm A and CM0 uses Alarm B.
+This multicore project shows how CPU1 (CM4) uses the Alarm A and CPU2 (CM0) uses Alarm B.
 
 At the beginning of the main program the HAL_Init() function is called to reset
 all the peripherals, initialize the Flash interface and the systick.
@@ -39,13 +39,14 @@ Procedure using IDE:
   3. Perform a system reset (or SW reset of CPU2 program only)
 
 In this example :
- - CM4 Configures the RTC, set the Time to 00:10:00 and programs the Alarm A with interrupt at 00:10:02.
- - CM4 starts the CM0.
- - CM0 programs the Alarm B with interrupt at 00:10:04.
- - LED2 is turned ON when the RTC Alarm A is generated correctly (CM4 after 4s).
- - LED3 is turned ON when the RTC Alarm B is generated correctly (CM0 after 4s).
- - LED2 Toggles in case of error with CM4
- - LED3 Toggles in case of error with CM0
+ - CPU1 configures the RTC, set the Time to 00:10:00 and programs the Alarm A with interrupt at 00:10:02.
+ - CPU1 boot the CPU2.
+ - CPU2 programs the Alarm B with interrupt at 00:10:04.
+
+Three GPIO are used to monitor CPU activity through LED:
+- LED1 for CPU1 activity: turned on when RTC Alarm A interruption is generated correctly (2s after CPU1 boot)
+- LED2 for CPU2 activity: turned on when RTC Alarm B interruption is generated correctly (4s after CPU2 boot)
+- LED3 for CPU1 and CPU2 in case of error: LED toggle
 
 @note Care must be taken when using HAL_Delay(), this function provides accurate delay (in milliseconds)
       based on variable incremented in SysTick ISR. This implies that if HAL_Delay() is called from

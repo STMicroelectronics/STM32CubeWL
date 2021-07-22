@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    lora_app.h
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __LORA_APP_H__
@@ -77,8 +79,6 @@ extern "C" {
 /* Exported functions prototypes ---------------------------------------------*/
 /**
   * @brief  Init Lora Application
-  * @param None
-  * @retval None
   */
 void LoRaWAN_Init(void);
 

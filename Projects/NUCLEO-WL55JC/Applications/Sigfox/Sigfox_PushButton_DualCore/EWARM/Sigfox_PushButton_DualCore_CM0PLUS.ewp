@@ -117,7 +117,7 @@
                 <option>
                     <name>GBECoreSlave</name>
                     <version>26</version>
-                    <state>39</state>
+                    <state>35</state>
                 </option>
                 <option>
                     <name>OGUseCmsis</name>
@@ -226,6 +226,7 @@
                     <name>CCDefines</name>
                     <state>CORE_CM0PLUS</state>
                     <state>KMS_ENABLED</state>
+                    <state>USE_HAL_DRIVER</state>
                     <state>STM32WL55xx</state>
                     <state>MBEDTLS_CONFIG_FILE="mbedtls_config.h"</state>
                 </option>
@@ -358,8 +359,9 @@
                     <state>$PROJ_DIR$/../CM0PLUS/Sigfox/Target</state>
                     <state>$PROJ_DIR$/../CM0PLUS/MbMux</state>
                     <state>$PROJ_DIR$/../Common/Board</state>
-                    <state>$PROJ_DIR$/../Common/MbMux</state>
                     <state>$PROJ_DIR$/../Common/System</state>
+                    <state>$PROJ_DIR$/../Common/MbMux</state>
+                    <state>$PROJ_DIR$/../../../../../../Drivers/BSP/STM32WLxx_Nucleo</state>
                     <state>$PROJ_DIR$/../../../../../../Utilities/trace/adv_trace</state>
                     <state>$PROJ_DIR$/../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc</state>
                     <state>$PROJ_DIR$/../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc/Legacy</state>
@@ -1067,147 +1069,153 @@
     <group>
         <name>Application</name>
         <group>
-            <name>Core</name>
-            <file>
-                <name>$PROJ_DIR$\..\Common\Board\board_resources.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\ca_low_level.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\flash_if.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\ipcc.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\ipcc_if.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\kms_low_level.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\lptim.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\main.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\mn_lptim_if.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\nvms_low_level.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\rtc.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\stm32_lpm_if.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\stm32wlxx_it.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\subghz.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\sys_app.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\Common\System\sys_debug.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\timer_if.c</name>
-            </file>
-        </group>
-        <group>
             <name>EWARM</name>
             <file>
                 <name>$PROJ_DIR$\startup_stm32wl55xx_cm0plus.s</name>
             </file>
         </group>
         <group>
-            <name>KMS</name>
+            <name>User</name>
             <group>
-                <name>App</name>
-                <file>
-                    <name>$PROJ_DIR$\..\CM0PLUS\KMS\App\app_kms.c</name>
-                </file>
+                <name>CM0PLUS</name>
+                <group>
+                    <name>Core</name>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\ca_low_level.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\flash_if.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\ipcc.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\ipcc_if.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\kms_low_level.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\lptim.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\main.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\mn_lptim_if.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\nvms_low_level.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\rtc.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\stm32_lpm_if.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\stm32wlxx_hal_msp.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\stm32wlxx_it.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\subghz.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\sys_app.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\timer_if.c</name>
+                    </file>
+                </group>
+                <group>
+                    <name>KMS</name>
+                    <group>
+                        <name>App</name>
+                        <file>
+                            <name>$PROJ_DIR$\..\CM0PLUS\KMS\App\app_kms.c</name>
+                        </file>
+                    </group>
+                </group>
+                <group>
+                    <name>MbMux</name>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\MbMux\features_info.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\MbMux\mbmux.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\MbMux\mbmuxif_radio.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\MbMux\mbmuxif_sigfox.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\MbMux\mbmuxif_sys.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\MbMux\mbmuxif_trace.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\MbMux\radio_mbwrapper.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\MbMux\sigfox_info.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\MbMux\sigfox_mbwrapper.c</name>
+                    </file>
+                </group>
+                <group>
+                    <name>Sigfox</name>
+                    <group>
+                        <name>App</name>
+                        <file>
+                            <name>$PROJ_DIR$\..\CM0PLUS\Sigfox\App\app_sigfox.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\CM0PLUS\Sigfox\App\ee.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\CM0PLUS\Sigfox\App\sgfx_cstimer.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\CM0PLUS\Sigfox\App\sgfx_eeprom_if.c</name>
+                        </file>
+                    </group>
+                    <group>
+                        <name>Target</name>
+                        <file>
+                            <name>$PROJ_DIR$\..\CM0PLUS\Sigfox\Target\mcu_api.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\CM0PLUS\Sigfox\Target\mn_api.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\CM0PLUS\Sigfox\Target\radio_board_if.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\CM0PLUS\Sigfox\Target\rf_api.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\CM0PLUS\Sigfox\Target\se_nvm.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\CM0PLUS\Sigfox\Target\sgfx_credentials.c</name>
+                        </file>
+                    </group>
+                </group>
             </group>
-        </group>
-        <group>
-            <name>MbMux</name>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\MbMux\features_info.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\MbMux\mbmux.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\MbMux\mbmuxif_kms.c</name>
-                <excluded>
-                    <configuration>Sigfox_PushButton_DualCore_CM0PLUS</configuration>
-                </excluded>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\MbMux\mbmuxif_radio.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\MbMux\mbmuxif_sigfox.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\MbMux\mbmuxif_sys.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\MbMux\mbmuxif_trace.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\MbMux\radio_mbwrapper.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\MbMux\sigfox_info.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\CM0PLUS\MbMux\sigfox_mbwrapper.c</name>
-            </file>
-        </group>
-        <group>
-            <name>Sigfox</name>
             <group>
-                <name>App</name>
-                <file>
-                    <name>$PROJ_DIR$\..\CM0PLUS\Sigfox\App\app_sigfox.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\CM0PLUS\Sigfox\App\ee.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\CM0PLUS\Sigfox\App\sgfx_cstimer.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\CM0PLUS\Sigfox\App\sgfx_eeprom_if.c</name>
-                </file>
-            </group>
-            <group>
-                <name>Target</name>
-                <file>
-                    <name>$PROJ_DIR$\..\CM0PLUS\Sigfox\Target\mcu_api.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\CM0PLUS\Sigfox\Target\mn_api.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\CM0PLUS\Sigfox\Target\radio_board_if.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\CM0PLUS\Sigfox\Target\rf_api.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\CM0PLUS\Sigfox\Target\se_nvm.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\CM0PLUS\Sigfox\Target\sgfx_credentials.c</name>
-                </file>
+                <name>Common</name>
+                <group>
+                    <name>System</name>
+                    <file>
+                        <name>$PROJ_DIR$\..\Common\System\sys_debug.c</name>
+                    </file>
+                </group>
             </group>
         </group>
     </group>
@@ -1221,9 +1229,6 @@
         <name>Drivers</name>
         <group>
             <name>BSP</name>
-            <excluded>
-                <configuration>Sigfox_PushButton_DualCore_CM0PLUS</configuration>
-            </excluded>
             <group>
                 <name>STM32WLxx_Nucleo</name>
                 <file>
@@ -1301,6 +1306,12 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_subghz.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_tim.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_tim_ex.c</name>
             </file>
         </group>
     </group>
@@ -1396,6 +1407,9 @@
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\ST\STM32_Key_Management_Services\Modules\kms_sign_verify.c</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\ST\STM32_Key_Management_Services\Modules\kms_vm_storage.c</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\ST\STM32_Key_Management_Services\Interface\CryptoApi\HAL\mac_stm32hal.c</name>
             </file>
             <file>
@@ -1420,16 +1434,16 @@
         <group>
             <name>Sigfox</name>
             <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\Sigfox\SigfoxLibTest\SFX_ADDON_RFP_V0.6.0_SE_FDL_MON.a</name>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\Sigfox\SigfoxLibTest\SFX_ADDON_RFP_V0.8.0_SE_FDL_MON_ASYNC.a</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\Sigfox\SigfoxLib\SFX_LIB_V2.8.1_SE_FDL_MON.a</name>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\Sigfox\SigfoxLib\SFX_LIB_V2.10.0_SE_FDL_MON.a</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\Sigfox\Crypto\Sgfx-Cmac-V1.0.0-CM0-O3.a</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\Sigfox\Monarch\Sgfx-Monarch-V2.0.0-CM0-O3.a</name>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\Sigfox\Monarch\Sgfx-Monarch-V2.0.1-CM0-O3.a</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\Sigfox\Crypto\sigfox_aes.c</name>
@@ -1445,6 +1459,9 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\SubGHz_Phy\stm32_radio_driver\radio_driver.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\SubGHz_Phy\stm32_radio_driver\radio_fw.c</name>
             </file>
         </group>
     </group>

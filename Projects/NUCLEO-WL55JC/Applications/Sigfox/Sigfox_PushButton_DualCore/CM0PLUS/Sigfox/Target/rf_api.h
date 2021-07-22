@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    rf_api.h
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 /*!
 \if SIGFOX PATTERN
 ----------------------------------------------
@@ -32,7 +34,7 @@
    !!!!  DO NOT MODIFY THIS FILE !!!!
 
  ----------------------------------------------
- \endif
+ \endif
  ----------------------------------------------*/
 /*!
  * \file rf_api.h
@@ -197,7 +199,7 @@ sfx_u8 RF_API_start_continuous_transmission(sfx_modulation_type_t type);
 
 /*!******************************************************************
   * \fn sfx_u8 RF_API_stop_continuous_transmission (void)
-  * \brief Stop the current continuous transmisssion
+  * \brief Stop the current continuous transmission
   *
   * \retval SFX_ERR_NONE:                                 No error
   * \retval RF_ERR_API_STOP_CONTINUOUS_TRANSMISSION:      Continuous Transmission Stop error
@@ -254,9 +256,9 @@ sfx_u8 RF_API_wait_frame(sfx_u8 *frame, sfx_s16 *rssi, sfx_rx_state_enum_t *stat
   *        allowed). Otherwise it continues to listen to the channel till the expiration of the
   *        carrier sense maximum window and then updates the state ( with timeout enum ).
   *
-  * \param[in] none
-  * \param[out] sfx_u8 cs_min                  Minimum Carrier Sense time in ms.
-  * \param[out] sfx_s8 cs_threshold            Power threshold limit to declare the channel clear.
+  *
+  * \param[in] sfx_u8 cs_min                  Minimum Carrier Sense time in ms.
+  * \param[in] sfx_s8 cs_threshold            Power threshold limit to declare the channel clear.
   *                                            i.e : cs_threshold value -80dBm in Japan / -65dBm in Korea
   * \param[out] sfx_rx_state_enum_t state      Indicate the final state of the carrier sense. Value can be DL_TIMEOUT or PASSED
   *                                            as per defined in sigfox_api.h file.

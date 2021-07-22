@@ -38,19 +38,19 @@ extern "C" {
 /* Exported functions ------------------------------------------------------- */
 
 /**
- * @brief Initializes command module
- *
- * @param [IN] cb to signal appli that character has been received
- * @retval None
- */
+  * @brief Initializes command module
+  *
+  * @param [IN] cb to signal appli that character has been received
+  * @retval None
+  */
 void CMD_Init(void (*CmdProcessNotify)(void));
 
 /**
- * @brief Process the command
- *
- * @param [IN] None
- * @retval None
- */
+  * @brief Process the command
+  *
+  * @param [IN] None
+  * @retval None
+  */
 void CMD_Process(void);
 
 

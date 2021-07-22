@@ -1,8 +1,9 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    ipcc_if.c
   * @author  MCD Application Team
-  * @brief   Interface to IPCC: handles IRQs and abstract appl from Ipcc handler and ch direction
+  * @brief   Interface to IPCC: handles IRQs and abstract application from Ipcc handler and channel direction
   ******************************************************************************
   * @attention
   *
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
 
@@ -80,21 +82,21 @@ void IPCC_IF_Init(void (*IPCC_IF_ResponseRcv_cb)(uint32_t channelIdx),
   /* USER CODE BEGIN IPCC_IF_Init_1 */
 
   /* USER CODE END IPCC_IF_Init_1 */
-  /*Initialise the ipcc, initialises MSP*/
+  /*Initialize the ipcc, initialize MSP*/
   MX_IPCC_Init();
 
   /* IPCC EXTI (AIEC) line for CPU1  */
   LL_EXTI_EnableIT_32_63(LL_EXTI_LINE_36);
   LL_EXTI_EnableRisingTrig_32_63(LL_EXTI_LINE_36);
 
-  /* Initialises IPCC callback of all channels*/
+  /* Initialize IPCC callback of all channels*/
   for (int32_t i = 0; i < IPCC_CHANNEL_NUMBER; i++)
   {
     HAL_IPCC_ActivateNotification(&hipcc, i, IPCC_CHANNEL_DIR_TX, IpccIfIsrTxCb);
     HAL_IPCC_ActivateNotification(&hipcc, i, IPCC_CHANNEL_DIR_RX, IpccIfIsrRxCb);
   }
 
-  /* Registers upper level (applic) callback */
+  /* Registers upper level (application) callback */
   IpccResponseRcv = IPCC_IF_ResponseRcv_cb;
   IpccNotificationRcv = IPCC_IF_NotificationRcv_cb;
   return;

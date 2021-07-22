@@ -86,7 +86,6 @@ void HAL_RTC_MspInit(RTC_HandleTypeDef* hrtc)
   if(hrtc->Instance==RTC)
   {
   /* USER CODE BEGIN RTC_MspInit 0 */
-  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   /* Intermediate configuration in case of system resume from standby mode:   */
   /* RTC clock source disable before modifying its configuration afterwards.  */
   /* Note: In case of user application requires RTC clock to be uninterrupted,*/
@@ -100,15 +99,8 @@ void HAL_RTC_MspInit(RTC_HandleTypeDef* hrtc)
   }
 
   /*## Configure the RTC clock source ######################################*/
-  /* Enable LSI Oscillator */
-  RCC_OscInitStruct.OscillatorType =  RCC_OSCILLATORTYPE_LSI;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
-  RCC_OscInitStruct.LSIState = RCC_LSI_ON;
-  RCC_OscInitStruct.LSIDiv = LL_RCC_LSI_PREDIV_1;
-  if(HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
-  {
-    while(1);
-  }
+  /* Note: LSI has already been configured by function "SystemClock_Config()" */
+
   /* USER CODE END RTC_MspInit 0 */
   /** Initializes the peripherals clocks
   */

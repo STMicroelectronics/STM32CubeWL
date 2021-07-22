@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    sys_app.c
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
 #include <stdio.h>
@@ -27,16 +29,15 @@
 #include "timer_if.h"
 #include "utilities_def.h"
 #include "sys_debug.h"
-
+#include "sgfx_eeprom_if.h"
 #include "msg_id.h"
-#include "features_info.h"
 #include "mbmuxif_sys.h"
 #include "mbmuxif_trace.h"
 #include "mbmuxif_radio.h"
+#include "features_info.h"
 #include "mbmuxif_sigfox.h"
-#include "sgfx_eeprom_if.h"
 #ifdef ALLOW_KMS_VIA_MBMUX /* currently not supported */
-#include "mbmuxif_kms.h"
+/* #include "mbmuxif_kms.h" */
 #endif /* ALLOW_KMS_VIA_MBMUX */
 
 /* USER CODE BEGIN Includes */
@@ -55,6 +56,7 @@
 
 /* Private define ------------------------------------------------------------*/
 #define MAX_TS_SIZE (int) 16
+
 /* USER CODE BEGIN PD */
 
 /* USER CODE END PD */
@@ -72,8 +74,6 @@
 /* Private function prototypes -----------------------------------------------*/
 /**
   * @brief Radio NVIC IRQ & MSI Wakeup SystemClock setting
-  * @param none
-  * @retval  none
   */
 static void System_Init(void);
 
@@ -81,16 +81,12 @@ static void System_Init(void);
   * @brief  it calls UTIL_ADV_TRACE_VSNPRINTF
   */
 static void tiny_snprintf_like(char *buf, uint32_t maxsize, const char *strFormat, ...);
+
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Exported functions ---------------------------------------------------------*/
-/**
-  * @brief initialises MBMUXIF System and send a notification to Cm4 when ready
-  * @param none
-  * @retval  none
-  */
 void SystemApp_Init(void)
 {
   int8_t init_status;
@@ -99,13 +95,13 @@ void SystemApp_Init(void)
   /* USER CODE END SystemApp_Init_1 */
 
   /* RTC_Init: normally already executed by overloading HAL_InitTick(), but need to be sure before notify Cm4 */
+  /*Initialize timer and RTC*/
   UTIL_TIMER_Init();
 
+  /* #warning "should be removed when proper obl is done" */
   __HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_OPTVERR);
-  E2P_Init();
 
-  /*Set verbose LEVEL*/
-  UTIL_ADV_TRACE_SetVerboseLevel(E2P_Read_VerboseLevel());
+  E2P_Init();
 
   /*Init low power manager*/
   UTIL_LPM_Init();
@@ -122,7 +118,7 @@ void SystemApp_Init(void)
   /* Init Feat_Info table */
   FEAT_INFO_Init();
 
-  /* Note: the trace is initialised in the context of MBMUXIF because it uses the MB on Cm0 side */
+  /* Note: the trace is initialized in the context of MBMUXIF because it uses the MB on Cm0 side */
   init_status = MBMUXIF_SystemInit();
   if (init_status < 0)
   {
@@ -131,8 +127,8 @@ void SystemApp_Init(void)
 
   System_Init();
 
-  /* Configure the debug mode*/
-  DBG_Init();
+  /* Initializes the SW probes pins and the monitor RF pins via Alternate Func */
+  DBG_ProbesInit();
 
   /* Registers Sigfox Notif to the sequencer */
   UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_MbSigfoxNotifRcv), UTIL_SEQ_RFU, MBMUXIF_SigfoxSendNotifTask);
@@ -142,11 +138,6 @@ void SystemApp_Init(void)
   /* USER CODE END SystemApp_Init_2 */
 }
 
-/**
-  * @brief Returns sec and msec based on the systime in use
-  * @param none
-  * @retval  none
-  */
 void TimestampNow(uint8_t *buff, uint16_t *size)
 {
   /* USER CODE BEGIN TimestampNow_1 */
@@ -166,7 +157,7 @@ void Process_Kms_Cmd(MBMUX_ComParam_t *ComObj)
   /* USER CODE BEGIN Process_Kms_Cmd_1 */
 
   /* USER CODE END Process_Kms_Cmd_1 */
-  uint32_t *com_buffer = ComObj->ParamBuf;;
+  uint32_t *com_buffer = MBMUX_SEC_VerifySramBufferPtr(ComObj->ParamBuf, ComObj->BufSize);
 
   APP_LOG(TS_ON, VLEVEL_L, ">CM0PLUS(KMS)\r\n");
 
@@ -207,19 +198,19 @@ void Process_Sys_Cmd(MBMUX_ComParam_t *ComObj)
   switch (ComObj->MsgId)
   {
     case SYS_OTHER_MSG_ID:
-  /* USER CODE BEGIN Process_Sys_Cmd_switch_msg_id */
+      /* USER CODE BEGIN Process_Sys_Cmd_switch_msg_id */
 
-  /* USER CODE END Process_Sys_Cmd_switch_msg_id */
+      /* USER CODE END Process_Sys_Cmd_switch_msg_id */
       break;
 
-  /* USER CODE BEGIN Process_Sys_Cmd_switch_case */
+    /* USER CODE BEGIN Process_Sys_Cmd_switch_case */
 
-  /* USER CODE END Process_Sys_Cmd_switch_case */
+    /* USER CODE END Process_Sys_Cmd_switch_case */
 
     default:
-  /* USER CODE BEGIN Process_Sys_Cmd_switch_default */
+      /* USER CODE BEGIN Process_Sys_Cmd_switch_default */
 
-  /* USER CODE END Process_Sys_Cmd_switch_default */
+      /* USER CODE END Process_Sys_Cmd_switch_default */
       break;
   }
 
@@ -231,16 +222,16 @@ void Process_Sys_Cmd(MBMUX_ComParam_t *ComObj)
   /* USER CODE END Process_Sys_Cmd_2 */
 }
 
-void UTIL_SEQ_EvtIdle(uint32_t task_id_bm, uint32_t evt_waited_bm)
+void UTIL_SEQ_EvtIdle(uint32_t TaskId_bm, uint32_t EvtWaited_bm)
 {
   /**
     * overwrites the __weak UTIL_SEQ_EvtIdle() in stm32_seq.c
-    * all to process all tack except task_id_bm
+    * all to process all tack except TaskId_bm
     */
   /* USER CODE BEGIN UTIL_SEQ_EvtIdle_1 */
 
   /* USER CODE END UTIL_SEQ_EvtIdle_1 */
-  UTIL_SEQ_Run(~task_id_bm);
+  UTIL_SEQ_Run(~TaskId_bm);
   /* USER CODE BEGIN UTIL_SEQ_EvtIdle_2 */
 
   /* USER CODE END UTIL_SEQ_EvtIdle_2 */
@@ -249,8 +240,6 @@ void UTIL_SEQ_EvtIdle(uint32_t task_id_bm, uint32_t evt_waited_bm)
 
 /**
   * @brief redefines __weak function in stm32_seq.c such to enter low power
-  * @param none
-  * @retval  none
   */
 void UTIL_SEQ_Idle(void)
 {
@@ -263,66 +252,9 @@ void UTIL_SEQ_Idle(void)
   /* USER CODE END UTIL_SEQ_Idle_2 */
 }
 
-void GetUniqueId(uint8_t *id)
-{
-  /* USER CODE BEGIN GetUniqueId_1 */
+/* USER CODE BEGIN EF */
 
-  /* USER CODE END GetUniqueId_1 */
-  uint32_t val = 0;
-  val = LL_FLASH_GetUDN();
-  if (val == 0xFFFFFFFF)  /* Normally this should not happen */
-  {
-    uint32_t ID_1_3_val = HAL_GetUIDw0() + HAL_GetUIDw2();
-    uint32_t ID_2_val = HAL_GetUIDw1();
-
-    id[7] = (ID_1_3_val) >> 24;
-    id[6] = (ID_1_3_val) >> 16;
-    id[5] = (ID_1_3_val) >> 8;
-    id[4] = (ID_1_3_val);
-    id[3] = (ID_2_val) >> 24;
-    id[2] = (ID_2_val) >> 16;
-    id[1] = (ID_2_val) >> 8;
-    id[0] = (ID_2_val);
-  }
-  else  /* Typical use case */
-  {
-    id[7] = val & 0xFF;
-    id[6] = (val >> 8) & 0xFF;
-    id[5] = (val >> 16) & 0xFF;
-    id[4] = (val >> 24) & 0xFF;
-    val = LL_FLASH_GetDeviceID();
-    id[3] = val & 0xFF;
-    val = LL_FLASH_GetSTCompanyID();
-    id[2] = val & 0xFF;
-    id[1] = (val >> 8) & 0xFF;
-    id[0] = (val >> 16) & 0xFF;
-  }
-
-  /* USER CODE BEGIN GetUniqueId_2 */
-
-  /* USER CODE END GetUniqueId_2 */
-}
-
-uint32_t GetDevAddr(void)
-{
-  uint32_t val = 0;
-  /* USER CODE BEGIN GetDevAddr_1 */
-
-  /* USER CODE END GetDevAddr_1 */
-  val = LL_FLASH_GetUDN();
-  if (val == 0xFFFFFFFF)
-  {
-    val = ((HAL_GetUIDw0()) ^ (HAL_GetUIDw1()) ^ (HAL_GetUIDw2()));
-  }
-  /* USER CODE BEGIN GetDevAddr_2 */
-
-  /* USER CODE END GetDevAddr_2 */
-  return val;
-}
-
-/* USER CODE BEGIN ExF */
-
-/* USER CODE END ExF */
+/* USER CODE END EF */
 
 /* Private functions ---------------------------------------------------------*/
 static void System_Init(void)
@@ -334,7 +266,7 @@ static void System_Init(void)
   LL_C2_PWR_DisableInternWU();
 
   /**< Disable all wakeup interrupt on CPU2  except RTC(17,20) IPCC_CPU2(37), Radio(44,45), Debugger(46) */
-  /* This is to avoid that Cm0 woke up as consequence of IRQs that are meant to reach onlt Cm4 */
+  /* This is to avoid that Cm0 woke up as consequence of IRQs that are meant to reach only Cm4 */
   LL_C2_EXTI_DisableIT_0_31(~0  & (~(LL_EXTI_LINE_17 | LL_EXTI_LINE_20)));
   LL_C2_EXTI_DisableIT_32_63((~0) & (~(LL_EXTI_LINE_37 | (0x1U << (7u)) | LL_EXTI_LINE_44 | LL_EXTI_LINE_45 | LL_EXTI_LINE_46)));
 
@@ -395,10 +327,7 @@ static void tiny_snprintf_like(char *buf, uint32_t maxsize, const char *strForma
 /* HAL overload functions ---------------------------------------------------------*/
 
 /**
-  * @brief This function configures the source of the time base.
-  * @brief  don't enable systick
-  * @param TickPriority: Tick interrupt priority.
-  * @retval HAL status
+  * @note This function overwrites the __weak one from HAL
   */
 HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
 {
@@ -413,13 +342,11 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
 }
 
 /**
-  * @brief Provide a tick value in millisecond measured using RTC
   * @note This function overwrites the __weak one from HAL
-  * @retval tick value
   */
 uint32_t HAL_GetTick(void)
 {
-  /* TIMER_IF can be based onother counter the SysTick e.g. RTC */
+  /* TIMER_IF can be based on other counter the SysTick e.g. RTC */
   /* USER CODE BEGIN HAL_GetTick_1 */
 
   /* USER CODE END HAL_GetTick_1 */
@@ -430,13 +357,11 @@ uint32_t HAL_GetTick(void)
 }
 
 /**
-  * @brief This function provides delay (in ms)
-  * @param Delay: specifies the delay time length, in milliseconds.
-  * @retval None
+  * @note This function overwrites the __weak one from HAL
   */
 void HAL_Delay(__IO uint32_t Delay)
 {
-  /* TIMER_IF can be based onother counter the SysTick e.g. RTC */
+  /* TIMER_IF can be based on other counter the SysTick e.g. RTC */
   /* USER CODE BEGIN HAL_Delay_1 */
 
   /* USER CODE END HAL_Delay_1 */

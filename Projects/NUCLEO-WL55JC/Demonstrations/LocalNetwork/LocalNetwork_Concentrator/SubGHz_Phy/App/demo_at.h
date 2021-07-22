@@ -84,45 +84,45 @@ typedef enum eATEerror
 void at_init(void);
 
 /**
- * @brief  Return AT_OK in all cases
- * @param  Param string of the AT command - unused
- * @retval AT_OK
- */
+  * @brief  Return AT_OK in all cases
+  * @param  Param string of the AT command - unused
+  * @retval AT_OK
+  */
 ATEerror_t at_return_ok(const char *param);
 
 /**
- * @brief  Return AT_ERROR in all cases
- * @param  Param string of the AT command - unused
- * @retval AT_ERROR
- */
+  * @brief  Return AT_ERROR in all cases
+  * @param  Param string of the AT command - unused
+  * @retval AT_ERROR
+  */
 ATEerror_t at_return_error(const char *param);
 
 /**
- * @brief  Trig a reset of the MCU
- * @param  Param string of the AT command - unused
- * @retval AT_OK
- */
+  * @brief  Trig a reset of the MCU
+  * @param  Param string of the AT command - unused
+  * @retval AT_OK
+  */
 ATEerror_t at_reset(const char *param);
 
 /**
- * @brief Get firmware version.
- * @param param
- * @return AT_OK
- */
+  * @brief Get firmware version.
+  * @param param
+  * @return AT_OK
+  */
 ATEerror_t at_version_get(const char *param);
 
 /**
- * @brief  Set the verbose level
- * @param  String parameter
- * @retval AT_OK
- */
+  * @brief  Set the verbose level
+  * @param  String parameter
+  * @retval AT_OK
+  */
 ATEerror_t at_verbose_set(const char *param);
 
 /**
- * @brief  Get the verbose level
- * @param  String parameter
- * @retval AT_OK
- */
+  * @brief  Get the verbose level
+  * @param  String parameter
+  * @retval AT_OK
+  */
 ATEerror_t at_verbose_get(const char *param);
 
 ATEerror_t at_list_regions(const char *param);

@@ -27,10 +27,10 @@ extern "C" {
 #endif
 
 /**
- * @brief Structure with measurement data.
- * Sent in DEMO_packet_sensor_t.
- * This data structure is for version 1.0.
- */
+  * @brief Structure with measurement data.
+  * Sent in DEMO_packet_sensor_t.
+  * This data structure is for version 1.0.
+  */
 typedef  struct
 {
   int16_t temperature;  /**<Temperature [0.01 `C]*/
@@ -44,10 +44,10 @@ typedef  struct
 
 
 /**
- * @brief Structure with measurement data.
- * Sent in DEMO_packet_sensor_t.
- * This data structure is for version 1.1.
- */
+  * @brief Structure with measurement data.
+  * Sent in DEMO_packet_sensor_t.
+  * This data structure is for version 1.1.
+  */
 typedef  struct
 {
   int16_t temperature;  /**<Temperature [0.01 `C]*/
@@ -65,15 +65,15 @@ typedef  struct
   uint16_t distance:12; /**<Distance from the ranging sensor [mm]*/
 
   /**
-   * Activity detected by the accelerometer and MotionAR
-   * 0 - No Activity
-   * 1 - Stationary
-   * 2 - Walking
-   * 3 - Fast Walking
-   * 4 - Jogging
-   * 5 - Biking
-   * 6 - Driving
-   */
+    * Activity detected by the accelerometer and MotionAR
+    * 0 - No Activity
+    * 1 - Stationary
+    * 2 - Walking
+    * 3 - Fast Walking
+    * 4 - Jogging
+    * 5 - Biking
+    * 6 - Driving
+    */
   uint16_t activity:4;
 
   uint16_t step_count;  /**<Number of steps (acceleration bumps) [1]*/

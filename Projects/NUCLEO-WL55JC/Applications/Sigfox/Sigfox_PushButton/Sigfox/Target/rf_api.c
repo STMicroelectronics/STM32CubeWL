@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ****************************************************************************
   * @file    rf_api.c
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* includes -----------------------------------------------------------*/
 #include "stdint.h"
@@ -50,7 +52,7 @@
 /* Private define ------------------------------------------------------------*/
 #define RF_VER                   "RF_API_V1.0"
 #define SFX_PREAMBLE_LENGTH      2
-#define MONARCH_PREAMBLE_LENGTH (65535/8) /*max length to never synchronise*/
+#define MONARCH_PREAMBLE_LENGTH (65535/8) /*max length to never synchronize*/
 #define SFX_MAX_PAYLOAD_LENGTH   15
 #define SFX_DATARATE_600         600
 #define SFX_DATARATE_100         100
@@ -129,27 +131,34 @@ const RadioEvents_t RfApiRadioEvents =
 /* Exported functions --------------------------------------------------------*/
 sfx_u8 RF_API_init(sfx_rf_mode_t rf_mode)
 {
+  sfx_u8 status = SFX_ERR_NONE;
   /* USER CODE BEGIN RF_API_init_1 */
 
   /* USER CODE END RF_API_init_1 */
-  /* ------------------------------------------------------ */
-  /* PSEUDO code */
-  /* ------------------------------------------------------ */
   /* Put here all RF initialization concerning the RC IC you are using. */
-  /* this function is dependent of SPI driver or equivalent. */
 
   switch (rf_mode)
   {
     case SFX_RF_MODE_TX:
     {
+      /* USER CODE BEGIN SFX_RF_MODE_TX_1 */
+
+      /* USER CODE END SFX_RF_MODE_TX_1 */
+      /* Initialize Tx if necessary*/
       APP_LOG(TS_ON, VLEVEL_M, "RF_API_init in TX\n\r");
-      /* nothing to do */
-      /* set the RF IC in TX mode : this could be DBPSK100 or 600:  this distinction will be done during the RF_API_send */
-      /* you can add some code to switch on TCXO or warm up quartz for stabilization : in case of frequency drift issue */
+
+      /* USER CODE BEGIN SFX_RF_MODE_TX_2 */
+
+      /* USER CODE END SFX_RF_MODE_TX_2 */
       break;
     }
     case SFX_RF_MODE_RX:
     {
+      /* Configure the RF_IP IC in RX mode : GFSK 600bps*/
+      /* RF IC must configure the SYNCHRO BIT = 0xAAAAAAAAAA and synchro frame = 0xB227 */
+      /* USER CODE BEGIN SFX_RF_MODE_RX_1 */
+
+      /* USER CODE END SFX_RF_MODE_RX_1 */
       APP_LOG(TS_ON, VLEVEL_M, "RF_API_init in RX\n\r");
       Radio.SetRxConfig(MODEM_SIGFOX_RX, 1600,
                         SFX_DATARATE_600, NA,
@@ -158,13 +167,19 @@ sfx_u8 RF_API_init(sfx_rf_mode_t rf_mode)
                         SFX_MAX_PAYLOAD_LENGTH,
                         false, NA, NA,
                         NA, true);
-      /* set the RF IC in RX mode : GFSK 600bps is the only mode now */
-      /* Enable interrupts on RX fifo */
-      /* RF IC must configure the SYNCHRO BIT = 0xAAAAAAAAAA and synchro frame = 0xB227 */
+
+      /* USER CODE BEGIN SFX_RF_MODE_RX_2 */
+
+      /* USER CODE END SFX_RF_MODE_RX_2 */
       break;
     }
     case SFX_RF_MODE_CS200K_RX:
     {
+      /* USER CODE BEGIN SFX_RF_MODE_CS200K_RX_1 */
+
+      /* USER CODE END SFX_RF_MODE_CS200K_RX_1 */
+      /* configure the RF_IP into sensing 200KHz bandwidth to be able to read out RSSI level */
+      /* RSSI level will extracted during the RF_API_wait_for_clear_channel function */
       APP_LOG(TS_ON, VLEVEL_M, "RF_API_init in CS200\n\r");
 
       Radio.SetRxConfig(MODEM_SIGFOX_RX, 200000,
@@ -174,12 +189,20 @@ sfx_u8 RF_API_init(sfx_rf_mode_t rf_mode)
                         SFX_MAX_PAYLOAD_LENGTH,
                         false, NA, NA,
                         NA, true);
-      /* configure the RF IC into sensing 200KHz bandwidth to be able to read out RSSI level */
-      /* RSSI level will outputted during the RF_API_wait_for_clear_channel function */
+
+      /* USER CODE BEGIN SFX_RF_MODE_CS200K_RX_2 */
+
+      /* USER CODE END SFX_RF_MODE_CS200K_RX_2 */
       break;
     }
     case SFX_RF_MODE_CS300K_RX:
     {
+      /* USER CODE BEGIN SFX_RF_MODE_CS300K_RX_1 */
+
+      /* USER CODE END SFX_RF_MODE_CS300K_RX_1 */
+
+      /* configure the RF_IP into sensing 300KHz bandwidth to be able to read out RSSI level */
+      /* RSSI level will extracted during the RF_API_wait_for_clear_channel function. */
       APP_LOG(TS_ON, VLEVEL_M, "RF_API_init in CS300\n\r");
 
       Radio.SetRxConfig(MODEM_SIGFOX_RX, 300000,
@@ -189,13 +212,19 @@ sfx_u8 RF_API_init(sfx_rf_mode_t rf_mode)
                         SFX_MAX_PAYLOAD_LENGTH,
                         false, NA, NA,
                         NA, true);
-      /* configure the RF IC into sensing 300KHz bandwidth to be able to read out RSSI level */
-      /* This is poosible to make this carrier sense in 2 * 200Kz if you respect the regulation time for listening */
-      /* RSSI level will outputted during the RF_API_wait_for_clear_channel function. */
+
+      /* USER CODE BEGIN SFX_RF_MODE_CS300K_RX_2 */
+
+      /* USER CODE END SFX_RF_MODE_CS300K_RX_2 */
       break;
     }
     case SFX_RF_MODE_MONARCH:
     {
+      /* USER CODE BEGIN SFX_RF_MODE_MONARCH_1 */
+
+      /* USER CODE END SFX_RF_MODE_MONARCH_1 */
+
+      /* configure the RF_IP into sensing 20KHz bandwidth */
       APP_LOG(TS_ON, VLEVEL_M, "RF_API_init in MN20\n\r");
       /* APP_LOG(TS_ON, VLEVEL_L,"RxBw=20kHz\n\r"); */
       Radio.SetRxConfig(MODEM_SIGFOX_RX, 20000,
@@ -205,22 +234,25 @@ sfx_u8 RF_API_init(sfx_rf_mode_t rf_mode)
                         SFX_MAX_PAYLOAD_LENGTH,
                         false, NA, NA,
                         NA, true);
-      /* configure the RF IC into sensing 20KHz bandwidth to be able to read out RSSI level */
-      /* This is poosible to make this carrier sense in 2 * 200Kz if you respect the regulation time for listening */
-      /* RSSI level will outputted during the RF_API_wait_for_clear_channel function. */
+
+      /* USER CODE BEGIN SFX_RF_MODE_MONARCH_2 */
+
+      /* USER CODE END SFX_RF_MODE_MONARCH_2 */
       break;
     }
     default :
+      status = RF_ERR_API_INIT;
       break;
   }
-  return SFX_ERR_NONE;
   /* USER CODE BEGIN RF_API_init_2 */
 
   /* USER CODE END RF_API_init_2 */
+  return status;
 }
 
 sfx_u8 RF_API_stop(void)
 {
+  sfx_u8 status = SFX_ERR_NONE;
   /* USER CODE BEGIN RF_API_stop_1 */
 
   /* USER CODE END RF_API_stop_1 */
@@ -231,35 +263,56 @@ sfx_u8 RF_API_stop(void)
 
   /* USER CODE END RF_API_stop_2 */
 
-  return SFX_ERR_NONE;
+  return status;
 }
 
 sfx_u8 RF_API_send(sfx_u8 *stream, sfx_modulation_type_t type, sfx_u8 size)
 {
+  sfx_u8 status = SFX_ERR_NONE;
   /* USER CODE BEGIN RF_API_send_1 */
 
   /* USER CODE END RF_API_send_1 */
-  sfx_u8 status = SFX_ERR_NONE;
 
   uint32_t datarate;
 
   int8_t power = E2P_Read_Power(E2P_Read_Rc());
 
   APP_LOG(TS_ON, VLEVEL_M, "TX START:nB=%d\n\r", size);
-
   switch (type)
   {
     case SFX_DBPSK_100BPS :
+      /* USER CODE BEGIN RF_API_send_DBPSK_100BPS_1 */
+
+      /* USER CODE END RF_API_send_DBPSK_100BPS_1 */
+      /* Send to the RF_IP the stream built by the sigfox lib @100bps:
+       * this bitstream contains all data including synchro bits+frame and CRC.*/
       datarate = SFX_DATARATE_100;
+
+      /* USER CODE BEGIN RF_API_send_DBPSK_100BPS_2 */
+
+      /* USER CODE END RF_API_send_DBPSK_100BPS_2 */
       break;
     case SFX_DBPSK_600BPS :
+      /* USER CODE BEGIN RF_API_send_DBPSK_600BPS_1 */
+
+      /* USER CODE END RF_API_send_DBPSK_600BPS_1 */
+      /* Send to the RF_IP the stream built by the sigfox lib @600bps:
+       * this bitstream contains all data including synchro bits+frame and CRC.*/
       datarate = SFX_DATARATE_600;
+
+      /* USER CODE BEGIN RF_API_send_DBPSK_600BPS_2 */
+
+      /* USER CODE END RF_API_send_DBPSK_600BPS_2 */
+
       break;
     default :
       status = RF_ERR_API_SEND;
       break;
   }
+  /* USER CODE BEGIN RF_API_send_2 */
+  BSP_LED_On(LED_BLUE);
 
+  /* USER CODE END RF_API_send_2 */
   if (status == SFX_ERR_NONE)
   {
     Radio.SetTxConfig(MODEM_SIGFOX_TX, power, NA,
@@ -267,12 +320,6 @@ sfx_u8 RF_API_send(sfx_u8 *stream, sfx_modulation_type_t type, sfx_u8 size)
                       NA, NA,
                       NA, NA, NA,
                       NA, NA, 3000);
-
-#if defined(USE_BSP_DRIVER)
-    BSP_LED_On(LED_BLUE);
-#elif defined(MX_BOARD_PSEUDODRIVER)
-    SYS_LED_On(SYS_LED_BLUE);
-#endif /* defined(USE_BSP_DRIVER) */
 
     Radio.Send(stream, size);
 
@@ -282,70 +329,87 @@ sfx_u8 RF_API_send(sfx_u8 *stream, sfx_modulation_type_t type, sfx_u8 size)
 
     APP_LOG(TS_ON, VLEVEL_M, "End Of Tx\n\r");
 
-#if defined(USE_BSP_DRIVER)
-    BSP_LED_Off(LED_BLUE);
-#elif defined(MX_BOARD_PSEUDODRIVER)
-    SYS_LED_Off(SYS_LED_BLUE);
-#endif /* defined(USE_BSP_DRIVER) */
-
   }
 
   APP_LOG(TS_ON, VLEVEL_M, "TX END\n\r");
+  /* USER CODE BEGIN RF_API_send_3 */
+  BSP_LED_Off(LED_BLUE);
 
-  /* BSP_LED_Off( LED_RED2 ); */
+  /* USER CODE END RF_API_send_3 */
   return status;
-  /* USER CODE BEGIN RF_API_send_2 */
 
-  /* USER CODE END RF_API_send_2 */
 }
 
 sfx_u8 RF_API_start_continuous_transmission(sfx_modulation_type_t type)
 {
+  sfx_u8 status = SFX_ERR_NONE;
   /* USER CODE BEGIN RF_API_start_continuous_transmission_1 */
 
   /* USER CODE END RF_API_start_continuous_transmission_1 */
-  sfx_u8 status = SFX_ERR_NONE;
 
   int8_t power = E2P_Read_Power(E2P_Read_Rc());
-
-  /* ------------------------------------------------------ */
-  /* PSEUDO code */
-  /* ------------------------------------------------------ */
 
   switch (type)
   {
     case SFX_NO_MODULATION :
+      /* Starts CW continuous Tx at the frequency given by the RF_API_change_frequency()*/
+
+      /* USER CODE BEGIN RF_API_start_continuous_transmission_NO_MODULATION_1 */
+
+      /* USER CODE END RF_API_start_continuous_transmission_NO_MODULATION_1 */
       Radio.TxCw(power);
+
+      /* USER CODE BEGIN RF_API_start_continuous_transmission_NO_MODULATION_2 */
+
+      /* USER CODE END RF_API_start_continuous_transmission_NO_MODULATION_2 */
       break;
     case SFX_DBPSK_100BPS :
-      /* Make an infinite DBPSK 100bps modulation on the RF IC at the frequency given by the RF_API_change_frequency() */
+      /* Starts an infinite DBPSK 100bps modulation on the RF IC at the frequency given by the RF_API_change_frequency() */
+
+      /* USER CODE BEGIN RF_API_start_continuous_transmission_DBPSK_100BPS_1 */
+
+      /* USER CODE END RF_API_start_continuous_transmission_DBPSK_100BPS_1 */
       Radio.SetTxConfig(MODEM_SIGFOX_TX, power, NA,
                         NA, SFX_DATARATE_100,
                         NA, NA,
                         NA, NA, NA,
                         NA, NA, 3000);
       Radio.TxPrbs();
+      /* USER CODE BEGIN RF_API_start_continuous_transmission_DBPSK_100BPS_2 */
+
+      /* USER CODE END RF_API_start_continuous_transmission_DBPSK_100BPS_2 */
       break;
     case SFX_DBPSK_600BPS :
+      /* Starts an infinite DBPSK 600bps modulation on the RF IC at the frequency given by the RF_API_change_frequency() */
+
+      /* USER CODE BEGIN RF_API_start_continuous_transmission_DBPSK_600BPS_1 */
+
+      /* USER CODE END RF_API_start_continuous_transmission_DBPSK_600BPS_1 */
       Radio.SetTxConfig(MODEM_SIGFOX_TX, power, NA,
                         NA, SFX_DATARATE_600,
                         NA, NA,
                         NA, NA, NA,
                         NA, NA, 3000);
       Radio.TxPrbs();
+      /* USER CODE BEGIN RF_API_start_continuous_transmission_DBPSK_600BPS_2 */
+
+      /* USER CODE END RF_API_start_continuous_transmission_DBPSK_600BPS_2 */
       break;
     default :
       status = RF_ERR_API_SEND;
       break;
   }
-  return status;
   /* USER CODE BEGIN RF_API_start_continuous_transmission_2 */
 
   /* USER CODE END RF_API_start_continuous_transmission_2 */
+  return status;
 }
 
 sfx_u8 RF_API_stop_continuous_transmission(void)
 {
+  sfx_u8 status = SFX_ERR_NONE;
+  /* stop continuous Tx */
+
   /* USER CODE BEGIN RF_API_stop_continuous_transmission_1 */
 
   /* USER CODE END RF_API_stop_continuous_transmission_1 */
@@ -355,11 +419,14 @@ sfx_u8 RF_API_stop_continuous_transmission(void)
   /* USER CODE BEGIN RF_API_stop_continuous_transmission_2 */
 
   /* USER CODE END RF_API_stop_continuous_transmission_2 */
-  return SFX_ERR_NONE;
+  return status;
 }
 
 sfx_u8 RF_API_change_frequency(sfx_u32 frequency)
 {
+  sfx_u8 status = SFX_ERR_NONE;
+  /* set rf frequency for Rx or Tx*/
+
   /* USER CODE BEGIN RF_API_change_frequency_1 */
 
   /* USER CODE END RF_API_change_frequency_1 */
@@ -369,16 +436,22 @@ sfx_u8 RF_API_change_frequency(sfx_u32 frequency)
   /* USER CODE BEGIN RF_API_change_frequency_2 */
 
   /* USER CODE END RF_API_change_frequency_2 */
-
-  return SFX_ERR_NONE;
+  return status;
 }
 
 sfx_u8 RF_API_wait_frame(sfx_u8 *frame, sfx_s16 *rssi, sfx_rx_state_enum_t *state)
 {
+  sfx_u8 status = SFX_ERR_NONE;
+  sfx_s16 res_rssi = 0;
+  sfx_rx_state_enum_t ret_state = DL_TIMEOUT;
   /* USER CODE BEGIN RF_API_wait_frame_1 */
 
   /* USER CODE END RF_API_wait_frame_1 */
-  sfx_error_t status;
+  /* Starts Rx Windows and wait up to the end of frame or end of rx window*/
+  /*  Wait for 2 events :
+   *  event from your RF_IP indicating a buffer is received or
+   *  event from the timer end : event_timer (see mcu_api.c)
+   * If buffer is received, then copy the buffer in frame buffer and update the state parameter*/
 
   APP_LOG(TS_ON, VLEVEL_M, "RX START\n\r");
 
@@ -389,39 +462,41 @@ sfx_u8 RF_API_wait_frame(sfx_u8 *frame, sfx_s16 *rssi, sfx_rx_state_enum_t *stat
 
   if (sfx_wait_end_of_rx() == 1)
   {
-#if 0
-    APP_LOG(TS_ON, VLEVEL_M, "RX= %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X %02X\n\r",
-            RxFrame[0], RxFrame[1], RxFrame[2], RxFrame[3],
-            RxFrame[4], RxFrame[5], RxFrame[6], RxFrame[7],
-            RxFrame[8], RxFrame[9], RxFrame[10], RxFrame[11],
-            RxFrame[12], RxFrame[13], RxFrame[14], RxFrame[15]);
-#endif /* 0 */
     status = SFX_ERR_NONE;
-    *state = DL_PASSED;
+    ret_state = DL_PASSED;
   }
   else
   {
-    *state = DL_TIMEOUT;
+    ret_state = DL_TIMEOUT;
     status = SFX_ERR_NONE;
   }
 
-  *rssi = (sfx_s16) RxRssi;
+  res_rssi = (sfx_s16) RxRssi;
 
   APP_LOG(TS_ON, VLEVEL_M, "RX END\n\r");
-
-  return status;
   /* USER CODE BEGIN RF_API_wait_frame_2 */
 
   /* USER CODE END RF_API_wait_frame_2 */
+  *state = ret_state;
+  *rssi = res_rssi;
+  return status;
 }
 
 sfx_u8 RF_API_wait_for_clear_channel(sfx_u8 cs_min, sfx_s8 cs_threshold, sfx_rx_state_enum_t *state)
 {
+  sfx_u8 status = SFX_ERR_NONE;
+  sfx_rx_state_enum_t cs_state = DL_TIMEOUT;
+  /* Starts Rx Windows to sense if channel is occupied or clear*
+   * If the channel is clear during the minimum carrier sense
+   * value (cs_min), under the limit of the cs_threshold,
+   * the functions returns with SFX_ERR_NONE (transmission
+   * allowed). Otherwise it continues to listen to the channel till the expiration of the
+   * carrier sense maximum window and then updates the state ( with timeout enum ).*/
+
   /* USER CODE BEGIN RF_API_wait_for_clear_channel_1 */
 
   /* USER CODE END RF_API_wait_for_clear_channel_1 */
-  sfx_rx_state_enum_t cs_state = DL_TIMEOUT;
-  /**/
+
   RxCarrierSenseInitStatus();
 
   Radio.Rx(0);
@@ -449,19 +524,21 @@ sfx_u8 RF_API_wait_for_clear_channel(sfx_u8 cs_min, sfx_s8 cs_threshold, sfx_rx_
     APP_LOG(TS_ON, VLEVEL_M, "LBT Channel Busy\n\r");
   }
 
-  *state = cs_state;
   /* USER CODE BEGIN RF_API_wait_for_clear_channel_2 */
 
   /* USER CODE END RF_API_wait_for_clear_channel_2 */
-
-  return SFX_ERR_NONE;
+  *state = cs_state;
+  return status;
 }
 
 sfx_u8 RF_API_get_version(sfx_u8 **version, sfx_u8 *size)
 {
+  sfx_u8 status = SFX_ERR_NONE;
+  /* return version and size of the version buffer*/
   /* USER CODE BEGIN RF_API_get_version_1 */
 
   /* USER CODE END RF_API_get_version_1 */
+
   *version = (sfx_u8 *)rf_api_version;
   if (size == SFX_NULL)
   {
@@ -471,8 +548,7 @@ sfx_u8 RF_API_get_version(sfx_u8 **version, sfx_u8 *size)
   /* USER CODE BEGIN RF_API_get_version_2 */
 
   /* USER CODE END RF_API_get_version_2 */
-
-  return SFX_ERR_NONE;
+  return status;
 }
 
 /* USER CODE BEGIN EF */
@@ -480,29 +556,6 @@ sfx_u8 RF_API_get_version(sfx_u8 **version, sfx_u8 *size)
 /* USER CODE END EF */
 
 /* Private Functions Definition -----------------------------------------------*/
-
-static sfx_u8 sfx_wait_end_of_rx(void)
-{
-  /* USER CODE BEGIN sfx_wait_end_of_rx_1 */
-
-  /* USER CODE END sfx_wait_end_of_rx_1 */
-  RxPacketReceived = 0;
-
-  RxRssi = -150;
-
-  APP_LOG(TS_ON, VLEVEL_M, "Wait For End of Rx\n\r");
-
-  UTIL_SEQ_ClrEvt(1 << CFG_SEQ_Evt_Timeout);
-
-  UTIL_SEQ_WaitEvt(1 << CFG_SEQ_Evt_Timeout);
-
-  APP_LOG(TS_ON, VLEVEL_M, "End Of Rx\n\r");
-
-  return RxPacketReceived;
-  /* USER CODE BEGIN sfx_wait_end_of_rx_2 */
-
-  /* USER CODE END sfx_wait_end_of_rx_2 */
-}
 
 static void OnTxDone(void)
 {
@@ -532,6 +585,7 @@ static void OnRxDone(uint8_t *payload, uint16_t size, int16_t rssi, int8_t offse
   UTIL_SEQ_SetEvt(1 << CFG_SEQ_Evt_Timeout);
 
   APP_LOG(TS_ON, VLEVEL_M, "OnRxDone\n\r");
+
   /* USER CODE BEGIN OnRxDone_2 */
 
   /* USER CODE END OnRxDone_2 */
@@ -545,6 +599,7 @@ static void OnTxTimeout(void)
   UTIL_SEQ_SetEvt(1 << CFG_SEQ_Evt_TxTimeout);
 
   APP_LOG(TS_ON, VLEVEL_M,  "OnTxTimeout\n\r");
+
   /* USER CODE BEGIN OnTxTimeout_2 */
 
   /* USER CODE END OnTxTimeout_2 */
@@ -560,6 +615,7 @@ static void OnRxTimeout(void)
   UTIL_SEQ_SetEvt(1 << CFG_SEQ_Evt_Timeout);
 
   APP_LOG(TS_ON, VLEVEL_M,  "OnRxTimeout\n\r");
+
   /* USER CODE BEGIN OnRxTimeout_2 */
 
   /* USER CODE END OnRxTimeout_2 */
@@ -575,9 +631,33 @@ static void OnRxError(void)
   UTIL_SEQ_SetEvt(1 << CFG_SEQ_Evt_Timeout);
 
   APP_LOG(TS_ON, VLEVEL_M, "OnRxError\n\r");
+
   /* USER CODE BEGIN OnRxError_2 */
 
   /* USER CODE END OnRxError_2 */
+}
+
+static sfx_u8 sfx_wait_end_of_rx(void)
+{
+  /* USER CODE BEGIN sfx_wait_end_of_rx_1 */
+
+  /* USER CODE END sfx_wait_end_of_rx_1 */
+  RxPacketReceived = 0;
+
+  RxRssi = -150;
+
+  APP_LOG(TS_ON, VLEVEL_M, "Wait For End of Rx\n\r");
+
+  UTIL_SEQ_ClrEvt(1 << CFG_SEQ_Evt_Timeout);
+
+  UTIL_SEQ_WaitEvt(1 << CFG_SEQ_Evt_Timeout);
+
+  APP_LOG(TS_ON, VLEVEL_M, "End Of Rx\n\r");
+
+  return RxPacketReceived;
+  /* USER CODE BEGIN sfx_wait_end_of_rx_2 */
+
+  /* USER CODE END sfx_wait_end_of_rx_2 */
 }
 
 bool RF_API_isChannelFree(int16_t rssiThresh, uint32_t maxCarrierSenseTime)

@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    mn_lptim_if.h
@@ -16,6 +17,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __MN_LPTIM_IF_H__
@@ -25,6 +27,8 @@
 extern "C" {
 #endif
 /* Includes ------------------------------------------------------------------*/
+#include "lptim.h"
+
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */
@@ -71,4 +75,3 @@ void MN_LPTIM_IF_DeInit(void);
 #endif /* __MN_LPTIM_IF_H__ */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-

@@ -21,17 +21,17 @@
 #define __VERSION_H__
 
 /**
- * @brief Major version indicates major changes in behavior.
- * Used when regions/subregions are changed or incompatible behavior.
- * Only 0 ~ 7 fit inside packets.
- */
+  * @brief Major version indicates major changes in behavior.
+  * Used when regions/subregions are changed or incompatible behavior.
+  * Only 0 ~ 7 fit inside packets.
+  */
 #define VERSION_MAJOR          1
 
 /**
- * @brief Minor version indicated minor changes in behavior.
- * Used to change sensor data format or compatible changes.
- * Only 0 ~ 31 fit inside packets.
- */
+  * @brief Minor version indicated minor changes in behavior.
+  * Used to change sensor data format or compatible changes.
+  * Only 0 ~ 31 fit inside packets.
+  */
 #define VERSION_MINOR          0
 
 #define VERSION_STR_CONVERT(a) VERSION_STR_HELPER(a)    /*Preprocessor trick to convert constant to string*/

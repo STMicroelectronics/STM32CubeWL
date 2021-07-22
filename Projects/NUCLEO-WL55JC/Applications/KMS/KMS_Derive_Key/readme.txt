@@ -55,9 +55,9 @@ Cryptography, KMS, Key generation
 
 @par Directory contents 
 
-  - KMS/KMS_Derive_Key/Inc/stm32wlxx_nucleo_conf.h     BSP configuration file
-  - KMS/KMS_Derive_Key/Inc/stm32wlxx_hal_conf.h    HAL configuration file
-  - KMS/KMS_Derive_Key/Inc/stm32wlxx_it.h          Interrupt handlers header file
+  - KMS/KMS_Derive_Key/Inc/stm32wlxx_nucleo_conf.h       BSP configuration file
+  - KMS/KMS_Derive_Key/Inc/stm32wlxx_hal_conf.h          HAL configuration file
+  - KMS/KMS_Derive_Key/Inc/stm32wlxx_it.h                Interrupt handlers header file
   - KMS/KMS_Derive_Key/Inc/app_kms.h                     Header for app_kms.c module
   - KMS/KMS_Derive_Key/Inc/ca_conf.h                     Cryptographic configuration file
   - KMS/KMS_Derive_Key/Inc/ca_low_level.h                Header for ca_low_level.c module
@@ -70,15 +70,15 @@ Cryptography, KMS, Key generation
   - KMS/KMS_Derive_Key/Inc/main.h                        Header for main.c module
   - KMS/KMS_Derive_Key/Inc/mbedtls_config.h              MBED crypto configuration file
   - KMS/KMS_Derive_Key/Inc/nvms_low_level.h              Header for nvms_low_level.c module
-  - KMS/KMS_Derive_Key/Src/stm32wlxx_it.c          Interrupt handlers
-  - KMS/KMS_Derive_Key/Src/stm32wlxx_hal_msp.c     HAL MSP module
+  - KMS/KMS_Derive_Key/Src/stm32wlxx_it.c                Interrupt handlers
+  - KMS/KMS_Derive_Key/Src/stm32wlxx_hal_msp.c           HAL MSP module
   - KMS/KMS_Derive_Key/Src/app_kms.c                     KMS application
   - KMS/KMS_Derive_Key/Src/ca_low_level.c                Cryptographic low level source file
   - KMS/KMS_Derive_Key/Src/com.c                         Communication module file
   - KMS/KMS_Derive_Key/Src/kms_low_level.c               KMS low level source file
   - KMS/KMS_Derive_Key/Src/main.c                        Main program
   - KMS/KMS_Derive_Key/Src/nvms_low_level.c              NVMS low level source file
-  - KMS/KMS_Derive_Key/Src/system_stm32wlxx.c      STM32WLxx system source file
+  - KMS/KMS_Derive_Key/Src/system_stm32wlxx.c            STM32WLxx system source file
 
 
 @par Hardware and Software environment

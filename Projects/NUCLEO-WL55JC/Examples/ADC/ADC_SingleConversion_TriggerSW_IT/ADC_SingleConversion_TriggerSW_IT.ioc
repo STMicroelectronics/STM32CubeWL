@@ -117,3 +117,5 @@ SH.SharedAnalog_PA10.ConfNb=2
 VP_SYS_VS_Systick.Mode=SysTick
 VP_SYS_VS_Systick.Signal=SYS_VS_Systick
 board=custom
+ProjectManager.Example=ADC_SingleConversion_TriggerSW_IT
+ProjectManager.ExampleSource=CubeFw

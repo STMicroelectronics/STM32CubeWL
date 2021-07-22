@@ -48,6 +48,12 @@ extern "C"
 #include "utilities.h"
 #include "LoRaMacTypes.h"
 #include "LoRaMacMessageTypes.h"
+#include "LoRaMacCryptoNvm.h"
+
+/*!
+ * Indicates if LoRaWAN 1.1.x crypto scheme is enabled
+ */
+#define USE_LRWAN_1_1_X_CRYPTO                      0
 
 /*!
  * Indicates if a random devnonce must be used or not
@@ -163,11 +169,11 @@ typedef void ( *LoRaMacCryptoNvmEvent )( void );
  * Initialization of LoRaMac Crypto module
  * It sets initial values of volatile variables and assigns the non-volatile context.
  *
- * \param[IN]     cryptoNvmCtxChanged - Callback function which will be called  when the
- *                                      non-volatile context have to be stored.
+ * \param[IN]     nvm                 - Pointer to the non-volatile memory data
+ *                                      structure.
  * \retval                            - Status of the operation
  */
-LoRaMacCryptoStatus_t LoRaMacCryptoInit( LoRaMacCryptoNvmEvent cryptoNvmCtxChanged );
+LoRaMacCryptoStatus_t LoRaMacCryptoInit( LoRaMacCryptoNvmData_t* nvm );
 
 /*!
  * Sets the LoRaWAN specification version to be used.
@@ -179,22 +185,6 @@ LoRaMacCryptoStatus_t LoRaMacCryptoInit( LoRaMacCryptoNvmEvent cryptoNvmCtxChang
  * \retval                            - Status of the operation
  */
 LoRaMacCryptoStatus_t LoRaMacCryptoSetLrWanVersion( Version_t version );
-
-/*!
- * Restores the internal nvm context from passed pointer.
- *
- * \param[IN]     cryptoNmvCtx     - Pointer to non-volatile crypto module context to be restored.
- * \retval                         - Status of the operation
- */
-LoRaMacCryptoStatus_t LoRaMacCryptoRestoreNvmCtx( void* cryptoNvmCtx );
-
-/*!
- * Returns a pointer to the internal non-volatile context.
- *
- * \param[IN]     cryptoNvmCtxSize - Size of the module non-volatile context
- * \retval                         - Points to a structure where the module store its non-volatile context
- */
-void* LoRaMacCryptoGetNvmCtx( size_t* cryptoNvmCtxSize );
 
 /*!
  * Returns updated fCntID downlink counter value.
@@ -303,10 +293,11 @@ LoRaMacCryptoStatus_t LoRaMacCryptoUnsecureMessage( AddressIdentifier_t addrID, 
  * 1.1.x
  * McRootKey = aes128_encrypt(AppKey, 0x20 | pad16)
  *
+ * \param[IN]     versionMinor    - LoRaWAN specification minor version to be used.
  * \param[IN]     keyID           - Key identifier of the root key to use to perform the derivation ( AppKey )
  * \retval                        - Status of the operation
  */
-LoRaMacCryptoStatus_t LoRaMacCryptoDeriveMcRootKey( KeyIdentifier_t keyID );
+LoRaMacCryptoStatus_t LoRaMacCryptoDeriveMcRootKey( uint8_t versionMinor, KeyIdentifier_t keyID );
 
 /*!
  * Derives the McKEKey from the McRootKey.

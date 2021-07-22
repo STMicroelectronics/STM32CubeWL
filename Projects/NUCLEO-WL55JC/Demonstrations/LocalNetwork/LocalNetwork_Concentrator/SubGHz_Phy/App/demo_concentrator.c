@@ -1,21 +1,21 @@
 /**
- ******************************************************************************
- * @file    demo_concentrator.c
- * @author  MCD Application Team
- * @brief   Concentrator behavior module for STM32WL Concentrator Demo.
- ******************************************************************************
- * @attention
- *
- * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
- * All rights reserved.</center></h2>
- *
- * This software component is licensed by ST under Ultimate Liberty license
- * SLA0044, the "License"; You may not use this file except in compliance with
- * the License. You may obtain a copy of the License at:
- *                             www.st.com/SLA0044
- *
- ******************************************************************************
- */
+  ******************************************************************************
+  * @file    demo_concentrator.c
+  * @author  MCD Application Team
+  * @brief   Concentrator behavior module for STM32WL Concentrator Demo.
+  ******************************************************************************
+  * @attention
+  *
+  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
+  * All rights reserved.</center></h2>
+  *
+  * This software component is licensed by ST under Ultimate Liberty license
+  * SLA0044, the "License"; You may not use this file except in compliance with
+  * the License. You may obtain a copy of the License at:
+  *                             www.st.com/SLA0044
+  *
+  ******************************************************************************
+  */
 
 #include "demo_concentrator.h"
 #include "demo_radio_utils.h"
@@ -37,9 +37,14 @@
 #define CONC_BEACON_OFFSET_TRIM         ((int32_t)0)    /*[ms]*/
 
 /**
- *
-*/
+  *
+  */
 #define PRBS9_INIT ((uint16_t) 0x0055);
+
+/**
+  * @brief Max size of the data that can be received
+  */
+#define MAX_RECEIVED_DATA 255
 
 /* Private global variables --------------------------------------------------*/
 
@@ -61,15 +66,15 @@ typedef struct
   UTIL_TIMER_Object_t LedTimer;        /**<Timer which turns LEDs off*/
   UTIL_TIMER_Object_t LedEffect;        /**<Timer which blink leds after other*/
   UTIL_TIMER_Object_t StartTimer;      /**<Timer which starts LPTIM at a random offset*/
-  CONC_Sensor_t Sensors[DEMO_SLOT_NUMBER-2];  /**<Storage for all connected sensors*/
-  CONC_Sensor_t ShadowSensors[DEMO_SLOT_NUMBER-2];  /**<Storage for planned coding changes*/
+  CONC_Sensor_t Sensors[DEMO_SLOT_NUMBER - 2]; /**<Storage for all connected sensors*/
+  CONC_Sensor_t ShadowSensors[DEMO_SLOT_NUMBER - 2]; /**<Storage for planned coding changes*/
   uint32_t SlotCounter;         /**<Count slots, starting with 0=beacon and 1=sync*/
   uint32_t PeriodCounter;       /**<Counts periods from BEACON_ON*/
   uint32_t PseudorandomState;   /**<If hopping is used, it holds state of the generator*/
   uint32_t OccupiedNrLatch;     /**<Number of occupied slots sent in last Sync (not modified for predictable hopping)*/
   uint32_t BeaconLength;        /**<Length of the beacon packet [ms]*/
-  const DEMO_Region_t* Region;          /**<Region number used*/
-  const DEMO_Subregion_t* Subregion;    /**<Subregion number used*/
+  const DEMO_Region_t *Region;          /**<Region number used*/
+  const DEMO_Subregion_t *Subregion;    /**<Subregion number used*/
   bool Enable;                  /**<Set when beacon sending is enabled*/
   bool BeaconOk;                /**<Set if beacon was sent (not set if it failed due to LBT)*/
   bool SyncOk;                  /**<Set if sync was sent (not set if it failed due to LBT)*/
@@ -78,39 +83,39 @@ static CONC_Global_t CONC; /*Global variables of this module*/
 
 /* Private function declarations ---------------------------------------------*/
 
-static void StartLPTIM (void* context);
-static void LedsOff(void* context);
-static void LedsEffect(void* context);
+static void StartLPTIM(void *context);
+static void LedsOff(void *context);
+static void LedsEffect(void *context);
 static void LedBlink(Led_TypeDef Led);
-static void SendBeacon (void);
-static void SendSync (void);
-static void Receive (void);
-static void EvaluateLastPeriod (void);
+static void SendBeacon(void);
+static void SendSync(void);
+static void Receive(void);
+static void EvaluateLastPeriod(void);
 static uint32_t FindEui(uint32_t Eui);
-static uint32_t AddCodingChanges (uint8_t* Buf, uint32_t Len);
-void LPTIM1_IRQHandler (void);
-static void TxDone (void);
-static void TxTimeout (void);
-static void RxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr);
-static void RxTimeout (void);
-static void RxError (void);
-static void FhssChangeChannel (uint8_t currentChannel);
-static void CadDone (bool channelActivityDetected);
-static void Prbs9Init( void );
-static uint8_t Prbs9Next( void );
+static uint32_t AddCodingChanges(uint8_t *Buf, uint32_t Len);
+void LPTIM1_IRQHandler(void);
+static void TxDone(void);
+static void TxTimeout(void);
+static void RxDone(uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr);
+static void RxTimeout(void);
+static void RxError(void);
+static void FhssChangeChannel(uint8_t currentChannel);
+static void CadDone(bool channelActivityDetected);
+static void Prbs9Init(void);
+static uint8_t Prbs9Next(void);
 
 /**
- * @brief Structure with handlers for radio events.
- */
+  * @brief Structure with handlers for radio events.
+  */
 static RadioEvents_t CONC_RadioEvents;
 
 /* Function definitions ------------------------------------------------------*/
 
 /**
- * @brief Initialize Concentrator but don't send anything yet.
- * @return zero on success, 1 - LSE fault, 2 - ARR set fault
- */
-int CONC_Init (void)
+  * @brief Initialize Concentrator but don't send anything yet.
+  * @return zero on success, 1 - LSE fault, 2 - ARR set fault
+  */
+int CONC_Init(void)
 {
   int timeout;
   uint32_t random;
@@ -140,7 +145,7 @@ int CONC_Init (void)
 
   /*Init LED timer*/
   UTIL_TIMER_Create(&CONC.LedTimer, 125, UTIL_TIMER_ONESHOT, LedsOff, NULL);
-  
+
   UTIL_TIMER_Create(&CONC.LedEffect, 125, UTIL_TIMER_ONESHOT, LedsEffect, NULL);
   /*Start Led Effect*/
   UTIL_TIMER_Start(&CONC.LedEffect);
@@ -182,7 +187,7 @@ int CONC_Init (void)
       return 2; /*ARR register couldn't be set*/
     }
   }
-  
+
   Prbs9Init();
 
   /*Enable timer interrupt*/
@@ -200,9 +205,9 @@ int CONC_Init (void)
 }
 
 /**
- * @brief Start LPTIM at a random time.
- */
-static void StartLPTIM (void* context)
+  * @brief Start LPTIM at a random time.
+  */
+static void StartLPTIM(void *context)
 {
   UNUSED(context);
 
@@ -212,12 +217,12 @@ static void StartLPTIM (void* context)
 }
 
 /**
- * @brief Start sending beacons.
- * @param Region region number as index to CONC_Regions
- * @param Subregion subregion number as index to CONC_Regions[].subregions
- * @return zero on success
- */
-int CONC_StartBeacon (uint32_t Region, uint32_t Subregion)
+  * @brief Start sending beacons.
+  * @param Region region number as index to CONC_Regions
+  * @param Subregion subregion number as index to CONC_Regions[].subregions
+  * @return zero on success
+  */
+int CONC_StartBeacon(uint32_t Region, uint32_t Subregion)
 {
   if (CONC.Enable == true)
   {
@@ -235,9 +240,9 @@ int CONC_StartBeacon (uint32_t Region, uint32_t Subregion)
   }
   /*stop Led effect*/
   UTIL_TIMER_Stop(&CONC.LedEffect);
-  BSP_LED_Off( LED_GREEN);
-  BSP_LED_Off( LED_RED);
-  BSP_LED_Off( LED_BLUE);
+  BSP_LED_Off(LED_GREEN);
+  BSP_LED_Off(LED_RED);
+  BSP_LED_Off(LED_BLUE);
 
   /*Store Parameters*/
   CONC.Region = &(DEMO_Regions[Region]);
@@ -252,7 +257,7 @@ int CONC_StartBeacon (uint32_t Region, uint32_t Subregion)
 
   /*Reset all modulations and sensors*/
   CONC.PeriodCounter = 0;
-  for(int i = 0; i < (DEMO_SLOT_NUMBER - 2); i++)
+  for (int i = 0; i < (DEMO_SLOT_NUMBER - 2); i++)
   {
     DEMO_DefaultCoding(&(CONC.Sensors[i].Coding), i + 2, CONC.Region);
     CONC.Sensors[i].CodingApplied = true;       /*Default coding is already applied*/
@@ -273,9 +278,9 @@ int CONC_StartBeacon (uint32_t Region, uint32_t Subregion)
 }
 
 /**
- * @brief Stop sending beacons and forget all sensors.
- */
-void CONC_StopBeacon (void)
+  * @brief Stop sending beacons and forget all sensors.
+  */
+void CONC_StopBeacon(void)
 {
   CONC.Enable = false; /*Stop sending beacons*/
 
@@ -286,38 +291,38 @@ void CONC_StopBeacon (void)
 }
 
 /**
- * @brief Get whether beacon sending is enabled.
- * @return true when beacons are sent
- */
-bool CONC_IsEnabled (void)
+  * @brief Get whether beacon sending is enabled.
+  * @return true when beacons are sent
+  */
+bool CONC_IsEnabled(void)
 {
   return CONC.Enable;
 }
 
 /**
- * @brief Change modulation for one sensor to LoRa.
- * @param eui device whose modulation is to change
- * @param param LoRa modulation parameters
- * @param test_only if true, only respond and do not use the modulation
- * @return CONC_SETMOD_Ok when successfully added the modulation, the modulation will change after a while
- */
-CONC_SetModReturn_t CONC_SetModLora (uint32_t eui, const DEMO_coding_lora_t *param, bool test_only)
+  * @brief Change modulation for one sensor to LoRa.
+  * @param eui device whose modulation is to change
+  * @param param LoRa modulation parameters
+  * @param test_only if true, only respond and do not use the modulation
+  * @return CONC_SETMOD_Ok when successfully added the modulation, the modulation will change after a while
+  */
+CONC_SetModReturn_t CONC_SetModLora(uint32_t eui, const DEMO_coding_lora_t *param, bool test_only)
 {
   uint32_t slot_nr;             /*Slot number of the eui given*/
-  CONC_Sensor_t* shadow_sensor= NULL;        /*Sensor for eui given*/
+  CONC_Sensor_t *shadow_sensor = NULL;       /*Sensor for eui given*/
   uint32_t channel_nr;          /*Selected channel number*/
-  const DEMO_Channel_t* channel;      /*Iterator over available channels*/
+  const DEMO_Channel_t *channel;      /*Iterator over available channels*/
 
-  if(CONC.Enable == false)
+  if (CONC.Enable == false)
   {
     return CONC_SETMOD_Fail;
   }
 
-  if(test_only == false)
+  if (test_only == false)
   {
     /*Find the sensor*/
     slot_nr = FindEui(eui);
-    if(slot_nr == 0)
+    if (slot_nr == 0)
     {
       return CONC_SETMOD_EuiWrong;   /*Eui not found*/
     }
@@ -325,23 +330,23 @@ CONC_SetModReturn_t CONC_SetModLora (uint32_t eui, const DEMO_coding_lora_t *par
   }
 
   /*Check if the modulation is valid*/
-  for(channel_nr = 0; (channel_nr < CONC.Subregion->channels_n) && (channel_nr <= DEMO_HDR_CHAN_NR_MAX); channel_nr++)
+  for (channel_nr = 0; (channel_nr < CONC.Subregion->channels_n) && (channel_nr <= DEMO_HDR_CHAN_NR_MAX); channel_nr++)
   {
     channel = &(CONC.Subregion->channels[channel_nr]);
 
-    if(DEMO_BandwidthLora(param) <= channel->max_bw) /*Bandwidth fits*/
+    if (DEMO_BandwidthLora(param) <= channel->max_bw) /*Bandwidth fits*/
     {
       /*Calculate what is the maximal payload and how long is the packet*/
       uint32_t packet_time;
       uint32_t max_payload = DEMO_MaxPayloadLora(param, CONC.Subregion, &packet_time);
-      if(max_payload >= sizeof(DEMO_packet_sensor_header_t))   /*Modulation allows to send at least header*/
+      if (max_payload >= sizeof(DEMO_packet_sensor_header_t))  /*Modulation allows to send at least header*/
       {
         /*Calculate how many periods must be skipped to comply with duty cycle*/
         uint32_t period = (packet_time * channel->duty_cycle) / (DEMO_SLOT_NUMBER * 1000);
-        if(period <= DEMO_HDR_PARAM_PERIOD_MAX) /*Check that period is achievable*/
+        if (period <= DEMO_HDR_PARAM_PERIOD_MAX) /*Check that period is achievable*/
         {
           UTILS_ENTER_CRITICAL_SECTION();
-          if(test_only == false)
+          if (test_only == false)
           {
             /*Store the config*/
             shadow_sensor->Coding.hdr.data_lim = max_payload;
@@ -374,24 +379,24 @@ CONC_SetModReturn_t CONC_SetModLora (uint32_t eui, const DEMO_coding_lora_t *par
 }
 
 /**
- * @brief Change modulation for one sensor to FSK.
- * @param eui device whose modulation is to change
- * @param param FSK modulation parameters
- * @param test_only if true, only respond and do not use the modulation
- * @return CONC_SETMOD_Ok when successfully added the modulation, the modulation will change after a while
- */
-CONC_SetModReturn_t CONC_SetModFSK (uint32_t eui, const DEMO_coding_fsk_t *param, bool test_only)
+  * @brief Change modulation for one sensor to FSK.
+  * @param eui device whose modulation is to change
+  * @param param FSK modulation parameters
+  * @param test_only if true, only respond and do not use the modulation
+  * @return CONC_SETMOD_Ok when successfully added the modulation, the modulation will change after a while
+  */
+CONC_SetModReturn_t CONC_SetModFSK(uint32_t eui, const DEMO_coding_fsk_t *param, bool test_only)
 {
   uint32_t slot_nr;             /*Slot number of the eui given*/
-  CONC_Sensor_t* shadow_sensor= NULL;        /*Sensor for eui given*/
+  CONC_Sensor_t *shadow_sensor = NULL;       /*Sensor for eui given*/
   uint32_t channel_nr;          /*Selected channel number*/
-  const DEMO_Channel_t* channel;      /*Pointer to iterate over channels*/
+  const DEMO_Channel_t *channel;      /*Pointer to iterate over channels*/
 
-  if(test_only == false)
+  if (test_only == false)
   {
     /*Find the sensor*/
     slot_nr = FindEui(eui);
-    if(slot_nr == 0)
+    if (slot_nr == 0)
     {
       return CONC_SETMOD_EuiWrong;   /*Eui not found*/
     }
@@ -399,29 +404,29 @@ CONC_SetModReturn_t CONC_SetModFSK (uint32_t eui, const DEMO_coding_fsk_t *param
   }
 
   /*Check MSK limit*/
-  if((param->fdev * 4) < param->br)
+  if ((param->fdev * 4) < param->br)
   {
     return CONC_SETMOD_ModWrong;
   }
 
   /*Check if the modulation is valid*/
-  for(channel_nr = 0; (channel_nr < CONC.Subregion->channels_n) && (channel_nr <= DEMO_HDR_CHAN_NR_MAX); channel_nr++)
+  for (channel_nr = 0; (channel_nr < CONC.Subregion->channels_n) && (channel_nr <= DEMO_HDR_CHAN_NR_MAX); channel_nr++)
   {
     channel = &(CONC.Subregion->channels[channel_nr]);  /*Iterate over channels*/
 
-    if(DEMO_BandwidthFsk(param) <= channel->max_bw) /*Bandwidth fits*/
+    if (DEMO_BandwidthFsk(param) <= channel->max_bw) /*Bandwidth fits*/
     {
       /*Calculate what is the maximal payload and how long is the packet*/
       uint32_t packet_time;
       uint32_t max_payload = DEMO_MaxPayloadFsk(param, CONC.Subregion, &packet_time);
-      if(max_payload >= sizeof(DEMO_packet_sensor_header_t))      /*Modulation allows to send at least header*/
+      if (max_payload >= sizeof(DEMO_packet_sensor_header_t))     /*Modulation allows to send at least header*/
       {
         /*Calculate how many periods must be skipped to comply with duty cycle*/
         uint32_t period = (packet_time * channel->duty_cycle) / (DEMO_SLOT_NUMBER * 1000);
-        if(period <= DEMO_HDR_PARAM_PERIOD_MAX) /*Check that period is achievable*/
+        if (period <= DEMO_HDR_PARAM_PERIOD_MAX) /*Check that period is achievable*/
         {
           UTILS_ENTER_CRITICAL_SECTION();
-          if(test_only == false)
+          if (test_only == false)
           {
             /*Store the config*/
             shadow_sensor->Coding.hdr.data_lim = max_payload;
@@ -454,44 +459,44 @@ CONC_SetModReturn_t CONC_SetModFSK (uint32_t eui, const DEMO_coding_fsk_t *param
 }
 
 /**
- * @brief Turn all LEDs off.
- * Used as a timer callback.
- */
-static void LedsOff(void* context)
+  * @brief Turn all LEDs off.
+  * Used as a timer callback.
+  */
+static void LedsOff(void *context)
 {
   UNUSED(context);
   BSP_LED_Off(LED_GREEN);
   BSP_LED_Off(LED_BLUE);
 }
 
-static void LedsEffect(void* context)
+static void LedsEffect(void *context)
 {
   UNUSED(context);
-  if (1U==BSP_LED_GetState(LED_BLUE))
+  if (1U == BSP_LED_GetState(LED_BLUE))
   {
-    BSP_LED_Off( LED_BLUE);
-    BSP_LED_On( LED_GREEN);
-  } 
-  else if(1U==BSP_LED_GetState(LED_GREEN))
-  {
-    BSP_LED_Off( LED_GREEN);
-    BSP_LED_On( LED_RED);
+    BSP_LED_Off(LED_BLUE);
+    BSP_LED_On(LED_GREEN);
   }
-  else if (1U==BSP_LED_GetState(LED_RED))
+  else if (1U == BSP_LED_GetState(LED_GREEN))
   {
-    BSP_LED_Off( LED_RED);
-    BSP_LED_On( LED_BLUE);
+    BSP_LED_Off(LED_GREEN);
+    BSP_LED_On(LED_RED);
+  }
+  else if (1U == BSP_LED_GetState(LED_RED))
+  {
+    BSP_LED_Off(LED_RED);
+    BSP_LED_On(LED_BLUE);
   }
   else
   {
-    BSP_LED_On( LED_BLUE);
+    BSP_LED_On(LED_BLUE);
   }
   UTIL_TIMER_Start(&CONC.LedEffect);
 }
 /**
- * @brief Do a short blink with a LED.
- * @param Led which LED
- */
+  * @brief Do a short blink with a LED.
+  * @param Led which LED
+  */
 static void LedBlink(Led_TypeDef Led)
 {
   BSP_LED_On(Led);
@@ -499,11 +504,11 @@ static void LedBlink(Led_TypeDef Led)
 }
 
 /**
- * @brief Send beacon.
- */
-static void SendBeacon (void)
+  * @brief Send beacon.
+  */
+static void SendBeacon(void)
 {
-  if(CONC.Subregion->hopping == true)
+  if (CONC.Subregion->hopping == true)
   {
     /*Generate seed,*/
     CONC.Beacon.seed = Prbs9Next();
@@ -536,24 +541,24 @@ static void SendBeacon (void)
   }
   else
   {
-      Radio.SetTxConfig(MODEM_LORA, /*Beacon is always LoRa*/
-                    CONC.Subregion->beacon_power, /*Power*/
-                    0, /*FSK parameter*/
-                    DEMO_BW_TO_SETTXCONFIG(CONC.Region->beacon_bw), /*Bandwidth*/
-                    CONC.Region->beacon_sf, /*Spreading factor*/
-                    DEMO_DEFAULT_CR, /*Coderate 4/5*/
-                    36, /*Preamble length*/
-                    1, /*Fixed length*/
-                    0, /*CRC not used*/
-                    0, 0, /*No hopping*/
-                    0, /*IQ not inverted*/
-                    1000); /*Tx timeout is not needed*/
+    Radio.SetTxConfig(MODEM_LORA, /*Beacon is always LoRa*/
+                      CONC.Subregion->beacon_power, /*Power*/
+                      0, /*FSK parameter*/
+                      DEMO_BW_TO_SETTXCONFIG(CONC.Region->beacon_bw), /*Bandwidth*/
+                      CONC.Region->beacon_sf, /*Spreading factor*/
+                      DEMO_DEFAULT_CR, /*Coderate 4/5*/
+                      36, /*Preamble length*/
+                      1, /*Fixed length*/
+                      0, /*CRC not used*/
+                      0, 0, /*No hopping*/
+                      0, /*IQ not inverted*/
+                      1000); /*Tx timeout is not needed*/
   }
   /*Listen Before Talk is required*/
   if (CONC.Subregion->lbt)
   {
-    if(DEMO_WaitForFreeChannel(MODEM_LORA, CONC.Subregion->lbt_rssi, CONC.Subregion->lbt_time,
-                               DEMO_MAX_END_OF_PACKET_TX - CONC.Region->beacon_length) == false)
+    if (DEMO_WaitForFreeChannel(MODEM_LORA, CONC.Subregion->lbt_rssi, CONC.Subregion->lbt_time,
+                                DEMO_MAX_END_OF_PACKET_TX - CONC.Region->beacon_length) == false)
     {
       Radio.Sleep();
       APP_LOG(TS_ON, VLEVEL_L, "Beacon transmission failed\n\r");
@@ -563,30 +568,30 @@ static void SendBeacon (void)
 
   /*Send*/
   CONC.Beacon.offset = (int32_t)CONC.Region->beacon_length      /*Mark end of the packet*/
-      + (int32_t)CONC_LPTIM_TO_MS(LL_LPTIM_GetCounter(LPTIM1))  /*Delay caused by config and LBT*/
-      + CONC_BEACON_OFFSET_TRIM;                                /*Configurable trim*/
+                       + (int32_t)CONC_LPTIM_TO_MS(LL_LPTIM_GetCounter(LPTIM1))  /*Delay caused by config and LBT*/
+                       + CONC_BEACON_OFFSET_TRIM;                                /*Configurable trim*/
   CONC.Beacon.sum = 0;  /*Set to 0 before summing bytes*/
-  uint8_t bytesum = ((uint8_t*)&CONC.Beacon)[0] + ((uint8_t*)&CONC.Beacon)[1]
-                  + ((uint8_t*)&CONC.Beacon)[2] + ((uint8_t*)&CONC.Beacon)[3];
-  CONC.Beacon.sum = - ((bytesum + (bytesum >> 4)) & 0xf);   //Add negative value of primitive checksum
+  uint8_t bytesum = ((uint8_t *)&CONC.Beacon)[0] + ((uint8_t *)&CONC.Beacon)[1]
+                    + ((uint8_t *)&CONC.Beacon)[2] + ((uint8_t *)&CONC.Beacon)[3];
+  CONC.Beacon.sum = - ((bytesum + (bytesum >> 4)) & 0xf);   /* Add negative value of primitive checksum */
 
-  Radio.Send((uint8_t*)&CONC.Beacon, 4); /*Send beacon*/
+  Radio.Send((uint8_t *)&CONC.Beacon, 4); /*Send beacon*/
 
   EvaluateLastPeriod(); /*Check all sensors and update occupied mask before Sync*/
-  
-  APP_LOG(TS_ON, VLEVEL_H, "Beacon Tx at %d\n\r",(CONC.Region->beacon_freq));
+
+  APP_LOG(TS_ON, VLEVEL_H, "Beacon Tx at %d\n\r", (CONC.Region->beacon_freq));
   /*Notify*/
   BSP_LED_On(LED_RED);
 }
 
 /**
- * @brief Send sync.
- */
-static void SendSync (void)
+  * @brief Send sync.
+  */
+static void SendSync(void)
 {
-  const DEMO_Channel_t* channel;
+  const DEMO_Channel_t *channel;
 
-  if(CONC.Subregion->hopping == true)
+  if (CONC.Subregion->hopping == true)
   {
     /*Select one of available channels, depending only on seed*/
     channel = &(CONC.Subregion->channels[CONC.Beacon.seed % CONC.Subregion->channels_n]);
@@ -623,8 +628,8 @@ static void SendSync (void)
     DEMO_coding_lora_t sync_coding = {.de = 0, .cr = 1, .bw = CONC.Region->beacon_bw, .sf = CONC.Region->beacon_sf};
     uint32_t packet_length = DEMO_TimeOnAirLora(&sync_coding, 4 + codings_len);
 
-    if(DEMO_WaitForFreeChannel(MODEM_LORA, CONC.Subregion->lbt_rssi, CONC.Subregion->lbt_time,
-                               DEMO_MAX_END_OF_PACKET_TX - packet_length) == false)
+    if (DEMO_WaitForFreeChannel(MODEM_LORA, CONC.Subregion->lbt_rssi, CONC.Subregion->lbt_time,
+                                DEMO_MAX_END_OF_PACKET_TX - packet_length) == false)
     {
       Radio.Sleep();
       APP_LOG(TS_ON, VLEVEL_L, "Sync transmission failed\n\r");
@@ -634,28 +639,28 @@ static void SendSync (void)
 
   /*Send*/
   CONC.Sync.seed = CONC.Beacon.seed;    /*Repeat the seed*/
-  Radio.Send((uint8_t*)&CONC.Sync, 4 + codings_len);
+  Radio.Send((uint8_t *)&CONC.Sync, 4 + codings_len);
 
   /*Notify*/
   BSP_LED_On(LED_RED);
-  
-  APP_LOG(TS_ON, VLEVEL_H, "Sync Tx at %d\n\r",(channel->freq));
+
+  APP_LOG(TS_ON, VLEVEL_H, "Sync Tx at %d\n\r", (channel->freq));
 }
 
 /**
- * @brief Set receiver and listen for sensor.
- * @note This function doesn't use Radio.SetRxConfig() and Radio.SetTxConfig() because it allows only LoRaWAN
- *    modulation and it doesn't use Radio.Rx() because it highly depends on SetRxConfig.
- */
-static void Receive (void)
+  * @brief Set receiver and listen for sensor.
+  * @note This function doesn't use Radio.SetRxConfig() and Radio.SetTxConfig() because it allows only LoRaWAN
+  *    modulation and it doesn't use Radio.Rx() because it highly depends on SetRxConfig.
+  */
+static void Receive(void)
 {
-  const DEMO_Channel_t* channel;
+  const DEMO_Channel_t *channel;
   PacketParams_t pck_params;
   ModulationParams_t mod_params;
   CONC_Sensor_t *sensor = &(CONC.Sensors[CONC.SlotCounter - 2]);        /*Make the below code less confusing*/
 
   /*Select channel*/
-  if(CONC.Subregion->hopping == true)
+  if (CONC.Subregion->hopping == true)
   {
     /*Get number of used channels*/
     uint32_t channel_count = CONC.Subregion->channels_n;       /*Limited by number of existing channels*/
@@ -681,7 +686,7 @@ static void Receive (void)
     mod_params.PacketType = PACKET_TYPE_LORA;
     mod_params.Params.LoRa.SpreadingFactor = DEMO_GetSpreadingFactor(&(sensor->Coding.lora));
     mod_params.Params.LoRa.Bandwidth = DEMO_GetBandwidth(&(sensor->Coding.lora));
-    mod_params.Params.LoRa.CodingRate= DEMO_GetCoderate(&(sensor->Coding.lora));
+    mod_params.Params.LoRa.CodingRate = DEMO_GetCoderate(&(sensor->Coding.lora));
     mod_params.Params.LoRa.LowDatarateOptimize = sensor->Coding.lora.de;
 
     pck_params.PacketType = PACKET_TYPE_LORA;
@@ -694,7 +699,7 @@ static void Receive (void)
       pck_params.Params.LoRa.PreambleLength = 8;
     }
     pck_params.Params.LoRa.HeaderType = LORA_PACKET_VARIABLE_LENGTH;
-    pck_params.Params.LoRa.PayloadLength = RADIO_RX_BUF_SIZE;
+    pck_params.Params.LoRa.PayloadLength = MAX_RECEIVED_DATA;
     pck_params.Params.LoRa.CrcMode = LORA_CRC_ON;
     pck_params.Params.LoRa.InvertIQ = LORA_IQ_NORMAL;
 
@@ -722,7 +727,7 @@ static void Receive (void)
     pck_params.Params.Gfsk.SyncWordLength = (4 << 3); /*Convert byte into bit*/
     pck_params.Params.Gfsk.AddrComp = RADIO_ADDRESSCOMP_FILT_OFF;
     pck_params.Params.Gfsk.HeaderType = RADIO_PACKET_VARIABLE_LENGTH;
-    pck_params.Params.Gfsk.PayloadLength = RADIO_RX_BUF_SIZE;
+    pck_params.Params.Gfsk.PayloadLength = MAX_RECEIVED_DATA;
     pck_params.Params.Gfsk.CrcLength = RADIO_CRC_2_BYTES_CCIT;
     pck_params.Params.Gfsk.DcFree = RADIO_DC_FREEWHITENING;
 
@@ -743,9 +748,9 @@ static void Receive (void)
                          IRQ_RADIO_NONE);
 
   /*Set DBG pin PB12*/
-#ifdef LET_SUBGHZ_MW_USING_DGB_LINE1_PIN
-  DBG_GPIO_SET_LINE(DGB_LINE1_PORT, DGB_LINE1_PIN);
-#endif
+#ifdef LET_SUBGHZ_MW_USING_PROBE_LINE1_PIN
+  PROBE_GPIO_SET_LINE(PROBE_LINE1_PORT, PROBE_LINE1_PIN);
+#endif /* LET_SUBGHZ_MW_USING_PROBE_LINE1_PIN */
 
   /*Receive*/
   SUBGRF_SetSwitch(0, RFSWITCH_RX); /*Set RF switch*/
@@ -753,26 +758,26 @@ static void Receive (void)
 }
 
 /**
- * @brief Evaluate last period and update occupied mask.
- * Check all sensors and loose those who do not communicate.
- * Count occupied slots.
- * Apply coding changes for the Sync which will come just now.
- */
-static void EvaluateLastPeriod (void)
+  * @brief Evaluate last period and update occupied mask.
+  * Check all sensors and loose those who do not communicate.
+  * Count occupied slots.
+  * Apply coding changes for the Sync which will come just now.
+  */
+static void EvaluateLastPeriod(void)
 {
   uint32_t slot_nr;             /*Slot number*/
-  CONC_Sensor_t* sensor;        /*Iterate over connected sensors*/
-  CONC_Sensor_t* shadow_sensor;        /*Pointer to a temporary storage of coding changes*/
+  CONC_Sensor_t *sensor;        /*Iterate over connected sensors*/
+  CONC_Sensor_t *shadow_sensor;        /*Pointer to a temporary storage of coding changes*/
 
   CONC.OccupiedNrLatch = 0;
-  for(slot_nr = 2; slot_nr < DEMO_SLOT_NUMBER; slot_nr++)
+  for (slot_nr = 2; slot_nr < DEMO_SLOT_NUMBER; slot_nr++)
   {
-    if(CONC.Sync.occupied & (1 << slot_nr))     /*Slot is occupied*/
+    if (CONC.Sync.occupied & (1 << slot_nr))    /*Slot is occupied*/
     {
-      sensor = &(CONC.Sensors[slot_nr -2]);     /*Iterate over connected sensors*/
+      sensor = &(CONC.Sensors[slot_nr - 2]);    /*Iterate over connected sensors*/
       shadow_sensor = &(CONC.ShadowSensors[slot_nr - 2]);        /*Get respective shadow sensor*/
 
-      if(sensor->Missed > (DEMO_SENSOR_MISS_LIMIT * (sensor->Coding.hdr.period + 1)))      /*Missed too many beacons*/
+      if (sensor->Missed > (DEMO_SENSOR_MISS_LIMIT * (sensor->Coding.hdr.period + 1)))     /*Missed too many beacons*/
       {
         CONC.Sync.occupied &= ~(1 << slot_nr);  /*Kick the sensor out*/
         CONC_Report_LOST(sensor->Eui);  /*Report lost sensor*/
@@ -792,7 +797,7 @@ static void EvaluateLastPeriod (void)
         CONC.OccupiedNrLatch++;      /*Count number of occupied slots*/
         sensor->Missed++; /*Increase missed counter now, it is cleared on each reception*/
 
-        if(shadow_sensor->CodingApplied == false)        /*There is a modulation change to apply*/
+        if (shadow_sensor->CodingApplied == false)       /*There is a modulation change to apply*/
         {
           /*Apply the new coding, to be sent soon in Sync*/
           sensor->Coding.hdr = shadow_sensor->Coding.hdr;
@@ -809,9 +814,9 @@ static void EvaluateLastPeriod (void)
   APP_LOG(TS_ON, VLEVEL_M, "Period %u, occupied = bs", CONC.PeriodCounter++);
   char oc_str[17] = "..............\r\n";
   uint16_t oc_shift = CONC.Sync.occupied >> 2;
-  for(int i = 0; i < (DEMO_SLOT_NUMBER - 2); oc_shift >>= 1, i++)
+  for (int i = 0; i < (DEMO_SLOT_NUMBER - 2); oc_shift >>= 1, i++)
   {
-    if(oc_shift & 0x1)
+    if (oc_shift & 0x1)
     {
       oc_str[i] = '0';
     }
@@ -820,15 +825,15 @@ static void EvaluateLastPeriod (void)
 }
 
 /**
- * @brief Find eui in list of connected sensors.
- * @param Eui sensor's address
- * @return slot on which the sensor is connected or 0 if it is unknown
- */
+  * @brief Find eui in list of connected sensors.
+  * @param Eui sensor's address
+  * @return slot on which the sensor is connected or 0 if it is unknown
+  */
 static uint32_t FindEui(uint32_t Eui)
 {
   int i;
 
-  for(i = 0; i < (DEMO_SLOT_NUMBER - 2); i++)
+  for (i = 0; i < (DEMO_SLOT_NUMBER - 2); i++)
   {
     if ((CONC.Sync.occupied & (1 << (i + 2)))   /*This slot is occupied*/
         && (CONC.Sensors[i].Eui == Eui))        /*Eui fits*/
@@ -841,16 +846,16 @@ static uint32_t FindEui(uint32_t Eui)
 }
 
 /**
- * @brief Add coding changes to a buffer.
- * @param buf where to write the changes
- * @param len available length
- * @return number of bytes used
- */
-static uint32_t AddCodingChanges (uint8_t* Buf, uint32_t Len)
+  * @brief Add coding changes to a buffer.
+  * @param buf where to write the changes
+  * @param len available length
+  * @return number of bytes used
+  */
+static uint32_t AddCodingChanges(uint8_t *Buf, uint32_t Len)
 {
   uint32_t offset; /*Current offset in Buf*/
   uint32_t slot_nr; /*Slot index*/
-  CONC_Sensor_t* sensor; /*Sensor iterator*/
+  CONC_Sensor_t *sensor; /*Sensor iterator*/
 
   for (slot_nr = 2, offset = 0; slot_nr < DEMO_SLOT_NUMBER; slot_nr++)
   {
@@ -870,8 +875,8 @@ static uint32_t AddCodingChanges (uint8_t* Buf, uint32_t Len)
 
       DEMO_coding_connect_t connect =
       {
-          .mark = DEMO_HDR_CONNECT_MARK,
-          .slot = sensor->Coding.hdr.slot,
+        .mark = DEMO_HDR_CONNECT_MARK,
+        .slot = sensor->Coding.hdr.slot,
       };
       memcpy(&(Buf[offset]), &connect, sizeof(DEMO_coding_connect_t));
       offset += sizeof(DEMO_coding_connect_t);
@@ -912,10 +917,10 @@ static uint32_t AddCodingChanges (uint8_t* Buf, uint32_t Len)
 }
 
 /**
- * @brief LPTIM autoreload interrupt handler.
- * This is launched each second to mark start of a slot.
- */
-void LPTIM1_IRQHandler (void)
+  * @brief LPTIM autoreload interrupt handler.
+  * This is launched each second to mark start of a slot.
+  */
+void LPTIM1_IRQHandler(void)
 {
   LL_LPTIM_ClearFLAG_ARRM(LPTIM1);
 
@@ -926,10 +931,10 @@ void LPTIM1_IRQHandler (void)
     /*Start of period, clear OKs*/
     CONC.BeaconOk = false;
     CONC.SyncOk = false;
-    
-    HAL_GPIO_WritePin(DGB_LINE3_PORT, DGB_LINE3_PIN, GPIO_PIN_SET);
-    HAL_GPIO_WritePin(DGB_LINE3_PORT, DGB_LINE3_PIN, GPIO_PIN_RESET);
-    
+
+    PROBE_GPIO_WRITE(PROBE_LINE3_PORT, PROBE_LINE3_PIN, GPIO_PIN_SET);
+    PROBE_GPIO_WRITE(PROBE_LINE3_PORT, PROBE_LINE3_PIN, GPIO_PIN_RESET);
+
   }
   else
   {
@@ -939,20 +944,20 @@ void LPTIM1_IRQHandler (void)
   /*Do something when slot starts*/
   if (CONC.Enable)
   {
-    if(CONC.SlotCounter == 0) /*Time to send Beacon*/
+    if (CONC.SlotCounter == 0) /*Time to send Beacon*/
     {
       SendBeacon();
     }
-    else if(CONC.SlotCounter == 1) /*Time to send Sync*/
+    else if (CONC.SlotCounter == 1) /*Time to send Sync*/
     {
-      if(CONC.BeaconOk == true)   /*No point sending Sync if Beacon wasn't sent*/
+      if (CONC.BeaconOk == true)  /*No point sending Sync if Beacon wasn't sent*/
       {
         SendSync();
       }
     }
     else /*Receive for sensors*/
     {
-      if(CONC.SyncOk == true)      /*No point receiving if Sync wasn't sent properly*/
+      if (CONC.SyncOk == true)     /*No point receiving if Sync wasn't sent properly*/
       {
         Receive();
       }
@@ -966,11 +971,11 @@ void LPTIM1_IRQHandler (void)
 }
 
 /*!
- * \brief  Tx Done callback prototype.
- */
-static void TxDone (void)
+  * \brief  Tx Done callback prototype.
+  */
+static void TxDone(void)
 {
-  if(CONC.Enable == true)
+  if (CONC.Enable == true)
   {
     /*Set radio to idle state and wait for next slot*/
     Radio.Standby();
@@ -992,26 +997,26 @@ static void TxDone (void)
 }
 
 /*!
- * \brief  Tx Timeout callback prototype.
- */
-static void TxTimeout (void)
+  * \brief  Tx Timeout callback prototype.
+  */
+static void TxTimeout(void)
 {
   BSP_LED_Off(LED_RED);
 }
 
 /*!
- * \brief Rx Done callback prototype.
- *
- * \param [IN] payload Received buffer pointer
- * \param [IN] size    Received buffer size
- * \param [IN] rssi    RSSI value computed while receiving the frame [dBm]
- * \param [IN] snr     Raw SNR value given by the radio hardware
- *                     FSK : N/A ( set to 0 )
- *                     LoRa: SNR value in dB
- */
-static void RxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr)
+  * \brief Rx Done callback prototype.
+  *
+  * \param [IN] payload Received buffer pointer
+  * \param [IN] size    Received buffer size
+  * \param [IN] rssi    RSSI value computed while receiving the frame [dBm]
+  * \param [IN] snr     Raw SNR value given by the radio hardware
+  *                     FSK : N/A ( set to 0 )
+  *                     LoRa: SNR value in dB
+  */
+static void RxDone(uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr)
 {
-  if(CONC.Enable == true)
+  if (CONC.Enable == true)
   {
     /*Set radio to idle state and wait for next slot*/
     Radio.Standby();
@@ -1028,7 +1033,7 @@ static void RxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr)
     DEMO_packet_sensor_header_t header;
     memcpy(&header, payload, sizeof(DEMO_packet_sensor_header_t)); /*Copy payload header to sensor's packet*/
 
-    CONC_Sensor_t* sensor = &(CONC.Sensors[CONC.SlotCounter - 2]); /*Look up this slot's sensor*/
+    CONC_Sensor_t *sensor = &(CONC.Sensors[CONC.SlotCounter - 2]); /*Look up this slot's sensor*/
 
     if (CONC.Sync.occupied & (1 << CONC.SlotCounter)) /*Slot is already occupied*/
     {
@@ -1037,11 +1042,11 @@ static void RxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr)
         return;
       }
 
-      if(sensor->ConnectVerified == false)
+      if (sensor->ConnectVerified == false)
       {
         sensor->ConnectVerified = true;
       }
-      if(sensor->CodingApplied == false)
+      if (sensor->CodingApplied == false)
       {
         sensor->CodingApplied = true; /*Modulation was successfully changed*/
         CONC_Report_MOD_OK(header.eui); /*Report to console*/
@@ -1054,7 +1059,7 @@ static void RxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr)
       if (already_in >= 2) /*This sensor is already connected in different slot*/
       {
         CONC.Sensors[already_in - 2].ConnectVerified = false;      /*Switch the eui to that slot*/
-        if(DEMO_IsCodingDefault(&(CONC.Sensors[already_in - 2].Coding), CONC.Region) != true)    /*Coding was changed*/
+        if (DEMO_IsCodingDefault(&(CONC.Sensors[already_in - 2].Coding), CONC.Region) != true)   /*Coding was changed*/
         {
           CONC.Sensors[already_in - 2].CodingApplied = false;   /*Reapply coding*/
         }
@@ -1071,7 +1076,7 @@ static void RxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr)
 
     /*Report to console*/
     CONC_Report_RCV(&header, rssi, snr,
-                    ((uint8_t*)payload) + sizeof(DEMO_packet_sensor_header_t),
+                    ((uint8_t *)payload) + sizeof(DEMO_packet_sensor_header_t),
                     size - sizeof(DEMO_packet_sensor_header_t));
 
     LedBlink(LED_BLUE);
@@ -1083,51 +1088,51 @@ static void RxDone (uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr)
 }
 
 /*!
- * \brief  Rx Timeout callback prototype.
- */
-static void RxTimeout (void){}
+  * \brief  Rx Timeout callback prototype.
+  */
+static void RxTimeout(void) {}
 
 /*!
- * \brief Rx Error callback prototype.
- */
-static void RxError (void){}
+  * \brief Rx Error callback prototype.
+  */
+static void RxError(void) {}
 
 /*!
- * \brief  FHSS Change Channel callback prototype.
- *
- * \param [IN] currentChannel   Index number of the current channel
- */
-static void FhssChangeChannel (uint8_t currentChannel)
+  * \brief  FHSS Change Channel callback prototype.
+  *
+  * \param [IN] currentChannel   Index number of the current channel
+  */
+static void FhssChangeChannel(uint8_t currentChannel)
 {
   UNUSED(currentChannel);
 }
 
 /*!
- * \brief CAD Done callback prototype.
- *
- * \param [IN] channelDetected    Channel Activity detected during the CAD
- */
-static void CadDone ( bool channelActivityDetected)
+  * \brief CAD Done callback prototype.
+  *
+  * \param [IN] channelDetected    Channel Activity detected during the CAD
+  */
+static void CadDone(bool channelActivityDetected)
 {
   UNUSED(channelActivityDetected);
 }
 
 /**
- * \brief Initialise the PRBS9 generator
- */
-static void Prbs9Init( void )
+  * \brief Initialise the PRBS9 generator
+  */
+static void Prbs9Init(void)
 {
-  prbs9_val= PRBS9_INIT;
+  prbs9_val = PRBS9_INIT;
 }
 
 /**
- * \brief Returns the next number from PRBS9 generator
- *
- * \return new PRBS number
- */
-static uint8_t Prbs9Next( void )
+  * \brief Returns the next number from PRBS9 generator
+  *
+  * \return new PRBS number
+  */
+static uint8_t Prbs9Next(void)
 {
   int newbit = (((prbs9_val >> 8) ^ (prbs9_val >> 4)) & 1);
   prbs9_val = ((prbs9_val << 1) | newbit) & 0x01ff;
-  return (uint8_t) (prbs9_val&0xFF);
+  return (uint8_t)(prbs9_val & 0xFF);
 }

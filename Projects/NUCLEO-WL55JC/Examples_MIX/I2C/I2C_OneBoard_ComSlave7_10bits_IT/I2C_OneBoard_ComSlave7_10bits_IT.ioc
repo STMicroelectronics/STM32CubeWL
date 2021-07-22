@@ -135,3 +135,5 @@ RCC.VCOOutputFreq_Value=384000000
 VP_SYS_VS_Systick.Mode=SysTick
 VP_SYS_VS_Systick.Signal=SYS_VS_Systick
 board=custom
+ProjectManager.Example=I2C_OneBoard_ComSlave7_10bits_IT
+ProjectManager.ExampleSource=CubeFw

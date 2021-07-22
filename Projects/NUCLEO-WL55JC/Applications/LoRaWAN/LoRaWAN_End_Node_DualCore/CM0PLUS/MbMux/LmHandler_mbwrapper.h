@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    LmHandler_mbwrapper.h
@@ -17,6 +18,7 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __LMHANDLER_MBWRAPPER_CM0PLUS_H__
@@ -54,6 +56,10 @@ extern "C" {
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
+/**
+  * @brief  This function processes the LmHandler events callbacks from CM4
+  * @param  ComObj exchange buffer parameter
+  */
 void Process_Lora_Cmd(MBMUX_ComParam_t *ComObj);
 
 /* USER CODE BEGIN EFP */

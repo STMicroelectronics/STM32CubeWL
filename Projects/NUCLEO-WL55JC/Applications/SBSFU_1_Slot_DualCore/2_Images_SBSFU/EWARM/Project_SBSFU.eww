@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workspace>
+  <project>
+    <path>$WS_DIR$\CM4.ewp</path>
+  </project>
+  <project>
+    <path>$WS_DIR$\CM0PLUS.ewp</path>
+  </project>
+  <batchBuild />
+</workspace>

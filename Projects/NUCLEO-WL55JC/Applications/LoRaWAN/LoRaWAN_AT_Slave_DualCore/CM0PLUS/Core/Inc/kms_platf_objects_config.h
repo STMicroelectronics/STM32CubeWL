@@ -27,6 +27,7 @@
 /* USER CODE BEGIN KMS_PLATF_OBJECTS_CONFIG_Includes */
 #include "stm32wlxx.h"
 #include "Commissioning.h"
+#include "lorawan_conf.h" /* KEY_EXTRACTABLE */
 /* USER CODE END KMS_PLATF_OBJECTS_CONFIG_Includes */
 
 #ifdef __cplusplus
@@ -95,121 +96,135 @@ extern "C" {
 #pragma arm section rodata = ".USER_embedded_Keys"
 #endif
 
-KMS_DECLARE_BLOB_STRUCT(, 32)
+KMS_DECLARE_BLOB_STRUCT(, 21);
+KMS_DECLARE_BLOB_STRUCT(, 27);
 
+/* These objects are used by user tKMS application                 */
+#if defined(__GNUC__)
+#pragma GCC push_options
+#pragma GCC optimize ("O0")
+#endif
+#if ( LORAMAC_CLASSB_ENABLED == 1 )
 #if defined(__GNUC__)
 __attribute__((section(".USER_embedded_Keys")))
 #endif
-/* These objects are used by user tKMS application                 */
-static const kms_obj_keyhead_32_t   Lorawan_Zero_Key =
+static const kms_obj_keyhead_27_t   Lorawan_Zero_Key =
 {
   KMS_ABI_VERSION_CK_2_40,         /*  uint32_t version; */
   KMS_ABI_CONFIG_KEYHEAD,          /*  uint32_t configuration; */
-  128,                             /*  uint32_t blobs_size; */
-  9,                               /*  uint32_t blobs_count; */
+  108,                             /*  uint32_t blobs_size; */
+  8,                               /*  uint32_t blobs_count; */
   1,                               /*  uint32_t object_id; */
   {
-    CKA_KEY_TYPE,     sizeof(CK_KEY_TYPE),          CKK_AES,
-    CKA_VALUE,        16, 0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U,
-    CKA_ENCRYPT,      sizeof(CK_BBOOL), (uint8_t)CK_TRUE,
-    CKA_DECRYPT,      sizeof(CK_BBOOL), (uint8_t)CK_TRUE,
-    CKA_TOKEN,        sizeof(CK_BBOOL), (uint8_t)CK_TRUE,
-    CKA_COPYABLE,     sizeof(CK_BBOOL), (uint8_t)CK_FALSE,
-    CKA_EXTRACTABLE,  sizeof(CK_BBOOL), (uint8_t)CK_FALSE,
     CKA_CLASS,        sizeof(CK_OBJECT_CLASS), (uint8_t)CKO_SECRET_KEY,
-    CKA_LABEL,        12, 0x41524F4CU, 0x50595243U, 0x00383231U      /* 'LORA', 'CRYP', '128' */
+    CKA_KEY_TYPE,     sizeof(CK_KEY_TYPE),     CKK_AES,
+    CKA_VALUE,        16UL,                    0x00000000U, 0x00000000U, 0x00000000U, 0x00000000U,
+    CKA_DERIVE,       sizeof(CK_BBOOL),        (uint8_t)CK_FALSE,
+    CKA_DECRYPT,      sizeof(CK_BBOOL),        (uint8_t)CK_FALSE,
+    CKA_COPYABLE,     sizeof(CK_BBOOL),        (uint8_t)CK_FALSE,
+    CKA_EXTRACTABLE,  sizeof(CK_BBOOL),        (uint8_t)CK_FALSE,
+    CKA_LABEL,        4UL,                     0x5F45524CU /* 'LRE_' */
   }
 };
+#endif /* LORAMAC_CLASSB_ENABLED == 1 */
 
 #if defined(__GNUC__)
 __attribute__((section(".USER_embedded_Keys")))
 #endif
-static const kms_obj_keyhead_32_t   Lorawan_App_Key =
+static const kms_obj_keyhead_27_t   Lorawan_App_Key =
 {
   KMS_ABI_VERSION_CK_2_40,         /*  uint32_t version; */
   KMS_ABI_CONFIG_KEYHEAD,          /*  uint32_t configuration; */
-  128,                             /*  uint32_t blobs_size; */
-  9,                               /*  uint32_t blobs_count; */
+  108,                             /*  uint32_t blobs_size; */
+  8,                               /*  uint32_t blobs_count; */
   2,                               /*  uint32_t object_id; */
   {
-    CKA_KEY_TYPE,     sizeof(CK_KEY_TYPE),          CKK_AES,
-    CKA_VALUE,        16, FORMAT_KEY_32(LORAWAN_APP_KEY),
-    CKA_ENCRYPT,      sizeof(CK_BBOOL), (uint8_t)CK_TRUE,
-    CKA_DECRYPT,      sizeof(CK_BBOOL), (uint8_t)CK_TRUE,
-    CKA_TOKEN,        sizeof(CK_BBOOL), (uint8_t)CK_TRUE,
-    CKA_COPYABLE,     sizeof(CK_BBOOL), (uint8_t)CK_FALSE,
-    CKA_EXTRACTABLE,  sizeof(CK_BBOOL), (uint8_t)CK_FALSE,
     CKA_CLASS,        sizeof(CK_OBJECT_CLASS), (uint8_t)CKO_SECRET_KEY,
-    CKA_LABEL,        12, 0x41524F4CU, 0x50595243U, 0x00383231U      /* 'LORA', 'CRYP', '128' */
+    CKA_KEY_TYPE,     sizeof(CK_KEY_TYPE),     CKK_AES,
+    CKA_VALUE,        16UL,                    FORMAT_KEY_32(LORAWAN_APP_KEY),
+    CKA_ENCRYPT,      sizeof(CK_BBOOL),        (uint8_t)CK_FALSE,
+    CKA_DECRYPT,      sizeof(CK_BBOOL),        (uint8_t)CK_FALSE,
+    CKA_COPYABLE,     sizeof(CK_BBOOL),        (uint8_t)CK_FALSE,
+#if (!defined (KEY_EXTRACTABLE) || (KEY_EXTRACTABLE == 0))
+    CKA_EXTRACTABLE,  sizeof(CK_BBOOL),        (uint8_t)CK_FALSE,
+#else
+    CKA_EXTRACTABLE,  sizeof(CK_BBOOL),        (uint8_t)CK_TRUE,
+#endif /* KEY_EXTRACTABLE */
+    CKA_LABEL,        4UL,                     0x5F45524CU /* 'LRE_' */
   }
 };
 
 #if defined(__GNUC__)
 __attribute__((section(".USER_embedded_Keys")))
 #endif
-static const kms_obj_keyhead_32_t   Lorawan_Nwk_Key =
+static const kms_obj_keyhead_27_t   Lorawan_Nwk_Key =
 {
   KMS_ABI_VERSION_CK_2_40,         /*  uint32_t version; */
   KMS_ABI_CONFIG_KEYHEAD,          /*  uint32_t configuration; */
-  128,                             /*  uint32_t blobs_size; */
-  9,                               /*  uint32_t blobs_count; */
+  108,                             /*  uint32_t blobs_size; */
+  8,                               /*  uint32_t blobs_count; */
   3,                               /*  uint32_t object_id; */
   {
-    CKA_KEY_TYPE,     sizeof(CK_KEY_TYPE),          CKK_AES,
-    CKA_VALUE,        16, FORMAT_KEY_32(LORAWAN_NWK_KEY),
-    CKA_ENCRYPT,      sizeof(CK_BBOOL), (uint8_t)CK_TRUE,
-    CKA_DECRYPT,      sizeof(CK_BBOOL), (uint8_t)CK_TRUE,
-    CKA_TOKEN,        sizeof(CK_BBOOL), (uint8_t)CK_TRUE,
-    CKA_COPYABLE,     sizeof(CK_BBOOL), (uint8_t)CK_FALSE,
-    CKA_EXTRACTABLE,  sizeof(CK_BBOOL), (uint8_t)CK_FALSE,
     CKA_CLASS,        sizeof(CK_OBJECT_CLASS), (uint8_t)CKO_SECRET_KEY,
-    CKA_LABEL,        12, 0x41524F4CU, 0x50595243U, 0x00383231U      /* 'LORA', 'CRYP', '128' */
+    CKA_KEY_TYPE,     sizeof(CK_KEY_TYPE),     CKK_AES,
+    CKA_VALUE,        16UL,                    FORMAT_KEY_32(LORAWAN_NWK_KEY),
+    CKA_ENCRYPT,      sizeof(CK_BBOOL),        (uint8_t)CK_FALSE,
+    CKA_DECRYPT,      sizeof(CK_BBOOL),        (uint8_t)CK_FALSE,
+    CKA_COPYABLE,     sizeof(CK_BBOOL),        (uint8_t)CK_FALSE,
+#if (!defined (KEY_EXTRACTABLE) || (KEY_EXTRACTABLE == 0))
+    CKA_EXTRACTABLE,  sizeof(CK_BBOOL),        (uint8_t)CK_FALSE,
+#else
+    CKA_EXTRACTABLE,  sizeof(CK_BBOOL),        (uint8_t)CK_TRUE,
+#endif /* KEY_EXTRACTABLE */
+    CKA_LABEL,        4UL,                     0x5F45524CU /* 'LRE_' */
   }
 };
 
 #if defined(__GNUC__)
 __attribute__((section(".USER_embedded_Keys")))
 #endif
-static const kms_obj_keyhead_32_t   Lorawan_Nwk_S_Key =
+static const kms_obj_keyhead_21_t   Lorawan_Nwk_S_Key =
 {
   KMS_ABI_VERSION_CK_2_40,         /*  uint32_t version; */
   KMS_ABI_CONFIG_KEYHEAD,          /*  uint32_t configuration; */
-  128,                             /*  uint32_t blobs_size; */
-  9,                               /*  uint32_t blobs_count; */
-  6,                               /*  uint32_t object_id; */
+  84,                              /*  uint32_t blobs_size; */
+  6,                               /*  uint32_t blobs_count; */
+  4,                               /*  uint32_t object_id; */
   {
-    CKA_KEY_TYPE,     sizeof(CK_KEY_TYPE),          CKK_AES,
-    CKA_VALUE,        16, FORMAT_KEY_32(LORAWAN_NWK_S_KEY),
-    CKA_ENCRYPT,      sizeof(CK_BBOOL), (uint8_t)CK_TRUE,
-    CKA_DECRYPT,      sizeof(CK_BBOOL), (uint8_t)CK_TRUE,
-    CKA_TOKEN,        sizeof(CK_BBOOL), (uint8_t)CK_TRUE,
-    CKA_COPYABLE,     sizeof(CK_BBOOL), (uint8_t)CK_FALSE,
-    CKA_EXTRACTABLE,  sizeof(CK_BBOOL), (uint8_t)CK_FALSE,
     CKA_CLASS,        sizeof(CK_OBJECT_CLASS), (uint8_t)CKO_SECRET_KEY,
-    CKA_LABEL,        12, 0x41524F4CU, 0x50595243U, 0x00383231U      /* 'LORA', 'CRYP', '128' */
+    CKA_KEY_TYPE,     sizeof(CK_KEY_TYPE),     CKK_AES,
+    CKA_VALUE,        16UL,                    FORMAT_KEY_32(LORAWAN_NWK_S_KEY),
+    CKA_COPYABLE,     sizeof(CK_BBOOL),        (uint8_t)CK_FALSE,
+#if (!defined (KEY_EXTRACTABLE) || (KEY_EXTRACTABLE == 0))
+    CKA_EXTRACTABLE,  sizeof(CK_BBOOL),        (uint8_t)CK_FALSE,
+#else
+    CKA_EXTRACTABLE,  sizeof(CK_BBOOL),        (uint8_t)CK_TRUE,
+#endif /* KEY_EXTRACTABLE */
+    CKA_LABEL,        4UL,                     0x5F45524CU /* 'LRE_' */
   }
 };
 
 #if defined(__GNUC__)
 __attribute__((section(".USER_embedded_Keys")))
 #endif
-static const kms_obj_keyhead_32_t   Lorawan_App_S_Key =
+static const kms_obj_keyhead_21_t   Lorawan_App_S_Key =
 {
   KMS_ABI_VERSION_CK_2_40,         /*  uint32_t version; */
   KMS_ABI_CONFIG_KEYHEAD,          /*  uint32_t configuration; */
-  128,                             /*  uint32_t blobs_size; */
-  9,                               /*  uint32_t blobs_count; */
-  7,                               /*  uint32_t object_id; */
+  84,                              /*  uint32_t blobs_size; */
+  6,                               /*  uint32_t blobs_count; */
+  5,                               /*  uint32_t object_id; */
   {
-    CKA_KEY_TYPE,     sizeof(CK_KEY_TYPE),          CKK_AES,
-    CKA_VALUE,        16, FORMAT_KEY_32(LORAWAN_APP_S_KEY),
-    CKA_ENCRYPT,      sizeof(CK_BBOOL), (uint8_t)CK_TRUE,
-    CKA_DECRYPT,      sizeof(CK_BBOOL), (uint8_t)CK_TRUE,
-    CKA_TOKEN,        sizeof(CK_BBOOL), (uint8_t)CK_TRUE,
-    CKA_COPYABLE,     sizeof(CK_BBOOL), (uint8_t)CK_FALSE,
-    CKA_EXTRACTABLE,  sizeof(CK_BBOOL), (uint8_t)CK_FALSE,
     CKA_CLASS,        sizeof(CK_OBJECT_CLASS), (uint8_t)CKO_SECRET_KEY,
-    CKA_LABEL,        12, 0x41524F4CU, 0x50595243U, 0x00383231U      /* 'LORA', 'CRYP', '128' */
+    CKA_KEY_TYPE,     sizeof(CK_KEY_TYPE),     CKK_AES,
+    CKA_VALUE,        16UL,                    FORMAT_KEY_32(LORAWAN_APP_S_KEY),
+    CKA_COPYABLE,     sizeof(CK_BBOOL),        (uint8_t)CK_FALSE,
+#if (!defined (KEY_EXTRACTABLE) || (KEY_EXTRACTABLE == 0))
+    CKA_EXTRACTABLE,  sizeof(CK_BBOOL),        (uint8_t)CK_FALSE,
+#else
+    CKA_EXTRACTABLE,  sizeof(CK_BBOOL),        (uint8_t)CK_TRUE,
+#endif /* KEY_EXTRACTABLE */
+    CKA_LABEL,        4UL,                     0x5F45524CU /* 'LRE_' */
   }
 };
 
@@ -218,6 +233,8 @@ static const kms_obj_keyhead_32_t   Lorawan_App_S_Key =
 #pragma default_variable_attributes =
 #elif defined(__CC_ARM)
 #pragma arm section code
+#elif defined(__GNUC__)
+#pragma GCC pop_options
 #endif
 /* USER CODE END KMS_PLATF_OBJECTS_CONFIG_Embedded_Objects_Definition */
 
@@ -232,11 +249,30 @@ const kms_obj_keyhead_t * const KMS_PlatfObjects_EmbeddedList[KMS_INDEX_MAX_EMBE
 {
 /* USER CODE BEGIN KMS_PlatfObjects_EmbeddedList */
   /* UserApp example keys */
+#if ( LORAMAC_CLASSB_ENABLED == 1 )
   (kms_obj_keyhead_t *) &Lorawan_Zero_Key,            /* Index = 1 */
+#else
+  (kms_obj_keyhead_t *) NULL,                         /* Index = 1 */
+#endif /* LORAMAC_CLASSB_ENABLED == 1 */
   (kms_obj_keyhead_t *) &Lorawan_App_Key,             /* Index = 2 */
   (kms_obj_keyhead_t *) &Lorawan_Nwk_Key,             /* Index = 3 */
   (kms_obj_keyhead_t *) &Lorawan_Nwk_S_Key,           /* Index = 4 */
   (kms_obj_keyhead_t *) &Lorawan_App_S_Key,           /* Index = 5 */
+  (kms_obj_keyhead_t *) NULL,       /* Index = 6 */
+  (kms_obj_keyhead_t *) NULL,       /* Index = 7 */
+  (kms_obj_keyhead_t *) NULL,       /* Index = 8 */
+  (kms_obj_keyhead_t *) NULL,       /* Index = 9 */
+  (kms_obj_keyhead_t *) NULL,       /* Index = 10 */
+  (kms_obj_keyhead_t *) NULL,       /* Index = 11 */
+  (kms_obj_keyhead_t *) NULL,       /* Index = 12 */
+  (kms_obj_keyhead_t *) NULL,       /* Index = 13 */
+  (kms_obj_keyhead_t *) NULL,       /* Index = 14 */
+  (kms_obj_keyhead_t *) NULL,       /* Index = 15 */
+  (kms_obj_keyhead_t *) NULL,       /* Index = 16 */
+  (kms_obj_keyhead_t *) NULL,       /* Index = 17 */
+  (kms_obj_keyhead_t *) NULL,       /* Index = 18 */
+  (kms_obj_keyhead_t *) NULL,       /* Index = 19 */
+  (kms_obj_keyhead_t *) NULL,       /* Index = 20 */
 /* USER CODE END KMS_PlatfObjects_EmbeddedList */
 };
 

@@ -14,7 +14,7 @@ LR_IROM1 0x08000000 0x00020000  {    ; load region size_region
    .ANY (+RW +ZI)
   }
   ; Backup SRAM2 dedicated to M4
-RW_IRAM2 0x20008000 0x00003000  {  ; to be modified accordingly to user project. Can be NoInit data for backup usage, RW, ZI region, etc...
+RW_IRAM2 0x20008000 0x00001000  {  ; to be modified accordingly to user project. Can be NoInit data for backup usage, RW, ZI region, etc...
     *(MAPPING_TABLE)
     *(MB_MEM1)
   }

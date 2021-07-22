@@ -1,5 +1,5 @@
 /*!
- * \file      se-identity_template.h
+ * \file      se-identity.h
  *
  * \brief     Secure Element identity and keys
  *
@@ -28,11 +28,12 @@
   *
   *          Portions COPYRIGHT 2020 STMicroelectronics
   *
-  * @file    se-identity_template.c
+  * @file    se-identity.h
   * @author  MCD Application Team
   * @brief   Secure Element identity and keys
   ******************************************************************************
   */
+
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __SOFT_SE_IDENTITY_H__
 #define __SOFT_SE_IDENTITY_H__
@@ -145,7 +146,7 @@ extern "C" {
 
 #if (USE_LRWAN_1_1_X_CRYPTO == 1)
 #define SESSION_KEYS_LIST                                                                                           \
-           {                                                                                                        \
+        {                                                                                                           \
             /*!                                                                                                     \
              * Join session integrity key (Dynamically updated)                                                     \
              * WARNING: NOT USED FOR 1.0.x DEVICES                                                                  \

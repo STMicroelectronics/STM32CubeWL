@@ -16,15 +16,15 @@
                 <debug>1</debug>
                 <option>
                     <name>ExePath</name>
-                    <state>SubGHz_Phy_PingPong\Exe</state>
+                    <state>SubGHz_Phy_PingPong/Exe</state>
                 </option>
                 <option>
                     <name>ObjPath</name>
-                    <state>SubGHz_Phy_PingPong\Obj</state>
+                    <state>SubGHz_Phy_PingPong/Obj</state>
                 </option>
                 <option>
                     <name>ListPath</name>
-                    <state>SubGHz_Phy_PingPong\List</state>
+                    <state>SubGHz_Phy_PingPong/List</state>
                 </option>
                 <option>
                     <name>GEndianMode</name>
@@ -32,11 +32,11 @@
                 </option>
                 <option>
                     <name>Input description</name>
-                    <state>Full formatting, with multibyte support.</state>
+                    <state>No specifier n, no float nor long long, no scan set, no assignment suppressing, with multibyte support.</state>
                 </option>
                 <option>
                     <name>Output description</name>
-                    <state>Full formatting, with multibyte support.</state>
+                    <state>No specifier a, A, no specifier n, no float nor long long, with multibyte support.</state>
                 </option>
                 <option>
                     <name>GOutputBinary</name>
@@ -108,7 +108,7 @@
                 <option>
                     <name>GeneralMisraRules04</name>
                     <version>0</version>
-                    <state>011111111111111110111111111111111111111111111010110100111111111111110111111111111111111111111111111111110111111011111111111111111111111111111</state>
+                    <state>011111111111111110111111111111011111111111111011110100111111111111111111111111111111111111111111101111111111111011111111111111111111111111111</state>
                 </option>
                 <option>
                     <name>RTConfigPath2</name>
@@ -219,9 +219,14 @@
                 <wantNonLocal>1</wantNonLocal>
                 <debug>1</debug>
                 <option>
+                    <name>CCOptimizationNoSizeConstraints</name>
+                    <state>0</state>
+                </option>
+                <option>
                     <name>CCDefines</name>
-                    <state>STM32WL55xx</state>
                     <state>CORE_CM4</state>
+                    <state>USE_HAL_DRIVER</state>
+                    <state>STM32WL55xx</state>
                 </option>
                 <option>
                     <name>CCPreprocFile</name>
@@ -349,17 +354,18 @@
                     <state>$PROJ_DIR$/../Core/Inc</state>
                     <state>$PROJ_DIR$/../SubGHz_Phy/App</state>
                     <state>$PROJ_DIR$/../SubGHz_Phy/Target</state>
+                    <state>$PROJ_DIR$/../../../../../../Utilities/trace/adv_trace</state>
                     <state>$PROJ_DIR$/../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc</state>
-                    <state>$PROJ_DIR$/../../../../../../Drivers/BSP/STM32WLxx_Nucleo</state>
-                    <state>$PROJ_DIR$/../../../../../../Drivers/CMSIS/Include</state>
-                    <state>$PROJ_DIR$/../../../../../../Drivers/CMSIS/Device/ST/STM32WLxx/Include</state>
-                    <state>$PROJ_DIR$/../../../../../../Middlewares/Third_Party/SubGHz_Phy</state>
-                    <state>$PROJ_DIR$/../../../../../../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver</state>
-                    <state>$PROJ_DIR$/../../../../../../Utilities/lpm/tiny_lpm</state>
+                    <state>$PROJ_DIR$/../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc/Legacy</state>
                     <state>$PROJ_DIR$/../../../../../../Utilities/misc</state>
                     <state>$PROJ_DIR$/../../../../../../Utilities/sequencer</state>
                     <state>$PROJ_DIR$/../../../../../../Utilities/timer</state>
-                    <state>$PROJ_DIR$/../../../../../../Utilities/trace/adv_trace</state>
+                    <state>$PROJ_DIR$/../../../../../../Utilities/lpm/tiny_lpm</state>
+                    <state>$PROJ_DIR$/../../../../../../Middlewares/Third_Party/SubGHz_Phy</state>
+                    <state>$PROJ_DIR$/../../../../../../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver</state>
+                    <state>$PROJ_DIR$/../../../../../../Drivers/CMSIS/Device/ST/STM32WLxx/Include</state>
+                    <state>$PROJ_DIR$/../../../../../../Drivers/CMSIS/Include</state>
+                    <state>$PROJ_DIR$/../../../../../../Drivers/BSP/STM32WLxx_Nucleo</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -422,11 +428,11 @@
                 </option>
                 <option>
                     <name>IccStaticDestr</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>IccCppInlineSemantics</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>IccCmsis</name>
@@ -434,10 +440,6 @@
                 </option>
                 <option>
                     <name>IccFloatSemantics</name>
-                    <state>0</state>
-                </option>
-                <option>
-                    <name>CCOptimizationNoSizeConstraints</name>
                     <state>0</state>
                 </option>
                 <option>
@@ -778,7 +780,7 @@
                 </option>
                 <option>
                     <name>IlinkIcfFile</name>
-                    <state>$PROJ_DIR$\stm32wl55xx_flash_cm4.icf</state>
+                    <state>$PROJ_DIR$/stm32wl55xx_flash_cm4.icf</state>
                 </option>
                 <option>
                     <name>IlinkIcfFileSlave</name>
@@ -1045,67 +1047,70 @@
     <group>
         <name>Application</name>
         <group>
-            <name>App</name>
-            <file>
-                <name>$PROJ_DIR$\..\SubGHz_Phy\App\app_subghz_phy.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\SubGHz_Phy\App\subghz_phy_app.c</name>
-            </file>
-        </group>
-        <group>
-            <name>Core</name>
-            <file>
-                <name>$PROJ_DIR$\..\Core\Src\board_resources.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\Core\Src\dma.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\Core\Src\main.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\Core\Src\rtc.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\Core\Src\timer_if.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\Core\Src\stm32_lpm_if.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\Core\Src\stm32wlxx_hal_msp.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\Core\Src\stm32wlxx_it.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\Core\Src\subghz.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\Core\Src\sys_app.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\Core\Src\sys_debug.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\Core\Src\usart.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\Core\Src\usart_if.c</name>
-            </file>
-        </group>
-        <group>
             <name>EWARM</name>
             <file>
                 <name>$PROJ_DIR$\startup_stm32wl55xx_cm4.s</name>
             </file>
         </group>
         <group>
-            <name>Target</name>
-            <file>
-                <name>$PROJ_DIR$\..\SubGHz_Phy\Target\radio_board_if.c</name>
-            </file>
+            <name>User</name>
+            <group>
+                <name>Core</name>
+                <file>
+                    <name>$PROJ_DIR$\..\Core\Src\dma.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\Core\Src\main.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\Core\Src\rtc.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\Core\Src\stm32_lpm_if.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\Core\Src\stm32wlxx_hal_msp.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\Core\Src\stm32wlxx_it.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\Core\Src\subghz.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\Core\Src\sys_app.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\Core\Src\sys_debug.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\Core\Src\timer_if.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\Core\Src\usart.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\Core\Src\usart_if.c</name>
+                </file>
+            </group>
+            <group>
+                <name>SubGHz_Phy</name>
+                <group>
+                    <name>App</name>
+                    <file>
+                        <name>$PROJ_DIR$\..\SubGHz_Phy\App\app_subghz_phy.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\SubGHz_Phy\App\subghz_phy_app.c</name>
+                    </file>
+                </group>
+                <group>
+                    <name>Target</name>
+                    <file>
+                        <name>$PROJ_DIR$\..\SubGHz_Phy\Target\radio_board_if.c</name>
+                    </file>
+                </group>
+            </group>
         </group>
     </group>
     <group>
@@ -1118,9 +1123,6 @@
         <name>Drivers</name>
         <group>
             <name>BSP</name>
-            <excluded>
-                <configuration>SubGHz_Phy_PingPong</configuration>
-            </excluded>
             <group>
                 <name>STM32WLxx_Nucleo</name>
                 <file>
@@ -1141,12 +1143,6 @@
             <name>STM32WLxx_HAL_Driver</name>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_adc.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_adc_ex.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_cortex.c</name>
@@ -1191,6 +1187,12 @@
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_subghz.c</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_tim.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_tim_ex.c</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_uart.c</name>
             </file>
             <file>
@@ -1207,6 +1209,9 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\SubGHz_Phy\stm32_radio_driver\radio_driver.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\SubGHz_Phy\stm32_radio_driver\radio_fw.c</name>
             </file>
         </group>
     </group>
@@ -1229,6 +1234,9 @@
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\..\..\..\Utilities\timer\stm32_timer.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\..\Utilities\misc\stm32_tiny_sscanf.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\..\..\..\..\Utilities\misc\stm32_tiny_vsnprintf.c</name>

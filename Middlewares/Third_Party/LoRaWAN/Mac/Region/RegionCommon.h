@@ -34,6 +34,16 @@
  *            Region independent implementations which are common to all regions.
  * \{
  */
+/**
+  ******************************************************************************
+  *
+  *          Portions COPYRIGHT 2020 STMicroelectronics
+  *
+  * @file    RegionCommon.h
+  * @author  MCD Application Team
+  * @brief   Region independent implementations which are common to all regions.
+  ******************************************************************************
+  */
 #ifndef __REGIONCOMMON_H__
 #define __REGIONCOMMON_H__
 
@@ -45,6 +55,64 @@ extern "C"
 #include "LoRaMacTypes.h"
 #include "LoRaMacHeaderTypes.h"
 #include "Region.h"
+
+// Constants that are common to all the regions.
+
+/*!
+ * Receive delay of 1 second.
+ */
+#define REGION_COMMON_DEFAULT_RECEIVE_DELAY1            1000
+
+/*!
+ * Receive delay of 2 seconds.
+ */
+#define REGION_COMMON_DEFAULT_RECEIVE_DELAY2            ( REGION_COMMON_DEFAULT_RECEIVE_DELAY1 + 1000 )
+
+/*!
+ * Join accept delay of 5 seconds.
+ */
+#define REGION_COMMON_DEFAULT_JOIN_ACCEPT_DELAY1        5000
+
+/*!
+ * Join accept delay of 6 seconds.
+ */
+#define REGION_COMMON_DEFAULT_JOIN_ACCEPT_DELAY2        ( REGION_COMMON_DEFAULT_JOIN_ACCEPT_DELAY1 + 1000 )
+
+/*!
+ * ADR ack limit.
+ */
+#define REGION_COMMON_DEFAULT_ADR_ACK_LIMIT             64
+
+/*!
+ * ADR ack delay.
+ */
+#define REGION_COMMON_DEFAULT_ADR_ACK_DELAY             32
+
+/*!
+ * Maximum frame counter gap
+ */
+#define REGION_COMMON_DEFAULT_MAX_FCNT_GAP              16384
+
+/*!
+ * Retransmission timeout for ACK in milliseconds.
+ */
+#define REGION_COMMON_DEFAULT_ACK_TIMEOUT               2000
+
+/*!
+ * Rounding limit for generating random retransmission timeout for ACK.
+ * In milliseconds.
+ */
+#define REGION_COMMON_DEFAULT_ACK_TIMEOUT_RND           1000
+
+/*!
+ * Default Rx1 receive datarate offset
+ */
+#define REGION_COMMON_DEFAULT_RX1_DR_OFFSET             0
+
+/*!
+ * Default downlink dwell time configuration
+ */
+#define REGION_COMMON_DEFAULT_DOWNLINK_DWELL_TIME       0
 
 /*!
  * Default ping slots periodicity
@@ -205,9 +273,11 @@ typedef struct sRegionCommonCountNbOfEnabledChannelsParams
      */
     uint16_t MaxNbChannels;
     /*!
-     * A bitmask containing the join channels.
+     * A pointer to the bitmask containing the
+     * join channels. Shall have the same dimension as the
+     * ChannelsMask with a number of MaxNbChannels channels.
      */
-    uint16_t JoinChannels;
+    uint16_t* JoinChannels;
 }RegionCommonCountNbOfEnabledChannelsParams_t;
 
 typedef struct sRegionCommonIdentifyChannelsParam
@@ -262,15 +332,15 @@ typedef struct sRegionCommonSetDutyCycleParams
     Band_t* Bands;
 }RegionCommonSetDutyCycleParams_t;
 
-/*!
- * \brief Calculates the join duty cycle.
- *        This is a generic function and valid for all regions.
- *
- * \param [IN] elapsedTime Elapsed time since the start of the device.
- *
- * \retval Duty cycle restriction.
- */
-uint16_t RegionCommonGetJoinDc( SysTime_t elapsedTime );
+typedef struct sRegionCommonGetNextLowerTxDrParams
+{
+    int8_t CurrentDr;
+    int8_t MaxDr;
+    int8_t MinDr;
+    uint8_t NbChannels;
+    uint16_t* ChannelsMask;
+    ChannelParams_t* Channels;
+}RegionCommonGetNextLowerTxDrParams_t;
 
 /*!
  * \brief Verifies, if a value is in a given range.
@@ -423,38 +493,36 @@ uint8_t RegionCommonLinkAdrReqVerifyParams( RegionCommonLinkAdrReqVerifyParams_t
  *
  * \param [IN] bandwidth Bandwidth to use.
  *
- * \retval Returns the symbol time in us.
+ * \retval Returns the symbol time in microseconds.
  */
-uint32_t RegionCommonComputeSymbolTimeLoRa( uint8_t phyDr, uint32_t bandwidth );
+uint32_t RegionCommonComputeSymbolTimeLoRa( uint8_t phyDr, uint32_t bandwidthInHz );
 
 /*!
  * \brief Computes the symbol time for FSK modulation.
  *
  * \param [IN] phyDr Physical datarate to use.
  *
- * \param [IN] bandwidth Bandwidth to use.
- *
- * \retval Returns the symbol time in us.
+ * \retval Returns the symbol time in microseconds.
  */
-uint32_t RegionCommonComputeSymbolTimeFsk( uint8_t phyDr );
+uint32_t RegionCommonComputeSymbolTimeFsk( uint8_t phyDrInKbps );
 
 /*!
  * \brief Computes the RX window timeout and the RX window offset.
  *
- * \param [IN] tSymbol Symbol timeout.
+ * \param [IN] tSymbolInUs Symbol timeout.
  *
  * \param [IN] minRxSymbols Minimum required number of symbols to detect an Rx frame.
  *
- * \param [IN] rxError System maximum timing error of the receiver. In milliseconds
- *                     The receiver will turn on in a [-rxError : +rxError] ms interval around RxOffset.
+ * \param [IN] rxErrorInMs System maximum timing error of the receiver. In milliseconds
+ *                     The receiver will turn on in a [-rxErrorInMs : +rxErrorInMs] ms interval around RxOffset.
  *
- * \param [IN] wakeUpTime Wakeup time of the system.
+ * \param [IN] wakeUpTimeInMs Wakeup time of the system.
  *
- * \param [OUT] windowTimeout RX window timeout.
+ * \param [OUT] windowTimeoutInSymbols RX window timeout.
  *
- * \param [OUT] windowOffset RX window time offset to be applied to the RX delay.
+ * \param [OUT] windowOffsetInMs RX window time offset to be applied to the RX delay.
  */
-void RegionCommonComputeRxWindowParameters( uint32_t tSymbol, uint8_t minRxSymbols, uint32_t rxError, uint32_t wakeUpTime, uint32_t* windowTimeout, int32_t* windowOffset );
+void RegionCommonComputeRxWindowParameters( uint32_t tSymbolInUs, uint8_t minRxSymbols, uint32_t rxErrorInMs, uint32_t wakeUpTimeInMs, uint32_t* windowTimeoutInSymbols, int32_t* windowOffsetInMs );
 
 /*!
  * \brief Computes the txPower, based on the max EIRP and the antenna gain.
@@ -523,6 +591,38 @@ LoRaMacStatus_t RegionCommonIdentifyChannels( RegionCommonIdentifyChannelsParam_
                                               TimerTime_t* nextTxDelay );
 
 /*!
+ * \brief Selects the next lower datarate.
+ *
+ * \param [IN] params Data structure providing parameters based on \ref RegionCommonGetNextLowerTxDrParams_t
+ *
+ * \retval The next lower datarate.
+ */
+int8_t RegionCommonGetNextLowerTxDr( RegionCommonGetNextLowerTxDrParams_t *params );
+
+/*!
+ * \brief Limits the TX power.
+ *
+ * \param [IN] txPower Current TX power.
+ *
+ * \param [IN] maxBandTxPower Maximum possible TX power.
+ *
+ * \retval Limited TX power.
+ */
+int8_t RegionCommonLimitTxPower( int8_t txPower, int8_t maxBandTxPower );
+
+/*!
+ * \brief Gets the bandwidth.
+ *
+ * \param [IN] drIndex Datarate index.
+ *
+ * \param [IN] bandwidths A pointer to the bandwidth table.
+ *
+ * \retval Bandwidth.
+ */
+uint32_t RegionCommonGetBandwidth( uint32_t drIndex, const uint32_t* bandwidths );
+
+/* ST_WORKAROUND_BEGIN: Print Tx/Rx config */
+/*!
  * \brief Print the current RX configuration
  *
  * \param [IN] rxSlot rx slot
@@ -545,7 +645,7 @@ void RegionCommonRxConfigPrint(LoRaMacRxSlot_t rxSlot,
  *
  */
 void RegionCommonTxConfigPrint(uint32_t frequency, int8_t dr);
-
+/* ST_WORKAROUND_END */
 /*! \} defgroup REGIONCOMMON */
 
 #ifdef __cplusplus

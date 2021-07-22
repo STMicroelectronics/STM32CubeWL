@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    subghz_phy_app.h
@@ -16,6 +17,8 @@
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
+
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __SUBGHZ_PHY_APP_H__
 #define __SUBGHZ_PHY_APP_H__
@@ -100,7 +103,6 @@ extern "C" {
 #define FSK_FDEV                                    25000     /* Hz */
 #define FSK_DATARATE                                50000     /* bps */
 #define FSK_BANDWIDTH                               50000     /* Hz */
-#define FSK_AFC_BANDWIDTH                           83333     /* Hz */
 #define FSK_PREAMBLE_LENGTH                         5         /* Same for Tx and Rx */
 #define FSK_FIX_LENGTH_PAYLOAD_ON                   false
 
@@ -108,12 +110,7 @@ extern "C" {
 #error "Please define a modem in the compiler subghz_phy_app.h."
 #endif /* USE_MODEM_LORA | USE_MODEM_FSK */
 
-#define RX_TIMEOUT_VALUE                            2000
-#define TX_TIMEOUT_VALUE                            3000
-#define BUFFER_SIZE                                 64  /* Define the payload size here */
-#define LED_PERIOD_MS                               200
-
-#define TCXO_WORKAROUND_TIME_MARGIN                 50  /* 50ms margin */
+#define PAYLOAD_LEN                                 64
 
 /* USER CODE BEGIN EC */
 
@@ -130,15 +127,8 @@ extern "C" {
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
-/* USER CODE BEGIN EFP */
-
-/* USER CODE END EFP */
-
-/* Exported functions prototypes ---------------------------------------------*/
 /**
   * @brief  Init Subghz Application
-  * @param None
-  * @retval None
   */
 void SubghzApp_Init(void);
 

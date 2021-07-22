@@ -1,9 +1,9 @@
 /**
   @page Sigfox_AT_Slave_DualCore Readme file
- 
+
   @verbatim
   ******************** (C) COPYRIGHT 2020 STMicroelectronics *******************
-  * @file    Applications/Sigfox/Sigfox_AT_Slave_DualCore/readme.txt 
+  * @file    Applications/Sigfox/Sigfox_AT_Slave_DualCore/readme.txt
   * @author  MCD Application Team
   * @brief   This application is a simple demo application software of a Sigfox
   *          modem controlled though AT command interface over UART by an
@@ -37,13 +37,13 @@ This application is targeting the NUCLEO-WL55JC1 (HIGH-BAND) embedding the STM32
 
 Applications, SubGHz_Phy, Sigfox, AT_Slave, DualCore
 
-@par Directory contents 
+@par Directory contents
 
 
   - Sigfox_AT_Slave_DualCore/CM0PLUS/Core/Inc/ca_conf.h                         This file contains configuration for Cryptographic API (CA)
                                                                                 module functionalities.
   - Sigfox_AT_Slave_DualCore/CM0PLUS/Core/Inc/ca_low_level.h                    This file contains the low level definitions of the Cryptographic API (CA) module.
-  - Sigfox_AT_Slave_DualCore/CM0PLUS/Core/Inc/flash_if.h                        This file provides interface to low level driver
+  - Sigfox_AT_Slave_DualCore/CM0PLUS/Core/Inc/flash_if.h                        This file contains definitions for FLASH Interface functionalities.
   - Sigfox_AT_Slave_DualCore/CM0PLUS/Core/Inc/ipcc.h                            This file contains all the function prototypes for
                                                                                 the ipcc.c file
   - Sigfox_AT_Slave_DualCore/CM0PLUS/Core/Inc/ipcc_if.h                         This file contains the interface of the ipcc driver on CM0PLUS.
@@ -81,11 +81,10 @@ Applications, SubGHz_Phy, Sigfox, AT_Slave, DualCore
   - Sigfox_AT_Slave_DualCore/CM0PLUS/Core/Inc/utilities_def.h                   Definitions for modules requiring utilities
   - Sigfox_AT_Slave_DualCore/CM0PLUS/KMS/App/app_kms.h                          !!! No description found !!!
   - Sigfox_AT_Slave_DualCore/CM0PLUS/MbMux/mbmux.h                              API which interfaces CM0PLUS to IPCC
-  - Sigfox_AT_Slave_DualCore/CM0PLUS/MbMux/mbmuxif_kms.h                        Interface layer CM4 Kms to MBMUX (Mailbox Multiplexer)
-  - Sigfox_AT_Slave_DualCore/CM0PLUS/MbMux/mbmuxif_radio.h                      API for CM0PLUS applic to register and handle RADIO driver via MBMUX
-  - Sigfox_AT_Slave_DualCore/CM0PLUS/MbMux/mbmuxif_sigfox.h                     API provided to CM0 appli to register and handle Sigfox to MBMUX
-  - Sigfox_AT_Slave_DualCore/CM0PLUS/MbMux/mbmuxif_sys.h                        API for CM0PLUS applic to handle the SYSTEM MBMUX channel
-  - Sigfox_AT_Slave_DualCore/CM0PLUS/MbMux/mbmuxif_trace.h                      API for CM0PLUS applic to register and handle TRACE via MBMUX
+  - Sigfox_AT_Slave_DualCore/CM0PLUS/MbMux/mbmuxif_radio.h                      API for CM0PLUS application to register and handle RADIO driver via MBMUX
+  - Sigfox_AT_Slave_DualCore/CM0PLUS/MbMux/mbmuxif_sigfox.h                     API provided to CM0 application to register and handle Sigfox to MBMUX
+  - Sigfox_AT_Slave_DualCore/CM0PLUS/MbMux/mbmuxif_sys.h                        API for CM0PLUS application to handle the SYSTEM MBMUX channel
+  - Sigfox_AT_Slave_DualCore/CM0PLUS/MbMux/mbmuxif_trace.h                      API for CM0PLUS application to register and handle TRACE via MBMUX
   - Sigfox_AT_Slave_DualCore/CM0PLUS/MbMux/radio_mbwrapper.h                    This file implements the CM0PLUS side wrapper of the Radio interface
                                                                                 shared between M0 and M4.
   - Sigfox_AT_Slave_DualCore/CM0PLUS/MbMux/sigfox_mbwrapper.h                   This file implements the CM0 side wrapper of the SigfoxMac interface
@@ -96,7 +95,7 @@ Applications, SubGHz_Phy, Sigfox, AT_Slave, DualCore
   - Sigfox_AT_Slave_DualCore/CM0PLUS/Sigfox/App/sgfx_cstimer.h                  Interface for  cstimer.c driver
   - Sigfox_AT_Slave_DualCore/CM0PLUS/Sigfox/App/sgfx_eeprom_if.h                eeprom interface to the upper module.
   - Sigfox_AT_Slave_DualCore/CM0PLUS/Sigfox/App/sigfox_data.h                   provides encrypted data
-  - Sigfox_AT_Slave_DualCore/CM0PLUS/Sigfox/Target/mcu_api.h                    defines the interfaace to mcu_api.c
+  - Sigfox_AT_Slave_DualCore/CM0PLUS/Sigfox/Target/mcu_api.h                    defines the interface to mcu_api.c
   - Sigfox_AT_Slave_DualCore/CM0PLUS/Sigfox/Target/mn_api.h                     monarch library interface
   - Sigfox_AT_Slave_DualCore/CM0PLUS/Sigfox/Target/mw_log_conf.h                Configure (enable/disable) traces for CM0
   - Sigfox_AT_Slave_DualCore/CM0PLUS/Sigfox/Target/radio_board_if.h             Header for Radio interface configuration
@@ -128,11 +127,10 @@ Applications, SubGHz_Phy, Sigfox, AT_Slave, DualCore
   - Sigfox_AT_Slave_DualCore/CM4/Core/Inc/utilities_conf.h                      Header for configuration file to utilities
   - Sigfox_AT_Slave_DualCore/CM4/Core/Inc/utilities_def.h                       Definitions for modules requiring utilities
   - Sigfox_AT_Slave_DualCore/CM4/MbMux/mbmux.h                                  API which interfaces CM4 to IPCC
-  - Sigfox_AT_Slave_DualCore/CM4/MbMux/mbmuxif_kms.h                            Interface layer CM4 Kms to MBMUX (Mailbox Multiplexer)
-  - Sigfox_AT_Slave_DualCore/CM4/MbMux/mbmuxif_radio.h                          API for CM4 applic to register and handle RADIO driver via MBMUX
-  - Sigfox_AT_Slave_DualCore/CM4/MbMux/mbmuxif_sigfox.h                         API provided to CM0 appli to register and handle Sigfox to MBMUX
-  - Sigfox_AT_Slave_DualCore/CM4/MbMux/mbmuxif_sys.h                            API for CM4 applic to handle the SYSTEM MBMUX channel
-  - Sigfox_AT_Slave_DualCore/CM4/MbMux/mbmuxif_trace.h                          API for CM4 applic to register and handle TRACE via MBMUX
+  - Sigfox_AT_Slave_DualCore/CM4/MbMux/mbmuxif_radio.h                          API for CM4 application to register and handle RADIO driver via MBMUX
+  - Sigfox_AT_Slave_DualCore/CM4/MbMux/mbmuxif_sigfox.h                         API provided to CM0 application to register and handle Sigfox to MBMUX
+  - Sigfox_AT_Slave_DualCore/CM4/MbMux/mbmuxif_sys.h                            API for CM4 application to handle the SYSTEM MBMUX channel
+  - Sigfox_AT_Slave_DualCore/CM4/MbMux/mbmuxif_trace.h                          API for CM4 application to register and handle TRACE via MBMUX
   - Sigfox_AT_Slave_DualCore/CM4/MbMux/radio_mbwrapper.h                        This file implements the CM4 side wrapper of the Radio interface
                                                                                 shared between M0 and M4.
   - Sigfox_AT_Slave_DualCore/CM4/MbMux/sigfox_mbwrapper.h                       This file implements the CM0 side wrapper of the SigfoxMac interface
@@ -146,7 +144,6 @@ Applications, SubGHz_Phy, Sigfox, AT_Slave, DualCore
   - Sigfox_AT_Slave_DualCore/CM4/Sigfox/App/sgfx_command.h                      Header for sgfx_command.c
   - Sigfox_AT_Slave_DualCore/CM4/Sigfox/App/sgfx_eeprom_if.h                    eeprom interface to the upper module.
   - Sigfox_AT_Slave_DualCore/CM4/Sigfox/Target/se_nvm.h                         header to emulated SE nvm data
-  - Sigfox_AT_Slave_DualCore/Common/Board/board_resources.h                     Header for driver at.c module
   - Sigfox_AT_Slave_DualCore/Common/Board/stm32wlxx_nucleo_conf.h               STM32WLxx_Nucleo board configuration file.
   - Sigfox_AT_Slave_DualCore/Common/MbMux/features_info.h                       Feature list and parameters TypeDefinitions
   - Sigfox_AT_Slave_DualCore/Common/MbMux/mbmux_table.h                         Maps the IPCC channels to memory buffers
@@ -155,10 +152,11 @@ Applications, SubGHz_Phy, Sigfox, AT_Slave, DualCore
   - Sigfox_AT_Slave_DualCore/Common/System/sys_debug.h                          Configuration of the debug.c instances
 
   - Sigfox_AT_Slave_DualCore/CM0PLUS/Core/Src/ca_low_level.c                    This file contains the low level implementations of the Cryptographic API (CA) module.
-  - Sigfox_AT_Slave_DualCore/CM0PLUS/Core/Src/flash_if.c                        This file contains the FLASH driver
+  - Sigfox_AT_Slave_DualCore/CM0PLUS/Core/Src/flash_if.c                        This file provides set of firmware functions to manage Flash
+                                                                                Interface functionalities.
   - Sigfox_AT_Slave_DualCore/CM0PLUS/Core/Src/ipcc.c                            This file provides code for the configuration
                                                                                 of the IPCC instances.
-  - Sigfox_AT_Slave_DualCore/CM0PLUS/Core/Src/ipcc_if.c                         Interface to IPCC: handles IRQs and abstract appl from Ipcc handler and ch direction
+  - Sigfox_AT_Slave_DualCore/CM0PLUS/Core/Src/ipcc_if.c                         Interface to IPCC: handles IRQs and abstract application from Ipcc handler and channel direction
   - Sigfox_AT_Slave_DualCore/CM0PLUS/Core/Src/kms_low_level.c                   This file contains implementations for Key Management Services (KMS)
                                                                                 module Low Level access to Flash, CRC...
   - Sigfox_AT_Slave_DualCore/CM0PLUS/Core/Src/lptim.c                           This file provides code for the configuration
@@ -169,6 +167,8 @@ Applications, SubGHz_Phy, Sigfox, AT_Slave, DualCore
                                                                                 module NVM Low Level access to physical storage (Flash...)
   - Sigfox_AT_Slave_DualCore/CM0PLUS/Core/Src/rtc.c                             This file provides code for the configuration
                                                                                 of the RTC instances.
+  - Sigfox_AT_Slave_DualCore/CM0PLUS/Core/Src/stm32wlxx_hal_msp.c               This file provides code for the MSP Initialization
+                                                                                and de-Initialization codes.
   - Sigfox_AT_Slave_DualCore/CM0PLUS/Core/Src/stm32wlxx_it.c                    Interrupt Service Routines.
   - Sigfox_AT_Slave_DualCore/CM0PLUS/Core/Src/stm32_lpm_if.c                    Low layer function to enter/exit low power modes (stop, sleep)
   - Sigfox_AT_Slave_DualCore/CM0PLUS/Core/Src/subghz.c                          This file provides code for the configuration
@@ -178,10 +178,9 @@ Applications, SubGHz_Phy, Sigfox, AT_Slave, DualCore
   - Sigfox_AT_Slave_DualCore/CM0PLUS/KMS/App/app_kms.c                          !!! No description found !!!
   - Sigfox_AT_Slave_DualCore/CM0PLUS/MbMux/features_info.c                      CM0PLUS supported features list
   - Sigfox_AT_Slave_DualCore/CM0PLUS/MbMux/mbmux.c                              Interface CPU2 to IPCC: multiplexer to map features to IPCC channels
-  - Sigfox_AT_Slave_DualCore/CM0PLUS/MbMux/mbmuxif_kms.c                        Interface layer CM0PLUS Kms to MBMUX (Mailbox Multiplexer)
-  - Sigfox_AT_Slave_DualCore/CM0PLUS/MbMux/mbmuxif_radio.c                      allows CM0PLUS applic to register and handle RADIO driver via MBMUX
-  - Sigfox_AT_Slave_DualCore/CM0PLUS/MbMux/mbmuxif_sigfox.c                     allows CM0PLUS applic to register and handle Sigfox to MBMUX
-  - Sigfox_AT_Slave_DualCore/CM0PLUS/MbMux/mbmuxif_sys.c                        allows CM0 applic to handle the SYSTEM MBMUX channel
+  - Sigfox_AT_Slave_DualCore/CM0PLUS/MbMux/mbmuxif_radio.c                      allows CM0PLUS application to register and handle RADIO driver via MBMUX
+  - Sigfox_AT_Slave_DualCore/CM0PLUS/MbMux/mbmuxif_sigfox.c                     allows CM0PLUS application to register and handle Sigfox to MBMUX
+  - Sigfox_AT_Slave_DualCore/CM0PLUS/MbMux/mbmuxif_sys.c                        allows CM0 application to handle the SYSTEM MBMUX channel
   - Sigfox_AT_Slave_DualCore/CM0PLUS/MbMux/mbmuxif_trace.c                      Interface layer CM0PLUS Trace to MBMUX (Mailbox Multiplexer)
   - Sigfox_AT_Slave_DualCore/CM0PLUS/MbMux/radio_mbwrapper.c                    This file implements the CM0 side wrapper of the Radio interface
                                                                                 shared between M0 and M4.
@@ -205,7 +204,7 @@ Applications, SubGHz_Phy, Sigfox, AT_Slave, DualCore
                                                                                 of all the requested memory to memory DMA transfers.
   - Sigfox_AT_Slave_DualCore/CM4/Core/Src/ipcc.c                                This file provides code for the configuration
                                                                                 of the IPCC instances.
-  - Sigfox_AT_Slave_DualCore/CM4/Core/Src/ipcc_if.c                             Interface to IPCC: handles IRQs and abstract appl from Ipcc handler and ch direction
+  - Sigfox_AT_Slave_DualCore/CM4/Core/Src/ipcc_if.c                             Interface to IPCC: handles IRQs and abstract application from Ipcc handler and channel direction
   - Sigfox_AT_Slave_DualCore/CM4/Core/Src/main.c                                : Main program body
   - Sigfox_AT_Slave_DualCore/CM4/Core/Src/stm32wlxx_hal_msp.c                   This file provides code for the MSP Initialization
                                                                                 and de-Initialization codes.
@@ -215,44 +214,44 @@ Applications, SubGHz_Phy, Sigfox, AT_Slave, DualCore
   - Sigfox_AT_Slave_DualCore/CM4/Core/Src/timer_if.c                            Configure RTC Alarm, Tick and Calendar manager
   - Sigfox_AT_Slave_DualCore/CM4/Core/Src/usart.c                               This file provides code for the configuration
                                                                                 of the USART instances.
-  - Sigfox_AT_Slave_DualCore/CM4/Core/Src/usart_if.c                            Configuration of UART MX driver interface for hyperterminal communication
+  - Sigfox_AT_Slave_DualCore/CM4/Core/Src/usart_if.c                            Configuration of UART driver interface for hyperterminal communication
   - Sigfox_AT_Slave_DualCore/CM4/MbMux/mbmux.c                                  CM4 side multiplexer to map features to IPCC channels
-  - Sigfox_AT_Slave_DualCore/CM4/MbMux/mbmuxif_kms.c                            Interface layer CM4 Kms to MBMUX (Mailbox Multiplexer)
-  - Sigfox_AT_Slave_DualCore/CM4/MbMux/mbmuxif_radio.c                          allows CM4 applic to register and handle RADIO driver via MBMUX
-  - Sigfox_AT_Slave_DualCore/CM4/MbMux/mbmuxif_sigfox.c                         allows CM4 applic to register and handle SigfoxWAN via MBMUX
-  - Sigfox_AT_Slave_DualCore/CM4/MbMux/mbmuxif_sys.c                            allows CM4 applic to handle the SYSTEM MBMUX channel.
-  - Sigfox_AT_Slave_DualCore/CM4/MbMux/mbmuxif_trace.c                          allows CM4 applic to receive by CM0 TRACE via MBMUX
+  - Sigfox_AT_Slave_DualCore/CM4/MbMux/mbmuxif_radio.c                          allows CM4 application to register and handle RADIO driver via MBMUX
+  - Sigfox_AT_Slave_DualCore/CM4/MbMux/mbmuxif_sigfox.c                         allows CM4 application to register and handle SigfoxWAN via MBMUX
+  - Sigfox_AT_Slave_DualCore/CM4/MbMux/mbmuxif_sys.c                            allows CM4 application to handle the SYSTEM MBMUX channel.
+  - Sigfox_AT_Slave_DualCore/CM4/MbMux/mbmuxif_trace.c                          allows CM4 application to receive by CM0 TRACE via MBMUX
   - Sigfox_AT_Slave_DualCore/CM4/MbMux/radio_mbwrapper.c                        This file implements the CM4 side wrapper of the Radio interface
                                                                                 shared between M0 and M4.
   - Sigfox_AT_Slave_DualCore/CM4/MbMux/sigfox_mbwrapper.c                       This file implements the CM4 side wrapper of the Sigfox interface
                                                                                 shared between M0 and M4.
-  - Sigfox_AT_Slave_DualCore/CM4/MbMux/system_mbwrapper.c                       allows CM4 applic to handle the SYSTEM MBMUX channel.
+  - Sigfox_AT_Slave_DualCore/CM4/MbMux/system_mbwrapper.c                       allows CM4 application to handle the SYSTEM MBMUX channel.
   - Sigfox_AT_Slave_DualCore/CM4/Sigfox/App/app_sigfox.c                        Application of the Sigfox Middleware
   - Sigfox_AT_Slave_DualCore/CM4/Sigfox/App/sgfx_app.c                          provides code for the application of the sigfox Middleware
   - Sigfox_AT_Slave_DualCore/CM4/Sigfox/App/sgfx_at.c                           Header for driver sgfx_at.c module
   - Sigfox_AT_Slave_DualCore/CM4/Sigfox/App/sgfx_command.c                      main command driver dedicated to command AT
   - Sigfox_AT_Slave_DualCore/CM4/Sigfox/App/sgfx_eeprom_if.c                    eeprom interface to the sigfox component
-  - Sigfox_AT_Slave_DualCore/Common/Board/board_resources.c                     Source file
   - Sigfox_AT_Slave_DualCore/Common/System/system_stm32wlxx.c                   CMSIS Cortex Device Peripheral Access Layer System Source File
   - Sigfox_AT_Slave_DualCore/Common/System/sys_debug.c                          Enables 4 debug pins for internal signals RealTime debugging
+  - Sigfox_AT_Slave_DualCore/STM32CubeIDE/CM0PLUS/Application/User/Core/syscalls.cSTM32CubeIDE Minimal System calls file
+  - Sigfox_AT_Slave_DualCore/STM32CubeIDE/CM0PLUS/Application/User/Core/sysmem.cSTM32CubeIDE System Memory calls file
+  - Sigfox_AT_Slave_DualCore/STM32CubeIDE/CM4/Application/User/Core/syscalls.c  STM32CubeIDE Minimal System calls file
+  - Sigfox_AT_Slave_DualCore/STM32CubeIDE/CM4/Application/User/Core/sysmem.c    STM32CubeIDE System Memory calls file
 
 
-@par Hardware and Software environment 
+@par Hardware and Software environment
 
   - This example runs on the STM32WLxx Nucleo board.
 
-  - STM32WLxx Nucleo board Set-up    
-    - Connect the Nucleo board to your PC with a USB cable type A to micro-B 
+  - STM32WLxx Nucleo board Set-up
+    - Connect the Nucleo board to your PC with a USB cable type A to micro-B
       to ST-LINK connector.
     - Please ensure that the ST-LINK connector jumpers are fitted.
 
   - Configure the software via the configuration files:
-    - CM0PLUS (Mw and radio drivers config) 
-        - sys_conf.h, radio_conf.h, mw_log_conf.h, radio_board_if.h, main.h, etc
-    - CM4 (Sigfox appli)
-        - app_sigfox.h, nucleo_conf.h, main.h, etc
-    - Careful: 
-        - STM32WLxx Nucleo requires IS_TCXO_SUPPORTED=1
+    - CM0PLUS (Mw and radio drivers config)
+        - sys_conf.h, radio_conf.h, mw_log_conf.h, main.h, etc
+    - CM4 (Sigfox application)
+        - sys_conf.h, sgfx_app.h, nucleo_conf.h, main.h, etc
 
   -Set Up:
 
@@ -263,11 +262,11 @@ Applications, SubGHz_Phy, Sigfox, AT_Slave, DualCore
              |                        |          |                        |
              --------------------------          --------------------------
 
-@par How to use it ? 
+@par How to use it ?
 In order to make the program work, you must do the following :
-  - Open your preferred toolchain 
+  - Open your preferred toolchain
   - Rebuild all CM4 files and load your image into CM4 target memory
-  - Rebuild all CM0PLUS files, set PWR_CR4_C2BOOT flag via CM4 and load your image into CM0PLUS target memory 
+  - Rebuild all CM0PLUS files, set PWR_CR4_C2BOOT flag via CM4 and load your image into CM0PLUS target memory
   - Reset the system (two cores)
   - Run the example
   - Open a Terminal, connected the Sigfox Object
@@ -277,21 +276,23 @@ In order to make the program work, you must do the following :
   - type AT? to get all available commands
   - Send your AT commands by typing them in the terminal
 
-@par How to use IAR to debug ? 
-  - open project.eww and select CM4 project
-  - make sure the flag DEBUGGER_ON =1 in app_conf.h
-  - better to define the flag LOW_POWER_DISABLE = 1 at least on one MCU (currently debugger has problem in dual core STOP mode)
-  - compile and download (Ctrl + D)
+@par How to debug ?
+  - Open your preferred toolchain and select CM4 project
+  - define the flag DEBUGGER_ENABLED to 1 in CM4\Core\Inc\sys_conf.h
+  - define the flag LOW_POWER_DISABLE to 1 at least on one MCU (CM4 or CM0PUS)
+  - compile and download
   - put a breakpoint in sys_app.c one line after HAL_PWREx_ReleaseCore(PWR_CORE_CPU2);
   - run CM4 (the above functions sets PWR_CR4_C2BOOT flag)
-  - open a second instance of project.eww and select CM0PLUS project
-  - compile and download using "Download active application" 
+  - open a second instance of your preferred toolchain and select CM0PLUS project
+  - to debug CM0PLUS as well, define the flag DEBUGGER_ENABLED to 1 in CM0PLUS\Core\Inc\sys_conf.h
+  - define the flag LOW_POWER_DISABLE to 1 at least on one MCU (CM4 or CM0PUS)
+  - compile and download using "Download active application"
   - once CM0PLUS code is downloaded reset (system reset) the CM4
   - run CM4 to the breakpoint again
-  - attach to running target CM0PLUS 
+  - attach to running target CM0PLUS
          (CM0PLUS is in a while loop waiting CM4 to give green light to go further)
          (this is done to prevent CM0PLUS to execute too much code before attaching)
-  - on CM4 execute MBMUXIF_SetCpusSynchroFlag(1); this will allow CM0PLUS to exite the while loop
+  - on CM4 execute MBMUXIF_SetCpusSynchroFlag(1); this will allow CM0PLUS to exit the while loop
 
  * <h3><center>&copy; COPYRIGHT STMicroelectronics</center></h3>
  */

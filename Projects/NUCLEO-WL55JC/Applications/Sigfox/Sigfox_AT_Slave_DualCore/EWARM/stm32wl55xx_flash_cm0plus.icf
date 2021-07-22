@@ -11,10 +11,10 @@ define symbol __ICFEDIT_region_ROM_end__      = 0x0803CFFF;
 define symbol __ICFEDIT_region_User_Keys_region_ROM_start__   = 0x0803E500;
 define symbol __ICFEDIT_region_User_Keys_region_ROM_end__     = 0x0803E7FF;
 /***** SRAM2 shared allocated by M0+ *****/
-define symbol __ICFEDIT_region_RAM2_SHARED_start__ = 0x2000B000;
-define symbol __ICFEDIT_region_RAM2_SHARED_end__   = 0x2000BFFF;
+define symbol __ICFEDIT_region_RAM2_SHARED_start__ = 0x20009000;
+define symbol __ICFEDIT_region_RAM2_SHARED_end__   = 0x20009FFF;
 /***** SRAM2 dedicated to M0+ *****/
-define symbol __ICFEDIT_region_RAM2_start__   = 0x2000C000;
+define symbol __ICFEDIT_region_RAM2_start__   = 0x2000A000;
 define symbol __ICFEDIT_region_RAM2_end__     = 0x2000FFFF;
 
 /* KMS Data Storage (NVMS) region */

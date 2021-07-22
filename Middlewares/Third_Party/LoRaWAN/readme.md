@@ -18,24 +18,17 @@
 
 The aim of this project is to show an example of an end-device LoRaWAN stack implementation.
 
-This project has 3 active branches in place.
+This project has 2 active branches in place.
 
 | Branch        | L2 spec       | RP spec   | Tag/Milestone       | Class     | Comments      |
 | ------------- |:-------------:|:---------:|:---------:|:---------:|:--------------|
-| | [1.0.3](https://lora-alliance.org/resource-hub/lorawanr-specification-v103) | [v1.0.3revA](https://www.lora-alliance.org/resource-hub/lorawanr-regional-parameters-v103reva) | [v4.4.4](https://github.com/Lora-net/LoRaMac-node/releases/tag/v4.4.4) | A/B/C | LoRaWAN L2 1.0.3 - **_Released_** |
-| [master](https://github.com/Lora-net/LoRaMac-node/tree/master) | [1.0.3](https://lora-alliance.org/resource-hub/lorawanr-specification-v103) | [v1.0.3revA](https://www.lora-alliance.org/resource-hub/lorawanr-regional-parameters-v103reva) | [M 4.4.5](https://github.com/Lora-net/LoRaMac-node/milestone/7) | A/B/C | LoRaWAN L2 1.0.3 |
-| [develop](https://github.com/Lora-net/LoRaMac-node/tree/develop) | [1.0.4](https://lora-alliance.org/resource-hub) | [2-1.0.1](https://lora-alliance.org/sites/default/files/2020-02/rp_2-1.0.1.pdf) | [M 4.5.0](https://github.com/Lora-net/LoRaMac-node/milestone/5) | A/B/C |  LoRaWAN L2 1.0.4 |
-| [feature/5.0.0](https://github.com/Lora-net/LoRaMac-node/tree/feature/5.0.0) | [1.0.4](https://lora-alliance.org/resource-hub) / [1.1.1](https://lora-alliance.org/resource-hub/lorawanr-specification-v11) | [2-1.0.1](https://lora-alliance.org/sites/default/files/2020-02/rp_2-1.0.1.pdf) | [M 5.0.0](https://github.com/Lora-net/LoRaMac-node/milestone/3) | A/B/C |  LoRaWAN L2 1.0.4 / 1.1.1 |
+| | [1.0.3](https://lora-alliance.org/resource-hub/lorawanr-specification-v103) | [v1.0.3revA](https://www.lora-alliance.org/resource-hub/lorawanr-regional-parameters-v103reva) | [v4.4.7](https://github.com/Lora-net/LoRaMac-node/releases/tag/v4.4.7) | A/B/C | LoRaWAN L2 1.0.3 - **_Released_ (last release based on 1.0.3)** |
+| [master](https://github.com/Lora-net/LoRaMac-node/tree/master) | [1.0.4](https://lora-alliance.org/resource-hub/lorawan-104-specification-package) | [2-1.0.1](https://lora-alliance.org/sites/default/files/2020-02/rp_2-1.0.1.pdf) | [v4.5.0](https://github.com/Lora-net/LoRaMac-node/releases/tag/v4.5.0) | A/B/C |  LoRaWAN L2 1.0.4 |
+| [develop](https://github.com/Lora-net/LoRaMac-node/tree/develop) | [1.0.4](https://lora-alliance.org/resource-hub/lorawan-104-specification-package) / [1.1.1](https://lora-alliance.org/resource-hub/lorawanr-specification-v11) | [2-1.0.1](https://lora-alliance.org/sites/default/files/2020-02/rp_2-1.0.1.pdf) | [M 4.6.0](https://github.com/Lora-net/LoRaMac-node/milestone/3) | A/B/C |  LoRaWAN L2 1.0.4 / 1.1.1 |
 
 This project fully implements ClassA, ClassB and ClassC end-device classes and it also provides SX1272/73, SX1276/77/78/79, SX1261/2 and LR1110 radio drivers.
 
 For each currently supported platform example applications are provided.
-
-* **LoRaMac/classA**: ClassA end-device example application.
-
-* **LoRaMac/classB**: ClassB end-device example application.
-
-* **LoRaMac/classC**: ClassC end-device example application.
 
 * **LoRaMac/fuota-test-01**: FUOTA test scenario 01 end-device example application. (Based on provided application common packages)
 
@@ -225,7 +218,7 @@ $ make
         "APPLICATION":"LoRaMac",
 
         // Select LoRaMac sub project. You can choose between:
-        // classA, classB or classC, periodic-uplink-lpp, fuota-test-01.
+        // periodic-uplink-lpp, fuota-test-01.
         "SUB_PROJECT":"periodic-uplink-lpp",
 
         // Switch for Class B support of LoRaMac:
@@ -326,7 +319,7 @@ $ make
         "APPLICATION":"ping-pong",
 
         // Select LoRaMac sub project. You can choose between:
-        // classA, classB or classC, periodic-uplink-lpp, fuota-test-01.
+        // periodic-uplink-lpp, fuota-test-01.
         "SUB_PROJECT":"periodic-uplink-lpp",
 
         // Switch for Class B support of LoRaMac:

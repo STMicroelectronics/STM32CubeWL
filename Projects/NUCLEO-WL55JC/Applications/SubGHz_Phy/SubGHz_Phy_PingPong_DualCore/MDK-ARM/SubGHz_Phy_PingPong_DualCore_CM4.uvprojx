@@ -16,9 +16,9 @@
         <TargetCommonOption>
           <Device>STM32WL55JCIx:CM4</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32WLxx_DFP.1.0.5</PackID>
-          <PackURL>http://www.keil.com/pack</PackURL>
-          <Cpu>IROM(0x08000000-0x801FFFF) IRAM(0x20000000-0x20007FFF) IRAM2(0x20008000-0x2000AFFF) CLOCK(12000000) FPU2 CPUTYPE("Cortex-M4") TZ</Cpu>
+          <PackID>Keil.STM32WLxx_DFP.1.1.0</PackID>
+          <PackURL>http://www.keil.com/pack/</PackURL>
+          <Cpu>IRAM(0x20000000-0x20003FFF) IRAM2(0x20008000-0x2000BFFF) IROM(0x8000000-0x801FFFF) CLOCK(12000000) CPUTYPE("Cortex-M4") TZ</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
           <FlashDriverDll></FlashDriverDll>
@@ -48,7 +48,7 @@
             <NotGenerated>0</NotGenerated>
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
-          <OutputDirectory>SubGHz_Phy_PingPong_DualCore_CM4\Exe\</OutputDirectory>
+          <OutputDirectory>SubGHz_Phy_PingPong_DualCore_CM4\</OutputDirectory>
           <OutputName>SubGHz_Phy_PingPong_DualCore_CM4</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
@@ -138,7 +138,7 @@
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>BIN\UL2V8M.DLL</Flash2>
-          <Flash3>"" ()</Flash3>
+          <Flash3></Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -183,7 +183,7 @@
             <hadIRAM>1</hadIRAM>
             <hadXRAM>0</hadXRAM>
             <uocXRam>0</uocXRam>
-            <RvdsVP>1</RvdsVP>
+            <RvdsVP>0</RvdsVP>
             <RvdsMve>0</RvdsMve>
             <RvdsCdeCp>0</RvdsCdeCp>
             <hadIRAM2>1</hadIRAM2>
@@ -246,7 +246,7 @@
               <IRAM>
                 <Type>0</Type>
                 <StartAddress>0x20000000</StartAddress>
-                <Size>0x8000</Size>
+                <Size>0x4000</Size>
               </IRAM>
               <IROM>
                 <Type>1</Type>
@@ -301,12 +301,12 @@
               <OCR_RVCT9>
                 <Type>0</Type>
                 <StartAddress>0x20000000</StartAddress>
-                <Size>0x8000</Size>
+                <Size>0x4000</Size>
               </OCR_RVCT9>
               <OCR_RVCT10>
                 <Type>0</Type>
                 <StartAddress>0x20008000</StartAddress>
-                <Size>0x3000</Size>
+                <Size>0x4000</Size>
               </OCR_RVCT10>
             </OnChipMemories>
             <RvctStartVector></RvctStartVector>
@@ -336,10 +336,10 @@
             <v6WtE>0</v6WtE>
             <v6Rtti>0</v6Rtti>
             <VariousControls>
-              <MiscControls></MiscControls>
-              <Define>CORE_CM4,STM32WL55xx</Define>
+              <MiscControls>-fshort-enums</MiscControls>
+              <Define>CORE_CM4,USE_HAL_DRIVER,STM32WL55xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Common/Board;../Common/MbMux;../Common/System;../CM4/Core/Inc;../CM4/SubGHz_Phy/App;../CM4/SubGHz_Phy/Target;../CM4/MbMux;../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc;../../../../../../Drivers/BSP/STM32WLxx_Nucleo;../../../../../../Drivers/CMSIS/Include;../../../../../../Drivers/CMSIS/Device/ST/STM32WLxx/Include;../../../../../../Middlewares/Third_Party/SubGHz_Phy;../../../../../../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver;../../../../../../Utilities/lpm/tiny_lpm;../../../../../../Utilities/misc;../../../../../../Utilities/sequencer;../../../../../../Utilities/timer;../../../../../../Utilities/trace/adv_trace</IncludePath>
+              <IncludePath>../CM4/Core/Inc;../CM4/SubGHz_Phy/App;../CM4/MbMux;../Common/Board;../Common/System;../Common/MbMux;../../../../../../Drivers/BSP/STM32WLxx_Nucleo;../../../../../../Utilities/trace/adv_trace;../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc;../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc/Legacy;../../../../../../Utilities/misc;../../../../../../Utilities/sequencer;../../../../../../Utilities/timer;../../../../../../Utilities/lpm/tiny_lpm;../../../../../../Middlewares/Third_Party/SubGHz_Phy;../../../../../../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver;../../../../../../Drivers/CMSIS/Device/ST/STM32WLxx/Include;../../../../../../Drivers/CMSIS/Include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -381,8 +381,33 @@
       </TargetOption>
       <Groups>
         <Group>
-          <GroupName>Application/Core</GroupName>
+          <GroupName>Application/MDK-ARM</GroupName>
           <Files>
+            <File>
+              <FileName>startup_stm32wl55xx_cm4.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>startup_stm32wl55xx_cm4.s</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Application/User/Common/System</GroupName>
+          <Files>
+            <File>
+              <FileName>sys_debug.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Common/System/sys_debug.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Application/User/CM4/Core</GroupName>
+          <Files>
+            <File>
+              <FileName>main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../CM4/Core/Src/main.c</FilePath>
+            </File>
             <File>
               <FileName>dma.c</FileName>
               <FileType>1</FileType>
@@ -399,29 +424,9 @@
               <FilePath>../CM4/Core/Src/ipcc_if.c</FilePath>
             </File>
             <File>
-              <FileName>main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../CM4/Core/Src/main.c</FilePath>
-            </File>
-            <File>
-              <FileName>timer_if.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../CM4/Core/Src/timer_if.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32_lpm_if.c</FileName>
               <FileType>1</FileType>
               <FilePath>../CM4/Core/Src/stm32_lpm_if.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32wlxx_hal_msp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../CM4/Core/Src/stm32wlxx_hal_msp.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32wlxx_it.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../CM4/Core/Src/stm32wlxx_it.c</FilePath>
             </File>
             <File>
               <FileName>sys_app.c</FileName>
@@ -429,9 +434,9 @@
               <FilePath>../CM4/Core/Src/sys_app.c</FilePath>
             </File>
             <File>
-              <FileName>usart.c</FileName>
+              <FileName>timer_if.c</FileName>
               <FileType>1</FileType>
-              <FilePath>../CM4/Core/Src/usart.c</FilePath>
+              <FilePath>../CM4/Core/Src/timer_if.c</FilePath>
             </File>
             <File>
               <FileName>usart_if.c</FileName>
@@ -439,29 +444,24 @@
               <FilePath>../CM4/Core/Src/usart_if.c</FilePath>
             </File>
             <File>
-              <FileName>board_resources.c</FileName>
+              <FileName>usart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>../Common/Board/board_resources.c</FilePath>
+              <FilePath>../CM4/Core/Src/usart.c</FilePath>
             </File>
             <File>
-              <FileName>sys_debug.c</FileName>
+              <FileName>stm32wlxx_it.c</FileName>
               <FileType>1</FileType>
-              <FilePath>../Common/System/sys_debug.c</FilePath>
+              <FilePath>../CM4/Core/Src/stm32wlxx_it.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32wlxx_hal_msp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../CM4/Core/Src/stm32wlxx_hal_msp.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>Application/MDK-ARM</GroupName>
-          <Files>
-            <File>
-              <FileName>startup_stm32wl55xx_cm4.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>startup_stm32wl55xx_cm4.s</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Application/MbMux</GroupName>
+          <GroupName>Application/User/CM4/MbMux</GroupName>
           <Files>
             <File>
               <FileName>mbmux.c</FileName>
@@ -491,7 +491,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Application/App</GroupName>
+          <GroupName>Application/User/CM4/SubGHz_Phy/App</GroupName>
           <Files>
             <File>
               <FileName>app_subghz_phy.c</FileName>
@@ -523,15 +523,10 @@
               <FileType>1</FileType>
               <FilePath>../../../../../../Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo.c</FilePath>
             </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Drivers/CMSIS</GroupName>
-          <Files>
             <File>
-              <FileName>system_stm32wlxx.c</FileName>
+              <FileName>stm32wlxx_nucleo_radio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>../Common/System/system_stm32wlxx.c</FilePath>
+              <FilePath>../../../../../../Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo_radio.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -539,29 +534,14 @@
           <GroupName>Drivers/STM32WLxx_HAL_Driver</GroupName>
           <Files>
             <File>
-              <FileName>stm32wlxx_hal.c</FileName>
+              <FileName>stm32wlxx_hal_rcc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal.c</FilePath>
+              <FilePath>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_rcc.c</FilePath>
             </File>
             <File>
-              <FileName>stm32wlxx_hal_cortex.c</FileName>
+              <FileName>stm32wlxx_hal_rcc_ex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_cortex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32wlxx_hal_dma.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_dma.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32wlxx_hal_dma_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_dma_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32wlxx_hal_exti.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_exti.c</FilePath>
+              <FilePath>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_rcc_ex.c</FilePath>
             </File>
             <File>
               <FileName>stm32wlxx_hal_flash.c</FileName>
@@ -579,9 +559,14 @@
               <FilePath>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_gpio.c</FilePath>
             </File>
             <File>
-              <FileName>stm32wlxx_hal_ipcc.c</FileName>
+              <FileName>stm32wlxx_hal_dma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_ipcc.c</FilePath>
+              <FilePath>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_dma.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32wlxx_hal_dma_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_dma_ex.c</FilePath>
             </File>
             <File>
               <FileName>stm32wlxx_hal_pwr.c</FileName>
@@ -594,14 +579,24 @@
               <FilePath>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_pwr_ex.c</FilePath>
             </File>
             <File>
-              <FileName>stm32wlxx_hal_rcc.c</FileName>
+              <FileName>stm32wlxx_hal_cortex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_rcc.c</FilePath>
+              <FilePath>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_cortex.c</FilePath>
             </File>
             <File>
-              <FileName>stm32wlxx_hal_rcc_ex.c</FileName>
+              <FileName>stm32wlxx_hal.c</FileName>
               <FileType>1</FileType>
-              <FilePath>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_rcc_ex.c</FilePath>
+              <FilePath>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32wlxx_hal_exti.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_exti.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32wlxx_hal_ipcc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_ipcc.c</FilePath>
             </File>
             <File>
               <FileName>stm32wlxx_hal_rtc.c</FileName>
@@ -612,6 +607,16 @@
               <FileName>stm32wlxx_hal_rtc_ex.c</FileName>
               <FileType>1</FileType>
               <FilePath>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_rtc_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32wlxx_hal_tim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_tim.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32wlxx_hal_tim_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_tim_ex.c</FilePath>
             </File>
             <File>
               <FileName>stm32wlxx_hal_uart.c</FileName>
@@ -626,6 +631,16 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>Drivers/CMSIS</GroupName>
+          <Files>
+            <File>
+              <FileName>system_stm32wlxx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Common/System/system_stm32wlxx.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>Utilities</GroupName>
           <Files>
             <File>
@@ -634,29 +649,14 @@
               <FilePath>../../../../../../Utilities/trace/adv_trace/stm32_adv_trace.c</FilePath>
             </File>
             <File>
-              <FileName>stm32_lpm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../../../../../../Utilities/lpm/tiny_lpm/stm32_lpm.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32_mem.c</FileName>
               <FileType>1</FileType>
               <FilePath>../../../../../../Utilities/misc/stm32_mem.c</FilePath>
             </File>
             <File>
-              <FileName>stm32_seq.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../../../../../../Utilities/sequencer/stm32_seq.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32_systime.c</FileName>
               <FileType>1</FileType>
               <FilePath>../../../../../../Utilities/misc/stm32_systime.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32_timer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../../../../../../Utilities/timer/stm32_timer.c</FilePath>
             </File>
             <File>
               <FileName>stm32_tiny_sscanf.c</FileName>
@@ -667,6 +667,21 @@
               <FileName>stm32_tiny_vsnprintf.c</FileName>
               <FileType>1</FileType>
               <FilePath>../../../../../../Utilities/misc/stm32_tiny_vsnprintf.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32_seq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../../../../../../Utilities/sequencer/stm32_seq.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32_timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../../../../../../Utilities/timer/stm32_timer.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32_lpm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../../../../../../Utilities/lpm/tiny_lpm/stm32_lpm.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -680,8 +695,8 @@
   <RTE>
     <apis/>
     <components>
-      <component Cclass="CMSIS" Cgroup="CORE" Cvendor="ARM" Cversion="5.4.0" condition="ARMv6_7_8-M Device">
-        <package name="CMSIS" schemaVersion="1.3" url="http://www.keil.com/pack/" vendor="ARM" version="5.7.0"/>
+      <component Cclass="CMSIS" Cgroup="CORE" Cvendor="ARM" Cversion="4.3.0" condition="CMSIS Core">
+        <package name="CMSIS" schemaVersion="1.3" url="http://www.keil.com/pack/" vendor="ARM" version="4.5.0"/>
         <targetInfos>
           <targetInfo name="SubGHz_Phy_PingPong_DualCore_CM4"/>
         </targetInfos>

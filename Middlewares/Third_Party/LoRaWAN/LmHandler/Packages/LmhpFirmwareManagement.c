@@ -17,6 +17,7 @@
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/
+#include "platform.h"
 #include "LmHandler.h"
 #include "LmhpFirmwareManagement.h"
 #include "mw_log_conf.h"  /* needed for MW_LOG */
@@ -131,6 +132,7 @@ static LmhPackage_t LmhpFirmwareManagementPackage =
   .OnJoinRequest =              NULL,                              /* To be initialized by LmHandler */
   .OnSendRequest =              NULL,                              /* To be initialized by LmHandler */
   .OnDeviceTimeRequest =        NULL,                              /* To be initialized by LmHandler */
+  .OnPackageProcessEvent =      NULL,                              /* To be initialized by LmHandler */
 };
 
 /*!
