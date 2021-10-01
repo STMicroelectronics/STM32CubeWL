@@ -1571,7 +1571,7 @@ void  SUBGHZSPI_DeInit(void)
 }
 
 /**
-  * @brief  Transmit data trough SUBGHZSPI peripheral
+  * @brief  Transmit data through SUBGHZSPI peripheral
   * @param  hsubghz pointer to a SUBGHZ_HandleTypeDef structure that contains
   *         the handle information for SUBGHZ module.
   * @param  Data  data to transmit
@@ -1630,7 +1630,7 @@ HAL_StatusTypeDef SUBGHZSPI_Transmit(SUBGHZ_HandleTypeDef *hsubghz,
 }
 
 /**
-  * @brief  Receive data trough SUBGHZSPI peripheral
+  * @brief  Receive data through SUBGHZSPI peripheral
   * @param  hsubghz pointer to a SUBGHZ_HandleTypeDef structure that contains
   *         the handle information for SUBGHZ module.
   * @param  pData  pointer on data to receive
