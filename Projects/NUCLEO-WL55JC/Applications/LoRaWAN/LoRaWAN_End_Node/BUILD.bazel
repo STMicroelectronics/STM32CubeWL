@@ -1,0 +1,155 @@
+cc_library(
+    name = "core_facade",
+    hdrs = glob(["Core/Inc/*.h"]),
+    includes = ["Core/Inc"],
+    deps = [
+        "@com_github_stmicroelectronics_stm32cubewl//:stm32wlxx_hal_driver",
+        "@com_github_stmicroelectronics_stm32cubewl//:stm32wlxx_nucleo_board_support",
+    ],
+)
+
+cc_library(
+    name = "lorawan_config",
+    hdrs = [
+        "LoRaWAN/Target/lorawan_conf.h",
+    ] + glob(["LoRaWAN/App/*.h"]),
+    includes = [
+        "LoRaWAN/App",
+        "LoRaWAN/Target",
+    ],
+)
+
+cc_library(
+    name = "middleware_log_config",
+    hdrs = [
+        "LoRaWAN/Target/mw_log_conf.h",
+    ],
+    includes = [
+        "LoRaWAN/Target",
+    ],
+    deps = ["@com_github_stmicroelectronics_stm32cubewl//:utilities_trace"],
+)
+
+cc_library(
+    name = "radio_config",
+    hdrs = [
+        "LoRaWAN/Target/radio_board_if.h",
+        "LoRaWAN/Target/radio_conf.h",
+        "LoRaWAN/Target/systime.h",
+        "LoRaWAN/Target/timer.h",
+    ],
+    includes = [
+        "LoRaWAN/Target",
+    ],
+    deps = [
+        ":core_facade",
+        "@com_github_stmicroelectronics_stm32cubewl//:middleware_log_config",
+        "@com_github_stmicroelectronics_stm32cubewl//:utilities_timer",
+    ],
+)
+
+cc_library(
+    name = "stm32wlxx_hal_config",
+    hdrs = [
+        "Core/Inc/stm32wlxx_hal_conf.h",
+    ],
+    includes = [
+        "Core/Inc",
+    ],
+)
+
+cc_library(
+    name = "stm32wlxx_nucleo_config",
+    hdrs = [
+        "Core/Inc/stm32wlxx_nucleo_conf.h",
+    ],
+    includes = [
+        "Core/Inc",
+    ],
+    deps = ["@com_github_stmicroelectronics_stm32cubewl//:stm32wlxx_hal_driver"],
+)
+
+cc_library(
+    name = "sys_config",
+    hdrs = [
+        "Core/Inc/sys_conf.h",
+    ],
+    includes = [
+        "Core/Inc",
+    ],
+    deps = ["@com_github_stmicroelectronics_stm32cubewl//:utilities_misc_facade"],
+)
+
+cc_library(
+    name = "utilities_config",
+    hdrs = [
+        "Core/Inc/utilities_conf.h",
+    ],
+    includes = [
+        "Core/Inc",
+    ],
+    deps = [
+        "@com_github_stmicroelectronics_stm32cubewl//:stm32_cmsis_driver",
+        "@com_github_stmicroelectronics_stm32cubewl//:utilities_misc_facade",
+    ],
+)
+
+cc_library(
+    name = "lorawan",
+    srcs = [
+        "LoRaWAN/App/CayenneLpp.c",
+        "LoRaWAN/App/app_lorawan.c",
+        "LoRaWAN/App/lora_app.c",
+        "LoRaWAN/App/lora_info.c",
+        "LoRaWAN/Target/radio_board_if.c",
+    ],
+    hdrs = [
+        "LoRaWAN/App/CayenneLpp.h",
+        "LoRaWAN/App/Commissioning.h",
+        "LoRaWAN/App/app_lorawan.h",
+        "LoRaWAN/App/lora_app.h",
+        "LoRaWAN/App/lora_app_version.h",
+        "LoRaWAN/App/lora_info.h",
+        "LoRaWAN/App/se-identity.h",
+        "LoRaWAN/Target/lorawan_conf.h",
+        "LoRaWAN/Target/mw_log_conf.h",
+        "LoRaWAN/Target/radio_board_if.h",
+        "LoRaWAN/Target/radio_conf.h",
+        "LoRaWAN/Target/systime.h",
+        "LoRaWAN/Target/timer.h",
+    ],
+    defines = ["USE_BSP_DRIVER"],
+    includes = [
+        "LoRaWAN/App",
+        "LoRaWAN/Target",
+    ],
+    linkstatic = True,
+    deps = [
+        ":core_facade",
+        "@com_github_stmicroelectronics_stm32cubewl//:lorawan",
+        "@com_github_stmicroelectronics_stm32cubewl//:utilities_low_power_mode",
+        "@com_github_stmicroelectronics_stm32cubewl//:utilities_sequencer",
+    ],
+)
+
+cc_binary(
+    name = "lorawan_end_node",
+    srcs = glob(["Core/Src/*.c"]) + [
+        "STM32CubeIDE/Application/User/Startup/startup_stm32wl55jcix.s",
+        "STM32CubeIDE/Application/User/Core/syscalls.c",
+        "STM32CubeIDE/Application/User/Core/sysmem.c",
+        "LoRaWAN/Target/radio_board_if.c",
+    ],
+    defines = ["USE_BSP_DRIVER"],
+    linkopts = [
+        "-lm",
+        "-T $(location //Projects/NUCLEO-WL55JC/Applications/LoRaWAN/LoRaWAN_End_Node:STM32CubeIDE/STM32WL55JCIX_FLASH.ld)",
+    ],
+    deps = [
+        ":core_facade",
+        ":lorawan",
+        "//Projects/NUCLEO-WL55JC/Applications/LoRaWAN/LoRaWAN_End_Node:STM32CubeIDE/STM32WL55JCIX_FLASH.ld",
+        "@com_github_stmicroelectronics_stm32cubewl//:stm32wlxx_hal_driver",
+        "@com_github_stmicroelectronics_stm32cubewl//:utilities_sequencer",
+    ],
+)
