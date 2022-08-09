@@ -168,6 +168,7 @@
   */
 void              SUBGHZSPI_Init(uint32_t BaudratePrescaler);
 void              SUBGHZSPI_DeInit(void);
+HAL_StatusTypeDef SUBGHZSPI_TransmitReceive(SUBGHZ_HandleTypeDef *hsubghz, uint8_t Xmit, uint8_t *pRecv);
 HAL_StatusTypeDef SUBGHZSPI_Transmit(SUBGHZ_HandleTypeDef *hsubghz, uint8_t Data);
 HAL_StatusTypeDef SUBGHZSPI_Receive(SUBGHZ_HandleTypeDef *hsubghz, uint8_t *pData);
 HAL_StatusTypeDef SUBGHZ_WaitOnBusy(SUBGHZ_HandleTypeDef *hsubghz);
@@ -1571,7 +1572,75 @@ void  SUBGHZSPI_DeInit(void)
 }
 
 /**
-  * @brief  Transmit data trough SUBGHZSPI peripheral
+  * @brief  Transmit and receive data through SUBGHZSPI peripheral
+  * @param  hsubghz pointer to a SUBGHZ_HandleTypeDef structure that contains
+  *         the handle information for SUBGHZ module.
+  * @param  Xmit   data to transmit
+  * @param  pRecv  pointer on data to receive
+  * @retval HAL status
+  */
+HAL_StatusTypeDef SUBGHZSPI_TransmitReceive(SUBGHZ_HandleTypeDef *hsubghz,
+                                    uint8_t Xmit, uint8_t *pRecv)
+{
+  HAL_StatusTypeDef status = HAL_OK;
+  __IO uint32_t count;
+
+  /* Handle Tx transmission from SUBGHZSPI peripheral to Radio ****************/
+  /* Initialize Timeout */
+  count = SUBGHZ_DEFAULT_TIMEOUT * SUBGHZ_DEFAULT_LOOP_TIME;
+
+  /* Wait until TXE flag is set */
+  do
+  {
+    if (count == 0U)
+    {
+      status = HAL_ERROR;
+      hsubghz->ErrorCode = HAL_SUBGHZ_ERROR_TIMEOUT;
+      break;
+    }
+    count--;
+  } while (READ_BIT(SUBGHZSPI->SR, SPI_SR_TXE) != (SPI_SR_TXE));
+
+  /* Transmit Data*/
+#if defined (__GNUC__)
+  __IO uint8_t *spidr = ((__IO uint8_t *)&SUBGHZSPI->DR);
+  *spidr = Xmit;
+#else
+  *((__IO uint8_t *)&SUBGHZSPI->DR) = Xmit;
+#endif /* __GNUC__ */
+
+  /* Handle Rx transmission from SUBGHZSPI peripheral to Radio ****************/
+  /* Initialize Timeout */
+  count = SUBGHZ_DEFAULT_TIMEOUT * SUBGHZ_DEFAULT_LOOP_TIME;
+
+  /* Wait until RXNE flag is set */
+  do
+  {
+    if (count == 0U)
+    {
+      status = HAL_ERROR;
+      hsubghz->ErrorCode = HAL_SUBGHZ_ERROR_TIMEOUT;
+      break;
+    }
+    count--;
+  } while (READ_BIT(SUBGHZSPI->SR, SPI_SR_RXNE) != (SPI_SR_RXNE));
+
+  if (pRecv == NULL)
+  {
+    /* Flush Rx data */
+    READ_REG(SUBGHZSPI->DR);
+  }
+  else
+  {
+    /* Retrieve Rx data */
+    *pRecv = (uint8_t)(READ_REG(SUBGHZSPI->DR));
+  }
+
+  return status;
+}
+
+/**
+  * @brief  Transmit data through SUBGHZSPI peripheral
   * @param  hsubghz pointer to a SUBGHZ_HandleTypeDef structure that contains
   *         the handle information for SUBGHZ module.
   * @param  Data  data to transmit
@@ -1580,57 +1649,11 @@ void  SUBGHZSPI_DeInit(void)
 HAL_StatusTypeDef SUBGHZSPI_Transmit(SUBGHZ_HandleTypeDef *hsubghz,
                                      uint8_t Data)
 {
-  HAL_StatusTypeDef status = HAL_OK;
-  __IO uint32_t count;
-
-  /* Handle Tx transmission from SUBGHZSPI peripheral to Radio ****************/
-  /* Initialize Timeout */
-  count = SUBGHZ_DEFAULT_TIMEOUT * SUBGHZ_DEFAULT_LOOP_TIME;
-
-  /* Wait until TXE flag is set */
-  do
-  {
-    if (count == 0U)
-    {
-      status = HAL_ERROR;
-      hsubghz->ErrorCode = HAL_SUBGHZ_ERROR_TIMEOUT;
-      break;
-    }
-    count--;
-  } while (READ_BIT(SUBGHZSPI->SR, SPI_SR_TXE) != (SPI_SR_TXE));
-
-  /* Transmit Data*/
-#if defined (__GNUC__)
-  __IO uint8_t *spidr = ((__IO uint8_t *)&SUBGHZSPI->DR);
-  *spidr = Data;
-#else
-  *((__IO uint8_t *)&SUBGHZSPI->DR) = Data;
-#endif /* __GNUC__ */
-
-  /* Handle Rx transmission from SUBGHZSPI peripheral to Radio ****************/
-  /* Initialize Timeout */
-  count = SUBGHZ_DEFAULT_TIMEOUT * SUBGHZ_DEFAULT_LOOP_TIME;
-
-  /* Wait until RXNE flag is set */
-  do
-  {
-    if (count == 0U)
-    {
-      status = HAL_ERROR;
-      hsubghz->ErrorCode = HAL_SUBGHZ_ERROR_TIMEOUT;
-      break;
-    }
-    count--;
-  } while (READ_BIT(SUBGHZSPI->SR, SPI_SR_RXNE) != (SPI_SR_RXNE));
-
-  /* Flush Rx data */
-  READ_REG(SUBGHZSPI->DR);
-
-  return status;
+  return SUBGHZSPI_TransmitReceive(hsubghz, Data, NULL);
 }
 
 /**
-  * @brief  Receive data trough SUBGHZSPI peripheral
+  * @brief  Receive data through SUBGHZSPI peripheral
   * @param  hsubghz pointer to a SUBGHZ_HandleTypeDef structure that contains
   *         the handle information for SUBGHZ module.
   * @param  pData  pointer on data to receive
@@ -1639,53 +1662,7 @@ HAL_StatusTypeDef SUBGHZSPI_Transmit(SUBGHZ_HandleTypeDef *hsubghz,
 HAL_StatusTypeDef SUBGHZSPI_Receive(SUBGHZ_HandleTypeDef *hsubghz,
                                     uint8_t *pData)
 {
-  HAL_StatusTypeDef status = HAL_OK;
-  __IO uint32_t count;
-
-  /* Handle Tx transmission from SUBGHZSPI peripheral to Radio ****************/
-  /* Initialize Timeout */
-  count = SUBGHZ_DEFAULT_TIMEOUT * SUBGHZ_DEFAULT_LOOP_TIME;
-
-  /* Wait until TXE flag is set */
-  do
-  {
-    if (count == 0U)
-    {
-      status = HAL_ERROR;
-      hsubghz->ErrorCode = HAL_SUBGHZ_ERROR_TIMEOUT;
-      break;
-    }
-    count--;
-  } while (READ_BIT(SUBGHZSPI->SR, SPI_SR_TXE) != (SPI_SR_TXE));
-
-  /* Transmit Data*/
-#if defined (__GNUC__)
-  __IO uint8_t *spidr = ((__IO uint8_t *)&SUBGHZSPI->DR);
-  *spidr = SUBGHZ_DUMMY_DATA;
-#else
-  *((__IO uint8_t *)&SUBGHZSPI->DR) = SUBGHZ_DUMMY_DATA;
-#endif /* __GNUC__ */
-
-  /* Handle Rx transmission from SUBGHZSPI peripheral to Radio ****************/
-  /* Initialize Timeout */
-  count = SUBGHZ_DEFAULT_TIMEOUT * SUBGHZ_DEFAULT_LOOP_TIME;
-
-  /* Wait until RXNE flag is set */
-  do
-  {
-    if (count == 0U)
-    {
-      status = HAL_ERROR;
-      hsubghz->ErrorCode = HAL_SUBGHZ_ERROR_TIMEOUT;
-      break;
-    }
-    count--;
-  } while (READ_BIT(SUBGHZSPI->SR, SPI_SR_RXNE) != (SPI_SR_RXNE));
-
-  /* Retrieve pData */
-  *pData = (uint8_t)(READ_REG(SUBGHZSPI->DR));
-
-  return status;
+  return SUBGHZSPI_TransmitReceive(hsubghz, SUBGHZ_DUMMY_DATA, pData);
 }
 
 /**
