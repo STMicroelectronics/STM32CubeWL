@@ -1127,6 +1127,11 @@ static void ProcessRadioRxDone( void )
 #endif /* LORAMAC_VERSION */
     Mlme_t joinType = MLME_JOIN;
 
+    MW_LOG( TS_ON, VLEVEL_M, "RX: ");
+    for (size_t i = 0; i < RxDoneParams.Size; ++i)
+        MW_LOG( TS_ON, VLEVEL_M, "%02x", RxDoneParams.Payload[i]);
+    MW_LOG( TS_ON, VLEVEL_M, "\r\n");
+
 #if (defined( LORAMAC_VERSION ) && (( LORAMAC_VERSION == 0x01000400 ) || ( LORAMAC_VERSION == 0x01010100 )))
     LoRaMacRadioEvents.Events.RxProcessPending = 0;
 #endif /* LORAMAC_VERSION */
