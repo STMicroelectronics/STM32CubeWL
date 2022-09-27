@@ -562,7 +562,7 @@ void RegionCommonRxBeaconSetup( RegionCommonRxBeaconSetupParams_t* rxBeaconSetup
                        1, 0, 10, rxBeaconSetupParams->SymbolTimeout, true, rxBeaconSetupParams->BeaconSize, false, 0, 0, false, rxContinuous );
 
     Radio.Rx( rxBeaconSetupParams->RxTime );
-    MW_LOG(TS_ON, VLEVEL_M, "RX_BC on freq %d Hz at DR %d\r\n", rxBeaconSetupParams->Frequency, rxBeaconSetupParams->BeaconDatarate );
+    MW_LOG(TS_ON, VLEVEL_M, "RX_BC on freq %u Hz at DR %d\r\n", (unsigned)rxBeaconSetupParams->Frequency, rxBeaconSetupParams->BeaconDatarate );
 }
 
 void RegionCommonCountNbOfEnabledChannels( RegionCommonCountNbOfEnabledChannelsParams_t* countNbOfEnabledChannelsParams,
@@ -696,15 +696,15 @@ void RegionCommonRxConfigPrint(LoRaMacRxSlot_t rxSlot, uint32_t frequency, int8_
 {
     if ( rxSlot < RX_SLOT_NONE )
     {
-        MW_LOG(TS_ON, VLEVEL_M,  "RX_%s on freq %d Hz at DR %d\r\n", EventRXSlotStrings[rxSlot], frequency, dr );
+        MW_LOG(TS_ON, VLEVEL_M,  "RX_%s on freq %u Hz at DR %d\r\n", EventRXSlotStrings[rxSlot], (unsigned)frequency, dr );
     }
     else
     {
-        MW_LOG(TS_ON, VLEVEL_M,  "RX on freq %d Hz at DR %d\r\n", frequency, dr );
+        MW_LOG(TS_ON, VLEVEL_M,  "RX on freq %u Hz at DR %d\r\n", (unsigned)frequency, dr );
     }
 }
 
 void RegionCommonTxConfigPrint(uint32_t frequency, int8_t dr)
 {
-    MW_LOG(TS_ON, VLEVEL_M,  "TX on freq %d Hz at DR %d\r\n", frequency, dr );
+    MW_LOG(TS_ON, VLEVEL_M,  "TX on freq %u Hz at DR %d\r\n", (unsigned)frequency, dr );
 }
