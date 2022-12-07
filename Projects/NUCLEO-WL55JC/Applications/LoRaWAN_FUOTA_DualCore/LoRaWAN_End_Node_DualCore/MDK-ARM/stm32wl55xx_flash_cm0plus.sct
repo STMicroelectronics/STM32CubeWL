@@ -9,19 +9,29 @@ LR_ROM (SLOT_ACTIVE_1_START + 0x200) {                      ; 0x200 = IMAGE_OFFS
   vector_start (SLOT_ACTIVE_1_START + 0x200) FIXED VECTOR_SIZE {
     *.o (RESET, +First)
   }
+
   ROM_region +0 {
     *(InRoot$$Sections)
     .ANY (+RO)
   }
+
   ; SBSFU RAM area is reused for UserApp_M0  
   RAM_region SB_REGION_RAM_START SB_RAM_REGION_SIZE {
     .ANY (STACK)
     .ANY (HEAP)
     .ANY (+RW +ZI)
   }
+
   ; Backup SRAM2 dedicated to M0PLUS
   RW_IRAM2 M0PLUS_SHARED_REGION_RAM_START M0PLUS_SHARED_RAM_REGION_SIZE  {  ; to be modified accordingly to user project. Can be NoInit data for backup usage, RW, ZI region, etc...
     *(MB_MEM2)
+    *(MB_MEM3)
+  }
+
+  ; NVM RAM Data
+  RW_LW_NVM_RAM LW_NVM_RAM_START UNINIT LW_NVM_RAM_REGION_SIZE  {  ; RW data
+   *(.bss.LW_NVM_RAM)
+   *(.bss.LW_NVM_BACKUP_RAM)
   }
 }
 

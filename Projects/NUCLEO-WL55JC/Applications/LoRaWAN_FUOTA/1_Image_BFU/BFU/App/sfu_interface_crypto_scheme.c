@@ -8,20 +8,19 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"           /* se_interface_bootloader.c is compiled in SBSFU project using main.h from this project */
-#include "se_low_level.h"   /* This file is part of SE_CoreBin and adapts the Secure Engine (and its interface) to the 
+#include "se_low_level.h"   /* This file is part of SE_CoreBin and adapts the Secure Engine (and its interface) to the
                                STM32 board specificities */
 #include "tkms.h"
 #include "sfu_interface_crypto_scheme.h"
@@ -743,5 +742,3 @@ SE_ErrorStatus SFU_VerifyHeaderSignature(SE_StatusTypeDef *peSE_Status, SE_FwRaw
   return se_status;
 
 }
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

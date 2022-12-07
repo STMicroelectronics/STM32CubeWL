@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -78,6 +77,8 @@ typedef enum eATEerror
 /* AT Command strings. Commands start with AT */
 /* General commands */
 #define AT_RESET      "Z"
+#define AT_RFS        "+RFS"
+#define AT_CS         "+CS"
 #define AT_VL         "+VL"
 #define AT_LTIME      "+LTIME"
 
@@ -166,6 +167,24 @@ void AT_event_receive(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params);
   */
 void AT_event_confirm(LmHandlerTxParams_t *params);
 
+/**
+  * @brief  Event callback on class updated
+  * @param  deviceClass
+  */
+void AT_event_ClassUpdate(DeviceClass_t deviceClass);
+
+/**
+  * @brief  Event callback on beacon status updated
+  * @param  params
+  */
+void AT_event_Beacon(LmHandlerBeaconParams_t *params);
+
+void AT_event_OnNvmDataChange(LmHandlerNvmContextStates_t state);
+
+void AT_event_OnStoreContextRequest(void *nvm, uint32_t nvm_size);
+
+void AT_event_OnRestoreContextRequest(void *nvm, uint32_t nvm_size);
+
 /* --------------- General commands --------------- */
 /**
   * @brief  Trig a reset of the MCU
@@ -173,6 +192,20 @@ void AT_event_confirm(LmHandlerTxParams_t *params);
   * @retval AT_OK
   */
 ATEerror_t AT_reset(const char *param);
+
+/**
+  * @brief  Restore factory settings in Eeprom
+  * @param  param string of the AT command - unused
+  * @retval AT_OK
+  */
+ATEerror_t AT_restore_factory_settings(const char *param);
+
+/**
+  * @brief  Store current settings in Eeprom
+  * @param  param string of the AT command - unused
+  * @retval AT_OK
+  */
+ATEerror_t AT_store_context(const char *param);
 
 /**
   * @brief  Get the verbose level
@@ -615,5 +648,3 @@ ATEerror_t AT_bat_get(const char *param);
 #endif
 
 #endif /* __LORA_AT_H__ */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -14,7 +14,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2020(-2021) STMicroelectronics.
+  * Copyright (c) 2020-2021 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -50,6 +50,10 @@ defined in linker script */
 .word _sMB_MEM2
 /* end address for the .MB_MEM2 section. defined in linker script */
 .word _eMB_MEM2
+/* start address for the .MB_MEM3 section. defined in linker script */
+.word _sMB_MEM3
+/* end address for the .MB_MEM3 section. defined in linker script */
+.word _eMB_MEM3
 
 /* INIT_BSS macro is used to fill the specified region [start : end] with zeros */
 .macro INIT_BSS start, end
@@ -110,6 +114,9 @@ Reset_Handler:
 
 /* Zero fill the MB_MEM2 segments. */
   INIT_BSS _sMB_MEM2, _eMB_MEM2
+
+/* Zero fill the MB_MEM2 segments. */
+  INIT_BSS _sMB_MEM3, _eMB_MEM3
 
 /* Copy the data segment initializers from flash to SRAM */
   INIT_DATA _sdata, _edata, _sidata
@@ -324,5 +331,3 @@ g_pfnVectors:
 	.thumb_set SUBGHZ_Radio_IRQHandler,Default_Handler
 
 	.weak	SystemInit
-
-/************************ (C) COPYRIGHT STMicroelectonics *****END OF FILE****/

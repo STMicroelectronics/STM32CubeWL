@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -155,10 +154,10 @@ int8_t MBMUX_RegisterFeature(FEAT_INFO_IdTypeDef e_featID, MBMUX_ComType_t ComTy
   uint8_t channel_idx = MB_CHANNEL_NOT_REGISTERED;
   int8_t ret = -1; /* no more ipcc channels available */
   uint8_t check_existing_feature_registration;
-  /* USER CODE BEGIN MBMUX_RegisterFeatureC_1 */
 
-  /* USER CODE END MBMUX_RegisterFeatureC_1 */
+  /* USER CODE BEGIN MBMUX_RegisterFeature_1 */
 
+  /* USER CODE END MBMUX_RegisterFeature_1 */
   if (e_featID == FEAT_INFO_SYSTEM_ID)
   {
     check_if_feature_provided_by_cm0plus = 1;
@@ -214,9 +213,9 @@ int8_t MBMUX_RegisterFeature(FEAT_INFO_IdTypeDef e_featID, MBMUX_ComType_t ComTy
     }
     ret = channel_idx;
   }
-  /* USER CODE BEGIN MBMUX_RegisterFeatureC_Last */
+  /* USER CODE BEGIN MBMUX_RegisterFeature_Last */
 
-  /* USER CODE END MBMUX_RegisterFeatureC_Last */
+  /* USER CODE END MBMUX_RegisterFeature_Last */
   return ret;
 }
 
@@ -473,4 +472,3 @@ static void MBMUX_IsrNotRegistered(void *ComObj)
 /* USER CODE BEGIN PrFD */
 
 /* USER CODE END PrFD */
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

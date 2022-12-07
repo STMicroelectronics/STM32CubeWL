@@ -43,26 +43,25 @@ extern "C"
 /* Includes ------------------------------------------------------------------*/
 #include "utilities_conf.h"
 
-
 /* Exported types ------------------------------------------------------------*/
+/*!
+ * LMN (LoRaMac-node) status
+ */
+typedef enum LmnStatus_e
+{
+  LMN_STATUS_ERROR = 0,
+  LMN_STATUS_OK = !LMN_STATUS_ERROR
+} LmnStatus_t;
+
 /* Exported constants --------------------------------------------------------*/
 /* External variables --------------------------------------------------------*/
 /* Exported macros -----------------------------------------------------------*/
 /* Defines -------------------------------------------------------------------*/
-
-#ifndef SUCCESS
-#define SUCCESS                                     1
-#endif
-
-#ifndef FAIL
-#define FAIL                                        0
-#endif
-
 /*!
  * \brief Returns the minimum value between a and b
  *
- * \param [IN] a 1st value
- * \param [IN] b 2nd value
+ * \param [in] a 1st value
+ * \param [in] b 2nd value
  * \retval minValue Minimum value
  */
 #ifndef MIN
@@ -72,8 +71,8 @@ extern "C"
 /*!
  * \brief Returns the maximum value between a and b
  *
- * \param [IN] a 1st value
- * \param [IN] b 2nd value
+ * \param [in] a 1st value
+ * \param [in] b 2nd value
  * \retval maxValue Maximum value
  */
 #ifndef MAX
@@ -84,8 +83,8 @@ extern "C"
 /**
   * \brief Calculates ceiling( X / N )
   *
-  * \param [IN] X numerator
-  * \param [IN] N denominator
+  * \param [in] X numerator
+  * \param [in] N denominator
   *
   */
 #ifndef DIVC
@@ -96,7 +95,7 @@ extern "C"
 /*!
  * \brief Returns 2 raised to the power of n
  *
- * \param [IN] n power value
+ * \param [in] n power value
  * \retval result of raising 2 to the power n
  */
 #define POW2( n ) ( 1 << n )
@@ -119,15 +118,15 @@ typedef union Version_u
 /*!
  * \brief Initializes the pseudo random generator initial value
  *
- * \param [IN] seed Pseudo random generator initial value
+ * \param [in] seed Pseudo random generator initial value
  */
 void srand1( uint32_t seed );
 
 /*!
  * \brief Computes a random number between min and max
  *
- * \param [IN] min range minimum value
- * \param [IN] max range maximum value
+ * \param [in] min range minimum value
+ * \param [in] max range maximum value
  * \retval random random value in range min..max
  */
 int32_t randr( int32_t min, int32_t max );
@@ -137,18 +136,18 @@ int32_t randr( int32_t min, int32_t max );
  *
  * \remark STM32 Standard memcpy function only works on pointers that are aligned
  *
- * \param [OUT] dst  Destination array
- * \param [IN]  src  Source array
- * \param [IN]  size Number of bytes to be copied
+ * \param [out] dst  Destination array
+ * \param [in]  src  Source array
+ * \param [in]  size Number of bytes to be copied
  */
 void memcpy1( uint8_t *dst, const uint8_t *src, uint16_t size );
 
 /*!
  * \brief Copies size elements of src array to dst array reversing the byte order
  *
- * \param [OUT] dst  Destination array
- * \param [IN]  src  Source array
- * \param [IN]  size Number of bytes to be copied
+ * \param [out] dst  Destination array
+ * \param [in]  src  Source array
+ * \param [in]  size Number of bytes to be copied
  */
 void memcpyr( uint8_t *dst, const uint8_t *src, uint16_t size );
 
@@ -157,16 +156,16 @@ void memcpyr( uint8_t *dst, const uint8_t *src, uint16_t size );
  *
  * \remark STM32 Standard memset function only works on pointers that are aligned
  *
- * \param [OUT] dst   Destination array
- * \param [IN]  value Default value
- * \param [IN]  size  Number of bytes to be copied
+ * \param [out] dst   Destination array
+ * \param [in]  value Default value
+ * \param [in]  size  Number of bytes to be copied
  */
 void memset1( uint8_t *dst, uint8_t value, uint16_t size );
 
 /*!
  * \brief Converts a nibble to an hexadecimal character
  *
- * \param [IN] a   Nibble to be converted
+ * \param [in] a   Nibble to be converted
  * \retval hexChar Converted hexadecimal character
  */
 int8_t Nibble2HexChar( uint8_t a );
@@ -174,8 +173,8 @@ int8_t Nibble2HexChar( uint8_t a );
 /*!
  * \brief Computes a CCITT 32 bits CRC
  *
- * \param [IN] buffer   Data buffer used to compute the CRC
- * \param [IN] length   Data buffer length
+ * \param [in] buffer   Data buffer used to compute the CRC
+ * \param [in] length   Data buffer length
  *
  * \retval crc          The computed buffer of length CRC
  */
@@ -192,9 +191,9 @@ uint32_t Crc32Init( void );
 /*!
  * \brief Updates the value of the crc value.
  *
- * \param [IN] crcInit  Previous or initial crc value.
- * \param [IN] buffer   Data pointer.
- * \param [IN] length   Length of the data.
+ * \param [in] crcInit  Previous or initial crc value.
+ * \param [in] buffer   Data pointer.
+ * \param [in] length   Length of the data.
  *
  * \retval crc          Updated crc value.
  */
@@ -203,7 +202,7 @@ uint32_t Crc32Update( uint32_t crcInit, uint8_t *buffer, uint16_t length );
 /*!
  * \brief Finalizes the crc value after the calls to \ref Crc32Update.
  *
- * \param [IN] crc      Recent crc value.
+ * \param [in] crc      Recent crc value.
  *
  * \retval crc          Updated crc value.
  */

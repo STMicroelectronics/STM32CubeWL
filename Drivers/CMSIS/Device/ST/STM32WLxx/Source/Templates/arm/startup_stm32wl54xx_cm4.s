@@ -1,4 +1,4 @@
-;******************************************************************************
+;********************************************************************************
 ;* File Name          : startup_stm32wl54xx_cm4.s
 ;* Author             : MCD Application Team
 ;* Description        : STM32WL54xx devices vector table for MDK-ARM toolchain.
@@ -11,17 +11,17 @@
 ;*                      After Reset the CortexM4 processor is in Thread mode,
 ;*                      priority is Privileged, and the Stack is set to Main.
 ;* <<< Use Configuration Wizard in Context Menu >>>   
-;******************************************************************************
+;********************************************************************************
 ;* @attention
 ;*
-;* Copyright (c) 2020(2021) STMicroelectronics.
+;* Copyright (c) 2020-2021 STMicroelectronics.
 ;* All rights reserved.
 ;*
 ;* This software is licensed under terms that can be found in the LICENSE file
 ;* in the root directory of this software component.
 ;* If no LICENSE file comes with this software, it is provided AS-IS.
 ;*
-;******************************************************************************
+;********************************************************************************
 
 ; Amount of memory (in bytes) allocated for Stack
 ; Tailor this value to your application needs
@@ -84,7 +84,7 @@ __Vectors       DCD     __initial_sp                      ; Top of Stack
                 DCD     EXTI0_IRQHandler                  ; EXTI Line 0 Interrupt
                 DCD     EXTI1_IRQHandler                  ; EXTI Line 1 Interrupt
                 DCD     EXTI2_IRQHandler                  ; EXTI Line 2 Interrupt
-                DCD     EXTI3_IRQHandler                  ; EXTI Line 3 Interrup
+                DCD     EXTI3_IRQHandler                  ; EXTI Line 3 Interrupt
                 DCD     EXTI4_IRQHandler                  ; EXTI Line 4 Interrupt
                 DCD     DMA1_Channel1_IRQHandler          ; DMA1 Channel 1 Interrupt
                 DCD     DMA1_Channel2_IRQHandler          ; DMA1 Channel 2 Interrupt
@@ -334,9 +334,9 @@ DMAMUX1_OVR_IRQHandler
 
                 ALIGN
 
-;*******************************************************************************
+;********************************************************************************
 ; User Stack and Heap initialization
-;*******************************************************************************
+;********************************************************************************
                  IF      :DEF:__MICROLIB
 
                  EXPORT  __initial_sp
@@ -361,5 +361,3 @@ __user_initial_stackheap
                  ENDIF
 
                  END
-
-;************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE*****

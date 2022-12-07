@@ -256,6 +256,16 @@
 			<locationURI>PARENT-2-PROJECT_LOC/CM4/Core/Src/dma.c</locationURI>
 		</link>
 		<link>
+			<name>Application/User/Core/flash_if.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/CM4/Core/Src/flash_if.c</locationURI>
+		</link>
+		<link>
+			<name>Application/User/Core/gpio.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/CM4/Core/Src/gpio.c</locationURI>
+		</link>
+		<link>
 			<name>Application/User/Core/ipcc.c</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/CM4/Core/Src/ipcc.c</locationURI>
@@ -279,11 +289,6 @@
 			<name>Application/User/Core/stm32wlxx_hal_msp.c</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/CM4/Core/Src/stm32wlxx_hal_msp.c</locationURI>
-		</link>
-		<link>
-			<name>Application/User/Core/stm32wlxx_hal_timebase_tim.c</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/CM4/Core/Src/stm32wlxx_hal_timebase_tim.c</locationURI>
 		</link>
 		<link>
 			<name>Application/User/Core/stm32wlxx_it.c</name>

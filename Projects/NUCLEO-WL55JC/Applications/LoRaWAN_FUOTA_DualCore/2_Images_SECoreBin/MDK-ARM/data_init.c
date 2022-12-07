@@ -8,16 +8,15 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright(c) 2017 STMicroelectronics International N.V.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
-******************************************************************************
-*/
+  ******************************************************************************
+  */
 /* Includes ------------------------------------------------------------------*/
 #include "stdint.h"
 
@@ -40,7 +39,7 @@ extern uint32_t Image$$SE_region_RAM$$ZI$$Length;
   * @param  None.
   * @retval None.
   */
-void LoopCopyDataInit(void) 
+void LoopCopyDataInit(void)
 {
   uint32_t i;
 	uint8_t* src = (uint8_t*)&data_rom;
@@ -48,29 +47,29 @@ void LoopCopyDataInit(void)
 	uint32_t len = (uint32_t)&data_rom_length;
 
 	for(i=0; i < len; i++)
-  {  
+  {
 		dst[i] = src[i];
   }
 }
-  
+
 /**
   * @brief  Clear the zero-initialized data section.
   * @param  None.
   * @retval None.
   */
-void LoopFillZerobss(void) 
+void LoopFillZerobss(void)
 {
   uint32_t i;
 	uint8_t* dst = (uint8_t*)&bss;
 	uint32_t len = (uint32_t)&bss_length;
-	
+
 	/* Clear the zero-initialized data section */
 	for(i=0; i < len; i++)
-  {  
+  {
 		dst[i] = 0;
   }
 }
-	
+
 /**
   * @brief  Data section initialization.
   * @param  None.
@@ -79,6 +78,6 @@ void LoopFillZerobss(void)
  void __arm_data_init(void) {
 	 	LoopFillZerobss();
 	  LoopCopyDataInit();
-} 
- 
+}
+
 

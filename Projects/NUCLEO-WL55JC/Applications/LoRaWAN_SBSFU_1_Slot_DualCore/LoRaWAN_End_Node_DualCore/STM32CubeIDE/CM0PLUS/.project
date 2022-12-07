@@ -76,16 +76,6 @@
 			<locationURI>PARENT-7-PROJECT_LOC/Utilities/misc/stm32_tiny_vsnprintf.c</locationURI>
 		</link>
 		<link>
-			<name>Drivers/BSP/stm32wlxx_nucleo.c</name>
-			<type>1</type>
-			<locationURI>PARENT-7-PROJECT_LOC/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo.c</locationURI>
-		</link>
-		<link>
-			<name>Drivers/BSP/stm32wlxx_nucleo_radio.c</name>
-			<type>1</type>
-			<locationURI>PARENT-7-PROJECT_LOC/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo_radio.c</locationURI>
-		</link>
-		<link>
 			<name>Drivers/CMSIS/system_stm32wlxx.c</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/Common/System/system_stm32wlxx.c</locationURI>
@@ -191,6 +181,11 @@
 			<locationURI>PARENT-3-PROJECT_LOC/2_Images_SBSFU/STM32CubeIDE/CM0PLUS/Debug/se_interface_app.o</locationURI>
 		</link>
 		<link>
+			<name>Application/User/Core/gpio.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/CM0PLUS/Core/Src/gpio.c</locationURI>
+		</link>
+		<link>
 			<name>Application/User/Core/ipcc.c</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/CM0PLUS/Core/Src/ipcc.c</locationURI>
@@ -291,6 +286,16 @@
 			<locationURI>PARENT-2-PROJECT_LOC/CM0PLUS/MbMux/radio_mbwrapper.c</locationURI>
 		</link>
 		<link>
+			<name>Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo.c</locationURI>
+		</link>
+		<link>
+			<name>Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo_radio.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo_radio.c</locationURI>
+		</link>
+		<link>
 			<name>Middlewares/Third_Party/LoRaWAN/LmHandler.c</name>
 			<type>1</type>
 			<locationURI>PARENT-7-PROJECT_LOC/Middlewares/Third_Party/LoRaWAN/LmHandler/LmHandler.c</locationURI>
@@ -369,6 +374,26 @@
 			<name>Middlewares/Third_Party/LoRaWAN/RegionCN470.c</name>
 			<type>1</type>
 			<locationURI>PARENT-7-PROJECT_LOC/Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCN470.c</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/Third_Party/LoRaWAN/RegionCN470A20.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCN470A20.c</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/Third_Party/LoRaWAN/RegionCN470A26.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCN470A26.c</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/Third_Party/LoRaWAN/RegionCN470B20.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCN470B20.c</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/Third_Party/LoRaWAN/RegionCN470B26.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCN470B26.c</locationURI>
 		</link>
 		<link>
 			<name>Middlewares/Third_Party/LoRaWAN/RegionCN779.c</name>

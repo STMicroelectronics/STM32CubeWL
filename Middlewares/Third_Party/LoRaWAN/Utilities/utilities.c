@@ -41,6 +41,9 @@
 // Standard random functions redefinition start
 #define RAND_LOCAL_MAX 2147483647L
 
+// CRC32 reversed polynomial 0xEDB88320
+static const uint32_t reversedPolynom = 0xEDB88320;
+
 static uint32_t next = 1;
 
 static int32_t rand1( void );
@@ -104,9 +107,6 @@ int8_t Nibble2HexChar( uint8_t a )
 
 uint32_t Crc32( uint8_t *buffer, uint16_t length )
 {
-    // The CRC calculation follows CCITT - 0x04C11DB7
-    const uint32_t reversedPolynom = 0xEDB88320;
-
     // CRC initial value
     uint32_t crc = 0xFFFFFFFF;
 
@@ -134,9 +134,6 @@ uint32_t Crc32Init( void )
 
 uint32_t Crc32Update( uint32_t crcInit, uint8_t *buffer, uint16_t length )
 {
-    // The CRC calculation follows CCITT - 0x04C11DB7
-    const uint32_t reversedPolynom = 0xEDB88320;
-
     // CRC initial value
     uint32_t crc = crcInit;
 

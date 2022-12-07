@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -43,28 +42,41 @@ extern "C" {
   * @brief CM4 Verbose level for all trace logs
   * @note In AT_SLAVE usart speed is just 9600. VLEVEL_H will not work
   */
-#define VERBOSE_LEVEL               VLEVEL_M
+#define VERBOSE_LEVEL                        VLEVEL_M
 
 /**
   * @brief Enable trace logs
   */
-#define APP_LOG_ENABLED             1
+#define APP_LOG_ENABLED                      1
 
 /**
-  * @brief Enable MCU Debugger pins (dbg serial wires, sbg spi, etc)
+  * @brief Activate monitoring (probes) of some internal RF signals for debug purpose
   */
-#define DEBUGGER_ENABLED            0
+#define DEBUG_SUBGHZSPI_MONITORING_ENABLED   0
+
+#define DEBUG_RF_NRESET_ENABLED_ENABLED      0
+
+#define DEBUG_RF_HSE32RDY_ENABLED_ENABLED    0
+
+#define DEBUG_RF_SMPSRDY_ENABLED             0
+
+#define DEBUG_RF_LDORDY_ENABLED              0
+
+#define DEBUG_RF_DTB1_ENABLED                0
+
+#define DEBUG_RF_BUSY_ENABLED                0
 
 /**
-  * @brief Enable four wires usable as probes (two of them PROBE1 and PROBE2 used by the MW)
+  * @brief Enable/Disable MCU Debugger pins (dbg serial wires)
+  * @note  by HW serial wires are ON by default, need to put them OFF to save power
   */
-#define PROBE_PINS_ENABLED          0
+#define DEBUGGER_ENABLED                     0
 
 /**
   * @brief Disable Low Power mode
   * @note  0: LowPowerMode enabled. MCU enters stop2 mode, 1: LowPowerMode disabled. MCU enters sleep mode only
   */
-#define LOW_POWER_DISABLE           0
+#define LOW_POWER_DISABLE                    0
 
 /* USER CODE BEGIN EC */
 
@@ -90,5 +102,3 @@ extern "C" {
 #endif
 
 #endif /* __SYS_CONF_H__ */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

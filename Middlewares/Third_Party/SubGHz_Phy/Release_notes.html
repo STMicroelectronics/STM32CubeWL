@@ -5,74 +5,102 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>Release Notes for STM32WLxx SubGHz Physical Layer Middleware</title>
-  <style type="text/css">
-      code{white-space: pre-wrap;}
-      span.smallcaps{font-variant: small-caps;}
-      span.underline{text-decoration: underline;}
-      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
-  <link rel="stylesheet" href="../../../_htmresc/mini-st_2020.css" />
+  <link rel="stylesheet" href="_htmresc/mini-st_2020.css" />
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
-  <link rel="icon" type="image/x-icon" href="../../../_htmresc/favicon.png" />
+  <link rel="icon" type="image/x-icon" href="_htmresc/favicon.png" />
 </head>
 <body>
 <div class="row">
 <div class="col-sm-12 col-lg-4">
 <center>
-<h1 id="release-notes-for-stm32wlxx-subghz-physical-layer-middleware"><small>Release Notes for</small> STM32WLxx SubGHz Physical Layer Middleware</h1>
+<h1 id="release-notes-for">Release Notes for</h1>
+<h1 id="stm32wlxx-subghz-physical-layer-middleware"><mark>STM32WLxx SubGHz Physical Layer Middleware</mark></h1>
 <p>Copyright © 2021 STMicroelectronics<br />
 </p>
-<a href="https://www.st.com" class="logo"><img src="../../../_htmresc/st_logo_2020.png" alt="ST logo" /></a>
+<a href="https://www.st.com" class="logo"><img src="_htmresc/st_logo_2020.png" alt="ST logo" /></a>
 </center>
-<h1 id="license">License</h1>
-<p>Licensed by ST under BSD 3-Clause license (the "License"). You may not use this component except in compliance with the License. You may obtain a copy of the License at:</p>
-<p><a href="https://opensource.org/licenses/BSD-3-Clause">https://opensource.org/licenses/BSD-3-Clause</a></p>
 <h1 id="purpose">Purpose</h1>
-<p>This Middlewares provides the SubGHz Physical Layer for the stm32wlxx products. This covers</p>
+<p>This Middleware provides the SubGHz Physical Layer for the stm32wlxx products. This covers</p>
 <ul>
 <li>STM32WLxx devices</li>
 </ul>
 <p>This driver is composed of the radio driver and radio interface under “stm32_radio_driver” directory.</p>
 </div>
-<div class="col-sm-12 col-lg-8">
-<h1 id="update-history">Update History</h1>
+<section id="update-history" class="col-sm-12 col-lg-8">
+<h1>Update History</h1>
 <div class="collapse">
-<input type="checkbox" id="collapse-section2" checked aria-hidden="true"> <label for="collapse-section2" aria-hidden="true">v1.1.0 / 29-Apr-2021</label>
+<input type="checkbox" id="collapse-section3" checked aria-hidden="true"> <label for="collapse-section3" aria-hidden="true"><strong>V1.2.0 / 14-Dec-2021</strong></label>
 <div>
 <h2 id="main-changes">Main Changes</h2>
-<h3 id="fix-smps-drive-level-init">fix: SMPS drive level init</h3>
-<h3 id="fix-generic_bpsk-in-radiosettxgenericconfig-function-test-mode">fix: GENERIC_BPSK in RadioSetTxGenericConfig function (test mode)</h3>
-<h3 id="fix-modem_bpsk-is-not-handled-in-radiosetmodem-in-radio.c">fix: MODEM_BPSK is not handled in RadioSetModem in radio.c</h3>
-<h3 id="feature-add-cfo-calculation">feature: add cfo calculation</h3>
-<h3 id="fix-reduce-interrupt-scope-to-minimize-privilege-stack-code-execution">fix: reduce interrupt scope to minimize privilege stack code execution</h3>
-<h3 id="featureadd-long-packet-in-radio_fw">feature:add long packet in radio_fw</h3>
-<h3 id="feature-support-ibm-whitening-by-firmware-radio_fw">feature: Support IBM whitening by firmware radio_fw</h3>
-<h3 id="fix-channel-activity-detection-antenna-switch-set-in-rx-mode">fix: Channel Activity Detection: antenna switch set in rx mode</h3>
-<h3 id="fix-deadlock-of-wl-rf-driver">fix: Deadlock of WL RF driver</h3>
-<h3 id="fix-pingpong-rxerrors-when-sf12-bw500-cr-48">fix: PingPong RxErrors when SF12, BW500, CR 4/8</h3>
-<h3 id="feature-move-getfskbandwidthregvalue-in-radio-driver">feature: move GetFskBandwidthRegValue in radio_driver</h3>
-<h3 id="fix-incorrect-lora-per-results">fix: Incorrect LoRa PER Results</h3>
-<h3 id="feature-align-to-lorawan-semtech-stack-v4.4.7-integration---radio-part">feature: align to LoRaWAN Semtech stack v4.4.7 integration - Radio Part</h3>
-<p><br />
-</p>
+<ul>
+<li>Feature: Add defines RADIO_SIGFOX_ENABLE and RADIO_GENERIC_CONFIG_ENABLE to reduce code size when not needed</li>
+<li>Feature: Add Tx GMSK support</li>
+<li>Chore: Align register names with Reference Manual</li>
+<li>Chore: Clarify node/broadcast address</li>
+<li>Fix: Set_RxDutyCycle() function (Rx timeout Issue)</li>
+<li>Licensing update: New way to declare licenses</li>
+<li>Release Notes update</li>
+</ul>
+<h2 id="known-limitations">Known limitations:</h2>
+<p>None</p>
 </div>
 </div>
 <div class="collapse">
-<input type="checkbox" id="collapse-section1" aria-hidden="true"> <label for="collapse-section1" aria-hidden="true">v1.0.0 / 21-Oct-2020</label>
+<input type="checkbox" id="collapse-section2" aria-hidden="true"> <label for="collapse-section2" aria-hidden="true"><strong>V1.1.0 / 29-Apr-2021</strong></label>
 <div>
 <h2 id="main-changes-1">Main Changes</h2>
-<h3 id="first-release">First Release</h3>
-<p><br />
-</p>
+<ul>
+<li>fix: SMPS drive level init</li>
+<li>fix: GENERIC_BPSK in RadioSetTxGenericConfig function (test mode)</li>
+<li>fix: MODEM_BPSK is not handled in RadioSetModem in radio.c</li>
+<li>feature: add cfo calculation</li>
+<li>fix: reduce interrupt scope to minimize privilege stack code execution</li>
+<li>feature:add long packet in radio_fw</li>
+<li>feature: Support IBM whitening by firmware radio_fw</li>
+<li>fix: Channel Activity Detection: antenna switch set in rx mode</li>
+<li>fix: Deadlock of WL RF driver</li>
+<li>fix: PingPong RxErrors when SF12, BW500, CR 4/8</li>
+<li>feature: move GetFskBandwidthRegValue in radio_driver</li>
+<li>fix: Incorrect LoRa PER Results</li>
+<li>feature: align to LoRaWAN Semtech stack v4.4.7 integration - Radio Part</li>
+</ul>
+<h2 id="known-limitations-1">Known limitations:</h2>
+<p>None</p>
 </div>
 </div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section1" aria-hidden="true"> <label for="collapse-section1" aria-hidden="true"><strong>V1.0.0 / 21-Oct-2020</strong></label>
+<div>
+<h2 id="main-changes-2">Main Changes</h2>
+<ul>
+<li>First Release</li>
+</ul>
+<h2 id="known-limitations-2">Known limitations:</h2>
+<p>None</p>
 </div>
+</div>
+</section>
 </div>
 <footer class="sticky">
-<p>For complete documentation on STM32, visit: [<a href="http://www.st.com/stm32">www.st.com/stm32</a>]</p>
-This release note uses up to date web standards and, for this reason, should not be opened with Internet Explorer but preferably with popular browsers such as Google Chrome, Mozilla Firefox, Opera or Microsoft Edge.
+<div class="columns">
+<div class="column" style="width:95%;">
+<p>For complete documentation on STM32WLxx, visit: <a href="http://www.st.com/stm32wl">www.st.com/stm32wl</a></p>
+<p><em>This release note uses up to date web standards and, for this reason, should not be opened with Internet Explorer but preferably with popular browsers such as Google Chrome, Mozilla Firefox, Opera or Microsoft Edge.</em></p>
+</div><div class="column" style="width:5%;">
+<p><abbr title="Based on template cx566953 version 2.0">Info</abbr></p>
+</div>
+</div>
 </footer>
 </body>
 </html>

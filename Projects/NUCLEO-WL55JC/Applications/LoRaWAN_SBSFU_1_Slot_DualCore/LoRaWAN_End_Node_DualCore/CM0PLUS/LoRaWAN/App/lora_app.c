@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -70,7 +69,7 @@ void InitPackageProcess(void)
   /* USER CODE BEGIN InitPackageProcess_1 */
 
   /* USER CODE END InitPackageProcess_1 */
-  UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_MbLmHandlerProcess), UTIL_SEQ_RFU, LmHandlerProcess);
+  UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LmHandlerProcess), UTIL_SEQ_RFU, LmHandlerProcess);
   /* USER CODE BEGIN InitPackageProcess_2 */
 
   /* USER CODE END InitPackageProcess_2 */
@@ -81,10 +80,8 @@ void OnMacProcessNotify(void)
   /* USER CODE BEGIN OnMacProcessNotify_1 */
 
   /* USER CODE END OnMacProcessNotify_1 */
-  UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_MbLmHandlerProcess), CFG_SEQ_Prio_0);
+  UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LmHandlerProcess), CFG_SEQ_Prio_0);
   /* USER CODE BEGIN OnMacProcessNotify_2 */
 
   /* USER CODE END OnMacProcessNotify_2 */
 }
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

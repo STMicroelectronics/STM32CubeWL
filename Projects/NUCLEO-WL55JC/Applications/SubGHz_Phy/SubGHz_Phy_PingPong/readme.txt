@@ -2,22 +2,20 @@
   @page SubGHz_Phy_PingPong Readme file
 
   @verbatim
-  ******************** (C) COPYRIGHT 2020 STMicroelectronics *******************
+  ******************************************************************************
   * @file    Applications/SubGHz_Phy/SubGHz_Phy_PingPong/readme.txt
   * @author  MCD Application Team
   * @brief   This application is a simple demo application software between 2
   *          LoRa Objects: a STM32WL Nucleo board and whatever other LoRa Radio
   *          board embedding SubGHz_Phy_PingPong application too
   ******************************************************************************
-  * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2020-2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   @endverbatim
@@ -51,6 +49,8 @@ Applications, SubGHz_Phy, PingPong, SingleCore
 
   - SubGHz_Phy_PingPong/Core/Inc/dma.h                                          This file contains all the function prototypes for
                                                                                 the dma.c file
+  - SubGHz_Phy_PingPong/Core/Inc/gpio.h                                         This file contains all the function prototypes for
+                                                                                the gpio.c file
   - SubGHz_Phy_PingPong/Core/Inc/main.h                                         : Header for main.c file.
                                                                                 This file contains the common defines of the application.
   - SubGHz_Phy_PingPong/Core/Inc/platform.h                                     Header for General HW instances configuration
@@ -81,6 +81,8 @@ Applications, SubGHz_Phy, PingPong, SingleCore
 
   - SubGHz_Phy_PingPong/Core/Src/dma.c                                          This file provides code for the configuration
                                                                                 of all the requested memory to memory DMA transfers.
+  - SubGHz_Phy_PingPong/Core/Src/gpio.c                                         This file provides code for the configuration
+                                                                                of all used GPIO pins.
   - SubGHz_Phy_PingPong/Core/Src/main.c                                         : Main program body
   - SubGHz_Phy_PingPong/Core/Src/rtc.c                                          This file provides code for the configuration
                                                                                 of the RTC instances.
@@ -92,7 +94,7 @@ Applications, SubGHz_Phy, PingPong, SingleCore
                                                                                 of the SUBGHZ instances.
   - SubGHz_Phy_PingPong/Core/Src/system_stm32wlxx.c                             CMSIS Cortex Device Peripheral Access Layer System Source File
   - SubGHz_Phy_PingPong/Core/Src/sys_app.c                                      Initializes HW and SW system entities (not related to the radio)
-  - SubGHz_Phy_PingPong/Core/Src/sys_debug.c                                    Enables 4 debug pins for internal signals RealTime debugging
+  - SubGHz_Phy_PingPong/Core/Src/sys_debug.c                                    Configure probes pins RealTime debugging and JTAG/SerialWires for LowPower
   - SubGHz_Phy_PingPong/Core/Src/timer_if.c                                     Configure RTC Alarm, Tick and Calendar manager
   - SubGHz_Phy_PingPong/Core/Src/usart.c                                        This file provides code for the configuration
                                                                                 of the USART instances.
@@ -139,6 +141,34 @@ In order to make the program work, you must do the following :
   - make sure the flag DEBUGGER_ENABLED to 1 in sys_conf.h
   - simpler to define the flag LOW_POWER_DISABLE to 1 as well
   - compile, download and attach
+
+@par How to use MX to modify some RF middleware and application settings
+  This example is compatible (with some problems/limitations) with STM32CubeMX 
+  and the RF application and middleware configuration can be modified via GUI. Few warnings and guidelines:
+  - ioc file is provided in the project directory and can be opened with STM32CubeMX v6.5.0 or higher.
+  - warning: when regenerating with the provided ioc file, 
+    the IDE projects are regenerated and paths to HAL and MWs files from STM32Cube/Repository location are erroneously added; to avoid that, 
+    user shall uncheck the "Use Default Firmware Location" in the GUI "Project-Manager" panel
+    and shall replace "Firmware Relative Path" with the root directory of the STM32CubeWL firmware package  (e.g. C:\myDir\STM32Cube_FW_WL_V1.2.0\);
+    problem will be fixed in next STM32CubeMX version.
+  - .extSettings file allows to add to the generated IDE projects additional files not generated natively by MX (e.g. BSP files).
+  - when regenerating on existing code and existing linker files:
+    - STM32CubeMX updates the existing project content and preserves linker files.
+    - STM32CubeMX does not update the USER CODE sections (lines between /* USER CODE BEGIN Xxx */ and /* USER CODE END Xxx */).
+  - when regenerating after copying only the ioc file in an empty directory:
+    - STM32CubeMX generates default project files and default linker files. (Please check original linker file from project directory)
+    - it is up to the user to to fill the USER CODE sections with his application code.
+
+@par How to use it with Azure ThreadX RTOS?
+  This example can be combined with Azure ThreadX RTOS via STM32CubeMX. The video tutorial:
+  "STM32WL - How to port an existing RF application on Azure ThreadX RTOS"
+  is available on https://www.youtube.com/playlist?list=PLnMKNibPkDnE2eaR-ZGM3ZJXadyQLtTpX
+  but not sufficient for the complete porting of this example.
+  After following the video instructions the user shall open "subghz_phy_app.c" and manually:
+  - delete "stm32_seq.h" inclusion
+  - delete the line "UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_SubGHz_Phy_App_Process), UTIL_SEQ_RFU, PingPong_Process);
+  - call PingPong_Process(); function within /* USER CODE App_Main_Thread_Entry_Loop */
+  - replace "UTIL_SEQ_SetTask(..) calls" with tx_thread_resume(&App_MainThread);
 
  * <h3><center>&copy; COPYRIGHT STMicroelectronics</center></h3>
  */

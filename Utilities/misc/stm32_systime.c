@@ -1,7 +1,7 @@
 /*!
- * \file      systime.c
+ * \file      stm32_systime.c
  *
- * \brief     System time functions implementation.
+ * \brief     System time functions implementation
  *
  * \copyright Revised BSD License, see section \ref LICENSE.
  *
@@ -23,23 +23,22 @@
  * \author    MCD Application Team ( STMicroelectronics International )
  */
 /**
-******************************************************************************
- * @file  stm32_systime.c
- * @author  MCD Application Team
- * @brief   System time functions implementation
- ******************************************************************************
- * @attention
- *
- * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics. 
- * All rights reserved.</center></h2>
- *
- * This software component is licensed by ST under BSD 3-Clause license,
- * the "License"; You may not use this file except in compliance with the 
- * License. You may obtain a copy of the License at:
- *            opensource.org/licenses/BSD-3-Clause
- *
- ******************************************************************************
- */
+  ******************************************************************************
+  * @file    stm32_systime.c
+  * @author  MCD Application Team
+  * @brief   System time functions implementation
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2019 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
 
 /* Includes ------------------------------------------------------------------*/
 #include <stdio.h>
@@ -54,7 +53,7 @@
  * @defgroup SYS_TIME_private_defines SYS_TIME private defines
  *  @{
  */
- 
+
 /**
   * @brief number of day in leap year up to the end of February
   *
@@ -82,15 +81,15 @@
 /**
   * @brief delta is referenced to Unix time
   * @note UNIX time 0 = starts at 01:00:00, 01/01/1970
-  * but calculation is easier from Monday 1st January 1968 
+  * but calculation is easier from Monday 1st January 1968
   *
   */
-#define CALC_REF_YEAR                  68 
+#define CALC_REF_YEAR                  68
 
 /**
   * @brief delta is referenced to Unix time
   * @note UNIX time 0 = starts at 01:00:00, 01/01/1970
-  * but calculation is easier from Monday 1st January 1968 
+  * but calculation is easier from Monday 1st January 1968
   *
   */
 #define CALC_REF_YEAR_TO_UNIX_REF_YEAR_COMPENSATION_IN_SECONDS  ( ( TM_DAYS_IN_LEAP_YEAR + TM_DAYS_IN_YEAR ) * TM_SECONDS_IN_1DAY )
@@ -228,7 +227,7 @@ SysTime_t SysTimeSub( SysTime_t a, SysTime_t b )
 void SysTimeSet( SysTime_t sysTime )
 {
   SysTime_t DeltaTime;
-  
+
   SysTime_t calendarTime = { .Seconds = 0, .SubSeconds = 0 };
 
   calendarTime.Seconds = UTIL_SYSTIMDriver.GetCalendarTime( ( uint16_t* )&calendarTime.SubSeconds );
@@ -262,7 +261,7 @@ SysTime_t SysTimeGetMcuTime( void )
   SysTime_t calendarTime = { .Seconds = 0, .SubSeconds = 0 };
 
   calendarTime.Seconds = UTIL_SYSTIMDriver.GetCalendarTime( ( uint16_t* )&calendarTime.SubSeconds );
-  
+
   return calendarTime;
 }
 
@@ -271,7 +270,7 @@ uint32_t SysTimeToMs( SysTime_t sysTime )
   SysTime_t DeltaTime;
   DeltaTime.SubSeconds = (int16_t)UTIL_SYSTIMDriver.BKUPRead_SubSeconds();
   DeltaTime.Seconds = UTIL_SYSTIMDriver.BKUPRead_Seconds();
-  
+
   SysTime_t calendarTime = SysTimeSub( sysTime, DeltaTime );
   return calendarTime.Seconds * 1000 + calendarTime.SubSeconds;
 }
@@ -310,7 +309,7 @@ uint32_t SysTimeMkTime( const struct tm* localtime )
   // Convert from days to seconds
   nbsecs = nbdays * TM_SECONDS_IN_1DAY;
 
-  nbsecs += ( ( uint32_t )localtime->tm_sec + 
+  nbsecs += ( ( uint32_t )localtime->tm_sec +
         ( ( uint32_t )localtime->tm_min * TM_SECONDS_IN_1MINUTE ) +
         ( ( uint32_t )localtime->tm_hour * TM_SECONDS_IN_1HOUR ) );
   return nbsecs - CALC_REF_YEAR_TO_UNIX_REF_YEAR_COMPENSATION_IN_SECONDS;
@@ -371,7 +370,7 @@ void SysTimeLocalTime( const uint32_t timestamp, struct tm *localtime )
 /**
   *  @}
   */
-  
+
 /**************************** Private functions *******************************/
 
 /**
@@ -491,10 +490,7 @@ static void CalendarDiv60( uint32_t in, uint32_t* out, uint32_t* remainder )
 /**
   *  @}
   */
-  
+
 /**
   *  @}
   */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-

@@ -14,13 +14,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2020 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Apache License, Version 2.0,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/Apache-2.0
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -46,13 +45,13 @@ defined in linker script */
 .word _ebss
 
 /**
- * @brief  This is the code that gets called when the processor first
- *          starts execution following a reset event. Only the absolutely
- *          necessary set is performed, after which the application
- *          supplied main() routine is called.
- * @param  None
- * @retval : None
-*/
+  * @brief  This is the code that gets called when the processor first
+  *          starts execution following a reset event. Only the absolutely
+  *          necessary set is performed, after which the application
+  *          supplied main() routine is called.
+  * @param  None
+  * @retval : None
+  */
 
   .section .text.Reset_Handler
   .weak Reset_Handler
@@ -106,13 +105,13 @@ LoopForever:
   .size Reset_Handler, .-Reset_Handler
 
 /**
- * @brief  This is the code that gets called when the processor receives an
- *         unexpected interrupt.  This simply enters an infinite loop, preserving
- *         the system state for examination by a debugger.
- *
- * @param  None
- * @retval : None
-*/
+  * @brief  This is the code that gets called when the processor receives an
+  *         unexpected interrupt.  This simply enters an infinite loop, preserving
+  *         the system state for examination by a debugger.
+  *
+  * @param  None
+  * @retval : None
+  */
   .section .text.Default_Handler,"ax",%progbits
 Default_Handler:
 Infinite_Loop:
@@ -300,5 +299,3 @@ g_pfnVectors:
 	.thumb_set SUBGHZ_Radio_IRQHandler,Default_Handler
 
 	.weak	SystemInit
-
-/************************ (C) COPYRIGHT STMicroelectonics *****END OF FILE****/

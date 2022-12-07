@@ -32,7 +32,6 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS WITH THE SOFTWARE
 
 *****************************************************************************/
-#include <stdint.h>
 #include "lorawan_aes.h"
 #include "cmac.h"
 #include "utilities.h"

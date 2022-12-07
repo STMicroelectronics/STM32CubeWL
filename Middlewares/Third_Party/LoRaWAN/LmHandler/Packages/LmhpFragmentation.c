@@ -30,9 +30,9 @@
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/
+#include "LoRaMac.h"
 #include "LmHandler.h"
 #include "LmhpFragmentation.h"
-#include "FragDecoder.h"
 #include "frag_decoder_if.h"
 #include "utilities.h"
 
@@ -63,7 +63,11 @@ typedef enum LmhpFragmentationTxDelayStates_e
 typedef struct LmhpFragmentationState_s
 {
     bool Initialized;
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000300 ))
     bool IsRunning;
+#elif (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+    bool IsTxPending;
+#endif /* LORAMAC_VERSION */
     LmhpFragmentationTxDelayStates_t TxDelayState;
     uint8_t DataBufferMaxSize;
     uint8_t *DataBuffer;
@@ -95,9 +99,9 @@ static LmhpFragmentationParams_t* LmhpFragmentationParams;
 /*!
  * Initializes the package with provided parameters
  *
- * \param [IN] params            Pointer to the package parameters
- * \param [IN] dataBuffer        Pointer to main application buffer
- * \param [IN] dataBufferMaxSize Main application buffer maximum size
+ * \param [in] params            Pointer to the package parameters
+ * \param [in] dataBuffer        Pointer to main application buffer
+ * \param [in] dataBufferMaxSize Main application buffer maximum size
  */
 static void LmhpFragmentationInit( void *params, uint8_t *dataBuffer, uint8_t dataBufferMaxSize );
 
@@ -109,6 +113,7 @@ static void LmhpFragmentationInit( void *params, uint8_t *dataBuffer, uint8_t da
  */
 static bool LmhpFragmentationIsInitialized( void );
 
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000300 ))
 /*!
  * Returns the package operation status.
  *
@@ -116,6 +121,15 @@ static bool LmhpFragmentationIsInitialized( void );
  *                [true: Running, false: Not running]
  */
 static bool LmhpFragmentationIsRunning( void );
+#elif (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+/*!
+ * Returns if a package transmission is pending or not.
+ *
+ * \retval status Package transmission status
+ *                [true: pending, false: Not pending]
+ */
+static bool LmhpFragmentationIsTxPending( void );
+#endif /* LORAMAC_VERSION */
 
 /*!
  * Processes the internal package events.
@@ -125,7 +139,7 @@ static void LmhpFragmentationProcess( void );
 /*!
  * Processes the MCPS Indication
  *
- * \param [IN] mcpsIndication     MCPS indication primitive data
+ * \param [in] mcpsIndication     MCPS indication primitive data
  */
 static void LmhpFragmentationOnMcpsIndication( McpsIndication_t *mcpsIndication );
 
@@ -137,7 +151,11 @@ static void OnFragmentTxDelay(void *context);
 static LmhpFragmentationState_t LmhpFragmentationState =
 {
     .Initialized = false,
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000300 ))
     .IsRunning = false,
+#elif (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+    .IsTxPending = false,
+#endif /* LORAMAC_VERSION */
     .TxDelayState = FRAGMENTATION_TX_DELAY_STATE_IDLE,
 };
 
@@ -187,16 +205,23 @@ static LmhPackage_t LmhpFragmentationPackage =
     .Port = FRAGMENTATION_PORT,
     .Init = LmhpFragmentationInit,
     .IsInitialized = LmhpFragmentationIsInitialized,
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000300 ))
     .IsRunning = LmhpFragmentationIsRunning,
+#elif (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+    .IsTxPending =  LmhpFragmentationIsTxPending,
+#endif /* LORAMAC_VERSION */
     .Process = LmhpFragmentationProcess,
+    .OnPackageProcessEvent = NULL,                             // To be initialized by LmHandler
     .OnMcpsConfirmProcess = NULL,                              // Not used in this package
     .OnMcpsIndicationProcess = LmhpFragmentationOnMcpsIndication,
     .OnMlmeConfirmProcess = NULL,                              // Not used in this package
+    .OnMlmeIndicationProcess = NULL,                           // Not used in this package
     .OnJoinRequest = NULL,                                     // To be initialized by LmHandler
-    .OnSendRequest = NULL,                                     // To be initialized by LmHandler
     .OnDeviceTimeRequest = NULL,                               // To be initialized by LmHandler
     .OnSysTimeUpdate = NULL,                                   // To be initialized by LmHandler
-    .OnPackageProcessEvent = NULL,                             // To be initialized by LmHandler
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+    .OnSystemReset = NULL,                                     // To be initialized by LmHandler
+#endif /* LORAMAC_VERSION */
 };
 
 // Delay value.
@@ -222,11 +247,6 @@ LmhPackage_t *LmhpFragmentationPackageFactory( void )
     return &LmhpFragmentationPackage;
 }
 
-uint8_t LmhpFragmentationGetPackageVersion(void)
-{
-  return (uint8_t)FRAGMENTATION_VERSION;
-}
-
 static void LmhpFragmentationInit( void *params, uint8_t *dataBuffer, uint8_t dataBufferMaxSize )
 {
     if( ( params != NULL ) && ( dataBuffer != NULL ) )
@@ -235,7 +255,9 @@ static void LmhpFragmentationInit( void *params, uint8_t *dataBuffer, uint8_t da
         LmhpFragmentationState.DataBuffer = dataBuffer;
         LmhpFragmentationState.DataBufferMaxSize = dataBufferMaxSize;
         LmhpFragmentationState.Initialized = true;
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000300 ))
         LmhpFragmentationState.IsRunning = true;
+#endif /* LORAMAC_VERSION */
         // Initialize Fragmentation delay time.
         TxDelayTime = 0;
         // Initialize Fragmentation delay timer.
@@ -244,9 +266,14 @@ static void LmhpFragmentationInit( void *params, uint8_t *dataBuffer, uint8_t da
     else
     {
         LmhpFragmentationParams = NULL;
-        LmhpFragmentationState.IsRunning = false;
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000300 ))
+        LmhpFragmentationState.IsRunning = true;
+#endif /* LORAMAC_VERSION */
         LmhpFragmentationState.Initialized = false;
     }
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+    LmhpFragmentationState.IsTxPending = false;
+#endif /* LORAMAC_VERSION */
 
     /* initialize the global fragmentation session buffer */
     UTIL_MEM_set_8( FragSessionData, 0, sizeof(FragSessionData) );
@@ -257,6 +284,7 @@ static bool LmhpFragmentationIsInitialized( void )
     return LmhpFragmentationState.Initialized;
 }
 
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000300 ))
 static bool LmhpFragmentationIsRunning( void )
 {
     if( LmhpFragmentationState.Initialized == false )
@@ -266,6 +294,12 @@ static bool LmhpFragmentationIsRunning( void )
 
     return LmhpFragmentationState.IsRunning;
 }
+#elif (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+static bool  LmhpFragmentationIsTxPending( void )
+{
+    return LmhpFragmentationState.IsTxPending;
+}
+#endif /* LORAMAC_VERSION */
 
 static void LmhpFragmentationProcess( void )
 {
@@ -285,10 +319,7 @@ static void LmhpFragmentationProcess( void )
             break;
         case FRAGMENTATION_TX_DELAY_STATE_PENDING:
             // Send the reply.
-            if (LORAMAC_HANDLER_SUCCESS == LmhpFragmentationPackage.OnSendRequest( &DelayedReplyAppData,
-                                                                                   LORAMAC_HANDLER_UNCONFIRMED_MSG,
-                                                                                   NULL,
-                                                                                   true ) )
+            if (LORAMAC_HANDLER_SUCCESS == LmHandlerSend( &DelayedReplyAppData, LORAMAC_HANDLER_UNCONFIRMED_MSG, true ) )
             {
                 LmhpFragmentationState.TxDelayState = FRAGMENTATION_TX_DELAY_STATE_IDLE;
             }
@@ -367,7 +398,7 @@ static void LmhpFragmentationOnMcpsIndication( McpsIndication_t *mcpsIndication 
                 uint8_t status = 0x00;
 
                 fragSessionData.FragGroupData.FragSession.Value = mcpsIndication->Buffer[cmdIndex++];
-                
+
                 fragSessionData.FragGroupData.FragNb =  ( mcpsIndication->Buffer[cmdIndex++] << 0 ) & 0x00FF;
                 fragSessionData.FragGroupData.FragNb |= ( mcpsIndication->Buffer[cmdIndex++] << 8 ) & 0xFF00;
 
@@ -387,9 +418,10 @@ static void LmhpFragmentationOnMcpsIndication( McpsIndication_t *mcpsIndication 
                     status |= 0x01; // Encoding unsupported
                 }
 
-                if( ( fragSessionData.FragGroupData.FragNb > FRAG_MAX_NB ) || 
+                if( ( fragSessionData.FragGroupData.FragNb > FRAG_MAX_NB ) ||
                     ( fragSessionData.FragGroupData.FragSize > FRAG_MAX_SIZE ) ||
-                    ( ( fragSessionData.FragGroupData.FragNb * fragSessionData.FragGroupData.FragSize ) > FragDecoderGetMaxFileSize( ) ) )
+                      ( fragSessionData.FragGroupData.FragSize < FRAG_MIN_SIZE ) ||
+                    ( ( fragSessionData.FragGroupData.FragNb * fragSessionData.FragGroupData.FragSize ) > FRAG_DECODER_DWL_REGION_SIZE ) )
                 {
                     status |= 0x02; // Not enough Memory
                 }
@@ -415,7 +447,8 @@ static void LmhpFragmentationOnMcpsIndication( McpsIndication_t *mcpsIndication 
                     FragSessionData[fragSessionData.FragGroupData.FragSession.Fields.FragIndex] = fragSessionData;
                     FragDecoderInit( fragSessionData.FragGroupData.FragNb,
                                      fragSessionData.FragGroupData.FragSize,
-                                     &LmhpFragmentationParams->DecoderCallbacks );
+                                     &LmhpFragmentationParams->DecoderCallbacks,
+                                     FRAGMENTATION_VERSION);
                 }
                 LmhpFragmentationState.DataBuffer[dataBufferIndex++] = FRAGMENTATION_FRAG_SESSION_SETUP_ANS;
                 LmhpFragmentationState.DataBuffer[dataBufferIndex++] = status;
@@ -542,7 +575,7 @@ static void LmhpFragmentationOnMcpsIndication( McpsIndication_t *mcpsIndication 
 
             /* force Duty Cycle OFF to this Send */
             LmHandlerSetDutyCycleEnable( false );
-            LmhpFragmentationPackage.OnSendRequest( &cmdReplyAppData, LORAMAC_HANDLER_UNCONFIRMED_MSG, NULL, true );
+            LmHandlerSend( &cmdReplyAppData, LORAMAC_HANDLER_UNCONFIRMED_MSG, true );
 
             /* restore initial Duty Cycle */
             LmHandlerSetDutyCycleEnable( current_dutycycle );

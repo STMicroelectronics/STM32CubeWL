@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -21,8 +20,12 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stdint.h"
+#include "platform.h"
 #include "sys_conf.h"
 #include "sys_sensors.h"
+#if defined (SENSOR_ENABLED) && (SENSOR_ENABLED == 0)
+#include "adc_if.h"
+#endif /* SENSOR_ENABLED */
 
 /* USER CODE BEGIN Includes */
 #if defined (SENSOR_ENABLED) && (SENSOR_ENABLED == 1)
@@ -32,72 +35,28 @@
 #warning "this code would work only if user provide necessary IKS and BSP layers"
 #include "iks01a2_env_sensors.h"
 #elif defined (X_NUCLEO_IKS01A3)
+
 /*
-## How to add IKS01A3 to CubeWL
-
- 1. Download STM32CubeExpansion_MEMS1_V8.0.0
- 2. Copy Drivers From `STM32CubeExpansion_MEMS1_V8.0.0\Drivers\BSP\IKS01A3` to CubeWL `Drivers\BSP\IKS01A3` and add to the IDE Project
- 3. Copy `STM32CubeExpansion_MEMS1_V8.0.0\Drivers\BSP\IKS01A3\iks01a3_conf_template.h` into `Projects\NUCLEO-WL55JC\Applications\LoRaWAN\End_Node\LoRaWAN\Target\iks01a3_conf.h`.
- 4. Copy files nucleo_l476rg_bus.c/nucleo_l476rg_bus.h  from `STM32L476RG-Nucleo\Applications\IKS01A3\ActiveTime\Inc and \Src` to `Projects\NUCLEO-WL55JC\Applications\LoRaWAN\End_Node\LoRaWAN\Target` and rename to `nucleo_wl55jc_bus.c` and `nucleo_wl55jc_bus.h` respectively
- 5. Update `nucleo_wl55jc_bus.c`  include files  to
- ```bash
-#include "nucleo_wl55jc_bus.h"
-#include "stm32wlxx_nucleo_errno.h"
-#include "stm32wlxx_hal.h"
-```
-
-6. Update definitions in `nucleo_wl55jc_bus.h`(to be commented since already defined elsewhere)
-
- ```bash
-//#define USE_HAL_SPI_REGISTER_CALLBACKS 0
-//#define USE_HAL_I2C_REGISTER_CALLBACKS 0
-```
-
-7. copy following components and add them (.c and .h) into IDE Project
-
-../../../../../../Drivers/BSP/Components/lsm6dso
-../../../../../../Drivers/BSP/Components/lis2dw12
-../../../../../../Drivers/BSP/Components/lis2mdl
-../../../../../../Drivers/BSP/Components/hts221
-../../../../../../Drivers/BSP/Components/lps22hh
-../../../../../../Drivers/BSP/Components/stts751
-../../../../../../Drivers/BSP/Components/Common
-
-8. Enable #define HAL_I2C_MODULE_ENABLED in stm32_hal_conf.h
-9. Add stm32wlxx_hal_i2c.c and stm32wlxx_hal_i2c_ex.c in the IDE Project
-10. Update hi2c->Instance in `nucleo_wl55jc_bus.c` to
-
-```bash
-  hi2c->Instance = I2C2;
-```
-
-11. Update msp function in `nucleo_wl55jc_bus.c`
-
-```bash
-static void I2C2_MspInit(I2C_HandleTypeDef *i2cHandle)
-{
-  GPIO_InitTypeDef GPIO_InitStruct;
-
-  GPIO_InitStruct.Pin = GPIO_PIN_11 | GPIO_PIN_12;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-  GPIO_InitStruct.Alternate = GPIO_AF4_I2C2;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  __HAL_RCC_I2C2_CLK_ENABLE();
-}
-
-static void I2C2_MspDeInit(I2C_HandleTypeDef *i2cHandle)
-{
-  __HAL_RCC_I2C2_CLK_DISABLE();
-
-  HAL_GPIO_DeInit(GPIOA, GPIO_PIN_11 | GPIO_PIN_12);
-
-}
-```
-12. Replace I2C1xx by MX_I2C2xx and i2c1 by i2c2 in `nucleo_wl55jc_bus.c`
-13. Replace I2C1xx by MX_I2C2xx in `nucleo_wl55jc_bus.h`
+## How to add IKS01A3 to STM32CubeWL
+   Note that LoRaWAN_End_Node Example is used as an example for steps below.
+ 1. Open the LoRaWAN_End_Node CubeMX project by double-clicking on the LoRaWAN_End_Node.ioc under "STM32Cube_FW_WL_V1.x.x\Projects\NUCLEO-WL55JC\Applications\LoRaWAN\LoRaWAN_End_Node"
+ 2. From the CubeMX project, click on "Software Packs"->"Manage Software Packs" to open the Embedded Software Packages Manager. Then, click on the "STMicroelectronics" tab, expand the X-CUBE-MEMS1, check the latest version of this pack (i.e. 9.0.0), and install. Then, close the Embedded Software Packages Manager.
+ 3. From the CubeMX project, click on "Software Packs"->"Select Components" to open the Software Packs Component Selector, expand the X-CUBE-MEMS1 pack and select the "Board Extension IKS01A3" component by checking the respective box, and click OK.
+ 4. From the CubeMX project, expand the "Connectivity" category and enable I2C2 on pins PA11 (I2C2_SDA) and PA12 (I2C2_SCK).
+ 5. From the CubeMX project, expand the "Software Packs" category and enable the "Board Extension IKS01A3" by checking the box, and choose I2C2 under the "Found Solutions" menu.
+ 6. From the CubeMX project, click the "Project Manager" section
+    - From the "Project Settings" section, select your Toolchain/IDE of choice (if CubeIDE, uncheck the "Generator Under Root" option).
+    - From the "Code Generator" section, select "Copy only the necessary library files".
+ 7. Click "GENERATE CODE" to generate the code project with the MEMS drivers integrated.
+ 8. From the code project, find and open the sys_conf.h and make the following edits
+    - Set the #define SENSOR_ENABLED to 1
+    - Set the #define LOW_POWER_DISABLE to 1 to prevent the device from entering low power mode. This is needed, since the I2C2 requires handling when exiting low power modes, so to prevent issues, best is to disable low power mode, however, if low power mode is desired, you'll have to re-initialize the I2C2 from PWR_ExitStopMode() in stm32_lpm_if.c, so you can just call HAL_I2C_Init() from there.
+ 9. From the code project, find and open lora_app.h, and uncomment the following line
+    #define CAYENNE_LPP
+ 10. From the code project properties, add X_NUCLEO_IKS01A3 Pre-processor Defined symbol.
+ 11. Save all changes and build project
+ 12. Connect the X-NUCLEO-IKS01A3 expansion board on the NUCLEO-WL55JC1
+ 13. Load and run the code
 */
 #warning "IKS drivers are today available for several families but not stm32WL, follow steps defined in sys_sensors.c"
 #include "iks01a3_env_sensors.h"
@@ -160,7 +119,7 @@ IKS01A3_ENV_SENSOR_Capabilities_t EnvCapabilities;
 /* USER CODE END PFP */
 
 /* Exported functions --------------------------------------------------------*/
-int32_t  EnvSensors_Read(sensor_t *sensor_data)
+int32_t EnvSensors_Read(sensor_t *sensor_data)
 {
   /* USER CODE BEGIN EnvSensors_Read */
   float HUMIDITY_Value = HUMIDITY_DEFAULT_VAL;
@@ -184,8 +143,8 @@ int32_t  EnvSensors_Read(sensor_t *sensor_data)
   IKS01A3_ENV_SENSOR_GetValue(IKS01A3_LPS22HH_0, ENV_PRESSURE, &PRESSURE_Value);
   IKS01A3_ENV_SENSOR_GetValue(IKS01A3_LPS22HH_0, ENV_TEMPERATURE, &TEMPERATURE_Value);
 #endif /* USE_IKS01A3_ENV_SENSOR_LPS22HH_0 */
-#elif !defined (SENSOR_ENABLED)
-#error SENSOR_ENABLED not defined
+#else
+  TEMPERATURE_Value = (SYS_GetTemperatureLevel() >> 8);
 #endif  /* SENSOR_ENABLED */
 
   sensor_data->humidity    = HUMIDITY_Value;
@@ -199,61 +158,132 @@ int32_t  EnvSensors_Read(sensor_t *sensor_data)
   /* USER CODE END EnvSensors_Read */
 }
 
-int32_t  EnvSensors_Init(void)
+int32_t EnvSensors_Init(void)
 {
+#if defined( USE_IKS01A2_ENV_SENSOR_HTS221_0 ) || defined( USE_IKS01A2_ENV_SENSOR_LPS22HB_0 ) || \
+    defined( USE_IKS01A3_ENV_SENSOR_HTS221_0 ) || defined( USE_IKS01A3_ENV_SENSOR_LPS22HH_0 ) || \
+    defined( USE_BSP_DRIVER )
+  int32_t ret = BSP_ERROR_NONE;
+#else
+  int32_t ret = 0;
+#endif /* USE_BSP_DRIVER */
   /* USER CODE BEGIN EnvSensors_Init */
 #if defined (SENSOR_ENABLED) && (SENSOR_ENABLED == 1)
   /* Init */
 #if (USE_IKS01A2_ENV_SENSOR_HTS221_0 == 1)
-  IKS01A2_ENV_SENSOR_Init(HTS221_0, ENV_TEMPERATURE | ENV_HUMIDITY);
+  ret = IKS01A2_ENV_SENSOR_Init(HTS221_0, ENV_TEMPERATURE | ENV_HUMIDITY);
+  if (ret != BSP_ERROR_NONE)
+  {
+    Error_Handler();
+  }
 #endif /* USE_IKS01A2_ENV_SENSOR_HTS221_0 */
 #if (USE_IKS01A2_ENV_SENSOR_LPS22HB_0 == 1)
-  IKS01A2_ENV_SENSOR_Init(LPS22HB_0, ENV_TEMPERATURE | ENV_PRESSURE);
+  ret = IKS01A2_ENV_SENSOR_Init(LPS22HB_0, ENV_TEMPERATURE | ENV_PRESSURE);
+  if (ret != BSP_ERROR_NONE)
+  {
+    Error_Handler();
+  }
 #endif /* USE_IKS01A2_ENV_SENSOR_LPS22HB_0 */
 #if (USE_IKS01A3_ENV_SENSOR_HTS221_0 == 1)
-  IKS01A3_ENV_SENSOR_Init(IKS01A3_HTS221_0, ENV_TEMPERATURE | ENV_HUMIDITY);
+  ret = IKS01A3_ENV_SENSOR_Init(IKS01A3_HTS221_0, ENV_TEMPERATURE | ENV_HUMIDITY);
+  if (ret != BSP_ERROR_NONE)
+  {
+    Error_Handler();
+  }
 #endif /* USE_IKS01A3_ENV_SENSOR_HTS221_0 */
 #if (USE_IKS01A3_ENV_SENSOR_LPS22HH_0 == 1)
-  IKS01A3_ENV_SENSOR_Init(IKS01A3_LPS22HH_0, ENV_TEMPERATURE | ENV_PRESSURE);
+  ret = IKS01A3_ENV_SENSOR_Init(IKS01A3_LPS22HH_0, ENV_TEMPERATURE | ENV_PRESSURE);
+  if (ret != BSP_ERROR_NONE)
+  {
+    Error_Handler();
+  }
 #endif /* USE_IKS01A3_ENV_SENSOR_LPS22HH_0 */
 
   /* Enable */
 #if (USE_IKS01A2_ENV_SENSOR_HTS221_0 == 1)
-  IKS01A2_ENV_SENSOR_Enable(HTS221_0, ENV_HUMIDITY);
-  IKS01A2_ENV_SENSOR_Enable(HTS221_0, ENV_TEMPERATURE);
+  ret = IKS01A2_ENV_SENSOR_Enable(HTS221_0, ENV_HUMIDITY);
+  if (ret != BSP_ERROR_NONE)
+  {
+    Error_Handler();
+  }
+  ret = IKS01A2_ENV_SENSOR_Enable(HTS221_0, ENV_TEMPERATURE);
+  if (ret != BSP_ERROR_NONE)
+  {
+    Error_Handler();
+  }
 #endif /* USE_IKS01A2_ENV_SENSOR_HTS221_0 */
 #if (USE_IKS01A2_ENV_SENSOR_LPS22HB_0 == 1)
-  IKS01A2_ENV_SENSOR_Enable(LPS22HB_0, ENV_PRESSURE);
-  IKS01A2_ENV_SENSOR_Enable(LPS22HB_0, ENV_TEMPERATURE);
+  ret = IKS01A2_ENV_SENSOR_Enable(LPS22HB_0, ENV_PRESSURE);
+  if (ret != BSP_ERROR_NONE)
+  {
+    Error_Handler();
+  }
+  ret = IKS01A2_ENV_SENSOR_Enable(LPS22HB_0, ENV_TEMPERATURE);
+  if (ret != BSP_ERROR_NONE)
+  {
+    Error_Handler();
+  }
 #endif /* USE_IKS01A2_ENV_SENSOR_LPS22HB_0 */
 #if (USE_IKS01A3_ENV_SENSOR_HTS221_0 == 1)
-  IKS01A3_ENV_SENSOR_Enable(IKS01A3_HTS221_0, ENV_HUMIDITY);
-  IKS01A3_ENV_SENSOR_Enable(IKS01A3_HTS221_0, ENV_TEMPERATURE);
+  ret = IKS01A3_ENV_SENSOR_Enable(IKS01A3_HTS221_0, ENV_HUMIDITY);
+  if (ret != BSP_ERROR_NONE)
+  {
+    Error_Handler();
+  }
+  ret = IKS01A3_ENV_SENSOR_Enable(IKS01A3_HTS221_0, ENV_TEMPERATURE);
+  if (ret != BSP_ERROR_NONE)
+  {
+    Error_Handler();
+  }
 #endif /* USE_IKS01A3_ENV_SENSOR_HTS221_0 */
 #if (USE_IKS01A3_ENV_SENSOR_LPS22HH_0 == 1)
-  IKS01A3_ENV_SENSOR_Enable(IKS01A3_LPS22HH_0, ENV_PRESSURE);
-  IKS01A3_ENV_SENSOR_Enable(IKS01A3_LPS22HH_0, ENV_TEMPERATURE);
+  ret = IKS01A3_ENV_SENSOR_Enable(IKS01A3_LPS22HH_0, ENV_PRESSURE);
+  if (ret != BSP_ERROR_NONE)
+  {
+    Error_Handler();
+  }
+  ret = IKS01A3_ENV_SENSOR_Enable(IKS01A3_LPS22HH_0, ENV_TEMPERATURE);
+  if (ret != BSP_ERROR_NONE)
+  {
+    Error_Handler();
+  }
 #endif /* USE_IKS01A3_ENV_SENSOR_LPS22HH_0 */
 
   /* Get capabilities */
 #if (USE_IKS01A2_ENV_SENSOR_HTS221_0 == 1)
-  IKS01A2_ENV_SENSOR_GetCapabilities(HTS221_0, &EnvCapabilities);
+  ret = IKS01A2_ENV_SENSOR_GetCapabilities(HTS221_0, &EnvCapabilities);
+  if (ret != BSP_ERROR_NONE)
+  {
+    Error_Handler();
+  }
 #endif /* USE_IKS01A2_ENV_SENSOR_HTS221_0 */
 #if (USE_IKS01A2_ENV_SENSOR_LPS22HB_0 == 1)
-  IKS01A2_ENV_SENSOR_GetCapabilities(LPS22HB_0, &EnvCapabilities);
+  ret = IKS01A2_ENV_SENSOR_GetCapabilities(LPS22HB_0, &EnvCapabilities);
+  if (ret != BSP_ERROR_NONE)
+  {
+    Error_Handler();
+  }
 #endif /* USE_IKS01A2_ENV_SENSOR_LPS22HB_0 */
 #if (USE_IKS01A3_ENV_SENSOR_HTS221_0 == 1)
-  IKS01A3_ENV_SENSOR_GetCapabilities(IKS01A3_HTS221_0, &EnvCapabilities);
+  ret = IKS01A3_ENV_SENSOR_GetCapabilities(IKS01A3_HTS221_0, &EnvCapabilities);
+  if (ret != BSP_ERROR_NONE)
+  {
+    Error_Handler();
+  }
 #endif /* USE_IKS01A3_ENV_SENSOR_HTS221_0 */
 #if (USE_IKS01A3_ENV_SENSOR_LPS22HH_0 == 1)
-  IKS01A3_ENV_SENSOR_GetCapabilities(IKS01A3_LPS22HH_0, &EnvCapabilities);
+  ret = IKS01A3_ENV_SENSOR_GetCapabilities(IKS01A3_LPS22HH_0, &EnvCapabilities);
+  if (ret != BSP_ERROR_NONE)
+  {
+    Error_Handler();
+  }
 #endif /* USE_IKS01A3_ENV_SENSOR_LPS22HH_0 */
 
 #elif !defined (SENSOR_ENABLED)
 #error SENSOR_ENABLED not defined
 #endif /* SENSOR_ENABLED  */
-  return 0;
   /* USER CODE END EnvSensors_Init */
+  return ret;
 }
 
 /* USER CODE BEGIN EF */
@@ -264,5 +294,3 @@ int32_t  EnvSensors_Init(void)
 /* USER CODE BEGIN PrFD */
 
 /* USER CODE END PrFD */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

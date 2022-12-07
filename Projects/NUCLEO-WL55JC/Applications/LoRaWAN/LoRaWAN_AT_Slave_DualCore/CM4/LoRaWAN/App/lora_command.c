@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -106,6 +105,28 @@ static const struct ATCommand_s ATCommand[] =
     .get = AT_return_error,
     .set = AT_return_error,
     .run = AT_reset,
+  },
+
+  {
+    .string = AT_RFS,
+    .size_string = sizeof(AT_RFS) - 1,
+#ifndef NO_HELP
+    .help_string = "AT"AT_RFS ": Restore EEPROM Factory Settings\r\n",
+#endif /* !NO_HELP */
+    .get = AT_return_error,
+    .set = AT_return_error,
+    .run = AT_restore_factory_settings,
+  },
+
+  {
+    .string = AT_CS,
+    .size_string = sizeof(AT_CS) - 1,
+#ifndef NO_HELP
+    .help_string = "AT"AT_CS ": Store current context to EEPROM\r\n",
+#endif /* !NO_HELP */
+    .get = AT_return_error,
+    .set = AT_return_error,
+    .run = AT_store_context,
   },
 
   {
@@ -435,9 +456,12 @@ static const struct ATCommand_s ATCommand[] =
     .string = AT_TCONF,
     .size_string = sizeof(AT_TCONF) - 1,
 #ifndef NO_HELP
-    .help_string = "AT"AT_TCONF"=<Freq in Hz>:<Power in dBm>:<Lora Bandwidth <0 to 6>, or FSK Bandwidth in Hz>:<Lora SF or FSK datarate (bps)>:<CodingRate 4/5, 4/6, 4/7, 4/8>:\r\n\
-         <Lna>:<PA Boost>:<Modulation 0:FSK, 1:Lora, 2:BPSK>:<PayloadLen in Bytes>:<FskDeviation in Hz>:<LowDrOpt 0:off, 1:on, 2:Auto>:\r\n\
-         <BTproduct: 0:no Gaussian Filter Applied, 1:BT=0,3, 2:BT=0,5, 3:BT=0,7, 4:BT=1><CR>. Configure RF test\r\n",
+    .help_string = "AT"AT_TCONF"=<Freq in Hz>:<Power in dBm>:<Lora Bandwidth <0 to 6>, or Rx FSK Bandwidth in Hz>:<Lora SF or FSK datarate (bps)>:<CodingRate 4/5, 4/6, 4/7, 4/8>:\r\n\
+         <Lna>:<PA Boost>:<Modulation 0:FSK, 1:Lora, 2:BPSK, 3:MSK>:<PayloadLen in Bytes>:<FskDeviation in Hz>:<LowDrOpt 0:off, 1:on, 2:Auto>:\r\n\
+         <BTproduct: 0:no Gaussian Filter Applied, 1:BT=0,3, 2:BT=0,5, 3:BT=0,7, 4:BT=1><CR>. Configure RF test\r\n"
+    "AT+TCONF=868000000:14:50000:50000:4/5:0:0:0:16:25000:2:3 /*FSK*/\r\n"
+    "AT+TCONF=868000000:14:10000:10000:4/5:0:0:3:16:25000:2:3 /*MSK*/\r\n"
+    "AT+TCONF=868000000:14:4:12:4/5:0:0:1:16:25000:2:3 /*LORA*/\r\n",
 #endif /* !NO_HELP */
     .get = AT_test_get_config,
     .set = AT_test_set_config,
@@ -880,5 +904,3 @@ static void com_error(ATEerror_t error_type)
 /* USER CODE BEGIN PrFD */
 
 /* USER CODE END PrFD */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

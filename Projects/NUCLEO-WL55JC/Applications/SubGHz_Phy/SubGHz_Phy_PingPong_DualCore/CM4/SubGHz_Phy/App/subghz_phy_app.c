@@ -1,47 +1,35 @@
-/*!
- * \file      subghz_phy_app.c
- *
- * \brief     Ping-Pong implementation
- *
- * \copyright Revised BSD License, see section \ref LICENSE.
- *
- * \code
- *                ______                              _
- *               / _____)             _              | |
- *              ( (____  _____ ____ _| |_ _____  ____| |__
- *               \____ \| ___ |    (_   _) ___ |/ ___)  _ \
- *               _____) ) ____| | | || |_| ____( (___| | | |
- *              (______/|_____)_|_|_| \__)_____)\____)_| |_|
- *              (C)2013-2017 Semtech
- *
- * \endcode
- *
- * \author    Miguel Luis ( Semtech )
- *
- * \author    Gregory Cristian ( Semtech )
- */
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  *
-  *          Portions COPYRIGHT 2020 STMicroelectronics
-  *
   * @file    subghz_phy_app.c
   * @author  MCD Application Team
   * @brief   Application of the SubGHz_Phy Middleware
   ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
 #include "platform.h"
 #include "sys_app.h"
 #include "subghz_phy_app.h"
 #include "radio.h"
-#include "app_version.h"
 
 /* USER CODE BEGIN Includes */
 #include "stm32_timer.h"
 #include "stm32_seq.h"
 #include "utilities_def.h"
+#include "app_version.h"
+#include "mbmuxif_sys.h"
 /* USER CODE END Includes */
 
 /* External variables ---------------------------------------------------------*/
@@ -165,16 +153,34 @@ static void PingPong_Process(void);
 void SubghzApp_Init(void)
 {
   /* USER CODE BEGIN SubghzApp_Init_1 */
+  FEAT_INFO_Param_t *p_cm0plus_specific_features_info;
+  uint32_t feature_version = 0UL;
+
   APP_LOG(TS_OFF, VLEVEL_M, "\n\rPING PONG\n\r");
-  /* Print APP version*/
-  APP_LOG(TS_OFF, VLEVEL_M, "APP_VERSION= V%X.%X.%X\r\n",
-          (uint8_t)(__CM4_APP_VERSION >> __APP_VERSION_MAIN_SHIFT),
-          (uint8_t)(__CM4_APP_VERSION >> __APP_VERSION_SUB1_SHIFT),
-          (uint8_t)(__CM4_APP_VERSION >> __APP_VERSION_SUB2_SHIFT));
+  /* Get CM4 SubGHY_Phy APP version*/
+  APP_LOG(TS_OFF, VLEVEL_M, "M4 APP_VERSION:      V%X.%X.%X\r\n",
+          (uint8_t)(APP_VERSION_MAIN),
+          (uint8_t)(APP_VERSION_SUB1),
+          (uint8_t)(APP_VERSION_SUB2));
+
+  /* Get CM0 SubGHY_Phy APP version*/
+  p_cm0plus_specific_features_info = MBMUXIF_SystemGetFeatCapabInfoPtr(FEAT_INFO_SYSTEM_ID);
+  feature_version = p_cm0plus_specific_features_info->Feat_Info_Feature_Version;
+  APP_LOG(TS_OFF, VLEVEL_M, "M0PLUS_APP_VERSION:  V%X.%X.%X\r\n",
+          (uint8_t)(feature_version >> 24),
+          (uint8_t)(feature_version >> 16),
+          (uint8_t)(feature_version >> 8));
+
+  /* Get MW SubGhz_Phy info */
+  p_cm0plus_specific_features_info = MBMUXIF_SystemGetFeatCapabInfoPtr(FEAT_INFO_RADIO_ID);
+  feature_version = p_cm0plus_specific_features_info->Feat_Info_Feature_Version;
+  APP_LOG(TS_OFF, VLEVEL_M, "MW_RADIO_VERSION:    V%X.%X.%X\r\n",
+          (uint8_t)(feature_version >> 24),
+          (uint8_t)(feature_version >> 16),
+          (uint8_t)(feature_version >> 8));
 
   /* Led Timers*/
-  UTIL_TIMER_Create(&timerLed, 0xFFFFFFFFU, UTIL_TIMER_ONESHOT, OnledEvent, NULL);
-  UTIL_TIMER_SetPeriod(&timerLed, LED_PERIOD_MS);
+  UTIL_TIMER_Create(&timerLed, LED_PERIOD_MS, UTIL_TIMER_ONESHOT, OnledEvent, NULL);
   UTIL_TIMER_Start(&timerLed);
   /* USER CODE END SubghzApp_Init_1 */
 
@@ -188,6 +194,9 @@ void SubghzApp_Init(void)
   Radio.Init(&RadioEvents);
 
   /* USER CODE BEGIN SubghzApp_Init_2 */
+  /*calculate random delay for synchronization*/
+  random_delay = (Radio.Random()) >> 22; /*10bits random e.g. from 0 to 1023 ms*/
+
   /* Radio Set frequency */
   Radio.SetChannel(RF_FREQUENCY);
 
@@ -231,17 +240,14 @@ void SubghzApp_Init(void)
 #else
 #error "Please define a modulation in the subghz_phy_app.h file."
 #endif /* USE_MODEM_LORA | USE_MODEM_FSK */
-  /* LED initialization*/
-  BSP_LED_Init(LED_GREEN);
-  BSP_LED_Init(LED_RED);
-  /*calculate random delay for synchronization*/
-  random_delay = (Radio.Random()) >> 22; /*10bits random e.g. from 0 to 1023 ms*/
+
   /*fills tx buffer*/
   memset(BufferTx, 0x0, MAX_APP_BUFFER_SIZE);
 
   APP_LOG(TS_ON, VLEVEL_L, "rand=%d\n\r", random_delay);
   /*starts reception*/
   Radio.Rx(RX_TIMEOUT_VALUE + random_delay);
+
   /*register task to to be run in while(1) after Radio IT*/
   UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_SubGHz_Phy_App_Process), UTIL_SEQ_RFU, PingPong_Process);
   /* USER CODE END SubghzApp_Init_2 */
@@ -252,7 +258,6 @@ void SubghzApp_Init(void)
 /* USER CODE END EF */
 
 /* Private functions ---------------------------------------------------------*/
-
 static void OnTxDone(void)
 {
   /* USER CODE BEGIN OnTxDone */
@@ -355,9 +360,9 @@ static void PingPong_Process(void)
           {
             UTIL_TIMER_Stop(&timerLed);
             /* switch off green led */
-            BSP_LED_Off(LED_GREEN);
+            HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_RESET); /* LED_GREEN */
             /* master toggles red led */
-            BSP_LED_Toggle(LED_RED);
+            HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin); /* LED_RED */
             /* Add delay between RX and TX */
             HAL_Delay(Radio.GetWakeupTime() + RX_TIME_MARGIN);
             /* master sends PING*/
@@ -392,9 +397,9 @@ static void PingPong_Process(void)
           {
             UTIL_TIMER_Stop(&timerLed);
             /* switch off red led */
-            BSP_LED_Off(LED_RED);
+            HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_RESET); /* LED_RED */
             /* slave toggles green led */
-            BSP_LED_Toggle(LED_GREEN);
+            HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin); /* LED_GREEN */
             /* Add delay between RX and TX */
             HAL_Delay(Radio.GetWakeupTime() + RX_TIME_MARGIN);
             /*slave sends PONG*/
@@ -449,11 +454,9 @@ static void PingPong_Process(void)
 
 static void OnledEvent(void *context)
 {
-  BSP_LED_Toggle(LED_GREEN);
-  BSP_LED_Toggle(LED_RED);
+  HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin); /* LED_GREEN */
+  HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin); /* LED_RED */
   UTIL_TIMER_Start(&timerLed);
 }
 
 /* USER CODE END PrFD */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

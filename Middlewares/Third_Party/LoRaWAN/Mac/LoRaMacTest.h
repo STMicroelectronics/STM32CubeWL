@@ -41,15 +41,13 @@ extern "C"
 {
 #endif
 
-#include <stdbool.h>
-
 /*!
  * \brief   Enabled or disables the duty cycle
  *
  * \details This is a test function. It shall be used for testing purposes only.
  *          Changing this attribute may lead to a non-conformance LoRaMac operation.
  *
- * \param   [IN] enable - Enabled or disables the duty cycle
+ * \param   [in] enable - Enabled or disables the duty cycle
  */
 void LoRaMacTestSetDutyCycleOn( bool enable );
 

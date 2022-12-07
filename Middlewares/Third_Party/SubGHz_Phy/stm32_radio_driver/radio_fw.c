@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2020(-2021) STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -33,7 +32,7 @@
  * Radio RFWPacket and global parameters
  * In RFWPacket mode, the packet is 'Fixed length' without Hw Crc check and without Hw (de-)whitening
  */
-typedef struct 
+typedef struct
 {
     uint8_t Enable;                    /* RFWPacket mode On: 1 or Off: 0*/
     uint8_t PayloadLengthFieldSize;    /* Size of the packet length Field*/
@@ -48,7 +47,7 @@ typedef struct
     RadioEvents_t* RadioEvents;
 } RFwInit_t;
 
-typedef struct 
+typedef struct
 {
     RFwInit_t Init;                    /*Init structure, set at Rx or Tx config*/
     uint16_t CrcLfsrState;             /*State of LFSR crc, set from CrcSeed at beginning of each payload*/
@@ -78,8 +77,8 @@ typedef struct
 /**
   * @brief Calculates ceiling division of ( X / N )
   *
-  * @param [IN] X numerator
-  * @param [IN] N denominator
+  * @param [in] X numerator
+  * @param [in] N denominator
   *
   */
 #ifndef DIVC
@@ -89,8 +88,8 @@ typedef struct
 /**
   * @brief Calculates rounding division of ( X / N )
   *
-  * @param [IN] X numerator
-  * @param [IN] N denominator
+  * @param [in] X numerator
+  * @param [in] N denominator
   *
   */
 #ifndef DIVR
@@ -99,7 +98,7 @@ typedef struct
 
 /*can be overridden in radio_conf.h*/
 #ifndef RFW_IT_INIT
-#define RFW_IT_INIT() 
+#define RFW_IT_INIT()
 #endif
 
 #ifndef RFW_GET_PAYLOAD_PROCESS
@@ -149,60 +148,59 @@ static uint8_t RxBuffer[RADIO_BUF_SIZE];
 /**
  * @brief Record the seed of the (de-)Whitening algorithm
  *
- * @param [IN] RFwInit_t      the whitening Init structure
- * @param [IN] WhiteSeed        the Initial seed of the Whitening algorithm
+ * @param [in] RFwInit_t      the whitening Init structure
+ * @param [in] WhiteSeed        the Initial seed of the Whitening algorithm
  */
 static void RFW_WhiteInitState(RFwInit_t* Init, uint16_t WhiteSeed);
 
 /**
  * @brief Set the state of the Whitening algorithm from the seed
  *
- * @param [IN] RFWPacket      the whitening structure
- * @param [IN] whiteSeed             the Initial seed of the Whitening algorithm
+ * @param [in] RFWPacket      the whitening structure
+ * @param [in] whiteSeed             the Initial seed of the Whitening algorithm
  */
 static void RFW_WhiteSetState(RadioFw_t* RFWPacket);
 
 /**
  * @brief Initialize seed of the Crc algorithm
  *
- * @param [IN] RFWPacket      the whitening Init structure
- * @param [IN] CrcPolynomial         the Initial seed of the Crc algorithm
- * @param [IN] CrcSeed               the Initial seed of the Crc seed
- * @param [IN] CrcSeed               the Initial seed of the Crc types (Ibm/CCITT)
-
+ * @param [in] RFWPacket      the whitening Init structure
+ * @param [in] CrcPolynomial         the Initial seed of the Crc algorithm
+ * @param [in] CrcSeed               the Initial seed of the Crc seed
+ * @param [in] CrcSeed               the Initial seed of the Crc types (Ibm/CCITT)
  */
 static void RFW_CrcInitState(RFwInit_t* Init, const uint16_t CrcPolynomial, const uint16_t CrcSeed, const RADIO_FSK_CrcTypes_t CrcTypes);
 
 /**
  * @brief Run the Crc algorithm
- * @param [IN] RFWPacket      the whitening structure
+ * @param [in] RFWPacket      the whitening structure
  */
 static void RFW_CrcSetState(RadioFw_t* RFWPacket);
 /**
  * @brief Run the Whitening algorithm
  *
- * @param [IN] RFWPacket      the whitening structure
- * @param [IN/OUT] Payload    the Payload to (de-)Whiten and the payload result
- * @param [IN] Size           the Payload size
+ * @param [in] RFWPacket      the whitening structure
+ * @param [in,out] Payload    the Payload to (de-)Whiten and the payload result
+ * @param [in] Size           the Payload size
  */
 static void RFW_WhiteRun(RadioFw_t* RFWPacket, uint8_t* Payload, uint32_t Size);
 
 /**
  * @brief Run the Crc algorithm
  *
- * @param [IN] RFWPacket      the whitening structure
- * @param [IN] Payload        the Payload to calculate the Crc
- * @param [IN] Size           the Payload size
- * @param [OUT] CrcResult     the result of the Crc calculation
+ * @param [in] RFWPacket      the whitening structure
+ * @param [in] Payload        the Payload to calculate the Crc
+ * @param [in] Size           the Payload size
+ * @param [out] CrcResult     the result of the Crc calculation
  */
 static int32_t RFW_CrcRun(RadioFw_t* const RFWPacket, const uint8_t* Payload, const uint32_t Size, uint8_t CrcResult[2]);
 
 /**
  * @brief Compute Crc Byte
  *
- * @param [IN] crc        Crc bytes
- * @param [IN] dataByte        the data byte
- * @param [OUT] polynomial     the polynomial to use
+ * @param [in] crc        Crc bytes
+ * @param [in] dataByte        the data byte
+ * @param [out] polynomial     the polynomial to use
  * @return crc bytes out
  */
 uint16_t RFW_CrcRun1Byte( uint16_t Crc, uint8_t DataByte, uint16_t Polynomial );
@@ -210,7 +208,7 @@ uint16_t RFW_CrcRun1Byte( uint16_t Crc, uint8_t DataByte, uint16_t Polynomial );
 /**
  * @brief Get the payload length after sync
  *
- * @param [OUT] PayloadLength        the length of PayloadOnly excluding CrcLengthField
+ * @param [out] PayloadLength        the length of PayloadOnly excluding CrcLengthField
  * @return 0 when no parameters error, -1 otherwise
  */
 static int32_t RFW_GetPacketLength(uint16_t* PayloadLength);
@@ -219,7 +217,7 @@ static int32_t RFW_GetPacketLength(uint16_t* PayloadLength);
  * @brief RFW_GetPayloadTimerEvent TimerEvent to get the payload data, de-whitening, and crc verification
  *
  * @Note calls RFW_GetPayloadProcess directly inside IRQ (default) or in background with sequencer or OS
- * @param [IN] context        context of the timer
+ * @param [in] context        context of the timer
  */
 static void RFW_GetPayloadTimerEvent( void * context);
 
@@ -233,7 +231,7 @@ static void RFW_GetPayloadProcess( void );
  * @brief RFW_TransmitLongPacket_NewTxChunkTimer: long packet Tx timer callback to process intermediate chunk of TxData
  * @Note calls RFW_TransmitLongPacket_TxChunkProcess directly inside IRQ (default) or in background with sequencer or any Rtos
  *
- * @param [In] param        unused
+ * @param [in] param        unused
  */
 static void RFW_TransmitLongPacket_NewTxChunkTimerEvent( void * param );
 
@@ -244,10 +242,10 @@ static void RFW_TransmitLongPacket_TxChunkProcess( void );
 #endif
 
 /**
- * @brief RFW_GetPayload get the payload of 
+ * @brief RFW_GetPayload get the payload of
  *
- * @param [In] Offset        Offset of the 
- * @param [In] Length        carrier frequency offset in Hertz
+ * @param [in] Offset        Offset of the
+ * @param [in] Length        carrier frequency offset in Hertz
  */
 static void RFW_GetPayload( uint8_t Offset, uint8_t Length );
 #endif
@@ -296,6 +294,7 @@ int32_t RFW_TransmitLongPacket( uint16_t payload_size, uint32_t timeout, void (*
     switch(RFWPacket.Init.Modem)
     {
         case MODEM_FSK:
+        case MODEM_MSK:
         {
             if (RFWPacket.Init.Enable==1)
             {
@@ -342,7 +341,7 @@ int32_t RFW_TransmitLongPacket( uint16_t payload_size, uint32_t timeout, void (*
               }
               /* Get Tx chunk from app*/
               TxLongPacketGetNextChunkCb(&app_chunk_buffer_ptr, chunk_size);
-              
+
               /* Copy first chunk in ChunkBuffer Buffer*/
               RADIO_MEMCPY8(&ChunkBuffer[RFWPacket.Init.PayloadLengthFieldSize], app_chunk_buffer_ptr, chunk_size);
 
@@ -361,8 +360,8 @@ int32_t RFW_TransmitLongPacket( uint16_t payload_size, uint32_t timeout, void (*
               RFW_WhiteRun(&RFWPacket, &ChunkBuffer[0],RFWPacket.Init.PayloadLengthFieldSize+ chunk_size+ crc_size);
               /* Configure the Transmitter to send all*/
               /* Init radio buffer */
-              SUBGRF_WriteRegister(SUBGHZ_RTXPLDLEN,RFWPacket.Init.PayloadLengthFieldSize+ chunk_size+ crc_size);
-              SUBGRF_WriteRegister(SUBGHZ_TX_ADR_PTR,0);
+              SUBGRF_WriteRegister(SUBGHZ_GRTXPLDLEN,RFWPacket.Init.PayloadLengthFieldSize+ chunk_size+ crc_size);
+              SUBGRF_WriteRegister(SUBGHZ_TXADRPTR,0);
               /* Send*/
               SUBGRF_SendPayload( ChunkBuffer, RFWPacket.Init.PayloadLengthFieldSize+ chunk_size+ crc_size, 0 );
               if (total_size> RADIO_BUF_SIZE)
@@ -376,9 +375,9 @@ int32_t RFW_TransmitLongPacket( uint16_t payload_size, uint32_t timeout, void (*
                 TimerSetValue( &RFWPacket.Timer, chunk_timeout );
                 TimerStart( &RFWPacket.Timer);
                 /*Write bit infinite_sequence = 1, required for long packet*/
-                uint8_t reg = SUBGRF_ReadRegister(SUBGHZ_PKTCTL1A);
-                SUBGRF_WriteRegister(SUBGHZ_PKTCTL1A, reg | 0x02);
-                
+                uint8_t reg = SUBGRF_ReadRegister(SUBGHZ_GPKTCTL1AR);
+                SUBGRF_WriteRegister(SUBGHZ_GPKTCTL1AR, reg | 0x02);
+
                 TimerSetValue( RFWPacket.RxTimeoutTimer, timeout );
                 TimerStart( RFWPacket.RxTimeoutTimer);
               }
@@ -443,11 +442,11 @@ int32_t RFW_ReceiveLongPacket( uint8_t boosted_mode, uint32_t timeout, void (*Rx
     /* Set the state of the Crc to crc_seed*/
     RFW_CrcSetState(&RFWPacket);
     /* Init radio buffer */
-    SUBGRF_WriteRegister(SUBGHZ_RTXPLDLEN,255);
-    SUBGRF_WriteRegister(SUBGHZ_RX_ADR_PTR,0);
+    SUBGRF_WriteRegister(SUBGHZ_GRTXPLDLEN,255);
+    SUBGRF_WriteRegister(SUBGHZ_RXADRPTR,0);
     /*enable long packet*/
     RFWPacket.LongPacketModeEnable=1;
-    
+
     if( timeout != 0 )
     {
         TimerSetValue( RFWPacket.RxTimeoutTimer, timeout );
@@ -622,9 +621,9 @@ int32_t RFW_TransmitInit(uint8_t* inOutBuffer, uint8_t size, uint8_t* outSize)
     *outSize=(uint8_t) size+ RFWPacket.Init.PayloadLengthFieldSize+ RFWPacket.Init.CrcFieldSize;
     /*copy result*/
     RADIO_MEMCPY8(inOutBuffer, ChunkBuffer, *outSize);
-    
+
     RFWPacket.LongPacketModeEnable=0;
-    
+
     status= 0;
   }
 #endif
@@ -643,9 +642,9 @@ int32_t RFW_ReceiveInit( void )
   RFW_WhiteSetState(&RFWPacket);
 /* Set the state of the Crc to crc_seed*/
   RFW_CrcSetState(&RFWPacket);
-  
+
   RFWPacket.RxPayloadOffset=0;
-  
+
   RFWPacket.LongPacketModeEnable=0;
   return 0;
 #else
@@ -657,9 +656,9 @@ void RFW_DeInit_TxLongPacket(void)
 {
 #if (RFW_LONGPACKET_ENABLE ==1 )
   /*long packet WA*/
-  uint8_t reg = SUBGRF_ReadRegister(SUBGHZ_PKTCTL1A);
-  SUBGRF_WriteRegister(SUBGHZ_PKTCTL1A, reg & ~0x02);//clear infinite_sequence bit
-  SUBGRF_WriteRegister(SUBGHZ_RTXPLDLEN, 0xFF); //RxTxPldLen: reset to 0xFF
+  uint8_t reg = SUBGRF_ReadRegister(SUBGHZ_GPKTCTL1AR);
+  SUBGRF_WriteRegister(SUBGHZ_GPKTCTL1AR, reg & ~0x02);//clear infinite_sequence bit
+  SUBGRF_WriteRegister(SUBGHZ_GRTXPLDLEN, 0xFF); //RxTxPldLen: reset to 0xFF
 #endif
 }
 
@@ -740,8 +739,8 @@ static void RFW_TransmitLongPacket_TxChunkProcess( void )
   uint8_t crc_size;
   uint32_t timeout;/*timeout for next chunk*/
   /*records how much has been sent*/
-  uint8_t read_ptr= SUBGRF_ReadRegister(SUBGHZ_TX_ADR_PTR); /*radio has transmitted up to read_ptr*/
-  uint8_t write_ptr= SUBGRF_ReadRegister(SUBGHZ_RTXPLDLEN); /*from read_ptr to write_ptr still to be transmitted*/
+  uint8_t read_ptr= SUBGRF_ReadRegister(SUBGHZ_TXADRPTR); /*radio has transmitted up to read_ptr*/
+  uint8_t write_ptr= SUBGRF_ReadRegister(SUBGHZ_GRTXPLDLEN); /*from read_ptr to write_ptr still to be transmitted*/
   /*calculates how much bytes were sent since previous radio loading*/
   uint8_t bytes_sent =read_ptr-RFWPacket.RadioBufferOffset;
   /*bytes already loaded in the radio to send*/
@@ -751,7 +750,7 @@ static void RFW_TransmitLongPacket_TxChunkProcess( void )
   RFWPacket.RadioBufferOffset+= bytes_sent;
   /*record payload remaining bytes to send*/
   RFWPacket.LongPacketRemainingBytes-= bytes_sent;
-  RFW_MW_LOG( TS_ON, VLEVEL_M,  "read_ptr=%d, write_ptr=%d, bytes_sent=%d, bytes_loaded=%d,remaining to send=%d\r\n", 
+  RFW_MW_LOG( TS_ON, VLEVEL_M,  "read_ptr=%d, write_ptr=%d, bytes_sent=%d, bytes_loaded=%d,remaining to send=%d\r\n",
                                 read_ptr, write_ptr,bytes_sent, bytes_loaded,RFWPacket.LongPacketRemainingBytes);
   if ( RFWPacket.LongPacketRemainingBytes> 256)
   {
@@ -769,14 +768,14 @@ static void RFW_TransmitLongPacket_TxChunkProcess( void )
     crc_size= 0;
     /*calculate timeout for next chunk*/
     timeout = DIVR( chunk_size* 8 * 1000 , RFWPacket.BitRate);
-    
+
     TimerSetValue( &RFWPacket.Timer, timeout );
     TimerStart( &RFWPacket.Timer);
   }
   else
   {
     /*last chunk to send*/
-    
+
     if (RFWPacket.LongPacketRemainingBytes>bytes_loaded)
     {
       chunk_size = RFWPacket.LongPacketRemainingBytes-bytes_loaded;
@@ -808,8 +807,8 @@ static void RFW_TransmitLongPacket_TxChunkProcess( void )
   SUBGRF_WriteBuffer( write_ptr, ChunkBuffer, chunk_size );
 
   /*update end ptr*/
-  SUBGRF_WriteRegister(SUBGHZ_RTXPLDLEN, (uint8_t)(chunk_size + write_ptr));
-  
+  SUBGRF_WriteRegister(SUBGHZ_GRTXPLDLEN, (uint8_t)(chunk_size + write_ptr));
+
   RFW_MW_LOG( TS_ON, VLEVEL_M,  "next chunk size=%d, new write ptr=%d\n\r",chunk_size+ crc_size,  (uint8_t)(chunk_size+ crc_size + write_ptr));
 }
 #endif
@@ -841,10 +840,10 @@ static void RFW_WhiteRun(RadioFw_t* RFWPacket, uint8_t* Payload, uint32_t Size)
 {
   /*run the whitening algo on Size bytes*/
   uint16_t ibmwhite_state= RFWPacket->WhiteLfsrState;
-  for(int i=0;i<Size;i++)
+  for(int32_t i=0;i<Size;i++)
   {
     Payload[i]^= ibmwhite_state&0xFF;
-    for (int j=0; j<8; j++)
+    for (int32_t j=0; j<8; j++)
     {
       uint8_t msb =  ((ibmwhite_state>>5)&0x1)^((ibmwhite_state>>0)&0x1);
       ibmwhite_state= ((msb<<8) | (ibmwhite_state>>1) );
@@ -866,7 +865,7 @@ static int32_t RFW_CrcRun(RadioFw_t* const RFWPacket, const uint8_t* Payload, co
   }
   /*Save state for next chunk*/
   RFWPacket->CrcLfsrState=crc;
-  
+
   if( RFWPacket->Init.CrcType == RADIO_FSK_CRC_2_BYTES_IBM )
   {
     CrcResult[1]=crc&0xFF;
@@ -903,14 +902,14 @@ uint16_t RFW_CrcRun1Byte( uint16_t Crc, uint8_t DataByte, uint16_t Polynomial)
 static int32_t RFW_PollRxBytes(uint32_t bytes)
 {
    uint32_t now = TimerGetCurrentTime( );
-   uint8_t reg_buff_ptr_ref= SUBGRF_ReadRegister(SUBGHZ_RX_ADR_PTR);
+   uint8_t reg_buff_ptr_ref= SUBGRF_ReadRegister(SUBGHZ_RXADRPTR);
    uint8_t reg_buff_ptr=reg_buff_ptr_ref;
    uint32_t timeout = DIVC( bytes* 8 * 1000 , RFWPacket.BitRate);
     // Wait that packet length is received
     while( (reg_buff_ptr-reg_buff_ptr_ref) < bytes)
     {
         /*reading rx address pointer*/
-        reg_buff_ptr=SUBGRF_ReadRegister(SUBGHZ_RX_ADR_PTR);
+        reg_buff_ptr=SUBGRF_ReadRegister(SUBGHZ_RXADRPTR);
         if( TimerGetElapsedTime( now ) > timeout)
         {
           /*timeout*/
@@ -945,9 +944,6 @@ static int32_t RFW_GetPacketLength(uint16_t* PayloadLength)
     {
       /*packet length is 2 bytes*/
       *PayloadLength= (((uint16_t) ChunkBuffer[0])<<8) |ChunkBuffer[1];
-      /*disable preamble detector*/
-      //uint8_t reg= SUBGRF_ReadRegister( SUBGHZ_PKTCTL1 );
-      //SUBGRF_WriteRegister(SUBGHZ_PKTCTL1, reg&(~0x02));
     }
     RFW_MW_LOG( TS_ON, VLEVEL_M,  "PayloadLength=%d,\r\n", *PayloadLength);
     return 0;
@@ -961,7 +957,7 @@ static void RFW_GetPayloadTimerEvent( void * context)
 static void RFW_GetPayloadProcess( void )
 {
     /*long packet mode*/
-    uint8_t read_ptr= SUBGRF_ReadRegister(SUBGHZ_RX_ADR_PTR);
+    uint8_t read_ptr= SUBGRF_ReadRegister(SUBGHZ_RXADRPTR);
     uint8_t size=read_ptr-RFWPacket.RadioBufferOffset;
     uint32_t Timeout;
     /*check remaining size*/
@@ -970,11 +966,11 @@ static void RFW_GetPayloadProcess( void )
       /* update LongPacketRemainingBytes*/
       RFWPacket.LongPacketRemainingBytes-=size;
       /*intermediate chunk*/
-      RFW_MW_LOG( TS_ON, VLEVEL_M,  "RxTxPldLen=0x%02X,\r\n",SUBGRF_ReadRegister(SUBGHZ_RTXPLDLEN));
+      RFW_MW_LOG( TS_ON, VLEVEL_M,  "RxTxPldLen=0x%02X,\r\n",SUBGRF_ReadRegister(SUBGHZ_GRTXPLDLEN));
       RFW_MW_LOG( TS_ON, VLEVEL_M,  "RxAddrPtr=0x%02X,\r\n",read_ptr);
       RFW_MW_LOG( TS_ON, VLEVEL_M,  "offset= %d, size=%d, remaining=%d,\r\n",RFWPacket.RadioBufferOffset, size, RFWPacket.LongPacketRemainingBytes);
       /*update pld length so that not reached*/
-      SUBGRF_WriteRegister(SUBGHZ_RTXPLDLEN, read_ptr-1);
+      SUBGRF_WriteRegister(SUBGHZ_GRTXPLDLEN, read_ptr-1);
       /* read data from radio*/
       SUBGRF_ReadBuffer( RFWPacket.RadioBufferOffset, ChunkBuffer, size );
       /* update buffer Offset, with intentional wrap around*/
@@ -1091,7 +1087,7 @@ static void RFW_GetPayload( uint8_t Offset, uint8_t Length )
         int32_t cfo;
         SUBGRF_GetCFO(RFWPacket.BitRate, &cfo);
       /*ChunkBuffer[1] to remove packet Length*/
-        RFWPacket.Init.RadioEvents->RxDone( RxBuffer, 
+        RFWPacket.Init.RadioEvents->RxDone( RxBuffer,
                                             RFWPacket.RxPayloadOffset,
                                             -(rssi_sync>>1),
                                             (int8_t) DIVR(cfo,1000));
@@ -1103,5 +1099,4 @@ static void RFW_GetPayload( uint8_t Offset, uint8_t Length )
     }
     DBG_GPIO_RADIO_RX(RST);
 }
-#endif
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+#endif /* RFW_ENABLE */

@@ -28,15 +28,9 @@
  *
  * \author    Daniel Jaeckle ( STACKFORCE )
  */
-#include <stdint.h>
-#include <stdbool.h>
-#include <stddef.h>
-
-#include "timer.h"
 #include "utilities.h"
-#include "LoRaMac.h"
 #include "LoRaMacConfirmQueue.h"
-
+#include "LoRaMacVersion.h"
 
 /*
  * LoRaMac Confirm Queue Context NVM structure
@@ -183,7 +177,11 @@ bool LoRaMacConfirmQueueAdd( MlmeConfirmQueue_t* mlmeConfirm )
     ConfirmQueueCtx.BufferEnd->Request = mlmeConfirm->Request;
     ConfirmQueueCtx.BufferEnd->Status = mlmeConfirm->Status;
     ConfirmQueueCtx.BufferEnd->RestrictCommonReadyToHandle = mlmeConfirm->RestrictCommonReadyToHandle;
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000300 ))
     ConfirmQueueCtx.BufferEnd->ReadyToHandle = false;
+#elif (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+    ConfirmQueueCtx.BufferEnd->ReadyToHandle = mlmeConfirm->ReadyToHandle;
+#endif /* LORAMAC_VERSION */
     // Increase counter
     ConfirmQueueCtx.Nvm.MlmeConfirmQueueCnt++;
     // Update end pointer

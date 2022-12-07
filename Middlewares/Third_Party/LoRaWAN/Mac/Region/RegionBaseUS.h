@@ -1,7 +1,7 @@
 /*!
  * \file      RegionBaseUS.h
  *
- * \brief     Implementations common with US region.
+ * \brief     Definitions common with US region.
  *
  * \copyright Revised BSD License, see section \ref LICENSE.
  *
@@ -47,11 +47,11 @@ extern "C"
  * \brief Computes the next 125kHz channel used for join requests.
  *        And it returns all the parameters updated.
  *
- * \param [IN]  channelsMaskRemaining pointer to remaining channels.
+ * \param [in]  channelsMaskRemaining pointer to remaining channels.
  *
- * \param [IN]  groupsCurrentIndex Index of current channel.
+ * \param [in]  groupsCurrentIndex Index of current channel.
  *
- * \param [OUT] newChannelIndex Index of next available channel.
+ * \param [out] newChannelIndex Index of next available channel.
  *
  * \retval Status
  */
@@ -62,13 +62,13 @@ LoRaMacStatus_t RegionBaseUSComputeNext125kHzJoinChannel( uint16_t* channelsMask
  * \brief Verifies if the frequency is in the correct range with a
  *        specific stepwidth.
  *
- * \param [IN]  freq Frequency to verify.
+ * \param [in]  freq Frequency to verify.
  *
- * \param [IN]  minFreq Minimum frequency.
+ * \param [in]  minFreq Minimum frequency.
  *
- * \param [IN]  maxFreq Maximum frequency.
+ * \param [in]  maxFreq Maximum frequency.
  *
- * \param [IN]  stepwidth Frequency stepwidth.
+ * \param [in]  stepwidth Frequency stepwidth.
  *
  * \retval True, if the frequency is valid, false if not.
  */
@@ -78,11 +78,11 @@ bool RegionBaseUSVerifyFrequencyGroup( uint32_t freq, uint32_t minFreq, uint32_t
  * \brief Calculates the downlink frequency for a given channel. This
  *        function is used in class B only.
  *
- * \param [IN] channel The channel according to the channel plan.
+ * \param [in] channel The channel according to the channel plan.
  *
- * \param [IN] frequency The base frequency.
+ * \param [in] frequency The base frequency.
  *
- * \param [IN] stepwidth The frequency stepwidth.
+ * \param [in] stepwidth The frequency stepwidth.
  *
  * \retval The downlink frequency.
  */

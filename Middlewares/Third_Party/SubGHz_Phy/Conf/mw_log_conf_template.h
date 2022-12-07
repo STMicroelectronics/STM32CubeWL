@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    mw_log_conf_template.h
@@ -6,16 +7,16 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __MW_LOG_CONF_H__
@@ -27,6 +28,7 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32_adv_trace.h"
+
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */
@@ -52,8 +54,7 @@ extern "C" {
 #ifdef MW_LOG_ENABLED
 #define MW_LOG(TS,VL, ...)   do{ {UTIL_ADV_TRACE_COND_FSend(VL, T_REG_OFF, TS, __VA_ARGS__);} }while(0)
 #else  /* MW_LOG_ENABLED */
-#define VLEVEL_ABOVE_H   4    /* this level will be always filtered because too High */
-#define MW_LOG(TS,VL, ...)    do{ {UTIL_ADV_TRACE_COND_FSend(VLEVEL_ABOVE_H, T_REG_OFF, TS, __VA_ARGS__);} }while(0)
+#define MW_LOG(TS,VL, ...)
 #endif /* MW_LOG_ENABLED */
 /* USER CODE BEGIN EM */
 
@@ -69,5 +70,3 @@ extern "C" {
 #endif
 
 #endif /*__MW_LOG_CONF_H__ */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

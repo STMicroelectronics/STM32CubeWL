@@ -44,10 +44,7 @@ extern "C"
 {
 #endif
 
-#include <stdbool.h>
-#include <stdint.h>
-
-#include "LoRaMac.h"
+#include "LoRaMacInterfaces.h"
 
 /*!
  * LoRaMac MLME-Confirm queue length
@@ -81,14 +78,14 @@ typedef struct sMlmeConfirmQueue
 /*!
  * \brief   Initializes the confirm queue
  *
- * \param   [IN] primitives - Pointer to the LoRaMac primitives.
+ * \param   [in] primitive - Pointer to the LoRaMac primitives.
  */
 void LoRaMacConfirmQueueInit( LoRaMacPrimitives_t* primitive );
 
 /*!
  * \brief   Adds an element to the confirm queue.
  *
- * \param   [IN] mlmeConfirm - Pointer to the element to add.
+ * \param   [in] mlmeConfirm - Pointer to the element to add.
  *
  * \retval  [true - operation was successful, false - operation failed]
  */
@@ -111,16 +108,16 @@ bool LoRaMacConfirmQueueRemoveFirst( void );
 /*!
  * \brief   Sets the status of an element.
  *
- * \param   [IN] status - The status to set.
+ * \param   [in] status - The status to set.
  *
- * \param   [IN] request - The related request to set the status.
+ * \param   [in] request - The related request to set the status.
  */
 void LoRaMacConfirmQueueSetStatus( LoRaMacEventInfoStatus_t status, Mlme_t request );
 
 /*!
  * \brief   Gets the status of an element.
  *
- * \param   [IN] request - The request to query the status.
+ * \param   [in] request - The request to query the status.
  *
  * \retval  The status of the related MlmeRequest.
  */
@@ -129,7 +126,7 @@ LoRaMacEventInfoStatus_t LoRaMacConfirmQueueGetStatus( Mlme_t request );
 /*!
  * \brief   Sets a common status for all elements in the queue.
  *
- * \param   [IN] status - The status to set.
+ * \param   [in] status - The status to set.
  */
 void LoRaMacConfirmQueueSetStatusCmn( LoRaMacEventInfoStatus_t status );
 
@@ -143,7 +140,7 @@ LoRaMacEventInfoStatus_t LoRaMacConfirmQueueGetStatusCmn( void );
 /*!
  * \brief   Verifies if a request is in the queue and active.
  *
- * \param   [IN] request - The request to verify.
+ * \param   [in] request - The request to verify.
  *
  * \retval  [true - element is in the queue, false - element is not in the queue].
  */
@@ -152,7 +149,7 @@ bool LoRaMacConfirmQueueIsCmdActive( Mlme_t request );
 /*!
  * \brief   Handles all callbacks of active requests
  *
- * \param   [IN] mlmeConfirm - Pointer to the generic mlmeConfirm structure.
+ * \param   [in] mlmeConfirm - Pointer to the generic mlmeConfirm structure.
  */
 void LoRaMacConfirmQueueHandleCb( MlmeConfirm_t* mlmeConfirm );
 
@@ -169,6 +166,8 @@ uint8_t LoRaMacConfirmQueueGetCnt( void );
  * \retval  [true - queue is full, false - queue is not full].
  */
 bool LoRaMacConfirmQueueIsFull( void );
+
+/*! \} defgroup LORAMACCONFIRMQUEUE */
 
 #ifdef __cplusplus
 }

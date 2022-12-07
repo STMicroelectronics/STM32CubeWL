@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -56,6 +55,8 @@
 
 /* Private variables ---------------------------------------------------------*/
 static MBMUX_ComParam_t *RadioComObj;
+static osSemaphoreId_t Sem_MbRadioRespRcv;
+osThreadId_t Thd_RadioNotifRcvProcessId;
 
 /**
   * @brief radio cmd buffer to exchange data between CM4 and CM0+
@@ -89,10 +90,6 @@ static void MBMUXIF_IsrRadioNotifRcvCb(void *ComObj);
   */
 static void MBMUXIF_TaskRadioNotifRcv(void);
 
-static osSemaphoreId_t Sem_MbRadioRespRcv;
-
-osThreadId_t Thd_RadioNotifRcvProcessId;
-
 const osThreadAttr_t Thd_RadioNotifRcvProcess_attr =
 {
   .name = CFG_MB_RADIO_PROCESS_NAME,
@@ -101,8 +98,11 @@ const osThreadAttr_t Thd_RadioNotifRcvProcess_attr =
   .cb_size = CFG_MB_RADIO_PROCESS_CB_SIZE,
   .stack_mem = CFG_MB_RADIO_PROCESS_STACK_MEM,
   .priority = CFG_MB_RADIO_PROCESS_PRIORITY,
-  .stack_size = CFG_MB_RADIO_PROCESS_STACk_SIZE
+  .stack_size = CFG_MB_RADIO_PROCESS_STACK_SIZE
 };
+/**
+  * @brief  FreeRTOS process when receiving MailBox Radio Notification .
+  */
 static void Thd_RadioNotifRcvProcess(void *argument);
 
 /* USER CODE BEGIN PFP */
@@ -120,7 +120,7 @@ int8_t MBMUXIF_RadioInit(void)
   /* USER CODE END MBMUXIF_RadioInit_1 */
 
   p_cm0plus_specific_features_info = MBMUXIF_SystemGetFeatCapabInfoPtr(FEAT_INFO_RADIO_ID);
-  if (p_cm0plus_specific_features_info->Feat_Info_Feature_Version != __SUBGHZ_PHY_VERSION)
+  if (p_cm0plus_specific_features_info->Feat_Info_Feature_Version != SUBGHZ_PHY_VERSION)
   {
     ret = -4; /* version mismatch */
   }
@@ -132,10 +132,15 @@ int8_t MBMUXIF_RadioInit(void)
   {
     ret = MBMUX_RegisterFeature(FEAT_INFO_RADIO_ID, MBMUX_NOTIF_ACK, MBMUXIF_IsrRadioNotifRcvCb, aRadioNotifAckBuff, sizeof(aRadioNotifAckBuff));
   }
+
   if (ret >= 0)
   {
     Thd_RadioNotifRcvProcessId = osThreadNew(Thd_RadioNotifRcvProcess, NULL, &Thd_RadioNotifRcvProcess_attr);
     Sem_MbRadioRespRcv = osSemaphoreNew(1, 0, NULL);   /*< Create the semaphore and make it busy at initialization */
+  }
+
+  if (ret >= 0)
+  {
     ret = MBMUXIF_SystemSendCm0plusRegistrationCmd(FEAT_INFO_RADIO_ID);
     if (ret < 0)
     {
@@ -252,6 +257,8 @@ static void Thd_RadioNotifRcvProcess(void *argument)
     osThreadFlagsWait(1, osFlagsWaitAny, osWaitForever);
     MBMUXIF_TaskRadioNotifRcv();  /*what you want to do*/
   }
+  /* Following USER CODE SECTION will be never reached */
+  /* it can be use for compilation flag like #else or #endif */
   /* USER CODE BEGIN Thd_RadioNotifRcvProcess_Last */
 
   /* USER CODE END Thd_RadioNotifRcvProcess_Last */
@@ -260,5 +267,3 @@ static void Thd_RadioNotifRcvProcess(void *argument)
 /* USER CODE BEGIN PrFD */
 
 /* USER CODE END PrFD */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

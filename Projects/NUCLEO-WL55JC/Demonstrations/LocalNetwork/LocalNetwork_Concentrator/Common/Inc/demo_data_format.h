@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    demo_data_format.h
@@ -6,17 +7,17 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
-
+/* USER CODE END Header */
+/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __DEMO_DATA_FORMAT_H__
 #define __DEMO_DATA_FORMAT_H__
 
@@ -31,12 +32,12 @@ extern "C" {
   * Sent in DEMO_packet_sensor_t.
   * This data structure is for version 1.0.
   */
-typedef  struct
+typedef __PACKED_STRUCT
 {
   int16_t temperature;  /**<Temperature [0.01 `C]*/
 
   uint8_t voltage;      /**<Voltage on the MCU [0.05 V]*/
-} __packed DEMO_data_1_0_t;
+} DEMO_data_1_0_t;
 
 /**Error values for DEMO_data_1_0_t*/
 #define DEMO_DATA_1_0_ERROR_TEMPERATURE       INT16_MIN /*-3k `C*/
@@ -48,7 +49,7 @@ typedef  struct
   * Sent in DEMO_packet_sensor_t.
   * This data structure is for version 1.1.
   */
-typedef  struct
+typedef __PACKED_STRUCT
 {
   int16_t temperature;  /**<Temperature [0.01 `C]*/
   uint16_t pressure;    /**<Pressure [0.1 hPa]*/
@@ -84,7 +85,7 @@ typedef  struct
   /**Maximal acceleration, gravity excluded, during past 16 s [mg]*/
   uint16_t acceleration_max;
 
-} __packed DEMO_data_1_1_t;
+} DEMO_data_1_1_t;
 
 /**Error values for DEMO_data_1_0_t*/
 #define DEMO_DATA_1_1_ERROR_TEMPERATURE       DEMO_DATA_1_0_ERROR_TEMPERATURE

@@ -1,7 +1,7 @@
 /*!
  * \file      Region.h
  *
- * \brief     Region implementation.
+ * \brief     Region definition.
  *
  * \copyright Revised BSD License, see section \ref LICENSE.
  *
@@ -36,16 +36,16 @@
  *            - LoRaWAN regions can be activated by defining the related preprocessor
  *              definition. It is possible to define more than one region.
  *              The following regions are supported:
- *              - #define REGION_AS923
- *              - #define REGION_AU915
- *              - #define REGION_CN470
- *              - #define REGION_CN779
- *              - #define REGION_EU433
- *              - #define REGION_EU868
- *              - #define REGION_KR920
- *              - #define REGION_IN865
- *              - #define REGION_US915
- *              - #define REGION_RU864
+ *              - #REGION_AS923
+ *              - #REGION_AU915
+ *              - #REGION_CN470
+ *              - #REGION_CN779
+ *              - #REGION_EU433
+ *              - #REGION_EU868
+ *              - #REGION_KR920
+ *              - #REGION_IN865
+ *              - #REGION_US915
+ *              - #REGION_RU864
  *
  * \{
  */
@@ -57,26 +57,14 @@ extern "C"
 {
 #endif
 
-#include <stdint.h>
-#include <stdbool.h>
 #include "utilities.h"
-#include "LoRaMac.h"
-#include "timer.h"
 #include "RegionCommon.h"
+#include "RegionVersion.h"
 
 /*!
  * Macro to compute bit of a channel index.
  */
 #define LC( channelIndex )                          ( uint16_t )( 1 << ( channelIndex - 1 ) )
-
-#ifndef REGION_VERSION
-/*!
- * Regional parameters version definition.
- */
-#define REGION_VERSION                              0x01000300
-#endif
-
-
 
 /*!
  * Enumeration of phy attributes.
@@ -174,6 +162,7 @@ typedef enum ePhyAttribute
      * Join accept delay for window 2.
      */
     PHY_JOIN_ACCEPT_DELAY2,
+#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
     /*!
      * Maximum frame counter gap.
      */
@@ -182,6 +171,12 @@ typedef enum ePhyAttribute
      * Acknowledgement time out.
      */
     PHY_ACK_TIMEOUT,
+#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+    /*!
+     * Acknowledgement time out.
+     */
+    PHY_RETRANSMIT_TIMEOUT,
+#endif /* REGION_VERSION */
     /*!
      * Default datarate offset for window 1.
      */
@@ -489,6 +484,12 @@ typedef struct sInitDefaultsParams
      * Pointer to region NVM group2.
      */
     void* NvmGroup2;
+#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+    /*!
+     * Pointer to common region band storage.
+     */
+    void* Bands;
+#endif /* REGION_VERSION */
     /*!
      * Sets the initialization type.
      */
@@ -537,6 +538,9 @@ typedef union uVerifyParams
  */
 typedef struct sApplyCFListParams
 {
+#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+    uint8_t JoinChannel;
+#endif /* REGION_VERSION */
     /*!
      * Payload which contains the CF list.
      */
@@ -613,6 +617,15 @@ typedef struct sRxConfigParams
      * Sets the RX window.
      */
     LoRaMacRxSlot_t RxSlot;
+#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+    /*!
+     * LoRaWAN Network End-Device Activation ( ACTIVATION_TYPE_NONE, ACTIVATION_TYPE_ABP
+     * or ACTIVATION_TYPE_OTTA )
+     *
+     * Related MIB type: \ref MIB_NETWORK_ACTIVATION
+     */
+    ActivationType_t NetworkActivation;
+#endif /* REGION_VERSION */
 }RxConfigParams_t;
 
 /*!
@@ -644,6 +657,15 @@ typedef struct sTxConfigParams
      * Frame length to setup.
      */
     uint16_t PktLen;
+#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+    /*!
+     * LoRaWAN Network End-Device Activation ( ACTIVATION_TYPE_NONE, ACTIVATION_TYPE_ABP
+     * or ACTIVATION_TYPE_OTTA )
+     *
+     * Related MIB type: \ref MIB_NETWORK_ACTIVATION
+     */
+    ActivationType_t NetworkActivation;
+#endif /* REGION_VERSION */
 }TxConfigParams_t;
 
 /*!
@@ -833,6 +855,7 @@ typedef struct sChannelRemoveParams
     uint8_t ChannelId;
 }ChannelRemoveParams_t;
 
+#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
 /*!
  * Parameter structure for the function RegionContinuousWave.
  */
@@ -863,6 +886,7 @@ typedef struct sContinuousWaveParams
      */
     uint16_t Timeout;
 }ContinuousWaveParams_t;
+#endif /* REGION_VERSION */
 
 /*!
  * Parameter structure for the function RegionRxBeaconSetup
@@ -883,13 +907,11 @@ typedef struct sRxBeaconSetupParams
     uint32_t Frequency;
 }RxBeaconSetup_t;
 
-
-
 /*!
  * \brief The function verifies if a region is active or not. If a region
  *        is not active, it cannot be used.
  *
- * \param [IN] region LoRaWAN region.
+ * \param [in] region LoRaWAN region.
  *
  * \retval Return true, if the region is supported.
  */
@@ -898,9 +920,9 @@ bool RegionIsActive( LoRaMacRegion_t region );
 /*!
  * \brief The function gets a value of a specific phy attribute.
  *
- * \param [IN] region LoRaWAN region.
+ * \param [in] region LoRaWAN region.
  *
- * \param [IN] getPhy Pointer to the function parameters.
+ * \param [in] getPhy Pointer to the function parameters.
  *
  * \retval Returns a structure containing the PHY parameter.
  */
@@ -909,29 +931,29 @@ PhyParam_t RegionGetPhyParam( LoRaMacRegion_t region, GetPhyParams_t* getPhy );
 /*!
  * \brief Updates the last TX done parameters of the current channel.
  *
- * \param [IN] region LoRaWAN region.
+ * \param [in] region LoRaWAN region.
  *
- * \param [IN] txDone Pointer to the function parameters.
+ * \param [in] txDone Pointer to the function parameters.
  */
 void RegionSetBandTxDone( LoRaMacRegion_t region, SetBandTxDoneParams_t* txDone );
 
 /*!
  * \brief Initializes the channels masks and the channels.
  *
- * \param [IN] region LoRaWAN region.
+ * \param [in] region LoRaWAN region.
  *
- * \param [IN] params Pointer to the function parameters.
+ * \param [in] params Pointer to the function parameters.
  */
 void RegionInitDefaults( LoRaMacRegion_t region, InitDefaultsParams_t* params );
 
 /*!
  * \brief Verifies a parameter.
  *
- * \param [IN] region LoRaWAN region.
+ * \param [in] region LoRaWAN region.
  *
- * \param [IN] verify Pointer to the function parameters.
+ * \param [in] verify Pointer to the function parameters.
  *
- * \param [IN] type Sets the initialization type.
+ * \param [in] phyAttribute Sets the initialization type.
  *
  * \retval Returns true, if the parameter is valid.
  */
@@ -941,18 +963,18 @@ bool RegionVerify( LoRaMacRegion_t region, VerifyParams_t* verify, PhyAttribute_
  * \brief The function parses the input buffer and sets up the channels of the
  *        CF list.
  *
- * \param [IN] region LoRaWAN region.
+ * \param [in] region LoRaWAN region.
  *
- * \param [IN] applyCFList Pointer to the function parameters.
+ * \param [in] applyCFList Pointer to the function parameters.
  */
 void RegionApplyCFList( LoRaMacRegion_t region, ApplyCFListParams_t* applyCFList );
 
 /*!
  * \brief Sets a channels mask.
  *
- * \param [IN] region LoRaWAN region.
+ * \param [in] region LoRaWAN region.
  *
- * \param [IN] chanMaskSet Pointer to the function parameters.
+ * \param [in] chanMaskSet Pointer to the function parameters.
  *
  * \retval Returns true, if the channels mask could be set.
  */
@@ -961,11 +983,11 @@ bool RegionChanMaskSet( LoRaMacRegion_t region, ChanMaskSetParams_t* chanMaskSet
 /*!
  * \brief Configuration of the RX windows.
  *
- * \param [IN] region LoRaWAN region.
+ * \param [in] region LoRaWAN region.
  *
- * \param [IN] rxConfig Pointer to the function parameters.
+ * \param [in] rxConfig Pointer to the function parameters.
  *
- * \param [OUT] datarate The datarate index which was set.
+ * \param [out] datarate The datarate index which was set.
  *
  * \retval Returns true, if the configuration was applied successfully.
  */
@@ -1012,30 +1034,30 @@ bool RegionRxConfig( LoRaMacRegion_t region, RxConfigParams_t* rxConfig, int8_t*
 /*!
  * Computes the Rx window timeout and offset.
  *
- * \param [IN] region       LoRaWAN region.
+ * \param [in] region       LoRaWAN region.
  *
- * \param [IN] datarate     Rx window datarate index to be used
+ * \param [in] datarate     Rx window datarate index to be used
  *
- * \param [IN] minRxSymbols Minimum required number of symbols to detect an Rx frame.
+ * \param [in] minRxSymbols Minimum required number of symbols to detect an Rx frame.
  *
- * \param [IN] rxError      System maximum timing error of the receiver. In milliseconds
+ * \param [in] rxError      System maximum timing error of the receiver. In milliseconds
  *                          The receiver will turn on in a [-rxError : +rxError] ms
  *                          interval around RxOffset
  *
- * \param [OUT]rxConfigParams Returns updated WindowTimeout and WindowOffset fields.
+ * \param [out] rxConfigParams Returns updated WindowTimeout and WindowOffset fields.
  */
 void RegionComputeRxWindowParameters( LoRaMacRegion_t region, int8_t datarate, uint8_t minRxSymbols, uint32_t rxError, RxConfigParams_t *rxConfigParams );
 
 /*!
  * \brief TX configuration.
  *
- * \param [IN] region LoRaWAN region.
+ * \param [in] region LoRaWAN region.
  *
- * \param [IN] txConfig Pointer to the function parameters.
+ * \param [in] txConfig Pointer to the function parameters.
  *
- * \param [OUT] txPower The tx power index which was set.
+ * \param [out] txPower The tx power index which was set.
  *
- * \param [OUT] txTimeOnAir The time-on-air of the frame.
+ * \param [out] txTimeOnAir The time-on-air of the frame.
  *
  * \retval Returns true, if the configuration was applied successfully.
  */
@@ -1044,17 +1066,17 @@ bool RegionTxConfig( LoRaMacRegion_t region, TxConfigParams_t* txConfig, int8_t*
 /*!
  * \brief The function processes a Link ADR Request.
  *
- * \param [IN] region LoRaWAN region.
+ * \param [in] region LoRaWAN region.
  *
- * \param [IN] linkAdrReq Pointer to the function parameters.
+ * \param [in] linkAdrReq Pointer to the function parameters.
  *
- * \param [OUT] drOut The datarate which was applied.
+ * \param [out] drOut The datarate which was applied.
  *
- * \param [OUT] txPowOut The TX power which was applied.
+ * \param [out] txPowOut The TX power which was applied.
  *
- * \param [OUT] nbRepOut The number of repetitions to apply.
+ * \param [out] nbRepOut The number of repetitions to apply.
  *
- * \param [OUT] nbBytesParsed The number bytes which were parsed.
+ * \param [out] nbBytesParsed The number bytes which were parsed.
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  */
@@ -1063,9 +1085,9 @@ uint8_t RegionLinkAdrReq( LoRaMacRegion_t region, LinkAdrReqParams_t* linkAdrReq
 /*!
  * \brief The function processes a RX Parameter Setup Request.
  *
- * \param [IN] region LoRaWAN region.
+ * \param [in] region LoRaWAN region.
  *
- * \param [IN] rxParamSetupReq Pointer to the function parameters.
+ * \param [in] rxParamSetupReq Pointer to the function parameters.
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  */
@@ -1074,9 +1096,9 @@ uint8_t RegionRxParamSetupReq( LoRaMacRegion_t region, RxParamSetupReqParams_t* 
 /*!
  * \brief The function processes a New Channel Request.
  *
- * \param [IN] region LoRaWAN region.
+ * \param [in] region LoRaWAN region.
  *
- * \param [IN] newChannelReq Pointer to the function parameters.
+ * \param [in] newChannelReq Pointer to the function parameters.
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  */
@@ -1085,9 +1107,9 @@ int8_t RegionNewChannelReq( LoRaMacRegion_t region, NewChannelReqParams_t* newCh
 /*!
  * \brief The function processes a TX ParamSetup Request.
  *
- * \param [IN] region LoRaWAN region.
+ * \param [in] region LoRaWAN region.
  *
- * \param [IN] txParamSetupReq Pointer to the function parameters.
+ * \param [in] txParamSetupReq Pointer to the function parameters.
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  *         Returns -1, if the functionality is not implemented. In this case, the end node
@@ -1098,9 +1120,9 @@ int8_t RegionTxParamSetupReq( LoRaMacRegion_t region, TxParamSetupReqParams_t* t
 /*!
  * \brief The function processes a DlChannel Request.
  *
- * \param [IN] region LoRaWAN region.
+ * \param [in] region LoRaWAN region.
  *
- * \param [IN] dlChannelReq Pointer to the function parameters.
+ * \param [in] dlChannelReq Pointer to the function parameters.
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  */
@@ -1109,11 +1131,11 @@ int8_t RegionDlChannelReq( LoRaMacRegion_t region, DlChannelReqParams_t* dlChann
 /*!
  * \brief Alternates the datarate of the channel for the join request.
  *
- * \param [IN] region LoRaWAN region.
+ * \param [in] region LoRaWAN region.
  *
- * \param [IN] currentDr Current datarate.
+ * \param [in] currentDr Current datarate.
  *
- * \param [IN] type Alternation type.
+ * \param [in] type Alternation type.
  *
  * \retval Datarate to apply.
  */
@@ -1122,14 +1144,16 @@ int8_t RegionAlternateDr( LoRaMacRegion_t region, int8_t currentDr, AlternateDrT
 /*!
  * \brief Searches and set the next random available channel
  *
- * \param [IN] region LoRaWAN region.
+ * \param [in] region LoRaWAN region.
  *
- * \param [OUT] channel Next channel to use for TX.
+ * \param [in] nextChanParams pointer of selected channel parameters
  *
- * \param [OUT] time Time to wait for the next transmission according to the duty
+ * \param [out] channel Next channel to use for TX.
+ *
+ * \param [out] time Time to wait for the next transmission according to the duty
  *              cycle.
  *
- * \param [OUT] aggregatedTimeOff Updates the aggregated time off.
+ * \param [out] aggregatedTimeOff Updates the aggregated time off.
  *
  * \retval Function status [1: OK, 0: Unable to find a channel on the current datarate].
  */
@@ -1138,9 +1162,9 @@ LoRaMacStatus_t RegionNextChannel( LoRaMacRegion_t region, NextChanParams_t* nex
 /*!
  * \brief Adds a channel.
  *
- * \param [IN] region LoRaWAN region.
+ * \param [in] region LoRaWAN region.
  *
- * \param [IN] channelAdd Pointer to the function parameters.
+ * \param [in] channelAdd Pointer to the function parameters.
  *
  * \retval Status of the operation.
  */
@@ -1149,14 +1173,15 @@ LoRaMacStatus_t RegionChannelAdd( LoRaMacRegion_t region, ChannelAddParams_t* ch
 /*!
  * \brief Removes a channel.
  *
- * \param [IN] region LoRaWAN region.
+ * \param [in] region LoRaWAN region.
  *
- * \param [IN] channelRemove Pointer to the function parameters.
+ * \param [in] channelRemove Pointer to the function parameters.
  *
  * \retval Returns true, if the channel was removed successfully.
  */
 bool RegionChannelsRemove( LoRaMacRegion_t region, ChannelRemoveParams_t* channelRemove );
 
+#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
 /*!
  * \brief Sets the radio into continuous wave mode.
  *
@@ -1165,15 +1190,18 @@ bool RegionChannelsRemove( LoRaMacRegion_t region, ChannelRemoveParams_t* channe
  * \param [IN] continuousWave Pointer to the function parameters.
  */
 void RegionSetContinuousWave( LoRaMacRegion_t region, ContinuousWaveParams_t* continuousWave );
+#endif /* REGION_VERSION */
 
 /*!
  * \brief Computes new datarate according to the given offset
  *
- * \param [IN] downlinkDwellTime Downlink dwell time configuration. 0: No limit, 1: 400ms
+ * \param [in] region LoRaWAN region.
  *
- * \param [IN] dr Current datarate
+ * \param [in] downlinkDwellTime Downlink dwell time configuration. 0: No limit, 1: 400ms
  *
- * \param [IN] drOffset Offset to be applied
+ * \param [in] dr Current datarate
+ *
+ * \param [in] drOffset Offset to be applied
  *
  * \retval newDr Computed datarate.
  */
@@ -1182,7 +1210,9 @@ uint8_t RegionApplyDrOffset( LoRaMacRegion_t region, uint8_t downlinkDwellTime, 
 /*!
  * \brief Sets the radio into beacon reception mode
  *
- * \param [IN] rxBeaconSetup Pointer to the function parameters
+ * \param [in] region LoRaWAN region.
+ *
+ * \param [in] rxBeaconSetup Pointer to the function parameters
  *
  * \param [out] outDr Datarate used to receive the beacon
  */

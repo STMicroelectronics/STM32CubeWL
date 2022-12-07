@@ -2,19 +2,19 @@
   @page 2_Images_SECoreBin / Secure Engine Core binary generation.
 
   @verbatim
-  ******************** (C) COPYRIGHT 2017 STMicroelectronics *******************
+  ******************************************************************************
   * @file    readme.txt
   * @brief   Secure Engine Core binary generation.
   *          SE Core binary exports SE CallGate function entry point for
   *          SFU Application.
   ******************************************************************************
   *
-  * Copyright (c) 2017 STMicroelectronics. All rights reserved.
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                               www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   @endverbatim
@@ -39,7 +39,7 @@ provided and can be selected thanks to SECBOOT_CRYPTO_SCHEME compiler switch nam
    - SECBOOT_AES128_GCM_AES128_GCM_AES128_GCM
 
 This example supports multiple images feature configured with 2 active images for execution from internal flash.
-Each image has its own keys for signature verification and firwmare encryption.
+Each image has its own keys for signature verification and firmware encryption.
 
 For more details, refer to UM2262 "Getting started with SBSFU - software expansion for STM32Cube"
 available from the STMicroelectronics microcontroller website www.st.com.

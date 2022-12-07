@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -52,6 +51,7 @@
   * Defines the maximum battery level
   */
 #define LORAWAN_MAX_BAT   254
+
 /* USER CODE BEGIN PD */
 
 /* USER CODE END PD */
@@ -62,6 +62,8 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+static uint8_t SYS_TimerInitialisedFlag = 0;
+
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -95,16 +97,16 @@ void SystemApp_Init(void)
 
   /*Initialize timer and RTC*/
   UTIL_TIMER_Init();
-
-  /* Debug config : disable serial wires and DbgMcu pins settings */
-  DBG_Disable();
-
+  SYS_TimerInitialisedFlag = 1;
   /* Initializes the SW probes pins and the monitor RF pins via Alternate Function */
-  DBG_ProbesInit();
+  DBG_Init();
 
   /*Initialize the terminal */
   UTIL_ADV_TRACE_Init();
   UTIL_ADV_TRACE_RegisterTimeStampFunction(TimestampNow);
+
+  /* #warning "should be removed when proper obl is done" */
+  __HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_OPTVERR);
 
   /*Set verbose LEVEL*/
   UTIL_ADV_TRACE_SetVerboseLevel(VERBOSE_LEVEL);
@@ -168,8 +170,6 @@ uint8_t GetBatteryLevel(void)
     batteryLevel = (((uint32_t)(batteryLevelmV - VDD_MIN) * LORAWAN_MAX_BAT) / (VDD_BAT - VDD_MIN));
   }
 
-  APP_LOG(TS_ON, VLEVEL_M, "VDDA= %d\r\n", batteryLevel);
-
   /* USER CODE BEGIN GetBatteryLevel_2 */
 
   /* USER CODE END GetBatteryLevel_2 */
@@ -177,11 +177,11 @@ uint8_t GetBatteryLevel(void)
   return batteryLevel;  /* 1 (very low) to 254 (fully charged) */
 }
 
-uint16_t GetTemperatureLevel(void)
+int16_t GetTemperatureLevel(void)
 {
-  uint16_t temperatureLevel = 0;
+  int16_t temperatureLevel = 0;
 
-  temperatureLevel = (uint16_t)(SYS_GetTemperatureLevel() / 256);
+  temperatureLevel = (int16_t)(SYS_GetTemperatureLevel() >> 8);
   /* USER CODE BEGIN GetTemperatureLevel */
 
   /* USER CODE END GetTemperatureLevel */
@@ -330,14 +330,31 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
   */
 uint32_t HAL_GetTick(void)
 {
+  uint32_t ret = 0;
   /* TIMER_IF can be based on other counter the SysTick e.g. RTC */
   /* USER CODE BEGIN HAL_GetTick_1 */
 
   /* USER CODE END HAL_GetTick_1 */
-  return TIMER_IF_GetTimerValue();
+  if (SYS_TimerInitialisedFlag == 0)
+  {
+    /* TIMER_IF_GetTimerValue should be used only once UTIL_TIMER_Init() is initialized */
+    /* If HAL_Delay or a TIMEOUT countdown is necessary during initialization phase */
+    /* please use temporarily another timebase source (SysTick or TIMx), which implies also */
+    /* to rework the above function HAL_InitTick() and to call HAL_IncTick() on the timebase IRQ */
+    /* Note: when TIMER_IF is based on RTC, stm32wlxx_hal_rtc.c calls this function before TimeServer is functional */
+    /* RTC TIMEOUT will not expire, i.e. if RTC has an hw problem it will keep looping in the RTC_Init function */
+    /* USER CODE BEGIN HAL_GetTick_EarlyCall */
+
+    /* USER CODE END HAL_GetTick_EarlyCall */
+  }
+  else
+  {
+    ret = TIMER_IF_GetTimerValue();
+  }
   /* USER CODE BEGIN HAL_GetTick_2 */
 
   /* USER CODE END HAL_GetTick_2 */
+  return ret;
 }
 
 /**
@@ -358,5 +375,3 @@ void HAL_Delay(__IO uint32_t Delay)
 /* USER CODE BEGIN Overload_HAL_weaks */
 
 /* USER CODE END Overload_HAL_weaks */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

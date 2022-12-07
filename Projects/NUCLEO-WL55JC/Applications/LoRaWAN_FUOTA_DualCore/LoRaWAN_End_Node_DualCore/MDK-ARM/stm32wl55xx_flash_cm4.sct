@@ -13,6 +13,11 @@ LR_ROM (SLOT_ACTIVE_2_START + 0x200) {                      ; 0x200 = IMAGE_OFFS
     *(InRoot$$Sections)
     .ANY (+RO)
   }
+
+  ; NVM FLASH Data
+  ; WARNING: Symbols not used. The NVMS address is defined in lora_app.c
+  ; RW_LW_NVM_ROM 0x0801E000 0x00001000
+
   RAM_region M4_APP_REGION_RAM_START M4_APP_RAM_REGION_SIZE {
     .ANY (STACK)
     .ANY (HEAP)

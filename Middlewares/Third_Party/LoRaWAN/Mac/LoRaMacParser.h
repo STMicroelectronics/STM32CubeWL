@@ -42,7 +42,6 @@ extern "C"
 {
 #endif
 
-#include <stdint.h>
 #include "LoRaMacMessageTypes.h"
 
 /*!
@@ -68,11 +67,10 @@ typedef enum eLoRaMacParserStatus
     LORAMAC_PARSER_ERROR,
 }LoRaMacParserStatus_t;
 
-
 /*!
  * Parse a serialized join-accept message and fills the structured object.
  *
- * \param[IN/OUT] macMsg       - Join-accept message object
+ * \param [in,out] macMsg      - Join-accept message object
  * \retval                     - Status of the operation
  */
 LoRaMacParserStatus_t LoRaMacParserJoinAccept( LoRaMacMessageJoinAccept_t *macMsg );
@@ -80,7 +78,7 @@ LoRaMacParserStatus_t LoRaMacParserJoinAccept( LoRaMacMessageJoinAccept_t *macMs
 /*!
  * Parse a serialized data message and fills the structured object.
  *
- * \param[IN/OUT] macMsg       - Data message object
+ * \param [in,out] macMsg      - Data message object
  * \retval                     - Status of the operation
  */
 LoRaMacParserStatus_t LoRaMacParserData( LoRaMacMessageData_t *macMsg );

@@ -3,17 +3,16 @@
   ******************************************************************************
   * @file    sys_privileged_wrap.c
   * @author  MCD Application Team
-  * @brief   Wrapper functions to call SVC when in Unprivilege mode
+  * @brief   Wrapper functions to call SVC when in Unprivileged mode
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -131,7 +130,6 @@ void SYS_PRIVIL_NVIC_EnableIRQ(IRQn_Type IRQn)
   }
 }
 
-
 uint32_t SYS_PRIVIL_NVIC_GetEnableIRQ(IRQn_Type IRQn)
 {
   uint32_t irqn_state;
@@ -146,7 +144,6 @@ uint32_t SYS_PRIVIL_NVIC_GetEnableIRQ(IRQn_Type IRQn)
   }
   return irqn_state;
 }
-
 
 void SYS_PRIVIL_NVIC_DisableIRQ(IRQn_Type IRQn)
 {
@@ -251,5 +248,3 @@ void SYS_PRIVIL_NVIC_SystemReset(void)
 /* USER CODE BEGIN PrFD */
 
 /* USER CODE END PrFD */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

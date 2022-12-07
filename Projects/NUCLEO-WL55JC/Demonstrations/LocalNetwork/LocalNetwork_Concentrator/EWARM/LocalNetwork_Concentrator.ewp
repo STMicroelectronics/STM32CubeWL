@@ -1082,13 +1082,13 @@
                 <name>$PROJ_DIR$\..\Core\Src\dma.c</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\Core\Src\gpio.c</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\Core\Src\main.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\Core\Src\rtc.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\Core\Src\timer_if.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\Core\Src\stm32_lpm_if.c</name>
@@ -1107,6 +1107,9 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\Core\Src\sys_debug.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\Core\Src\timer_if.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\Core\Src\usart.c</name>
@@ -1161,15 +1164,9 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_adc.c</name>
-                <excluded>
-                    <configuration>Demo_Concentrator</configuration>
-                </excluded>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_adc_ex.c</name>
-                <excluded>
-                    <configuration>Demo_Concentrator</configuration>
-                </excluded>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_cortex.c</name>
@@ -1235,10 +1232,10 @@
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\SubGHz_Phy\stm32_radio_driver\radio.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\SubGHz_Phy\stm32_radio_driver\radio_fw.c</name>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\SubGHz_Phy\stm32_radio_driver\radio_driver.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\SubGHz_Phy\stm32_radio_driver\radio_driver.c</name>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\SubGHz_Phy\stm32_radio_driver\radio_fw.c</name>
             </file>
         </group>
     </group>

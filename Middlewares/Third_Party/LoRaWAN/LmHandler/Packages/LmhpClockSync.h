@@ -22,8 +22,6 @@
 #ifndef __LMHP_CLOCK_SYNC_H__
 #define __LMHP_CLOCK_SYNC_H__
 
-#include "LoRaMac.h"
-#include "LmHandlerTypes.h"
 #include "LmhPackage.h"
 
 /*!

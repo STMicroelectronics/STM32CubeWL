@@ -37,35 +37,39 @@
 #ifndef __NVMDATAMGMT_H__
 #define __NVMDATAMGMT_H__
 
+typedef enum NvmDataErrorStatus_e
+{
+  NVM_DATA_ERROR = -1,
+  NVM_DATA_NO_UPDATED_DATA = -2,
+  NVM_DATA_NOT_AVAILABLE = -3,
+  NVM_DATA_INCONSISTENT = -4,
+  NVM_DATA_DISABLED = -5,
+  NVM_DATA_OK = 0
+
+}NvmDataErrorStatus_t;
+
 /*!
  * \brief NVM Management event.
  *
- * \param [IN] notifyFlags Bitmap which contains the information about modules that
+ * \param [in] notifyFlags Bitmap which contains the information about modules that
  *                         changed.
  */
 void NvmDataMgmtEvent( uint16_t notifyFlags );
 
 /*!
- * \brief Function which stores the MAC data into NVM, if required.
+ * \brief Check the NVM Flag status and LoRaMAC state
  *
- * \retval Number of bytes which were stored.
+ * \retval status NVM_DATA_OK, NVM_DATA_DISABLED, NVM_DATA_NOT_AVAILABLE, NVM_DATA_NO_UPDATED_DATA
  */
-uint16_t NvmDataMgmtStore( void );
+int32_t NvmDataMgmtStoreBegin( void );
 
 /*!
- * \brief Function which restores the MAC data from NVM, if required.
+ * \brief Clean the NVM Flag status and resume LoRaMAC process
  *
- * \retval Number of bytes which were restored.
+ * \retval status NVM_DATA_OK, NVM_DATA_DISABLED
  */
-uint16_t NvmDataMgmtRestore(void );
+int32_t NvmDataMgmtStoreEnd( void );
 
-/*!
- * \brief Resets the NVM data.
- *
- * \retval Returns true, if successful.
- */
-bool NvmDataMgmtFactoryReset( void );
-
-/* \} */
+/*! \} defgroup NVMDATAMGMT */
 
 #endif // __NVMDATAMGMT_H__

@@ -30,6 +30,7 @@
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/
+#include "LoRaMac.h"
 #include "LmHandler.h"
 #include "LmhpRemoteMcastSetup.h"
 #include "mw_log_conf.h"  /* needed for MW_LOG */
@@ -55,7 +56,11 @@ typedef enum LmhpRemoteMcastSetupSessionStates_e
 typedef struct LmhpRemoteMcastSetupState_s
 {
     bool Initialized;
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000300 ))
     bool IsRunning;
+#elif (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+    bool IsTxPending;
+#endif /* LORAMAC_VERSION */
     LmhpRemoteMcastSetupSessionStates_t SessionState;
     uint8_t DataBufferMaxSize;
     uint8_t *DataBuffer;
@@ -84,9 +89,9 @@ typedef enum LmhpRemoteMcastSetupSrvCmd_e
 /*!
  * Initializes the package with provided parameters
  *
- * \param [IN] params            Pointer to the package parameters
- * \param [IN] dataBuffer        Pointer to main application buffer
- * \param [IN] dataBufferMaxSize Main application buffer maximum size
+ * \param [in] params            Pointer to the package parameters
+ * \param [in] dataBuffer        Pointer to main application buffer
+ * \param [in] dataBufferMaxSize Main application buffer maximum size
  */
 static void LmhpRemoteMcastSetupInit( void *params, uint8_t *dataBuffer, uint8_t dataBufferMaxSize );
 
@@ -98,6 +103,7 @@ static void LmhpRemoteMcastSetupInit( void *params, uint8_t *dataBuffer, uint8_t
  */
 static bool LmhpRemoteMcastSetupIsInitialized( void );
 
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000300 ))
 /*!
  * Returns the package operation status.
  *
@@ -105,6 +111,15 @@ static bool LmhpRemoteMcastSetupIsInitialized( void );
  *                [true: Running, false: Not running]
  */
 static bool LmhpRemoteMcastSetupIsRunning( void );
+#elif (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+/*!
+ * Returns if a package transmission is pending or not.
+ *
+ * \retval status Package transmission status
+ *                [true: pending, false: Not pending]
+ */
+static bool LmhpRemoteMcastSetupIsTxPending( void );
+#endif /* LORAMAC_VERSION */
 
 /*!
  * Processes the internal package events.
@@ -114,7 +129,7 @@ static void LmhpRemoteMcastSetupProcess( void );
 /*!
  * Processes the MCPS Indication
  *
- * \param [IN] mcpsIndication     MCPS indication primitive data
+ * \param [in] mcpsIndication     MCPS indication primitive data
  */
 static void LmhpRemoteMcastSetupOnMcpsIndication( McpsIndication_t *mcpsIndication );
 
@@ -125,7 +140,11 @@ static void OnSessionStopTimer( void *context );
 static LmhpRemoteMcastSetupState_t LmhpRemoteMcastSetupState =
 {
     .Initialized = false,
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000300 ))
     .IsRunning = false,
+#elif (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+    .IsTxPending = false,
+#endif /* LORAMAC_VERSION */
     .SessionState = REMOTE_MCAST_SETUP_SESSION_STATE_IDLE,
 };
 
@@ -179,16 +198,23 @@ static LmhPackage_t LmhpRemoteMcastSetupPackage =
     .Port = REMOTE_MCAST_SETUP_PORT,
     .Init = LmhpRemoteMcastSetupInit,
     .IsInitialized = LmhpRemoteMcastSetupIsInitialized,
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000300 ))
     .IsRunning = LmhpRemoteMcastSetupIsRunning,
+#elif (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+    .IsTxPending = LmhpRemoteMcastSetupIsTxPending,
+#endif /* LORAMAC_VERSION */
     .Process = LmhpRemoteMcastSetupProcess,
+    .OnPackageProcessEvent = NULL,                             // To be initialized by LmHandler
     .OnMcpsConfirmProcess = NULL,                              // Not used in this package
     .OnMcpsIndicationProcess = LmhpRemoteMcastSetupOnMcpsIndication,
     .OnMlmeConfirmProcess = NULL,                              // Not used in this package
+    .OnMlmeIndicationProcess = NULL,                           // Not used in this package
     .OnJoinRequest = NULL,                                     // To be initialized by LmHandler
-    .OnSendRequest = NULL,                                     // To be initialized by LmHandler
     .OnDeviceTimeRequest = NULL,                               // To be initialized by LmHandler
     .OnSysTimeUpdate = NULL,                                   // To be initialized by LmHandler
-    .OnPackageProcessEvent = NULL,                             // To be initialized by LmHandler
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+    .OnSystemReset = NULL,                                     // To be initialized by LmHandler
+#endif /* LORAMAC_VERSION */
 };
 
 LmhPackage_t *LmhpRemoteMcastSetupPackageFactory( void )
@@ -203,15 +229,22 @@ static void LmhpRemoteMcastSetupInit( void * params, uint8_t *dataBuffer, uint8_
         LmhpRemoteMcastSetupState.DataBuffer = dataBuffer;
         LmhpRemoteMcastSetupState.DataBufferMaxSize = dataBufferMaxSize;
         LmhpRemoteMcastSetupState.Initialized = true;
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000300 ))
         LmhpRemoteMcastSetupState.IsRunning = true;
+#endif /* LORAMAC_VERSION */
         TimerInit( &SessionStartTimer, OnSessionStartTimer );
         TimerInit( &SessionStopTimer, OnSessionStopTimer );
     }
     else
     {
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000300 ))
         LmhpRemoteMcastSetupState.IsRunning = false;
+#endif /* LORAMAC_VERSION */
         LmhpRemoteMcastSetupState.Initialized = false;
     }
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+    LmhpRemoteMcastSetupState.IsTxPending = false;
+#endif
 
     for (uint8_t id = 0; id < LORAMAC_MAX_MC_CTX; id++)
     {
@@ -224,6 +257,7 @@ static bool LmhpRemoteMcastSetupIsInitialized( void )
     return LmhpRemoteMcastSetupState.Initialized;
 }
 
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000300 ))
 static bool LmhpRemoteMcastSetupIsRunning( void )
 {
     if( LmhpRemoteMcastSetupState.Initialized == false )
@@ -233,6 +267,12 @@ static bool LmhpRemoteMcastSetupIsRunning( void )
 
     return LmhpRemoteMcastSetupState.IsRunning;
 }
+#elif (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+static bool LmhpRemoteMcastSetupIsTxPending( void )
+{
+    return LmhpRemoteMcastSetupState.IsTxPending;
+}
+#endif /* LORAMAC_VERSION */
 
 static void LmhpRemoteMcastSetupProcess( void )
 {
@@ -490,7 +530,7 @@ static void LmhpRemoteMcastSetupOnMcpsIndication( McpsIndication_t *mcpsIndicati
 
         /* force Duty Cycle OFF to this Send */
         LmHandlerSetDutyCycleEnable( false );
-        LmhpRemoteMcastSetupPackage.OnSendRequest( &appData, LORAMAC_HANDLER_UNCONFIRMED_MSG, NULL, true );
+        LmHandlerSend( &appData, LORAMAC_HANDLER_UNCONFIRMED_MSG, true );
 
         /* restore initial Duty Cycle */
         LmHandlerSetDutyCycleEnable( current_dutycycle );
@@ -518,6 +558,7 @@ static void LmhpRemoteMcastSetupOnMcpsIndication( McpsIndication_t *mcpsIndicati
 static void OnSessionStartTimer( void *context )
 {
     TimerStop( &SessionStartTimer );
+
     LmhpRemoteMcastSetupState.SessionState = REMOTE_MCAST_SETUP_SESSION_STATE_START;
     LmhpRemoteMcastSetupPackage.OnPackageProcessEvent();
 }
@@ -525,6 +566,7 @@ static void OnSessionStartTimer( void *context )
 static void OnSessionStopTimer( void *context )
 {
     TimerStop( &SessionStopTimer );
+
     LmhpRemoteMcastSetupState.SessionState = REMOTE_MCAST_SETUP_SESSION_STATE_STOP;
     LmhpRemoteMcastSetupPackage.OnPackageProcessEvent();
 }

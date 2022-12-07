@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    demo_concentrator.c
@@ -6,17 +7,17 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
-
+/* USER CODE END Header */
+/* Includes ------------------------------------------------------------------*/
 #include "demo_concentrator.h"
 #include "demo_radio_utils.h"
 #include "demo_report.h"
@@ -86,7 +87,7 @@ static CONC_Global_t CONC; /*Global variables of this module*/
 static void StartLPTIM(void *context);
 static void LedsOff(void *context);
 static void LedsEffect(void *context);
-static void LedBlink(Led_TypeDef Led);
+static void LedBlink(void);
 static void SendBeacon(void);
 static void SendSync(void);
 static void Receive(void);
@@ -240,9 +241,9 @@ int CONC_StartBeacon(uint32_t Region, uint32_t Subregion)
   }
   /*stop Led effect*/
   UTIL_TIMER_Stop(&CONC.LedEffect);
-  BSP_LED_Off(LED_GREEN);
-  BSP_LED_Off(LED_RED);
-  BSP_LED_Off(LED_BLUE);
+  HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET); /* LED_BLUE */
+  HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_RESET); /* LED_GREEN */
+  HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_RESET); /* LED_RED */
 
   /*Store Parameters*/
   CONC.Region = &(DEMO_Regions[Region]);
@@ -465,41 +466,39 @@ CONC_SetModReturn_t CONC_SetModFSK(uint32_t eui, const DEMO_coding_fsk_t *param,
 static void LedsOff(void *context)
 {
   UNUSED(context);
-  BSP_LED_Off(LED_GREEN);
-  BSP_LED_Off(LED_BLUE);
+  HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_RESET); /* LED_GREEN */
+  HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET); /* LED_BLUE */
 }
 
 static void LedsEffect(void *context)
 {
   UNUSED(context);
-  if (1U == BSP_LED_GetState(LED_BLUE))
+  if (1U == HAL_GPIO_ReadPin(LED1_GPIO_Port, LED1_Pin)) /* LED_BLUE */
   {
-    BSP_LED_Off(LED_BLUE);
-    BSP_LED_On(LED_GREEN);
+    HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET); /* LED_BLUE */
+    HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_SET); /* LED_GREEN */
   }
-  else if (1U == BSP_LED_GetState(LED_GREEN))
+  else if (1U == HAL_GPIO_ReadPin(LED2_GPIO_Port, LED2_Pin)) /* LED_GREEN */
   {
-    BSP_LED_Off(LED_GREEN);
-    BSP_LED_On(LED_RED);
+    HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_RESET); /* LED_GREEN */
+    HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_SET); /* LED_RED */
   }
-  else if (1U == BSP_LED_GetState(LED_RED))
+  else if (1U == HAL_GPIO_ReadPin(LED3_GPIO_Port, LED3_Pin)) /* LED_RED */
   {
-    BSP_LED_Off(LED_RED);
-    BSP_LED_On(LED_BLUE);
+    HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_RESET); /* LED_RED */
+    HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET); /* LED_BLUE */
   }
   else
   {
-    BSP_LED_On(LED_BLUE);
+    HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET); /* LED_BLUE */
   }
   UTIL_TIMER_Start(&CONC.LedEffect);
 }
 /**
   * @brief Do a short blink with a LED.
-  * @param Led which LED
   */
-static void LedBlink(Led_TypeDef Led)
+static void LedBlink(void)
 {
-  BSP_LED_On(Led);
   UTIL_TIMER_Start(&CONC.LedTimer);
 }
 
@@ -581,7 +580,7 @@ static void SendBeacon(void)
 
   APP_LOG(TS_ON, VLEVEL_H, "Beacon Tx at %d\n\r", (CONC.Region->beacon_freq));
   /*Notify*/
-  BSP_LED_On(LED_RED);
+  HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_SET); /* LED_RED */
 }
 
 /**
@@ -642,7 +641,7 @@ static void SendSync(void)
   Radio.Send((uint8_t *)&CONC.Sync, 4 + codings_len);
 
   /*Notify*/
-  BSP_LED_On(LED_RED);
+  HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_SET); /* LED_RED */
 
   APP_LOG(TS_ON, VLEVEL_H, "Sync Tx at %d\n\r", (channel->freq));
 }
@@ -966,7 +965,8 @@ void LPTIM1_IRQHandler(void)
         Radio.Sleep();
       }
     }
-    LedBlink(LED_GREEN);       /*Indicate slot start*/
+    HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_SET); /* LED_GREEN */
+    LedBlink();       /*Indicate slot start*/
   }
 }
 
@@ -993,7 +993,7 @@ static void TxDone(void)
   {
     Radio.Sleep();
   }
-  BSP_LED_Off(LED_RED);
+  HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_RESET); /* LED_RED */
 }
 
 /*!
@@ -1001,7 +1001,7 @@ static void TxDone(void)
   */
 static void TxTimeout(void)
 {
-  BSP_LED_Off(LED_RED);
+  HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_RESET); /* LED_RED */
 }
 
 /*!
@@ -1079,7 +1079,8 @@ static void RxDone(uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr)
                     ((uint8_t *)payload) + sizeof(DEMO_packet_sensor_header_t),
                     size - sizeof(DEMO_packet_sensor_header_t));
 
-    LedBlink(LED_BLUE);
+    HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET); /* LED_BLUE */
+    LedBlink();
   }
   else
   {

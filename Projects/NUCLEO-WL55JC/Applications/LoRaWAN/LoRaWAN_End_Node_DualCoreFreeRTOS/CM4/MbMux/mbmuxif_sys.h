@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -43,13 +42,13 @@ extern "C" {
 /* Exported constants --------------------------------------------------------*/
 /* -- FreeRTOS tasks configuration -- */
 /*Mailbox Lora*/
-#define CFG_MB_LORA_PROCESS_NAME                  "MB_LORA_PROCESS"
-#define CFG_MB_LORA_PROCESS_ATTR_BITS             (0)
-#define CFG_MB_LORA_PROCESS_CB_MEM                (0)
-#define CFG_MB_LORA_PROCESS_CB_SIZE               (0)
-#define CFG_MB_LORA_PROCESS_STACK_MEM             (0)
-#define CFG_MB_LORA_PROCESS_PRIORITY              osPriorityNone
-#define CFG_MB_LORA_PROCESS_STACk_SIZE            (128 * 10)
+#define CFG_MB_LORA_PROCESS_NAME                   "MB_LORA_PROCESS"
+#define CFG_MB_LORA_PROCESS_ATTR_BITS              (0)
+#define CFG_MB_LORA_PROCESS_CB_MEM                 (0)
+#define CFG_MB_LORA_PROCESS_CB_SIZE                (0)
+#define CFG_MB_LORA_PROCESS_STACK_MEM              (0)
+#define CFG_MB_LORA_PROCESS_PRIORITY               osPriorityNone
+#define CFG_MB_LORA_PROCESS_STACK_SIZE             (128 * 10)
 
 /*Mailbox Radio*/
 #define CFG_MB_RADIO_PROCESS_NAME                  "MB_RADIO_PROCESS"
@@ -58,25 +57,25 @@ extern "C" {
 #define CFG_MB_RADIO_PROCESS_CB_SIZE               (0)
 #define CFG_MB_RADIO_PROCESS_STACK_MEM             (0)
 #define CFG_MB_RADIO_PROCESS_PRIORITY              osPriorityNone
-#define CFG_MB_RADIO_PROCESS_STACk_SIZE            (128 * 10)
+#define CFG_MB_RADIO_PROCESS_STACK_SIZE            (128 * 10)
 
 /*Mailbox Sys*/
-#define CFG_MB_SYS_PROCESS_NAME                  "MB_SYS_PROCESS"
-#define CFG_MB_SYS_PROCESS_ATTR_BITS             (0)
-#define CFG_MB_SYS_PROCESS_CB_MEM                (0)
-#define CFG_MB_SYS_PROCESS_CB_SIZE               (0)
-#define CFG_MB_SYS_PROCESS_STACK_MEM             (0)
-#define CFG_MB_SYS_PROCESS_PRIORITY              osPriorityNone
-#define CFG_MB_SYS_PROCESS_STACk_SIZE            (128 * 10)
+#define CFG_MB_SYS_PROCESS_NAME                    "MB_SYS_PROCESS"
+#define CFG_MB_SYS_PROCESS_ATTR_BITS               (0)
+#define CFG_MB_SYS_PROCESS_CB_MEM                  (0)
+#define CFG_MB_SYS_PROCESS_CB_SIZE                 (0)
+#define CFG_MB_SYS_PROCESS_STACK_MEM               (0)
+#define CFG_MB_SYS_PROCESS_PRIORITY                osPriorityNone
+#define CFG_MB_SYS_PROCESS_STACK_SIZE              (128 * 10)
 
 /*Mailbox Kms*/
-#define CFG_MB_KMS_PROCESS_NAME                  "MB_KMS_PROCESS"
-#define CFG_MB_KMS_PROCESS_ATTR_BITS             (0)
-#define CFG_MB_KMS_PROCESS_CB_MEM                (0)
-#define CFG_MB_KMS_PROCESS_CB_SIZE               (0)
-#define CFG_MB_KMS_PROCESS_STACK_MEM             (0)
-#define CFG_MB_KMS_PROCESS_PRIORITY              osPriorityNone
-#define CFG_MB_KMS_PROCESS_STACk_SIZE            (128 * 10)
+#define CFG_MB_KMS_PROCESS_NAME                    "MB_KMS_PROCESS"
+#define CFG_MB_KMS_PROCESS_ATTR_BITS               (0)
+#define CFG_MB_KMS_PROCESS_CB_MEM                  (0)
+#define CFG_MB_KMS_PROCESS_CB_SIZE                 (0)
+#define CFG_MB_KMS_PROCESS_STACK_MEM               (0)
+#define CFG_MB_KMS_PROCESS_PRIORITY                osPriorityNone
+#define CFG_MB_KMS_PROCESS_STACK_SIZE              (128 * 10)
 
 /*Send*/
 #define CFG_APP_LORA_PROCESS_NAME                  "LORA_SEND_PROCESS"
@@ -85,7 +84,25 @@ extern "C" {
 #define CFG_APP_LORA_PROCESS_CB_SIZE               (0)
 #define CFG_APP_LORA_PROCESS_STACK_MEM             (0)
 #define CFG_APP_LORA_PROCESS_PRIORITY              osPriorityNone
-#define CFG_APP_LORA_PROCESS_STACk_SIZE            (128 * 10)
+#define CFG_APP_LORA_PROCESS_STACK_SIZE            (128 * 10)
+
+/*Store Context*/
+#define CFG_APP_LORA_STORE_CONTEXT_NAME            "LORA_STORE_CONTEXT"
+#define CFG_APP_LORA_STORE_CONTEXT_ATTR_BITS       (0)
+#define CFG_APP_LORA_STORE_CONTEXT_CB_MEM          (0)
+#define CFG_APP_LORA_STORE_CONTEXT_CB_SIZE         (0)
+#define CFG_APP_LORA_STORE_CONTEXT_STACK_MEM       (0)
+#define CFG_APP_LORA_STORE_CONTEXT_PRIORITY        osPriorityNone
+#define CFG_APP_LORA_STORE_CONTEXT_STACK_SIZE      (128 * 10)
+
+/*Stop Join*/
+#define CFG_APP_LORA_STOP_JOIN_NAME                "LORA_STOP_JOIN"
+#define CFG_APP_LORA_STOP_JOIN_ATTR_BITS           (0)
+#define CFG_APP_LORA_STOP_JOIN_CB_MEM              (0)
+#define CFG_APP_LORA_STOP_JOIN_CB_SIZE             (0)
+#define CFG_APP_LORA_STOP_JOIN_STACK_MEM           (0)
+#define CFG_APP_LORA_STOP_JOIN_PRIORITY            osPriorityNone
+#define CFG_APP_LORA_STOP_JOIN_STACK_SIZE          (128 * 10)
 
 /* USER CODE BEGIN EC */
 
@@ -104,7 +121,10 @@ extern "C" {
 /* Exported functions ------------------------------------------------------- */
 /**
   * @brief Inits the MBMUX and registers SYS channel to the mailbox and SYS task to the sequencer
-  * @retval   0: OK; -1: no more ipcc channel available; -2: feature not provided by CM0PLUS
+  * @retval   0: OK;
+             -1: no more ipcc channel available;
+             -2: feature not provided by CM0PLUS;
+             -3: callback error on CM0PLUS
   */
 int8_t MBMUXIF_SystemInit(void);
 
@@ -188,5 +208,3 @@ int8_t MBMUXIF_SystemSendCm0plusRegistrationCmd(FEAT_INFO_IdTypeDef e_featID);
 #endif
 
 #endif /*__MBMUXIF_SYS_CM4_H__ */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

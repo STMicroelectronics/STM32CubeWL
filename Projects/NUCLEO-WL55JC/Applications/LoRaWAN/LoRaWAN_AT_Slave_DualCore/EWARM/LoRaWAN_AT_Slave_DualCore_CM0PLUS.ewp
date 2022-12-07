@@ -1086,6 +1086,9 @@
                         <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\ca_low_level.c</name>
                     </file>
                     <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\gpio.c</name>
+                    </file>
+                    <file>
                         <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\ipcc.c</name>
                     </file>
                     <file>
@@ -1443,6 +1446,18 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCN470.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCN470A20.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCN470A26.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCN470B20.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCN470B26.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCN779.c</name>

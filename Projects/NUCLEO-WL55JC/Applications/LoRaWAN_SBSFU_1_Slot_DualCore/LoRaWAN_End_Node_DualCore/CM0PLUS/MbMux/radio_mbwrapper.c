@@ -8,13 +8,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -63,7 +62,7 @@
 /**
   * @brief radio buffer to exchange data between CM4 and CM0+
   */
-UTIL_MEM_PLACE_IN_SECTION("MB_MEM2") uint8_t aRadioMbWrapRxBuffer[RADIO_RX_BUF_SIZE];
+UTIL_MEM_PLACE_IN_SECTION("MB_MEM3") uint8_t aRadioMbWrapRxBuffer[RADIO_RX_BUF_SIZE];
 
 /**
   * @brief local structure of radio callbacks for command processes
@@ -422,7 +421,7 @@ static void RadioRxDone_mbwrapper(uint8_t *payload, uint16_t size, int16_t rssi,
 
   /* USER CODE END RadioRxDone_mbwrapper_1 */
   MBMUX_ComParam_t *com_obj;
-  uint32_t *com_buffer = NULL ;
+  uint32_t *com_buffer = NULL;
   uint16_t i = 0;
 
   /* copy data from Cm0 private memory to shared memory */
@@ -506,5 +505,3 @@ static void RadioRxError_mbwrapper(void)
 /* USER CODE BEGIN PrFD */
 
 /* USER CODE END PrFD */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

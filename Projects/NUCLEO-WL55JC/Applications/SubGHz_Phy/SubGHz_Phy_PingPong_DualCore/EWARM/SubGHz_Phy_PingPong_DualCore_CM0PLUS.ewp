@@ -1063,6 +1063,9 @@
                 <group>
                     <name>Core</name>
                     <file>
+                        <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\gpio.c</name>
+                    </file>
+                    <file>
                         <name>$PROJ_DIR$\..\CM0PLUS\Core\Src\ipcc.c</name>
                     </file>
                     <file>

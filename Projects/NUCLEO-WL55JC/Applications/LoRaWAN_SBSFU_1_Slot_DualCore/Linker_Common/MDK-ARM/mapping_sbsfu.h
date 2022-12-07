@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright(c) 2017 STMicroelectronics International N.V.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -96,18 +95,22 @@
 
 /* M4 UserApp : allocation limited to half RAM size */
 #define M4_APP_REGION_RAM_START         (M4_M0PLUS_FLAG_RAM_END + 0x1)
-#define M4_APP_REGION_RAM_END           0x20007FFF
+#define M4_APP_REGION_RAM_END           0x20006FFF
 
 /* M4 UserApp shared area */
 #define M4_SHARED_REGION_RAM_START      (M4_APP_REGION_RAM_END + 0x1)
-#define M4_SHARED_REGION_RAM_END        0x200083FF
+#define M4_SHARED_REGION_RAM_END        0x200073FF
 
 /* M0PLUS UserApp shared area */
 #define M0PLUS_SHARED_REGION_RAM_START  (M4_SHARED_REGION_RAM_END + 0x1)
-#define M0PLUS_SHARED_REGION_RAM_END    0x20008FFF
+#define M0PLUS_SHARED_REGION_RAM_END    0x20007FFF
+
+/* NVM RAM Data region */
+#define LW_NVM_RAM_START                (M0PLUS_SHARED_REGION_RAM_END + 0x1)
+#define LW_NVM_RAM_END                  0x20008FFF
 
 /* SBSFU RAM region */
-#define SB_REGION_RAM_START             (M0PLUS_SHARED_REGION_RAM_END + 0x1)
+#define SB_REGION_RAM_START             (LW_NVM_RAM_END + 0x1)
 #define SB_REGION_RAM_END               0x2000D3FF
 
 /* SE RAM region protected area with 1 kBytes alignment constraint (TZIC) ==> 0x2000D400 */
@@ -120,6 +123,7 @@
 #define M4_APP_RAM_REGION_SIZE          (M4_APP_REGION_RAM_END - M4_APP_REGION_RAM_START + 0x1)
 #define M4_SHARED_RAM_REGION_SIZE       (M4_SHARED_REGION_RAM_END - M4_SHARED_REGION_RAM_START + 0x1)
 #define M0PLUS_SHARED_RAM_REGION_SIZE   (M0PLUS_SHARED_REGION_RAM_END - M0PLUS_SHARED_REGION_RAM_START + 0x1)
+#define LW_NVM_RAM_REGION_SIZE          (LW_NVM_RAM_END - LW_NVM_RAM_START + 0x1)
 #define SB_RAM_REGION_SIZE              (SB_REGION_RAM_END - SB_REGION_RAM_START + 0x1)
 #define SE_RAM_REGION_SIZE              (SE_REGION_RAM_END - SE_REGION_RAM_STACK_TOP + 0x1)
 

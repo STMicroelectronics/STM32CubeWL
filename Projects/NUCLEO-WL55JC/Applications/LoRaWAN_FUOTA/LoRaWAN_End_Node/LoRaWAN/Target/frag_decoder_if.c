@@ -3,17 +3,16 @@
   ******************************************************************************
   * @file    frag_decoder_if.c
   * @author  MCD Application Team
-  * @brief   Implements the Data Distribution Agent
+  * @brief   Implements the interface of LoRa-Alliance fragmentation decoder
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -228,7 +227,7 @@ void FRAG_DECODER_IF_OnProgress(uint16_t fragCounter, uint16_t fragNb, uint8_t f
   APP_LOG(TS_OFF, VLEVEL_M, "LOST        :       %7d Fragments\r\n\r\n", fragNbLost);
 
 #if (INTEROP_TEST_MODE == 1)
-  BSP_LED_Toggle(LED_BLUE);
+  HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin); /* LED_BLUE */
 #endif /* INTEROP_TEST_MODE == 1 */
   /* USER CODE BEGIN FRAG_DECODER_IF_OnProgress_2 */
 
@@ -251,7 +250,7 @@ void FRAG_DECODER_IF_OnDone(int32_t status, uint32_t size)
   APP_LOG(TS_OFF, VLEVEL_M, "Size      : %d\r\n", size);
   APP_LOG(TS_OFF, VLEVEL_M, "CRC         : %08X\r\n\r\n", FileRxCrc);
 
-  BSP_LED_Off(LED_BLUE);
+  HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET); /* LED_BLUE */
 #endif /* INTEROP_TEST_MODE == 1 */
   /* USER CODE BEGIN FRAG_DECODER_IF_OnDone_2 */
 
@@ -293,5 +292,3 @@ static uint32_t Crc32(uint8_t *buffer, uint16_t length)
 /* USER CODE BEGIN PrFD */
 
 /* USER CODE END PrFD */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

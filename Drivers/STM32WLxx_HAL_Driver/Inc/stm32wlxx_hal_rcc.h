@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2020 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -190,7 +189,7 @@ extern "C" {
                                          ((__SOURCE__) == RCC_RTCCLKSOURCE_LSI)  || \
                                          ((__SOURCE__) == RCC_RTCCLKSOURCE_HSE_DIV32))
 
-#define IS_RCC_MCO(__MCOX__) (((__MCOX__) == RCC_MCO1))
+#define IS_RCC_MCO(__MCOX__) ((__MCOX__) == RCC_MCO1_PA8)
 
 #define IS_RCC_MCO1SOURCE(__SOURCE__) (((__SOURCE__) == RCC_MCO1SOURCE_NOCLOCK) || \
                                        ((__SOURCE__) == RCC_MCO1SOURCE_SYSCLK)  || \
@@ -632,8 +631,28 @@ typedef struct
 /** @defgroup RCC_MCO_Index MCO Index
   * @{
   */
-#define RCC_MCO1                       0x00000000U  /*!< MCO1 index                                         */
-#define RCC_MCO                        RCC_MCO1     /*!< MCO to be compliant with other families with 1 MCO */
+
+/* @cond */
+  /* 32     28      20       16      0
+   --------------------------------
+   | MCO   | GPIO  | GPIO  | GPIO  |
+   | Index |  AF   | Port  |  Pin  |
+   -------------------------------*/
+
+#define RCC_MCO_GPIOPORT_POS   16U
+#define RCC_MCO_GPIOPORT_MASK  (0xFUL << RCC_MCO_GPIOPORT_POS)
+#define RCC_MCO_GPIOAF_POS     20U
+#define RCC_MCO_GPIOAF_MASK    (0xFFUL << RCC_MCO_GPIOAF_POS)
+#define RCC_MCO_INDEX_POS      28U
+#define RCC_MCO_INDEX_MASK     (0x1UL << RCC_MCO_INDEX_POS)
+
+#define RCC_MCO1_INDEX         (0x0UL << RCC_MCO_INDEX_POS)             /*!< MCO1 index */
+/* @endcond */
+
+#define RCC_MCO1_PA8           (RCC_MCO1_INDEX | (GPIO_AF0_MCO << RCC_MCO_GPIOAF_POS) | (GPIO_GET_INDEX(GPIOA) << RCC_MCO_GPIOPORT_POS) | GPIO_PIN_8)
+#define RCC_MCO1               RCC_MCO1_PA8
+
+#define RCC_MCO                RCC_MCO1     /*!< MCO1 to be compliant with other families with 1 MCO */
 /**
   * @}
   */
@@ -2397,7 +2416,3 @@ uint32_t          HAL_RCC_GetResetSource(void);
 #endif
 
 #endif /* STM32WLxx_HAL_RCC_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-
-

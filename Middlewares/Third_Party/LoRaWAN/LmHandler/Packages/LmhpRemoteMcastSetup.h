@@ -22,8 +22,6 @@
 #ifndef __LMHP_REMOTE_MCAST_SETUP_H__
 #define __LMHP_REMOTE_MCAST_SETUP_H__
 
-#include "LoRaMac.h"
-#include "LmHandlerTypes.h"
 #include "LmhPackage.h"
 
 /*!

@@ -31,9 +31,8 @@
 #ifndef __LMH_PACKAGE_H__
 #define __LMH_PACKAGE_H__
 
-#include <stdint.h>
-#include <stdbool.h>
 #include "LmHandlerTypes.h"
+#include "LoRaMacVersion.h"
 
 /*!
  * Maximum number of packages
@@ -52,9 +51,9 @@ typedef struct LmhPackage_s
     /*!
      * Initializes the package with provided parameters
      *
-     * \param [IN] params            Pointer to the package parameters
-     * \param [IN] dataBuffer        Pointer to main application buffer
-     * \param [IN] dataBufferMaxSize Main application buffer maximum size
+     * \param [in] params            Pointer to the package parameters
+     * \param [in] dataBuffer        Pointer to main application buffer
+     * \param [in] dataBufferMaxSize Main application buffer maximum size
      */
     void ( *Init )( void *params, uint8_t *dataBuffer, uint8_t dataBufferMaxSize );
     /*!
@@ -64,6 +63,7 @@ typedef struct LmhPackage_s
      *                [true: Initialized, false: Not initialized]
      */
     bool ( *IsInitialized )( void );
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000300 ))
     /*!
      * Returns the package operation status.
      *
@@ -71,6 +71,15 @@ typedef struct LmhPackage_s
      *                [true: Running, false: Not running]
      */
     bool ( *IsRunning )( void );
+#elif (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+    /*!
+     * Returns if a package transmission is pending or not.
+     *
+     * \retval status Package transmission status
+     *                [true: pending, false: Not pending]
+     */
+    bool ( *IsTxPending )( void );
+#endif /* LORAMAC_VERSION */
     /*!
      * Processes the internal package events.
      */
@@ -82,21 +91,27 @@ typedef struct LmhPackage_s
     /*!
      * Processes the MCSP Confirm
      *
-     * \param [IN] mcpsConfirm MCPS confirmation primitive data
+     * \param [in] mcpsConfirm MCPS confirmation primitive data
      */
     void ( *OnMcpsConfirmProcess )( McpsConfirm_t *mcpsConfirm );
     /*!
      * Processes the MCPS Indication
      *
-     * \param [IN] mcpsIndication     MCPS indication primitive data
+     * \param [in] mcpsIndication     MCPS indication primitive data
      */
     void ( *OnMcpsIndicationProcess )( McpsIndication_t *mcpsIndication );
     /*!
      * Processes the MLME Confirm
      *
-     * \param [IN] mlmeConfirm MLME confirmation primitive data
+     * \param [in] mlmeConfirm MLME confirmation primitive data
      */
     void ( *OnMlmeConfirmProcess )( MlmeConfirm_t *mlmeConfirm );
+    /*!
+     * Processes the MLME Indication
+     *
+     * \param [in] mlmeIndication     MLME indication primitive data
+     */
+    void ( *OnMlmeIndicationProcess )( MlmeIndication_t *mlmeIndication );
 
     /*
      *=========================================================================
@@ -106,13 +121,15 @@ typedef struct LmhPackage_s
      */
 
     /*!
-    * Join a LoRa Network in classA
-    *
-    * \Note if the device is ABP, this is a pass through function
-    * 
-    * \param [IN] isOtaa Indicates which activation mode must be used
-    */
-    void ( *OnJoinRequest )( ActivationType_t mode );
+     * Join a LoRa Network in classA
+     *
+     * \note if the device is ABP, this is a pass through function
+     *
+     * \param [in] mode Indicates which activation mode must be used
+     * \param [in] forceRejoin Flag to force the rejoin even if LoRaWAN context can be restored
+     */
+    void ( *OnJoinRequest )( ActivationType_t mode, bool forceRejoin );
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000300 ))
     /*!
      * Instructs the MAC layer to send a ClassA uplink
      *
@@ -122,17 +139,24 @@ typedef struct LmhPackage_s
      * \retval status Returns \ref LORAMAC_HANDLER_SUCCESS if request has been
      *                processed else \ref LORAMAC_HANDLER_ERROR
      */
-    LmHandlerErrorStatus_t ( *OnSendRequest )( LmHandlerAppData_t *appData, LmHandlerMsgTypes_t isTxConfirmed, TimerTime_t *nextTxIn, bool allowDelayedTx );
+    LmHandlerErrorStatus_t ( *OnSendRequest )( LmHandlerAppData_t *appData, LmHandlerMsgTypes_t isTxConfirmed, bool allowDelayedTx );
+#endif /* LORAMAC_VERSION */
     /*!
-    * Requests network server time update
-    *
-    * \retval status Returns \ref LORAMAC_HANDLER_SET if joined else \ref LORAMAC_HANDLER_RESET
-    */
+     * Requests network server time update
+     *
+     * \retval status Returns \ref LORAMAC_HANDLER_SET if joined else \ref LORAMAC_HANDLER_RESET
+     */
     LmHandlerErrorStatus_t ( *OnDeviceTimeRequest )( void );
     /*!
      * Notifies the upper layer that the system time has been updated.
      */
     void ( *OnSysTimeUpdate )( void );
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+    /*!
+     * Request an NVIC Reset
+     */
+    void ( *OnSystemReset )( void );
+#endif /* LORAMAC_VERSION */
 }LmhPackage_t;
 
 #endif // __LMH_PACKAGE_H__

@@ -52,9 +52,10 @@ extern "C"
 {
 #endif
 
-#include "LoRaMacTypes.h"
+#include "LoRaMacInterfaces.h"
 #include "LoRaMacHeaderTypes.h"
-#include "Region.h"
+#include "RegionNvm.h"
+#include "RegionVersion.h"
 
 // Constants that are common to all the regions.
 
@@ -88,6 +89,7 @@ extern "C"
  */
 #define REGION_COMMON_DEFAULT_ADR_ACK_DELAY             32
 
+#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
 /*!
  * Maximum frame counter gap
  */
@@ -103,6 +105,18 @@ extern "C"
  * In milliseconds.
  */
 #define REGION_COMMON_DEFAULT_ACK_TIMEOUT_RND           1000
+#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+/*!
+ * Retransmission timeout for ACK in milliseconds.
+ */
+#define REGION_COMMON_DEFAULT_RETRANSMIT_TIMEOUT        2000
+
+/*!
+ * Rounding limit for generating random retransmission timeout for ACK.
+ * In milliseconds.
+ */
+#define REGION_COMMON_DEFAULT_RETRANSMIT_TIMEOUT_RND    1000
+#endif /* REGION_VERSION */
 
 /*!
  * Default Rx1 receive datarate offset
@@ -113,14 +127,6 @@ extern "C"
  * Default downlink dwell time configuration
  */
 #define REGION_COMMON_DEFAULT_DOWNLINK_DWELL_TIME       0
-
-/*!
- * Default ping slots periodicity
- *
- * Periodicity is equal to 2^REGION_COMMON_DEFAULT_PING_SLOT_PERIODICITY seconds.
- * Example: 2^7 = 128 seconds. The end-device will open an Rx slot every 128 seconds.
- */
-#define REGION_COMMON_DEFAULT_PING_SLOT_PERIODICITY     7
 
 typedef struct sRegionCommonLinkAdrParams
 {
@@ -346,11 +352,11 @@ typedef struct sRegionCommonGetNextLowerTxDrParams
  * \brief Verifies, if a value is in a given range.
  *        This is a generic function and valid for all regions.
  *
- * \param [IN] value Value to verify, if it is in range.
+ * \param [in] value Value to verify, if it is in range.
  *
- * \param [IN] min Minimum possible value.
+ * \param [in] min Minimum possible value.
  *
- * \param [IN] max Maximum possible value.
+ * \param [in] max Maximum possible value.
  *
  * \retval Returns 1 if the value is in range, otherwise 0.
  */
@@ -360,17 +366,17 @@ uint8_t RegionCommonValueInRange( int8_t value, int8_t min, int8_t max );
  * \brief Verifies, if a datarate is available on an active channel.
  *        This is a generic function and valid for all regions.
  *
- * \param [IN] nbChannels Number of channels.
+ * \param [in] nbChannels Number of channels.
  *
- * \param [IN] channelsMask The channels mask of the region.
+ * \param [in] channelsMask The channels mask of the region.
  *
- * \param [IN] dr The datarate to verify.
+ * \param [in] dr The datarate to verify.
  *
- * \param [IN] minDr Minimum datarate.
+ * \param [in] minDr Minimum datarate.
  *
- * \param [IN] maxDr Maximum datarate.
+ * \param [in] maxDr Maximum datarate.
  *
- * \param [IN] channels The channels of the region.
+ * \param [in] channels The channels of the region.
  *
  * \retval Returns true if the datarate is supported, false if not.
  */
@@ -381,11 +387,11 @@ bool RegionCommonChanVerifyDr( uint8_t nbChannels, uint16_t* channelsMask, int8_
  * \brief Disables a channel in a given channels mask.
  *        This is a generic function and valid for all regions.
  *
- * \param [IN] channelsMask The channels mask of the region.
+ * \param [in] channelsMask The channels mask of the region.
  *
- * \param [IN] id The id of the channels mask to disable.
+ * \param [in] id The id of the channels mask to disable.
  *
- * \param [IN] maxChannels Maximum number of channels.
+ * \param [in] maxChannels Maximum number of channels.
  *
  * \retval Returns true if the channel could be disabled, false if not.
  */
@@ -395,11 +401,11 @@ bool RegionCommonChanDisable( uint16_t* channelsMask, uint8_t id, uint8_t maxCha
  * \brief Counts the number of active channels in a given channels mask.
  *        This is a generic function and valid for all regions.
  *
- * \param [IN] channelsMask The channels mask of the region.
+ * \param [in] channelsMask The channels mask of the region.
  *
- * \param [IN] startIdx Start index.
+ * \param [in] startIdx Start index.
  *
- * \param [IN] stopIdx Stop index ( the channels of this index will not be counted ).
+ * \param [in] stopIdx Stop index ( the channels of this index will not be counted ).
  *
  * \retval Returns the number of active channels.
  */
@@ -409,11 +415,11 @@ uint8_t RegionCommonCountChannels( uint16_t* channelsMask, uint8_t startIdx, uin
  * \brief Copy a channels mask.
  *        This is a generic function and valid for all regions.
  *
- * \param [IN] channelsMaskDest The destination channels mask.
+ * \param [in] channelsMaskDest The destination channels mask.
  *
- * \param [IN] channelsMaskSrc The source channels mask.
+ * \param [in] channelsMaskSrc The source channels mask.
  *
- * \param [IN] len The index length to copy.
+ * \param [in] len The index length to copy.
  */
 void RegionCommonChanMaskCopy( uint16_t* channelsMaskDest, uint16_t* channelsMaskSrc, uint8_t len );
 
@@ -421,13 +427,13 @@ void RegionCommonChanMaskCopy( uint16_t* channelsMaskDest, uint16_t* channelsMas
  * \brief Sets the last tx done property.
  *        This is a generic function and valid for all regions.
  *
- * \param [IN] band The band to be updated.
+ * \param [in] band The band to be updated.
  *
- * \param [IN] lastTxAirTime The time on air of the last TX frame.
+ * \param [in] lastTxAirTime The time on air of the last TX frame.
  *
- * \param [IN] joined Set to true if the device has joined.
+ * \param [in] joined Set to true if the device has joined.
  *
- * \param [IN] elapsedTimeSinceStartup Elapsed time since initialization.
+ * \param [in] elapsedTimeSinceStartup Elapsed time since initialization.
  */
 void RegionCommonSetBandTxDone( Band_t* band, TimerTime_t lastTxAirTime, bool joined, SysTime_t elapsedTimeSinceStartup );
 
@@ -435,19 +441,19 @@ void RegionCommonSetBandTxDone( Band_t* band, TimerTime_t lastTxAirTime, bool jo
  * \brief Updates the time-offs of the bands.
  *        This is a generic function and valid for all regions.
  *
- * \param [IN] joined Set to true, if the node has joined the network
+ * \param [in] joined Set to true, if the node has joined the network
  *
- * \param [IN] bands A pointer to the bands.
+ * \param [in] bands A pointer to the bands.
  *
- * \param [IN] nbBands The number of bands available.
+ * \param [in] nbBands The number of bands available.
  *
- * \param [IN] dutyCycleEnabled Set to true, if the duty cycle is enabled.
+ * \param [in] dutyCycleEnabled Set to true, if the duty cycle is enabled.
  *
- * \param [IN] lastTxIsJoinRequest Set to true, if the last TX is a join request.
+ * \param [in] lastTxIsJoinRequest Set to true, if the last TX is a join request.
  *
- * \param [IN] elapsedTimeSinceStartup Elapsed time since start up.
+ * \param [in] elapsedTimeSinceStartup Elapsed time since start up.
  *
- * \param [IN] expectedTimeOnAir Expected time on air for the next transmission.
+ * \param [in] expectedTimeOnAir Expected time on air for the next transmission.
  *
  * \retval Returns the time which must be waited to perform the next uplink.
  */
@@ -460,10 +466,10 @@ TimerTime_t RegionCommonUpdateBandTimeOff( bool joined, Band_t* bands,
  * \brief Parses the parameter of an LinkAdrRequest.
  *        This is a generic function and valid for all regions.
  *
- * \param [IN] payload Pointer to the payload containing the MAC commands. The payload
+ * \param [in] payload Pointer to the payload containing the MAC commands. The payload
  *                     must contain the CMD identifier, following by the parameters.
  *
- * \param [OUT] parseLinkAdr The function fills the structure with the ADR parameters.
+ * \param [out] parseLinkAdr The function fills the structure with the ADR parameters.
  *
  * \retval Returns the length of the ADR request, if a request was found. Otherwise, the
  *         function returns 0.
@@ -474,13 +480,13 @@ uint8_t RegionCommonParseLinkAdrReq( uint8_t* payload, RegionCommonLinkAdrParams
  * \brief Verifies and updates the datarate, the TX power and the number of repetitions
  *        of a LinkAdrRequest. This depends on the configuration of ADR also.
  *
- * \param [IN] verifyParams Pointer to a structure containing input parameters.
+ * \param [in] verifyParams Pointer to a structure containing input parameters.
  *
- * \param [OUT] dr The updated datarate.
+ * \param [out] dr The updated datarate.
  *
- * \param [OUT] txPow The updated TX power.
+ * \param [out] txPow The updated TX power.
  *
- * \param [OUT] nbRep The updated number of repetitions.
+ * \param [out] nbRep The updated number of repetitions.
  *
  * \retval Returns the status according to the LinkAdrRequest definition.
  */
@@ -489,9 +495,9 @@ uint8_t RegionCommonLinkAdrReqVerifyParams( RegionCommonLinkAdrReqVerifyParams_t
 /*!
  * \brief Computes the symbol time for LoRa modulation.
  *
- * \param [IN] phyDr Physical datarate to use.
+ * \param [in] phyDr Physical datarate to use.
  *
- * \param [IN] bandwidth Bandwidth to use.
+ * \param [in] bandwidthInHz Bandwidth to use.
  *
  * \retval Returns the symbol time in microseconds.
  */
@@ -500,7 +506,7 @@ uint32_t RegionCommonComputeSymbolTimeLoRa( uint8_t phyDr, uint32_t bandwidthInH
 /*!
  * \brief Computes the symbol time for FSK modulation.
  *
- * \param [IN] phyDr Physical datarate to use.
+ * \param [in] phyDrInKbps Physical datarate to use.
  *
  * \retval Returns the symbol time in microseconds.
  */
@@ -509,18 +515,18 @@ uint32_t RegionCommonComputeSymbolTimeFsk( uint8_t phyDrInKbps );
 /*!
  * \brief Computes the RX window timeout and the RX window offset.
  *
- * \param [IN] tSymbolInUs Symbol timeout.
+ * \param [in] tSymbolInUs Symbol timeout.
  *
- * \param [IN] minRxSymbols Minimum required number of symbols to detect an Rx frame.
+ * \param [in] minRxSymbols Minimum required number of symbols to detect an Rx frame.
  *
- * \param [IN] rxErrorInMs System maximum timing error of the receiver. In milliseconds
+ * \param [in] rxErrorInMs System maximum timing error of the receiver. In milliseconds
  *                     The receiver will turn on in a [-rxErrorInMs : +rxErrorInMs] ms interval around RxOffset.
  *
- * \param [IN] wakeUpTimeInMs Wakeup time of the system.
+ * \param [in] wakeUpTimeInMs Wakeup time of the system.
  *
- * \param [OUT] windowTimeoutInSymbols RX window timeout.
+ * \param [out] windowTimeoutInSymbols RX window timeout.
  *
- * \param [OUT] windowOffsetInMs RX window time offset to be applied to the RX delay.
+ * \param [out] windowOffsetInMs RX window time offset to be applied to the RX delay.
  */
 void RegionCommonComputeRxWindowParameters( uint32_t tSymbolInUs, uint8_t minRxSymbols, uint32_t rxErrorInMs, uint32_t wakeUpTimeInMs, uint32_t* windowTimeoutInSymbols, int32_t* windowOffsetInMs );
 
@@ -530,11 +536,11 @@ void RegionCommonComputeRxWindowParameters( uint32_t tSymbolInUs, uint8_t minRxS
  * \remark US915 region uses a conducted power as input value for maxEirp.
  *         Thus, the antennaGain parameter must be set to 0.
  *
- * \param [IN] txPower TX power index.
+ * \param [in] txPowerIndex TX power index.
  *
- * \param [IN] maxEirp Maximum EIRP.
+ * \param [in] maxEirp Maximum EIRP.
  *
- * \param [IN] antennaGain Antenna gain. Referenced to the isotropic antenna.
+ * \param [in] antennaGain Antenna gain. Referenced to the isotropic antenna.
  *                         Value is in dBi. ( antennaGain[dBi] = measuredAntennaGain[dBd] + 2.15 )
  *
  * \retval Returns the physical TX power.
@@ -544,21 +550,21 @@ int8_t RegionCommonComputeTxPower( int8_t txPowerIndex, float maxEirp, float ant
 /*!
  * \brief Sets up the radio into RX beacon mode.
  *
- * \param [IN] rxBeaconSetupParams A pointer to the input parameters.
+ * \param [in] rxBeaconSetupParams A pointer to the input parameters.
  */
 void RegionCommonRxBeaconSetup( RegionCommonRxBeaconSetupParams_t* rxBeaconSetupParams );
 
 /*!
  * \brief Counts the number of enabled channels.
  *
- * \param [IN] countNbOfEnabledChannelsParams A pointer to the input parameters.
+ * \param [in] countNbOfEnabledChannelsParams A pointer to the input parameters.
  *
- * \param [OUT] enabledChannels A pointer to an array of size XX_MAX_NB_CHANNELS. The function
+ * \param [out] enabledChannels A pointer to an array of size XX_MAX_NB_CHANNELS. The function
  *              stores the available channels into this array.
  *
- * \param [OUT] nbEnabledChannels The number of available channels found.
+ * \param [out] nbEnabledChannels The number of available channels found.
  *
- * \param [OUT] nbRestrictedChannels It contains the number of channel
+ * \param [out] nbRestrictedChannels It contains the number of channel
  *                      which are available, but restricted due to duty cycle.
  */
 void RegionCommonCountNbOfEnabledChannels( RegionCommonCountNbOfEnabledChannelsParams_t* countNbOfEnabledChannelsParams,
@@ -567,20 +573,20 @@ void RegionCommonCountNbOfEnabledChannels( RegionCommonCountNbOfEnabledChannelsP
 /*!
  * \brief Identifies all channels which are available currently.
  *
- * \param [IN] identifyChannelsParam A pointer to the input parameters.
+ * \param [in] identifyChannelsParam A pointer to the input parameters.
  *
- * \param [OUT] aggregatedTimeOff The new value of the aggregatedTimeOff. The function
+ * \param [out] aggregatedTimeOff The new value of the aggregatedTimeOff. The function
  *                                may resets it to 0.
  *
- * \param [OUT] enabledChannels A pointer to an array of size XX_MAX_NB_CHANNELS. The function
+ * \param [out] enabledChannels A pointer to an array of size XX_MAX_NB_CHANNELS. The function
  *              stores the available channels into this array.
  *
- * \param [OUT] nbEnabledChannels The number of available channels found.
+ * \param [out] nbEnabledChannels The number of available channels found.
  *
- * \param [OUT] nbRestrictedChannels It contains the number of channel
+ * \param [out] nbRestrictedChannels It contains the number of channel
  *                      which are available, but restricted due to duty cycle.
  *
- * \param [OUT] nextTxDelay Holds the time which has to be waited for the next possible
+ * \param [out] nextTxDelay Holds the time which has to be waited for the next possible
  *                          uplink transmission.
  *
  *\retval Status of the operation.
@@ -593,7 +599,7 @@ LoRaMacStatus_t RegionCommonIdentifyChannels( RegionCommonIdentifyChannelsParam_
 /*!
  * \brief Selects the next lower datarate.
  *
- * \param [IN] params Data structure providing parameters based on \ref RegionCommonGetNextLowerTxDrParams_t
+ * \param [in] params Data structure providing parameters based on \ref RegionCommonGetNextLowerTxDrParams_t
  *
  * \retval The next lower datarate.
  */
@@ -602,9 +608,9 @@ int8_t RegionCommonGetNextLowerTxDr( RegionCommonGetNextLowerTxDrParams_t *param
 /*!
  * \brief Limits the TX power.
  *
- * \param [IN] txPower Current TX power.
+ * \param [in] txPower Current TX power.
  *
- * \param [IN] maxBandTxPower Maximum possible TX power.
+ * \param [in] maxBandTxPower Maximum possible TX power.
  *
  * \retval Limited TX power.
  */
@@ -613,9 +619,9 @@ int8_t RegionCommonLimitTxPower( int8_t txPower, int8_t maxBandTxPower );
 /*!
  * \brief Gets the bandwidth.
  *
- * \param [IN] drIndex Datarate index.
+ * \param [in] drIndex Datarate index.
  *
- * \param [IN] bandwidths A pointer to the bandwidth table.
+ * \param [in] bandwidths A pointer to the bandwidth table.
  *
  * \retval Bandwidth.
  */
@@ -625,11 +631,11 @@ uint32_t RegionCommonGetBandwidth( uint32_t drIndex, const uint32_t* bandwidths 
 /*!
  * \brief Print the current RX configuration
  *
- * \param [IN] rxSlot rx slot
+ * \param [in] rxSlot rx slot
  *
- * \param [IN] frequency rf frequency
+ * \param [in] frequency rf frequency
  *
- * \param [IN] dr datarate
+ * \param [in] dr datarate
  *
  */
 void RegionCommonRxConfigPrint(LoRaMacRxSlot_t rxSlot,
@@ -639,9 +645,9 @@ void RegionCommonRxConfigPrint(LoRaMacRxSlot_t rxSlot,
 /*!
  * \brief Print the current TX configuration
  *
- * \param [IN] frequency rf frequency
+ * \param [in] frequency rf frequency
  *
- * \param [IN] dr datarate
+ * \param [in] dr datarate
  *
  */
 void RegionCommonTxConfigPrint(uint32_t frequency, int8_t dr);

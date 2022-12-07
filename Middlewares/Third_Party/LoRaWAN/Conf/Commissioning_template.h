@@ -36,9 +36,9 @@
  ********************************** WARNING ***********************************
  ******************************************************************************
 
- The LoRaWAN AES128 keys are stored and provisionned on secure-elements.
+ The LoRaWAN AES128 keys are stored and provisioned on secure-elements.
 
- This project providdes a software emulated secure-element.
+ This project provides a software emulated secure-element.
  The LoRaWAN AES128 keys SHALL be updated under
  src/peripherals/<secure-element name>-se\se-identity.h file.
 
@@ -47,6 +47,7 @@
  ******************************************************************************
  */
 #include "se-identity.h"
+#include "LoRaMacVersion.h"
 
 /* USER CODE BEGIN EC1 */
 
@@ -56,9 +57,7 @@
  * When using ABP activation the MAC layer must know in advance to which server
  * version it will be connected.
  */
-#define ABP_ACTIVATION_LRWAN_VERSION_V10x                  0x01000300 /* 1.0.3.0 */
-
-#define ABP_ACTIVATION_LRWAN_VERSION                       ABP_ACTIVATION_LRWAN_VERSION_V10x
+#define ABP_ACTIVATION_LRWAN_VERSION                       LORAMAC_VERSION
 
 /*!
  * Indicates if the end-device support the operation with repeaters

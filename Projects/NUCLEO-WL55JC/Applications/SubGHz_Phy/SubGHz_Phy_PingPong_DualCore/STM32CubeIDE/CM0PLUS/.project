@@ -171,6 +171,11 @@
 			<locationURI>PARENT-7-PROJECT_LOC/Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_tim_ex.c</locationURI>
 		</link>
 		<link>
+			<name>Application/User/Core/gpio.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/CM0PLUS/Core/Src/gpio.c</locationURI>
+		</link>
+		<link>
 			<name>Application/User/Core/ipcc.c</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/CM0PLUS/Core/Src/ipcc.c</locationURI>

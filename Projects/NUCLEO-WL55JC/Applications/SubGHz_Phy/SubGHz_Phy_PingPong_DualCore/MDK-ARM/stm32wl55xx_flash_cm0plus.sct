@@ -16,5 +16,6 @@ LR_IROM1 0x08020000 0x00020000  {    ; load region size_region
 
   RW_RAM_SHARED 0x20009000 0x1000  {
    *(MB_MEM2)
+   *(MB_MEM3)
   }
 }

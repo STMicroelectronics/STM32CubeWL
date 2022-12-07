@@ -25,8 +25,8 @@ define symbol __ICFEDIT_region_RAM2_SHARED_end__         = __ICFEDIT_M4_SHARED_r
 define symbol __ICFEDIT_size_cstack__ = 0x800;
 define symbol __ICFEDIT_size_heap__ = 0x200;
 
-define region ROM_region      = mem:[from __ICFEDIT_region_ROM_start__   to __ICFEDIT_region_ROM_end__];
-define region RAM_region      = mem:[from __ICFEDIT_region_RAM_start__   to __ICFEDIT_region_RAM_end__];
+define region ROM_region         = mem:[from __ICFEDIT_region_ROM_start__   to __ICFEDIT_region_ROM_end__];
+define region RAM_region         = mem:[from __ICFEDIT_region_RAM_start__   to __ICFEDIT_region_RAM_end__];
 define region RAM2_SHARED_region = mem:[from __ICFEDIT_region_RAM2_SHARED_start__  to __ICFEDIT_region_RAM2_SHARED_end__];
 
 /* to make sure the binary size is a multiple of the AES block size (16 bytes) and L4 flash writing unit (8 bytes) */
@@ -46,8 +46,8 @@ do not initialize  { section .noinit,
 
 place at address mem:__ICFEDIT_region_ROM_start__ { readonly section .intvec };
 
-place in ROM_region   { readonly, last section aes_block_padding };
-place in RAM_region   { readwrite,
-                        block CSTACK, block HEAP };
-place in RAM2_SHARED_region   { first section MAPPING_TABLE};
-place in RAM2_SHARED_region   { section MB_MEM1};
+place in ROM_region           { readonly, last section aes_block_padding };
+place in RAM_region           { readwrite,
+                                block CSTACK, block HEAP };
+place in RAM2_SHARED_region   { first section MAPPING_TABLE };
+place in RAM2_SHARED_region   { section MB_MEM1 };

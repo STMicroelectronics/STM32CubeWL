@@ -8,6 +8,17 @@
   *           + Initialization and de-initialization functions
   *           + Peripheral Control functions
   *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2020 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
   @verbatim
   ==============================================================================
                       ##### RCC specific features #####
@@ -35,17 +46,6 @@
           derived from the System clock (RTC, ADC, RNG, I2S2, USARTx, LPUART1, LPTIMx, I2Cx)
 
   @endverbatim
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
   ******************************************************************************
   */
 
@@ -89,9 +89,13 @@
 /** @defgroup RCC_Private_Macros RCC Private Macros
   * @{
   */
-#define __MCO1_CLK_ENABLE()   __HAL_RCC_GPIOA_CLK_ENABLE()
-#define MCO1_GPIO_PORT        GPIOA
-#define MCO1_PIN              GPIO_PIN_8
+#define RCC_GET_MCO_GPIO_PIN(__RCC_MCOx__)   ((__RCC_MCOx__) & GPIO_PIN_MASK)
+
+#define RCC_GET_MCO_GPIO_AF(__RCC_MCOx__)    (((__RCC_MCOx__) & RCC_MCO_GPIOAF_MASK) >> RCC_MCO_GPIOAF_POS)
+
+#define RCC_GET_MCO_GPIO_INDEX(__RCC_MCOx__) (((__RCC_MCOx__) & RCC_MCO_GPIOPORT_MASK) >> RCC_MCO_GPIOPORT_POS)
+
+#define RCC_GET_MCO_GPIO_PORT(__RCC_MCOx__)  (IOPORT_BASE + ((0x00000400UL) * RCC_GET_MCO_GPIO_INDEX((__RCC_MCOx__))))
 
 #define __COUNTOF(_A_)   (sizeof(_A_) / sizeof(*(_A_)))
 /**
@@ -1162,7 +1166,7 @@ HAL_StatusTypeDef HAL_RCC_ClockConfig(RCC_ClkInitTypeDef  *RCC_ClkInitStruct, ui
   * @brief  Select the clock source to output on MCO1 pin(PA8).
   * @note   PA8 should be configured in alternate function mode.
   * @param  RCC_MCOx  specifies the output direction for the clock source.
-  *            @arg @ref RCC_MCO1  Clock source to output on MCO1 pin(PA8)
+  *            @arg @ref RCC_MCO1_PA8  Clock source to output on MCO1 pin(PA8).
   * @param  RCC_MCOSource  specifies the clock source to output.
   *          This parameter can be one of the following values:
   *            @arg @ref RCC_MCO1SOURCE_NOCLOCK  MCO output disabled, no clock on MCO
@@ -1186,23 +1190,31 @@ HAL_StatusTypeDef HAL_RCC_ClockConfig(RCC_ClkInitTypeDef  *RCC_ClkInitStruct, ui
   */
 void HAL_RCC_MCOConfig(uint32_t RCC_MCOx, uint32_t RCC_MCOSource, uint32_t RCC_MCODiv)
 {
-  GPIO_InitTypeDef GPIO_InitStruct;
+  GPIO_InitTypeDef gpio_initstruct;
+  uint32_t mco_gpio_index;
+  GPIO_TypeDef * mco_gpio_port;
 
   /* Check the parameters */
   assert_param(IS_RCC_MCO(RCC_MCOx));
   assert_param(IS_RCC_MCODIV(RCC_MCODiv));
   assert_param(IS_RCC_MCO1SOURCE(RCC_MCOSource));
 
-  /* MCO1 Clock Enable */
-  __MCO1_CLK_ENABLE();
-
   /* Configure the MCO1 pin in alternate function mode */
-  GPIO_InitStruct.Pin       = MCO1_PIN;
-  GPIO_InitStruct.Mode      = GPIO_MODE_AF_PP;
-  GPIO_InitStruct.Speed     = GPIO_SPEED_FREQ_VERY_HIGH;
-  GPIO_InitStruct.Pull      = GPIO_NOPULL;
-  GPIO_InitStruct.Alternate = GPIO_AF0_MCO;
-  HAL_GPIO_Init(MCO1_GPIO_PORT, &GPIO_InitStruct);
+  gpio_initstruct.Mode      = GPIO_MODE_AF_PP;
+  gpio_initstruct.Speed     = GPIO_SPEED_FREQ_VERY_HIGH;
+  gpio_initstruct.Pull      = GPIO_NOPULL;
+
+  /* Get MCOx GPIO Port */
+  mco_gpio_port = (GPIO_TypeDef *) RCC_GET_MCO_GPIO_PORT(RCC_MCOx);
+
+  /* MCOx Clock Enable */
+  mco_gpio_index = RCC_GET_MCO_GPIO_INDEX(RCC_MCOx);
+  SET_BIT(RCC->AHB2ENR, (1UL << mco_gpio_index ));
+
+  /* Configure the MCOx pin in alternate function mode */
+  gpio_initstruct.Pin = RCC_GET_MCO_GPIO_PIN(RCC_MCOx);
+  gpio_initstruct.Alternate = RCC_GET_MCO_GPIO_AF(RCC_MCOx);
+  HAL_GPIO_Init(mco_gpio_port, &gpio_initstruct);
 
   /* Configure the microcontroller clock output (MCO) */
   LL_RCC_ConfigMCO(RCC_MCOSource, RCC_MCODiv);
@@ -1211,7 +1223,7 @@ void HAL_RCC_MCOConfig(uint32_t RCC_MCOx, uint32_t RCC_MCOSource, uint32_t RCC_M
 /**
   * @brief  Return the SYSCLK frequency.
   *
-  * @note   The system  computed by this function is not the real
+  * @note   The system computed by this function is not the real
   *         frequency in the chip. It is calculated based on the predefined
   *         constant and the selected clock source:
   * @note     If SYSCLK source is MSI, function returns values based on MSI range
@@ -1718,5 +1730,3 @@ static HAL_StatusTypeDef RCC_SetFlashLatency(uint32_t Flash_ClkSrcFreq, uint32_t
 /**
   * @}
   */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

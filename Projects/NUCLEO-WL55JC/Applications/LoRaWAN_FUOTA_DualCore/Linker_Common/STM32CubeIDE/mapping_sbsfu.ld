@@ -85,18 +85,22 @@ M4_M0PLUS_flag_RAM_end         = M4_M0PLUS_flag_RAM_start + 0x1F;
 
 /* M4 UserApp : allocation limited to half RAM size */
 M4_APP_region_RAM_start        = M4_M0PLUS_flag_RAM_end + 0x1;
-M4_APP_region_RAM_end          = 0x20007FFF;
+M4_APP_region_RAM_end          = 0x20006FFF;
 
 /* M4 UserApp shared area */
 M4_SHARED_region_RAM_start     = M4_APP_region_RAM_end + 0x1;
-M4_SHARED_region_RAM_end       = 0x200083FF;
+M4_SHARED_region_RAM_end       = 0x200073FF;
 
 /* M0PLUS UserApp shared area */
 M0PLUS_SHARED_region_RAM_start = M4_SHARED_region_RAM_end + 0x1;
-M0PLUS_SHARED_region_RAM_end   = 0x20008FFF;
+M0PLUS_SHARED_region_RAM_end   = 0x20007FFF;
+
+/* NVM RAM Data region */
+LW_NVM_region_RAM_start        = M0PLUS_SHARED_region_RAM_end + 0x1;
+LW_NVM_region_RAM_end          = 0x20008FFF;
 
 /* SBSFU RAM region */
-SB_region_RAM_start            = M0PLUS_SHARED_region_RAM_end + 0x1;
+SB_region_RAM_start            = LW_NVM_region_RAM_end + 0x1;
 SB_region_RAM_end              = 0x2000CBFF;
 
 /* SE RAM region protected area with 1 kBytes alignment constraint (TZIC) ==> 0x2000CC00 */
@@ -109,6 +113,7 @@ M4_SB_region_RAM_size          = M4_SB_region_RAM_end - M4_SB_region_RAM_start +
 M4_APP_region_RAM_size         = M4_APP_region_RAM_end - M4_APP_region_RAM_start + 0x1;
 M4_SHARED_region_RAM_size      = M4_SHARED_region_RAM_end - M4_SHARED_region_RAM_start + 0x1;
 M0PLUS_SHARED_region_RAM_size  = M0PLUS_SHARED_region_RAM_end - M0PLUS_SHARED_region_RAM_start + 0x1;
+LW_NVM_region_RAM_size         = LW_NVM_region_RAM_end - LW_NVM_region_RAM_start + 0x1;
 SB_region_RAM_size             = SB_region_RAM_end - SB_region_RAM_start + 0x1;
 SE_region_RAM_size             = SE_region_RAM_end - SE_region_RAM_stack_top + 0x1;
 
@@ -133,4 +138,5 @@ MEMORY
  M4_SB_RAM_region (xrw)           : ORIGIN = M4_SB_region_RAM_start, LENGTH = M4_SB_region_RAM_size
  SB_RAM_region (xrw)              : ORIGIN = SB_region_RAM_start, LENGTH = SB_region_RAM_size
  SE_RAM_region (xrw)              : ORIGIN = SE_region_RAM_stack_top, LENGTH = SE_region_RAM_size
+ LW_NVM_region_RAM (xrw)          : ORIGIN = LW_NVM_region_RAM_start, LENGTH = LW_NVM_region_RAM_size
 }

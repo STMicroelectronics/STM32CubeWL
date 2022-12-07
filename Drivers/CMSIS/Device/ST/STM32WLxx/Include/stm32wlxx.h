@@ -8,15 +8,15 @@
   *          is using in the C source code, usually in main.c. This file contains:
   *           - Configuration section that allows to select:
   *              - The STM32WLxx device used in the target application
-  *              - To use or not the peripheral’s drivers in application code(i.e.
-  *                code will be based on direct access to peripheral’s registers
+  *              - To use or not the peripheral's drivers in application code(i.e.
+  *                code will be based on direct access to peripheral's registers
   *                rather than drivers API), this option is controlled by
   *                "#define USE_HAL_DRIVER"
   *
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2020(-2021) STMicroelectronics.
+  * Copyright (c) 2020-2021 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -80,7 +80,7 @@
   */
 #define __STM32WLxx_CMSIS_VERSION_MAIN   (0x01U) /*!< [31:24] main version */
 #define __STM32WLxx_CMSIS_VERSION_SUB1   (0x01U) /*!< [23:16] sub1 version */
-#define __STM32WLxx_CMSIS_VERSION_SUB2   (0x00U) /*!< [15:8]  sub2 version */
+#define __STM32WLxx_CMSIS_VERSION_SUB2   (0x01U) /*!< [15:8]  sub2 version */
 #define __STM32WLxx_CMSIS_VERSION_RC     (0x00U) /*!< [7:0]  release candidate */
 #define __STM32WLxx_CMSIS_DEVICE_VERSION        ((__STM32WLxx_CMSIS_VERSION_MAIN << 24)\
                                                 |(__STM32WLxx_CMSIS_VERSION_SUB1 << 16)\
@@ -275,8 +275,3 @@ typedef enum
 /**
   * @}
   */
-
-
-
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

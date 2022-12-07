@@ -36,15 +36,16 @@
 <div class="col-sm-12 col-lg-8">
 <h1 id="update-history">Update History</h1>
 <div class="collapse">
-<input type="checkbox" id="collapse-section2" checked aria-hidden="true"> <label for="collapse-section2" aria-hidden="true"><strong>V1.1.0 / 16-June-2021</strong></label>
+<input type="checkbox" id="collapse-section3" checked aria-hidden="true"> <label for="collapse-section3" aria-hidden="true"><strong>V1.2.0 / 4-February-2022</strong></label>
 <div>
 <h2 id="main-changes">Main Changes</h2>
 <p><strong>Maintenance Release</strong></p>
 <h2 id="contents">Contents</h2>
 <ul>
-<li>Move some radio definitions (TCXO, DSDC) from stm32wlxx_nucleo_conf.h to stm32wlxx_nucleo_radio.h</li>
-<li>Add 2 interfaces to check BSP_RADIO_IsTCXO and BSP_RADIO_IsDCDC definitions</li>
-<li>Remove radio API BSP_RADIO_GetWakeUpTime from stm32wlxx_nucleo_radio.c</li>
+<li>All source files and templates: update disclaimer to add reference to the new license agreement</li>
+<li>Add README.md file</li>
+<li>Rename BSP_BUTTON_SWx_IT_PRIORITY constant to BSP_BUTTON_USER_IT_PRIORITY</li>
+<li>Add new interface BSP_RADIO_GetRFOMaxPowerConfig to get the RFO Max Power configuration</li>
 </ul>
 <h2 id="known-limitations">Known Limitations</h2>
 <p>None</p>
@@ -55,17 +56,36 @@
 </div>
 </div>
 <div class="collapse">
-<input type="checkbox" id="collapse-section1" aria-hidden="true"> <label for="collapse-section1" aria-hidden="true"><strong>V1.0.0 / 28-October-2020</strong></label>
+<input type="checkbox" id="collapse-section2" aria-hidden="true"> <label for="collapse-section2" aria-hidden="true"><strong>V1.1.0 / 16-June-2021</strong></label>
 <div>
 <h2 id="main-changes-1">Main Changes</h2>
-<p><strong>First Official Release</strong></p>
+<p><strong>Maintenance Release</strong></p>
 <h2 id="contents-1">Contents</h2>
-<p>First official release of board drivers for <strong>NUCLEO-WL55JC board (MB1389 C-01)</strong> in line with STM32Cube BSP drivers development guidelines (UM2298 - revision 2)</p>
+<ul>
+<li>Move some radio definitions (TCXO, DSDC) from stm32wlxx_nucleo_conf.h to stm32wlxx_nucleo_radio.h</li>
+<li>Add 2 interfaces to check BSP_RADIO_IsTCXO and BSP_RADIO_IsDCDC definitions</li>
+<li>Remove radio API BSP_RADIO_GetWakeUpTime from stm32wlxx_nucleo_radio.c</li>
+</ul>
 <h2 id="known-limitations-1">Known Limitations</h2>
 <p>None</p>
 <h2 id="dependencies-1">Dependencies</h2>
 <p>None</p>
 <h2 id="notes-1">Notes</h2>
+<p>stm32wlxx_nucleo_conf_template.h file must be copied in user application as stm32wlxx_nucleo_conf.h with optional configuration update</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section1" aria-hidden="true"> <label for="collapse-section1" aria-hidden="true"><strong>V1.0.0 / 28-October-2020</strong></label>
+<div>
+<h2 id="main-changes-2">Main Changes</h2>
+<p><strong>First Official Release</strong></p>
+<h2 id="contents-2">Contents</h2>
+<p>First official release of board drivers for <strong>NUCLEO-WL55JC board (MB1389 C-01)</strong> in line with STM32Cube BSP drivers development guidelines (UM2298 - revision 2)</p>
+<h2 id="known-limitations-2">Known Limitations</h2>
+<p>None</p>
+<h2 id="dependencies-2">Dependencies</h2>
+<p>None</p>
+<h2 id="notes-2">Notes</h2>
 <p>stm32wlxx_nucleo_conf_template.h file must be copied in user application as stm32wlxx_nucleo_conf.h with optional configuration update</p>
 </div>
 </div>

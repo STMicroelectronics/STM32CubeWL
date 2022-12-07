@@ -11,13 +11,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -72,7 +71,7 @@ typedef struct
 #define IS_VALID_EXEC_ID(EXEC_ID)        (((EXEC_ID) == EXEC_ID_SECURE_BOOT) || \
                                           ((EXEC_ID) == EXEC_ID_USER_APP)) /*!< Check for valid ID */
 
-#define RESERVED_VALUE (0xFEU) /*!< Reserved value. The reserved field used inside the LastExecStatus of the BootInfo is 
+#define RESERVED_VALUE (0xFEU) /*!< Reserved value. The reserved field used inside the LastExecStatus of the BootInfo is
                                     maintained for future customization/expansion of the field itself */
 
 #define SFU_STATE_INITIAL     SFU_STATE_CHECK_STATUS_ON_RESET  /*!< Define the initial state*/
@@ -1712,4 +1711,3 @@ void SFU_CALLBACK_MEMORYFAULT(void)
   SFU_EXCPT_IrqExceptionHandler(SFU_EXCPT_MEMORY_FAULT);
 }
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

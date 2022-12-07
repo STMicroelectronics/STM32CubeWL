@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -44,7 +43,7 @@ extern "C" {
   *
   * \remark This parameter has an impact on the memory footprint.
   */
-#define FRAG_MAX_NB                                 20
+#define FRAG_MAX_NB                                 21
 
 /*!
   * Maximum fragment size that can be handled.
@@ -52,6 +51,13 @@ extern "C" {
   * \remark This parameter has an impact on the memory footprint.
   */
 #define FRAG_MAX_SIZE                               50
+
+/*!
+  * Minimum fragment size that can be handled.
+  *
+  * \remark This parameter has an impact on the memory footprint.
+  */
+#define FRAG_MIN_SIZE                               30
 
 /*!
   * Maximum number of extra frames that can be handled.
@@ -67,22 +73,28 @@ extern "C" {
   * \remark This parameter has an impact on the memory footprint.
   * \note FRAG_MAX_NB = (SLOT_DWL_1_END - SLOT_DWL_1_START) / FRAG_MAX_SIZE
   */
-#define FRAG_MAX_NB                                 600
+#define FRAG_MAX_NB                                 683
 
 /*!
   * Maximum fragment size that can be handled.
   *
   * \remark This parameter has an impact on the memory footprint.
   */
-#define FRAG_MAX_SIZE                               120
+#define FRAG_MAX_SIZE                               240
 
+/*!
+* Minimum fragment size that can be handled.
+*
+* \remark This parameter has an impact on the memory footprint.
+*/
+#define FRAG_MIN_SIZE                               96
 /*!
   * Maximum number of extra frames that can be handled.
   *
   * \remark This parameter has an impact on the memory footprint.
   * \note FRAG_MAX_NB * 0.10 (with redundancy = 10 %)
   */
-#define FRAG_MAX_REDUNDANCY                         55
+#define FRAG_MAX_REDUNDANCY                         69
 
 #endif /* INTEROP_TEST_MODE */
 
@@ -177,5 +189,3 @@ void FRAG_DECODER_IF_OnDone(int32_t status, uint32_t size);
 #endif
 
 #endif /* __FRAG_DECODER_IF_H__ */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

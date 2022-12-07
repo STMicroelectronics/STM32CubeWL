@@ -26,9 +26,6 @@
 <p>Copyright © 2020 STMicroelectronics</p>
 <a href="https://www.st.com" class="logo"><img src="_htmresc/st_logo_2020.png" alt="ST logo" /></a>
 </center>
-<h1 id="license">License</h1>
-<p>This software component is licensed by ST under BSD-3-Clause license, the “License”; You may not use this component except in compliance with the License. You may obtain a copy of the License at:</p>
-<p><a href="https://opensource.org/licenses/BSD-3-Clause">https://opensource.org/licenses/BSD-3-Clause</a></p>
 <h1 id="purpose">Purpose</h1>
 <p>The STM32Cube HAL and LL, an STM32 abstraction layer embedded software, ensure maximized portability across STM32 portfolio.</p>
 <p>The Portable APIs layer provides a generic, multi instanced and simple set of APIs to interact with the upper layer (application, libraries and stacks). It is composed of native and extended APIs set. It is directly built around a generic architecture and allows the build-upon layers, like the middleware layer, to implement its functions without knowing in-depth the used STM32 device. This improves the library code reusability and guarantees an easy portability on other devices and STM32 families.</p>
@@ -43,9 +40,140 @@
 <div class="col-sm-12 col-lg-8">
 <h1 id="update-history">Update History</h1>
 <div class="collapse">
-<input type="checkbox" id="collapse-section2" checked aria-hidden="true"> <label for="collapse-section2" aria-hidden="true"><strong>V1.1.0 / 16-June-2021</strong></label>
+<input type="checkbox" id="collapse-section2" checked aria-hidden="true"> <label for="collapse-section2" aria-hidden="true"><strong>V1.2.0 / 4-February-2022</strong></label>
 <div>
 <h2 id="main-changes">Main Changes</h2>
+<ul>
+<li>Maintenance release of <strong>HAL and Low Layer</strong> drivers to include latest corrections</li>
+<li>All source files: update disclaimer to add reference to the new license agreement</li>
+<li>Correct English spelling errors and typos</li>
+</ul>
+<h2 id="contents">Contents</h2>
+<h3 id="hal-drivers-updates"><strong>HAL Drivers</strong> updates</h3>
+<ul>
+<li><strong>HAL ADC</strong> driver
+<ul>
+<li>Enhance ADC calibration to reduce noise effect</li>
+<li>Fix write access to registers ADC_CFGR1 and ADC_CFGR2 in HAL_ADC_Init() and HAL_ADC_AnalogWDGConfig() functions</li>
+</ul></li>
+<li><strong>HAL GPIO</strong> driver
+<ul>
+<li>Reorder EXTI config in HAL_GPIO_Init/HAL_GPIO_DeInit to avoid unexpected level detection</li>
+<li>Add new HAL_GPIO_WriteMultipleStatePin() API for multiple pin access in same cycle</li>
+</ul></li>
+<li><strong>HAL I2C</strong> driver
+<ul>
+<li>Fix written reserved bit 28 in I2C_CR2 register</li>
+<li>Improve I2C_WaitOnFlagUntilTimeout() description to match code</li>
+<li>Update to handle errors in polling mode</li>
+<li>Rename I2C_IsAcknowledgeFailed() to I2C_IsErrorOccurred() and correctly manage when error occurs</li>
+<li>Fix some communication issue due to low system frequency execution (HSI)</li>
+</ul></li>
+<li><strong>HAL IRDA</strong> driver
+<ul>
+<li>Improve header description of IRDA_WaitOnFlagUntilTimeout() function</li>
+<li>Add a check on the IRDA parity before enabling the parity error interrupt</li>
+</ul></li>
+<li><strong>HAL LPTIM</strong> driver
+<ul>
+<li>Add check on PRIMASK register to prevent from enabling unwanted global interrupts within LPTIM_Disable() and LL_LPTIM_Disable()</li>
+</ul></li>
+<li><strong>HAL RCC</strong> driver
+<ul>
+<li>Enhance RCC_MCOx in order to support both MCO number and AF mapping</li>
+</ul></li>
+<li><strong>HAL SMARTCARD</strong> driver
+<ul>
+<li>Improve header description of SMARTCARD_WaitOnFlagUntilTimeout() function</li>
+</ul></li>
+<li><strong>HAL SMBUS</strong> driver
+<ul>
+<li>Add new APIs to support wake up capability:
+<ul>
+<li>HAL_SMBUSEx_EnableWakeUp()</li>
+<li>HAL_SMBUSEx_DisableWakeUp()</li>
+</ul></li>
+<li>Update to fix issue of mismatched data received by master in case of data size to be transmitted by the slave is greater than the data size to be received by the master</li>
+<li>Add flush on TX register</li>
+</ul></li>
+<li><strong>HAL TIM</strong> driver
+<ul>
+<li>Fix incorrect behavior of the timer if input signal changes before the end of timer configuration</li>
+</ul></li>
+<li><strong>HAL UART</strong> driver
+<ul>
+<li>Improve header description of UART_WaitOnFlagUntilTimeout() function</li>
+<li>Add a check on the UART parity before enabling the parity error interruption</li>
+</ul></li>
+<li><strong>HAL USART</strong> driver
+<ul>
+<li>Improve header description of USART_WaitOnFlagUntilTimeout() function</li>
+<li>Add a check on the USART parity before enabling the parity error interruption</li>
+</ul></li>
+</ul>
+<p><br />
+</p>
+<h3 id="ll-drivers-updates"><strong>LL Drivers</strong> updates</h3>
+<ul>
+<li><strong>LL ADC</strong> driver
+<ul>
+<li>Fix MISRA warning register shift overflow</li>
+</ul></li>
+<li><strong>LL CORTEX</strong> driver
+<ul>
+<li>Rename LL_CPUID_GetConstant() to LL_CPUID_GetArchitecture()</li>
+</ul></li>
+<li><strong>LL CRC</strong> driver
+<ul>
+<li>Rectified <span class="citation" data-cites="brief">@brief</span> of LL_CRC_GetOutputDataReverseMode() API</li>
+</ul></li>
+<li><strong>LL LPUART</strong> driver
+<ul>
+<li>Remove all reference of TXFECF bit unavailable for LPUART</li>
+</ul></li>
+<li><strong>LL RCC</strong> driver
+<ul>
+<li>Add missing API: LL_RCC_PLL_IsEnabledDomain_ADC, LL_RCC_PLL_IsEnabledDomain_RNG, LL_RCC_PLL_IsEnabledDomain_I2S, LL_RCC_PLL_IsEnabledDomain_SYS</li>
+<li>Add check of PLL enable bit when a peripheral using PPL P or PLL Q</li>
+</ul></li>
+<li><strong>LL RNG</strong> driver
+<ul>
+<li>Fix RNG_HTCFG constant for NIST compliance</li>
+</ul></li>
+<li><strong>Utils </strong> driver
+<ul>
+<li>Fix LL_PLL_ConfigSystemClock_HSE to take into account the setting of RCC_CR_HSEPRE when computing pllrfreq<br />
+</li>
+</ul></li>
+</ul>
+<h2 id="known-limitations">Known Limitations</h2>
+<p>None</p>
+<h2 id="development-toolchains-and-compilers">Development Toolchains and Compilers</h2>
+<ul>
+<li>IAR Embedded Workbench for ARM (EWARM) toolchain V8.30.1</li>
+<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.31</li>
+<li>STM32CubeIDE 1.9.0 (native GNU ARM 10.3-2021-10 or optional GNU ARM 9-2020-q2-update)</li>
+</ul>
+<h2 id="supported-devices-and-boards">Supported Devices and boards</h2>
+<p>Supported Devices:</p>
+<ul>
+<li>STM32WL55xx</li>
+<li>STM32WL54xx</li>
+<li>STM32WLE5xx</li>
+<li>STM32WLE4xx</li>
+</ul>
+<h2 id="backward-compatibility">Backward Compatibility</h2>
+<p>Not applicable</p>
+<h2 id="dependencies">Dependencies</h2>
+<p>None</p>
+<p><br />
+</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section2" aria-hidden="true"> <label for="collapse-section2" aria-hidden="true"><strong>V1.1.0 / 16-June-2021</strong></label>
+<div>
+<h2 id="main-changes-1">Main Changes</h2>
 <ul>
 <li>Maintenance release of <strong>HAL and Low Layer</strong> drivers to include latest corrections</li>
 <li>Update of HAL SMBUS driver to introduce fast mode and fast mode plus
@@ -57,8 +185,8 @@
 </ul></li>
 </ul></li>
 </ul>
-<h2 id="contents">Contents</h2>
-<h3 id="hal-drivers-updates"><strong>HAL Drivers</strong> updates</h3>
+<h2 id="contents-1">Contents</h2>
+<h3 id="hal-drivers-updates-1"><strong>HAL Drivers</strong> updates</h3>
 <ul>
 <li><strong>HAL ADC</strong> driver
 <ul>
@@ -181,7 +309,7 @@
 </ul>
 <p><br />
 </p>
-<h3 id="ll-drivers-updates"><strong>LL Drivers</strong> updates</h3>
+<h3 id="ll-drivers-updates-1"><strong>LL Drivers</strong> updates</h3>
 <ul>
 <li><strong>LL RCC</strong> driver
 <ul>
@@ -214,44 +342,13 @@
 </ul>
 <p><br />
 </p>
-<h2 id="known-limitations">Known Limitations</h2>
-<p>None</p>
-<h2 id="development-toolchains-and-compilers">Development Toolchains and Compilers</h2>
-<ul>
-<li>IAR Embedded Workbench for ARM (EWARM) toolchain V8.30.1</li>
-<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.31</li>
-<li>STM32CubeIDE 1.7.0</li>
-</ul>
-<h2 id="supported-devices-and-boards">Supported Devices and boards</h2>
-<p>Supported Devices:</p>
-<ul>
-<li>STM32WL55xx</li>
-<li>STM32WL54xx</li>
-<li>STM32WLE5xx</li>
-<li>STM32WLE4xx</li>
-</ul>
-<h2 id="backward-compatibility">Backward Compatibility</h2>
-<p>Not applicable</p>
-<h2 id="dependencies">Dependencies</h2>
-<p>None</p>
-<p><br />
-</p>
-</div>
-</div>
-<div class="collapse">
-<input type="checkbox" id="collapse-section1" aria-hidden="true"> <label for="collapse-section1" aria-hidden="true"><strong>V1.0.0 / 28-October-2020</strong></label>
-<div>
-<h2 id="main-changes-1">Main Changes</h2>
-<p><strong>First Official Release</strong></p>
-<h2 id="contents-1">Contents</h2>
-<p>First official release of LL / HAL Drivers for STM32WLxx series.</p>
 <h2 id="known-limitations-1">Known Limitations</h2>
 <p>None</p>
 <h2 id="development-toolchains-and-compilers-1">Development Toolchains and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V8.30.1</li>
-<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.28</li>
-<li>STM32CubeIDE 1.5.0</li>
+<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.31</li>
+<li>STM32CubeIDE 1.7.0</li>
 </ul>
 <h2 id="supported-devices-and-boards-1">Supported Devices and boards</h2>
 <p>Supported Devices:</p>
@@ -264,6 +361,37 @@
 <h2 id="backward-compatibility-1">Backward Compatibility</h2>
 <p>Not applicable</p>
 <h2 id="dependencies-1">Dependencies</h2>
+<p>None</p>
+<p><br />
+</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section1" aria-hidden="true"> <label for="collapse-section1" aria-hidden="true"><strong>V1.0.0 / 28-October-2020</strong></label>
+<div>
+<h2 id="main-changes-2">Main Changes</h2>
+<p><strong>First Official Release</strong></p>
+<h2 id="contents-2">Contents</h2>
+<p>First official release of LL / HAL Drivers for STM32WLxx series.</p>
+<h2 id="known-limitations-2">Known Limitations</h2>
+<p>None</p>
+<h2 id="development-toolchains-and-compilers-2">Development Toolchains and Compilers</h2>
+<ul>
+<li>IAR Embedded Workbench for ARM (EWARM) toolchain V8.30.1</li>
+<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.28</li>
+<li>STM32CubeIDE 1.5.0</li>
+</ul>
+<h2 id="supported-devices-and-boards-2">Supported Devices and boards</h2>
+<p>Supported Devices:</p>
+<ul>
+<li>STM32WL55xx</li>
+<li>STM32WL54xx</li>
+<li>STM32WLE5xx</li>
+<li>STM32WLE4xx</li>
+</ul>
+<h2 id="backward-compatibility-2">Backward Compatibility</h2>
+<p>Not applicable</p>
+<h2 id="dependencies-2">Dependencies</h2>
 <p>None</p>
 <p><br />
 </p>

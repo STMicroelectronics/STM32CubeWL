@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -82,8 +81,9 @@ typedef enum
   CFG_SEQ_Task_MbSystemNotifRcv,
   CFG_SEQ_Task_MbLoRaNotifRcv,
   CFG_SEQ_Task_MbRadioNotifRcv,
-  CFG_SEQ_Task_MbLoRaSendOnTxTimerOrButtonEvent,
-  CFG_SEQ_Task_MbLmHandlerProcess,
+  CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent,
+  CFG_SEQ_Task_LoRaStoreContextEvent,
+  CFG_SEQ_Task_LoRaStopJoinEvent,
   /* USER CODE BEGIN CFG_SEQ_Task_Id_t */
 
   /* USER CODE END CFG_SEQ_Task_Id_t */
@@ -135,5 +135,3 @@ typedef enum
 #endif
 
 #endif /* __UTILITIES_DEF_H__ */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

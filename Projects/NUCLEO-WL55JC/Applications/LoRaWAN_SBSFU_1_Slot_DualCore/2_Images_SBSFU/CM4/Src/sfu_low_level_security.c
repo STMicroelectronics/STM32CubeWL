@@ -8,13 +8,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -110,6 +109,12 @@ static SFU_MPU_InitTypeDef MpuAreas[] =
     SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_RGNV, SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_START, SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_SIZE,
     SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_PERM, SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_EXECV, SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_SREG,
     SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_TEXV, SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_C, SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_B
+  },
+  /*  App Access */
+  {
+    SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST2_RGNV, SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST2_START, SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST2_SIZE,
+    SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST2_PERM, SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST2_EXECV, SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST2_SREG,
+    SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST2_TEXV, SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST2_C, SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST2_B
   },
   /*  peripheral  */
   {
@@ -748,6 +753,20 @@ SFU_ErrorStatus SFU_LL_SECU_SetProtectionMPU_UserApp(void)
   MPU_InitStruct.TypeExtField         = APP_PROTECT_MPU_FLASHEXE_ADJUST_TEXV;
   HAL_MPU_ConfigRegion(&MPU_InitStruct);
 
+    /*  modify executable region for executing UserAPP */
+  MPU_InitStruct.Enable               = MPU_REGION_ENABLE;
+  MPU_InitStruct.Number               = APP_PROTECT_MPU_FLASHEXE_ADJUST2_RGNV;
+  MPU_InitStruct.BaseAddress          = APP_PROTECT_MPU_FLASHEXE_ADJUST2_START;
+  MPU_InitStruct.Size                 = APP_PROTECT_MPU_FLASHEXE_ADJUST2_SIZE;
+  MPU_InitStruct.SubRegionDisable     = APP_PROTECT_MPU_FLASHEXE_ADJUST2_SREG;
+  MPU_InitStruct.AccessPermission     = APP_PROTECT_MPU_FLASHEXE_ADJUST2_PERM;
+  MPU_InitStruct.DisableExec          = APP_PROTECT_MPU_FLASHEXE_ADJUST2_EXECV;
+  MPU_InitStruct.IsShareable          = MPU_ACCESS_NOT_SHAREABLE;
+  MPU_InitStruct.IsBufferable         = APP_PROTECT_MPU_FLASHEXE_ADJUST2_B ;
+  MPU_InitStruct.IsCacheable          = APP_PROTECT_MPU_FLASHEXE_ADJUST2_C;
+  MPU_InitStruct.TypeExtField         = APP_PROTECT_MPU_FLASHEXE_ADJUST2_TEXV;
+  HAL_MPU_ConfigRegion(&MPU_InitStruct);
+
   return e_ret_status;
 }
 #endif /* SFU_MPU_PROTECT_ENABLE */
@@ -984,4 +1003,3 @@ SFU_ErrorStatus SFU_LL_SECU_SetProtectionSecUser(FLASH_OBProgramInitTypeDef *psF
 }
 #endif /* SFU_SECURE_USER_PROTECT_ENABLE */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

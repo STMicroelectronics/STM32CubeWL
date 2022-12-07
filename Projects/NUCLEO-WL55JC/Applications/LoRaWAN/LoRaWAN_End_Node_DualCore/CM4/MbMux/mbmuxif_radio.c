@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -104,7 +103,7 @@ int8_t MBMUXIF_RadioInit(void)
   /* USER CODE END MBMUXIF_RadioInit_1 */
 
   p_cm0plus_specific_features_info = MBMUXIF_SystemGetFeatCapabInfoPtr(FEAT_INFO_RADIO_ID);
-  if (p_cm0plus_specific_features_info->Feat_Info_Feature_Version != __SUBGHZ_PHY_VERSION)
+  if (p_cm0plus_specific_features_info->Feat_Info_Feature_Version != SUBGHZ_PHY_VERSION)
   {
     ret = -4; /* version mismatch */
   }
@@ -116,9 +115,14 @@ int8_t MBMUXIF_RadioInit(void)
   {
     ret = MBMUX_RegisterFeature(FEAT_INFO_RADIO_ID, MBMUX_NOTIF_ACK, MBMUXIF_IsrRadioNotifRcvCb, aRadioNotifAckBuff, sizeof(aRadioNotifAckBuff));
   }
+
   if (ret >= 0)
   {
     UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_MbRadioNotifRcv), UTIL_SEQ_RFU, MBMUXIF_TaskRadioNotifRcv);
+  }
+
+  if (ret >= 0)
+  {
     ret = MBMUXIF_SystemSendCm0plusRegistrationCmd(FEAT_INFO_RADIO_ID);
     if (ret < 0)
     {
@@ -227,5 +231,3 @@ static void MBMUXIF_TaskRadioNotifRcv(void)
 /* USER CODE BEGIN PrFD */
 
 /* USER CODE END PrFD */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

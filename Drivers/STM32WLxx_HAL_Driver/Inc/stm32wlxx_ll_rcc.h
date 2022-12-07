@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2020 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                       opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -2721,6 +2720,15 @@ __STATIC_INLINE void LL_RCC_PLL_DisableDomain_ADC(void)
   CLEAR_BIT(RCC->PLLCFGR, RCC_PLLCFGR_PLLPEN);
 }
 
+/**
+  * @brief  Check if PLL output mapped on ADC domain clock is enabled
+  * @rmtoll PLLCFGR      RCC_PLLCFGR_PLLPEN        LL_RCC_PLL_IsEnabledDomain_ADC
+  * @retval State of bit (1 or 0).
+  */
+__STATIC_INLINE uint32_t LL_RCC_PLL_IsEnabledDomain_ADC(void)
+{
+  return ((READ_BIT(RCC->PLLCFGR, RCC_PLLCFGR_PLLPEN) == (RCC_PLLCFGR_PLLPEN)) ? 1UL : 0UL);
+}
 
 /**
   * @brief  Enable PLL output mapped on RNG domain clock
@@ -2742,6 +2750,16 @@ __STATIC_INLINE void LL_RCC_PLL_EnableDomain_RNG(void)
 __STATIC_INLINE void LL_RCC_PLL_DisableDomain_RNG(void)
 {
   CLEAR_BIT(RCC->PLLCFGR, RCC_PLLCFGR_PLLQEN);
+}
+
+/**
+  * @brief  Check if PLL output mapped on RNG domain clock is enabled
+  * @rmtoll PLLCFGR      PLLQEN        LL_RCC_PLL_IsEnabledDomain_RNG
+  * @retval State of bit (1 or 0).
+  */
+__STATIC_INLINE uint32_t LL_RCC_PLL_IsEnabledDomain_RNG(void)
+{
+  return ((READ_BIT(RCC->PLLCFGR, RCC_PLLCFGR_PLLQEN) == (RCC_PLLCFGR_PLLQEN)) ? 1UL : 0UL);
 }
 
 /**
@@ -2767,6 +2785,16 @@ __STATIC_INLINE void LL_RCC_PLL_DisableDomain_I2S(void)
 }
 
 /**
+  * @brief  Check if PLL output mapped on I2S domain clock is enabled
+  * @rmtoll PLLCFGR      PLLQEN        LL_RCC_PLL_IsEnabledDomain_I2S
+  * @retval State of bit (1 or 0).
+  */
+__STATIC_INLINE uint32_t LL_RCC_PLL_IsEnabledDomain_I2S(void)
+{
+  return ((READ_BIT(RCC->PLLCFGR, RCC_PLLCFGR_PLLQEN) == (RCC_PLLCFGR_PLLQEN)) ? 1UL : 0UL);
+}
+
+/**
   * @brief  Enable PLL output mapped on SYSCLK domain
   * @rmtoll PLLCFGR      PLLREN        LL_RCC_PLL_EnableDomain_SYS
   * @retval None
@@ -2787,6 +2815,16 @@ __STATIC_INLINE void LL_RCC_PLL_EnableDomain_SYS(void)
 __STATIC_INLINE void LL_RCC_PLL_DisableDomain_SYS(void)
 {
   CLEAR_BIT(RCC->PLLCFGR, RCC_PLLCFGR_PLLREN);
+}
+
+/**
+  * @brief  Check if PLL output mapped on SYS domain clock is enabled
+  * @rmtoll PLLCFGR      PLLREN        LL_RCC_PLL_IsEnabledDomain_SYS
+  * @retval State of bit (1 or 0).
+  */
+__STATIC_INLINE uint32_t LL_RCC_PLL_IsEnabledDomain_SYS(void)
+{
+  return ((READ_BIT(RCC->PLLCFGR, RCC_PLLCFGR_PLLREN) == (RCC_PLLCFGR_PLLREN)) ? 1UL : 0UL);
 }
 
 /**
@@ -3400,5 +3438,3 @@ uint32_t    LL_RCC_GetRTCClockFreq(void);
 #endif
 
 #endif /* __STM32WLxx_LL_RCC_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

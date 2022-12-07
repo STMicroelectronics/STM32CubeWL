@@ -8,13 +8,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -39,7 +38,7 @@
 /* Private variables ---------------------------------------------------------*/
 /* @note ATTENTION - please keep this variable 32bit aligned */
 static uint8_t m_aPacketData[PACKET_1K_SIZE + PACKET_DATA_INDEX +
-                             PACKET_TRAILER_SIZE]; /*!<Array used to store Packet Data*/
+                             PACKET_TRAILER_SIZE] __attribute__((aligned(4))); /*!<Array used to store Packet Data*/
 uint8_t m_aFileName[FILE_NAME_LENGTH + 1U]; /*!< Array used to store File Name data */
 static CRC_HandleTypeDef CrcHandle; /*!<CRC handle*/
 
@@ -392,4 +391,3 @@ COM_StatusTypeDef Ymodem_Receive(uint32_t *puSize, uint32_t uFlashDestination, Y
 /**
   * @}
   */
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

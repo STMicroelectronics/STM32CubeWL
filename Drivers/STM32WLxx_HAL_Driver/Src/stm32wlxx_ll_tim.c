@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2020 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -274,7 +273,8 @@ void LL_TIM_StructInit(LL_TIM_InitTypeDef *TIM_InitStruct)
 /**
   * @brief  Configure the TIMx time base unit.
   * @param  TIMx Timer Instance
-  * @param  TIM_InitStruct pointer to a @ref LL_TIM_InitTypeDef structure (TIMx time base unit configuration data structure)
+  * @param  TIM_InitStruct pointer to a @ref LL_TIM_InitTypeDef structure
+  *         (TIMx time base unit configuration data structure)
   * @retval An ErrorStatus enumeration value:
   *          - SUCCESS: TIMx registers are de-initialized
   *          - ERROR: not applicable
@@ -327,7 +327,8 @@ ErrorStatus LL_TIM_Init(TIM_TypeDef *TIMx, LL_TIM_InitTypeDef *TIM_InitStruct)
 /**
   * @brief  Set the fields of the TIMx output channel configuration data
   *         structure to their default values.
-  * @param  TIM_OC_InitStruct pointer to a @ref LL_TIM_OC_InitTypeDef structure (the output channel configuration data structure)
+  * @param  TIM_OC_InitStruct pointer to a @ref LL_TIM_OC_InitTypeDef structure
+  *         (the output channel configuration data structure)
   * @retval None
   */
 void LL_TIM_OC_StructInit(LL_TIM_OC_InitTypeDef *TIM_OC_InitStruct)
@@ -353,7 +354,8 @@ void LL_TIM_OC_StructInit(LL_TIM_OC_InitTypeDef *TIM_OC_InitStruct)
   *         @arg @ref LL_TIM_CHANNEL_CH4
   *         @arg @ref LL_TIM_CHANNEL_CH5
   *         @arg @ref LL_TIM_CHANNEL_CH6
-  * @param  TIM_OC_InitStruct pointer to a @ref LL_TIM_OC_InitTypeDef structure (TIMx output channel configuration data structure)
+  * @param  TIM_OC_InitStruct pointer to a @ref LL_TIM_OC_InitTypeDef structure (TIMx output channel configuration
+  *         data structure)
   * @retval An ErrorStatus enumeration value:
   *          - SUCCESS: TIMx output channel is initialized
   *          - ERROR: TIMx output channel is not initialized
@@ -392,7 +394,8 @@ ErrorStatus LL_TIM_OC_Init(TIM_TypeDef *TIMx, uint32_t Channel, LL_TIM_OC_InitTy
 /**
   * @brief  Set the fields of the TIMx input channel configuration data
   *         structure to their default values.
-  * @param  TIM_ICInitStruct pointer to a @ref LL_TIM_IC_InitTypeDef structure (the input channel configuration data structure)
+  * @param  TIM_ICInitStruct pointer to a @ref LL_TIM_IC_InitTypeDef structure (the input channel configuration
+  *         data structure)
   * @retval None
   */
 void LL_TIM_IC_StructInit(LL_TIM_IC_InitTypeDef *TIM_ICInitStruct)
@@ -412,7 +415,8 @@ void LL_TIM_IC_StructInit(LL_TIM_IC_InitTypeDef *TIM_ICInitStruct)
   *         @arg @ref LL_TIM_CHANNEL_CH2
   *         @arg @ref LL_TIM_CHANNEL_CH3
   *         @arg @ref LL_TIM_CHANNEL_CH4
-  * @param  TIM_IC_InitStruct pointer to a @ref LL_TIM_IC_InitTypeDef structure (TIMx input channel configuration data structure)
+  * @param  TIM_IC_InitStruct pointer to a @ref LL_TIM_IC_InitTypeDef structure (TIMx input channel configuration data
+  *         structure)
   * @retval An ErrorStatus enumeration value:
   *          - SUCCESS: TIMx output channel is initialized
   *          - ERROR: TIMx output channel is not initialized
@@ -444,7 +448,8 @@ ErrorStatus LL_TIM_IC_Init(TIM_TypeDef *TIMx, uint32_t Channel, LL_TIM_IC_InitTy
 
 /**
   * @brief  Fills each TIM_EncoderInitStruct field with its default value
-  * @param  TIM_EncoderInitStruct pointer to a @ref LL_TIM_ENCODER_InitTypeDef structure (encoder interface configuration data structure)
+  * @param  TIM_EncoderInitStruct pointer to a @ref LL_TIM_ENCODER_InitTypeDef structure (encoder interface
+  *         configuration data structure)
   * @retval None
   */
 void LL_TIM_ENCODER_StructInit(LL_TIM_ENCODER_InitTypeDef *TIM_EncoderInitStruct)
@@ -464,7 +469,8 @@ void LL_TIM_ENCODER_StructInit(LL_TIM_ENCODER_InitTypeDef *TIM_EncoderInitStruct
 /**
   * @brief  Configure the encoder interface of the timer instance.
   * @param  TIMx Timer Instance
-  * @param  TIM_EncoderInitStruct pointer to a @ref LL_TIM_ENCODER_InitTypeDef structure (TIMx encoder interface configuration data structure)
+  * @param  TIM_EncoderInitStruct pointer to a @ref LL_TIM_ENCODER_InitTypeDef structure (TIMx encoder interface
+  *         configuration data structure)
   * @retval An ErrorStatus enumeration value:
   *          - SUCCESS: TIMx registers are de-initialized
   *          - ERROR: not applicable
@@ -528,7 +534,8 @@ ErrorStatus LL_TIM_ENCODER_Init(TIM_TypeDef *TIMx, LL_TIM_ENCODER_InitTypeDef *T
 /**
   * @brief  Set the fields of the TIMx Hall sensor interface configuration data
   *         structure to their default values.
-  * @param  TIM_HallSensorInitStruct pointer to a @ref LL_TIM_HALLSENSOR_InitTypeDef structure (HALL sensor interface configuration data structure)
+  * @param  TIM_HallSensorInitStruct pointer to a @ref LL_TIM_HALLSENSOR_InitTypeDef structure (HALL sensor interface
+  *         configuration data structure)
   * @retval None
   */
 void LL_TIM_HALLSENSOR_StructInit(LL_TIM_HALLSENSOR_InitTypeDef *TIM_HallSensorInitStruct)
@@ -555,7 +562,8 @@ void LL_TIM_HALLSENSOR_StructInit(LL_TIM_HALLSENSOR_InitTypeDef *TIM_HallSensorI
   * @note LL_TIM_IC_POLARITY_BOTHEDGE must not be used for TI1 when it is used
   *       when TIMx operates in Hall sensor interface mode.
   * @param  TIMx Timer Instance
-  * @param  TIM_HallSensorInitStruct pointer to a @ref LL_TIM_HALLSENSOR_InitTypeDef structure (TIMx HALL sensor interface configuration data structure)
+  * @param  TIM_HallSensorInitStruct pointer to a @ref LL_TIM_HALLSENSOR_InitTypeDef structure (TIMx HALL sensor
+  *         interface configuration data structure)
   * @retval An ErrorStatus enumeration value:
   *          - SUCCESS: TIMx registers are de-initialized
   *          - ERROR: not applicable
@@ -635,7 +643,8 @@ ErrorStatus LL_TIM_HALLSENSOR_Init(TIM_TypeDef *TIMx, LL_TIM_HALLSENSOR_InitType
 /**
   * @brief  Set the fields of the Break and Dead Time configuration data structure
   *         to their default values.
-  * @param  TIM_BDTRInitStruct pointer to a @ref LL_TIM_BDTR_InitTypeDef structure (Break and Dead Time configuration data structure)
+  * @param  TIM_BDTRInitStruct pointer to a @ref LL_TIM_BDTR_InitTypeDef structure (Break and Dead Time configuration
+  *         data structure)
   * @retval None
   */
 void LL_TIM_BDTR_StructInit(LL_TIM_BDTR_InitTypeDef *TIM_BDTRInitStruct)
@@ -667,7 +676,8 @@ void LL_TIM_BDTR_StructInit(LL_TIM_BDTR_InitTypeDef *TIM_BDTRInitStruct)
   * @note Macro IS_TIM_BKIN2_INSTANCE(TIMx) can be used to check whether or not
   *       a timer instance provides a second break input.
   * @param  TIMx Timer Instance
-  * @param  TIM_BDTRInitStruct pointer to a @ref LL_TIM_BDTR_InitTypeDef structure (Break and Dead Time configuration data structure)
+  * @param  TIM_BDTRInitStruct pointer to a @ref LL_TIM_BDTR_InitTypeDef structure (Break and Dead Time configuration
+  *         data structure)
   * @retval An ErrorStatus enumeration value:
   *          - SUCCESS: Break and Dead Time is initialized
   *          - ERROR: not applicable
@@ -1313,4 +1323,3 @@ static ErrorStatus IC4Config(TIM_TypeDef *TIMx, LL_TIM_IC_InitTypeDef *TIM_ICIni
 
 #endif /* USE_FULL_LL_DRIVER */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

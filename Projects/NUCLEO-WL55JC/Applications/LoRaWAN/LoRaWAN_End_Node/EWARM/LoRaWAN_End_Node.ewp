@@ -1072,6 +1072,12 @@
                     <name>$PROJ_DIR$\..\Core\Src\dma.c</name>
                 </file>
                 <file>
+                    <name>$PROJ_DIR$\..\Core\Src\flash_if.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\Core\Src\gpio.c</name>
+                </file>
+                <file>
                     <name>$PROJ_DIR$\..\Core\Src\main.c</name>
                 </file>
                 <file>
@@ -1287,6 +1293,18 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCN470.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCN470A20.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCN470A26.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCN470B20.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCN470B26.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCN779.c</name>

@@ -75,18 +75,22 @@ define exported symbol __ICFEDIT_M4_M0PLUS_FLAG_region_RAM_end__   = __ICFEDIT_M
 
 /* M4 UserApp */
 define symbol __ICFEDIT_M4_APP_region_RAM_start__                  = __ICFEDIT_M4_M0PLUS_FLAG_region_RAM_end__ + 1;
-define symbol __ICFEDIT_M4_APP_region_RAM_end__                    = 0x20007FFF;
+define symbol __ICFEDIT_M4_APP_region_RAM_end__                    = 0x20006FFF;
 
 /* M4 UserApp shared area */
-define exported symbol __ICFEDIT_M4_SHARED_region_SRAM_start__     = 0x20008000;
-define exported symbol __ICFEDIT_M4_SHARED_region_SRAM_end__       = 0x200083FF;
+define exported symbol __ICFEDIT_M4_SHARED_region_SRAM_start__     = __ICFEDIT_M4_APP_region_RAM_end__ + 1;
+define exported symbol __ICFEDIT_M4_SHARED_region_SRAM_end__       = __ICFEDIT_M4_SHARED_region_SRAM_start__ + 0x3FF;
 
 /* M0PLUS UserApp shared area */
-define exported symbol __ICFEDIT_M0PLUS_SHARED_region_SRAM_start__ = 0x20008400;
-define exported symbol __ICFEDIT_M0PLUS_SHARED_region_SRAM_end__   = 0x20008FFF;
+define exported symbol __ICFEDIT_M0PLUS_SHARED_region_SRAM_start__ = __ICFEDIT_M4_SHARED_region_SRAM_end__ + 1;
+define exported symbol __ICFEDIT_M0PLUS_SHARED_region_SRAM_end__   = __ICFEDIT_M0PLUS_SHARED_region_SRAM_start__ + 0xBFF;
+
+/***** NVM RAM Data region *****/
+define exported symbol __ICFEDIT_LW_NVM_region_SRAM_start__        = __ICFEDIT_M0PLUS_SHARED_region_SRAM_end__ + 1;
+define exported symbol __ICFEDIT_LW_NVM_region_SRAM_end__          = __ICFEDIT_LW_NVM_region_SRAM_start__ + 0xFFF;
 
 /* SBSFU RAM region */
-define exported symbol __ICFEDIT_SB_region_RAM_start__             = __ICFEDIT_M0PLUS_SHARED_region_SRAM_end__ + 1;
+define exported symbol __ICFEDIT_SB_region_RAM_start__             = __ICFEDIT_LW_NVM_region_SRAM_end__ + 1;
 define exported symbol __ICFEDIT_SB_region_RAM_end__               = 0x2000D3FF;
 
 /* SE RAM region protected area with 1 kBytes alignment constraint (TZIC) ==> 0x2000D400 */

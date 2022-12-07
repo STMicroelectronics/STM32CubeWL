@@ -22,8 +22,6 @@
 #ifndef __LMHP_FRAGMENTATION_H__
 #define __LMHP_FRAGMENTATION_H__
 
-#include "LoRaMac.h"
-#include "LmHandlerTypes.h"
 #include "LmhPackage.h"
 #include "FragDecoder.h"
 
@@ -46,25 +44,23 @@ typedef struct LmhpFragmentationParams_s
     /*!
      * Notifies the progress of the current fragmentation session
      *
-     * \param [IN] fragCounter Fragment counter
-     * \param [IN] fragNb      Number of fragments
-     * \param [IN] fragSize    Size of fragments
-     * \param [IN] fragNbLost  Number of lost fragments
+     * \param [in] fragCounter Fragment counter
+     * \param [in] fragNb      Number of fragments
+     * \param [in] fragSize    Size of fragments
+     * \param [in] fragNbLost  Number of lost fragments
      */
     void ( *OnProgress )( uint16_t fragCounter, uint16_t fragNb, uint8_t fragSize, uint16_t fragNbLost );
     /*!
      * Notifies that the fragmentation session is finished
      *
-     * \param [IN] status Fragmentation session status [FRAG_SESSION_ONGOING,
+     * \param [in] status Fragmentation session status [FRAG_SESSION_ONGOING,
      *                                                  FRAG_SESSION_FINISHED or
      *                                                  FragDecoder.Status.FragNbLost]
-     * \param [IN] size   Received file size
+     * \param [in] size   Received file size
      */
     void ( *OnDone )( int32_t status, uint32_t size );
 }LmhpFragmentationParams_t;
 
 LmhPackage_t *LmhpFragmentationPackageFactory( void );
-
-uint8_t LmhpFragmentationGetPackageVersion(void);
 
 #endif // __LMHP_FRAGMENTATION_H__

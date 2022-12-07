@@ -1077,6 +1077,12 @@
                         <name>$PROJ_DIR$\..\CM4\Core\Src\dma.c</name>
                     </file>
                     <file>
+                        <name>$PROJ_DIR$\..\CM4\Core\Src\flash_if.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\CM4\Core\Src\gpio.c</name>
+                    </file>
+                    <file>
                         <name>$PROJ_DIR$\..\CM4\Core\Src\ipcc.c</name>
                     </file>
                     <file>

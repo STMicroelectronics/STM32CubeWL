@@ -167,7 +167,7 @@ uint8_t CayenneLppAddDigitalOutput(uint8_t channel, uint8_t value)
   return CayenneLppCursor;
 }
 
-uint8_t CayenneLppAddAnalogInput(uint8_t channel, uint16_t value)
+uint8_t CayenneLppAddAnalogInput(uint8_t channel, float value)
 {
   /* USER CODE BEGIN CayenneLppAddAnalogInput_1 */
 
@@ -177,18 +177,18 @@ uint8_t CayenneLppAddAnalogInput(uint8_t channel, uint16_t value)
     return 0;
   }
 
-  value *= 100;
+  int16_t val = (int16_t)(value * 100);
   CayenneLppBuffer[CayenneLppCursor++] = channel;
   CayenneLppBuffer[CayenneLppCursor++] = LPP_ANALOG_INPUT;
-  CayenneLppBuffer[CayenneLppCursor++] = value >> 8;
-  CayenneLppBuffer[CayenneLppCursor++] = value;
+  CayenneLppBuffer[CayenneLppCursor++] = val >> 8;
+  CayenneLppBuffer[CayenneLppCursor++] = val;
   /* USER CODE BEGIN CayenneLppAddAnalogInput_2 */
 
   /* USER CODE END CayenneLppAddAnalogInput_2 */
   return CayenneLppCursor;
 }
 
-uint8_t CayenneLppAddAnalogOutput(uint8_t channel, uint16_t value)
+uint8_t CayenneLppAddAnalogOutput(uint8_t channel, float value)
 {
   /* USER CODE BEGIN CayenneLppAddAnalogOutput_1 */
 
@@ -197,11 +197,11 @@ uint8_t CayenneLppAddAnalogOutput(uint8_t channel, uint16_t value)
   {
     return 0;
   }
-  value *= 100;
+  int16_t val = (int16_t)(value * 100);
   CayenneLppBuffer[CayenneLppCursor++] = channel;
   CayenneLppBuffer[CayenneLppCursor++] = LPP_ANALOG_OUTPUT;
-  CayenneLppBuffer[CayenneLppCursor++] = value >> 8;
-  CayenneLppBuffer[CayenneLppCursor++] = value;
+  CayenneLppBuffer[CayenneLppCursor++] = val >> 8;
+  CayenneLppBuffer[CayenneLppCursor++] = val;
   /* USER CODE BEGIN CayenneLppAddAnalogOutput_2 */
 
   /* USER CODE END CayenneLppAddAnalogOutput_2 */
@@ -245,7 +245,7 @@ uint8_t CayenneLppAddPresence(uint8_t channel, uint8_t value)
   return CayenneLppCursor;
 }
 
-uint8_t CayenneLppAddTemperature(uint8_t channel, int16_t celsius)
+uint8_t CayenneLppAddTemperature(uint8_t channel, float celsius)
 {
   /* USER CODE BEGIN CayenneLppAddTemperature_1 */
 
@@ -254,7 +254,7 @@ uint8_t CayenneLppAddTemperature(uint8_t channel, int16_t celsius)
   {
     return 0;
   }
-  int16_t val = celsius * 10;
+  int16_t val = (int16_t)(celsius * 10);
   CayenneLppBuffer[CayenneLppCursor++] = channel;
   CayenneLppBuffer[CayenneLppCursor++] = LPP_TEMPERATURE;
   CayenneLppBuffer[CayenneLppCursor++] = val >> 8;
@@ -265,7 +265,7 @@ uint8_t CayenneLppAddTemperature(uint8_t channel, int16_t celsius)
   return CayenneLppCursor;
 }
 
-uint8_t CayenneLppAddRelativeHumidity(uint8_t channel, uint16_t rh)
+uint8_t CayenneLppAddRelativeHumidity(uint8_t channel, float rh)
 {
   /* USER CODE BEGIN CayenneLppAddRelativeHumidity_1 */
 
@@ -276,14 +276,14 @@ uint8_t CayenneLppAddRelativeHumidity(uint8_t channel, uint16_t rh)
   }
   CayenneLppBuffer[CayenneLppCursor++] = channel;
   CayenneLppBuffer[CayenneLppCursor++] = LPP_RELATIVE_HUMIDITY;
-  CayenneLppBuffer[CayenneLppCursor++] = rh * 2;
+  CayenneLppBuffer[CayenneLppCursor++] = (uint8_t)(rh * 2);
   /* USER CODE BEGIN CayenneLppAddRelativeHumidity_2 */
 
   /* USER CODE END CayenneLppAddRelativeHumidity_2 */
   return CayenneLppCursor;
 }
 
-uint8_t CayenneLppAddAccelerometer(uint8_t channel, int16_t x, int16_t y, int16_t z)
+uint8_t CayenneLppAddAccelerometer(uint8_t channel, float x, float y, float z)
 {
   /* USER CODE BEGIN CayenneLppAddAccelerometer_1 */
 
@@ -292,9 +292,9 @@ uint8_t CayenneLppAddAccelerometer(uint8_t channel, int16_t x, int16_t y, int16_
   {
     return 0;
   }
-  int16_t vx = x * 1000;
-  int16_t vy = y * 1000;
-  int16_t vz = z * 1000;
+  int16_t vx = (int16_t)(x * 1000);
+  int16_t vy = (int16_t)(y * 1000);
+  int16_t vz = (int16_t)(z * 1000);
 
   CayenneLppBuffer[CayenneLppCursor++] = channel;
   CayenneLppBuffer[CayenneLppCursor++] = LPP_ACCELEROMETER;
@@ -310,7 +310,7 @@ uint8_t CayenneLppAddAccelerometer(uint8_t channel, int16_t x, int16_t y, int16_
   return CayenneLppCursor;
 }
 
-uint8_t CayenneLppAddBarometricPressure(uint8_t channel, uint16_t hpa)
+uint8_t CayenneLppAddBarometricPressure(uint8_t channel, float hpa)
 {
   /* USER CODE BEGIN CayenneLppAddBarometricPressure_1 */
 
@@ -319,19 +319,19 @@ uint8_t CayenneLppAddBarometricPressure(uint8_t channel, uint16_t hpa)
   {
     return 0;
   }
-  hpa *= 10;
+  int16_t val = (int16_t)(hpa * 10);
 
   CayenneLppBuffer[CayenneLppCursor++] = channel;
   CayenneLppBuffer[CayenneLppCursor++] = LPP_BAROMETRIC_PRESSURE;
-  CayenneLppBuffer[CayenneLppCursor++] = hpa >> 8;
-  CayenneLppBuffer[CayenneLppCursor++] = hpa;
+  CayenneLppBuffer[CayenneLppCursor++] = val >> 8;
+  CayenneLppBuffer[CayenneLppCursor++] = val;
   /* USER CODE BEGIN CayenneLppAddBarometricPressure_2 */
 
   /* USER CODE END CayenneLppAddBarometricPressure_2 */
   return CayenneLppCursor;
 }
 
-uint8_t CayenneLppAddGyrometer(uint8_t channel, int16_t x, int16_t y, int16_t z)
+uint8_t CayenneLppAddGyrometer(uint8_t channel, float x, float y, float z)
 {
   /* USER CODE BEGIN CayenneLppAddGyrometer_1 */
 
@@ -340,9 +340,9 @@ uint8_t CayenneLppAddGyrometer(uint8_t channel, int16_t x, int16_t y, int16_t z)
   {
     return 0;
   }
-  int16_t vx = x * 100;
-  int16_t vy = y * 100;
-  int16_t vz = z * 100;
+  int16_t vx = (int16_t)(x * 100);
+  int16_t vy = (int16_t)(y * 100);
+  int16_t vz = (int16_t)(z * 100);
 
   CayenneLppBuffer[CayenneLppCursor++] = channel;
   CayenneLppBuffer[CayenneLppCursor++] = LPP_GYROMETER;
@@ -358,7 +358,7 @@ uint8_t CayenneLppAddGyrometer(uint8_t channel, int16_t x, int16_t y, int16_t z)
   return CayenneLppCursor;
 }
 
-uint8_t CayenneLppAddGps(uint8_t channel, int32_t latitude, int32_t longitude, int32_t meters)
+uint8_t CayenneLppAddGps(uint8_t channel, float latitude, float longitude, float meters)
 {
   /* USER CODE BEGIN CayenneLppAddGps_1 */
 
@@ -367,9 +367,9 @@ uint8_t CayenneLppAddGps(uint8_t channel, int32_t latitude, int32_t longitude, i
   {
     return 0;
   }
-  int32_t lat = latitude * 10000;
-  int32_t lon = longitude * 10000;
-  int32_t alt = meters * 100;
+  int32_t lat = (int32_t)(latitude * 10000);
+  int32_t lon = (int32_t)(longitude * 10000);
+  int32_t alt = (int32_t)(meters * 100);
 
   CayenneLppBuffer[CayenneLppCursor++] = channel;
   CayenneLppBuffer[CayenneLppCursor++] = LPP_GPS;

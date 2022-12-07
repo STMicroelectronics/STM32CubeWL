@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -122,12 +121,12 @@ extern "C" {
 /*#define SFU_NO_SWAP*/                              /*!< FW upgrade installation process without swap area */
 
 /* Multi-images configuration :
-   - Max : 3 Active images and 3 Download area
+   - Max : 3 Active images and 3 Download areas
    - Not necessary same configuration between SFU_NB_MAX_ACTIVE_IMAGE and SFU_NB_MAX_DWL_AREA
    - Active slot identified with SFU magic (1,2,3) information from header
    - Do not forget to add keys for each image in SE_Corebin/Binary folder
    - Master slot : image started in priority if valid
-   - FW image valid all feature authorized from master slot
+   - FW image validate all features authorized from master slot
 */
 #define SFU_NB_MAX_ACTIVE_IMAGE 1U                        /*!< 1 active image managed */
 #define SFU_NB_MAX_DWL_AREA     1U                        /*!< 1 dwl area managed */
@@ -219,7 +218,7 @@ extern "C" {
 #define SFU_FW_VERSION_START_NUM (1U)    /*!< The very first version number a Firmware can have
                                               You can also define an upper bound here if you plan to use it */
 
-#define SFU_FW_VERSION_INIT_NUM (1U)     /*!< The version number accepted when the header is not valid (either because 
+#define SFU_FW_VERSION_INIT_NUM (1U)     /*!< The version number accepted when the header is not valid (either because
                                               no FW installed or due to an attack attempt). Could be different from
                                               SFU_FW_VERSION_START_NUM */
 
@@ -239,5 +238,3 @@ extern "C" {
 #endif
 
 #endif /* APP_SFU_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

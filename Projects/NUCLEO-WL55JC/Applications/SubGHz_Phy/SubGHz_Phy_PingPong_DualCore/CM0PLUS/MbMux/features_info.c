@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -59,13 +58,13 @@ UTIL_MEM_PLACE_IN_SECTION("MB_MEM2") FEAT_INFO_Param_t Feat_Info_Table[] =
 {
   {
     .Feat_Info_Feature_Id =   FEAT_INFO_SYSTEM_ID,
-    .Feat_Info_Feature_Version = __CM0_APP_VERSION,
+    .Feat_Info_Feature_Version = APP_VERSION,
     .Feat_Info_Config_Size =  0,
     .Feat_Info_Config_Ptr = (void *) NULL
   },
   {
     .Feat_Info_Feature_Id =   FEAT_INFO_SYSTEM_NOTIF_PRIO_A_ID,
-    .Feat_Info_Feature_Version = __CM0_APP_VERSION,
+    .Feat_Info_Feature_Version = APP_VERSION,
     .Feat_Info_Config_Size = 0,
     .Feat_Info_Config_Ptr = (void *) NULL
   },
@@ -77,13 +76,13 @@ UTIL_MEM_PLACE_IN_SECTION("MB_MEM2") FEAT_INFO_Param_t Feat_Info_Table[] =
   }, */
   {
     .Feat_Info_Feature_Id =   FEAT_INFO_TRACE_ID,
-    .Feat_Info_Feature_Version = __CM0_APP_VERSION,
+    .Feat_Info_Feature_Version = APP_VERSION,
     .Feat_Info_Config_Size = 0,
     .Feat_Info_Config_Ptr = (void *) NULL
   },
   {
     .Feat_Info_Feature_Id =   FEAT_INFO_RADIO_ID,
-    .Feat_Info_Feature_Version = __SUBGHZ_PHY_VERSION,
+    .Feat_Info_Feature_Version = SUBGHZ_PHY_VERSION,
     .Feat_Info_Config_Size = 0,
     .Feat_Info_Config_Ptr = (void *) NULL
   },
@@ -139,5 +138,3 @@ FEAT_INFO_List_t *FEAT_INFO_GetListPtr(void)
 /* USER CODE BEGIN PrFD */
 
 /* USER CODE END PrFD */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

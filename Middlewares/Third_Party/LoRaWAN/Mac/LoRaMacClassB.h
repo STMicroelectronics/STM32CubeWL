@@ -52,8 +52,8 @@ extern "C"
 {
 #endif
 
-#include "systime.h"
 #include "LoRaMacTypes.h"
+#include "LoRaMacVersion.h"
 
 /*!
  * States of the class B ping slot mechanism
@@ -103,7 +103,6 @@ typedef struct sPingSlotContext
     MulticastCtx_t *NextMulticastChannel;
 }PingSlotContext_t;
 
-
 /*!
  * Class B beacon context structure
  */
@@ -140,7 +139,7 @@ typedef struct sBeaconContext
     /*!
      * Current temperature
      */
-    float Temperature;
+    int16_t Temperature;
     /*!
      * Beacon time received with the beacon frame
      */
@@ -177,6 +176,13 @@ typedef struct sBeaconContext
      */
     TimerTime_t BeaconTimingDelay;
     TimerTime_t TimeStamp;
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+    /*!
+     * Beacons transmit time precision determined using
+     * param field of beacon frame format.
+     */
+    SysTime_t BeaconTimePrecision;
+#endif /* LORAMAC_VERSION */
 }BeaconContext_t;
 
 /*!
@@ -184,13 +190,13 @@ typedef struct sBeaconContext
  */
 typedef struct sLoRaMacClassBCallback
 {
-    /* ST_WORKAROUND_BEGIN: Return temperature into Q7.8 instead float */
+    /* ST_WORKAROUND_BEGIN: Return temperature into int16_t instead float */
     /*!
      * \brief   Measures the temperature level
      *
      * \retval  Temperature level
      */
-    uint16_t ( *GetTemperatureLevel )( void );
+    int16_t ( *GetTemperatureLevel )( void );
     /* ST_WORKAROUND_END */
     /*!
      *\brief    Will be called each time a Radio IRQ is handled by the MAC
@@ -238,6 +244,12 @@ typedef struct sLoRaMacClassBParams
      * Pointer to the multicast channel list
      */
     MulticastCtx_t *MulticastChannels;
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+    /*!
+     * Pointer to the activation type
+     */
+    ActivationType_t *NetworkActivation;
+#endif /* LORAMAC_VERSION */
 }LoRaMacClassBParams_t;
 
 /*!
@@ -249,9 +261,9 @@ typedef void ( *LoRaMacClassBNvmEvent )( void );
 /*!
  * \brief Initialize LoRaWAN Class B
  *
- * \param [IN] classBParams Information and feedback parameter
- * \param [IN] callbacks Contains the callback which the Class B implementation needs
- * \param [IN] nvm Pointer to an external non-volatile memory data structure.
+ * \param [in] classBParams Information and feedback parameter
+ * \param [in] callbacks Contains the callback which the Class B implementation needs
+ * \param [in] nvm Pointer to an external non-volatile memory data structure.
  */
 void LoRaMacClassBInit( LoRaMacClassBParams_t *classBParams, LoRaMacClassBCallback_t *callbacks,
                         LoRaMacClassBNvmData_t* nvm );
@@ -259,21 +271,21 @@ void LoRaMacClassBInit( LoRaMacClassBParams_t *classBParams, LoRaMacClassBCallba
 /*!
  * \brief Set the state of the beacon state machine
  *
- * \param [IN] beaconState Beacon state.
+ * \param [in] beaconState Beacon state.
  */
 void LoRaMacClassBSetBeaconState( BeaconState_t beaconState );
 
 /*!
  * \brief Set the state of the ping slot state machine
  *
- * \param [IN] pingSlotState Ping slot state.
+ * \param [in] pingSlotState Ping slot state.
  */
 void LoRaMacClassBSetPingSlotState( PingSlotState_t pingSlotState );
 
 /*!
  * \brief Set the state of the multicast slot state machine
  *
- * \param [IN] pingSlotState multicast slot state.
+ * \param [in] multicastSlotState multicast slot state.
  */
 void LoRaMacClassBSetMulticastSlotState( PingSlotState_t multicastSlotState );
 
@@ -302,8 +314,8 @@ void LoRaMacClassBMulticastSlotTimerEvent( void* context );
 /*!
  * \brief Receives and decodes the beacon frame
  *
- * \param [IN] payload Pointer to the payload
- * \param [IN] size Size of the payload
+ * \param [in] payload Pointer to the payload
+ * \param [in] size Size of the payload
  * \retval [true, if the node has received a beacon; false, if not]
  */
 bool LoRaMacClassBRxBeacon( uint8_t *payload, uint16_t size );
@@ -359,14 +371,14 @@ void LoRaMacClassBResumeBeaconing( void );
 /*!
  * \brief Sets the periodicity of the ping slots
  *
- * \param [IN] periodicity Periodicity
+ * \param [in] periodicity Periodicity
  */
 void LoRaMacClassBSetPingSlotInfo( uint8_t periodicity );
 
 /*!
  * \brief Switches the device class
  *
- * \param [IN] nextClass Device class to switch to
+ * \param [in] nextClass Device class to switch to
  *
  * \retval LoRaMacStatus_t Status of the operation.
  */
@@ -378,7 +390,7 @@ LoRaMacStatus_t LoRaMacClassBSwitchClass( DeviceClass_t nextClass );
  * \details The mac information base service to get attributes of the LoRaMac
  *          Class B layer.
  *
- * \param   [IN] mibRequest - MIB-GET-Request to perform. Refer to \ref MibRequestConfirm_t.
+ * \param   [in] mibGet - MIB-GET-Request to perform. Refer to \ref MibRequestConfirm_t.
  *
  * \retval  LoRaMacStatus_t Status of the operation. Possible returns are:
  *          \ref LORAMAC_STATUS_OK,
@@ -393,7 +405,7 @@ LoRaMacStatus_t LoRaMacClassBMibGetRequestConfirm( MibRequestConfirm_t *mibGet )
  * \details The mac information base service to set attributes of the LoRaMac
  *          Class B layer.
  *
- * \param   [IN] mibRequest - MIB-SET-Request to perform. Refer to \ref MibRequestConfirm_t.
+ * \param   [in] mibSet - MIB-SET-Request to perform. Refer to \ref MibRequestConfirm_t.
  *
  * \retval  LoRaMacStatus_t Status of the operation. Possible returns are:
  *          \ref LORAMAC_STATUS_OK,
@@ -411,8 +423,8 @@ void LoRaMacClassBPingSlotInfoAns( void );
 /*!
  * \brief This function handles the PING_SLOT_CHANNEL_REQ
  *
- * \param [IN] datarate Device class to switch to
- * \param [IN] frequency Device class to switch to
+ * \param [in] datarate Device class to switch to
+ * \param [in] frequency Device class to switch to
  *
  * \retval Status for the MAC answer.
  */
@@ -421,9 +433,9 @@ uint8_t LoRaMacClassBPingSlotChannelReq( uint8_t datarate, uint32_t frequency );
 /*!
  * \brief This function handles the BEACON_TIMING_ANS
  *
- * \param [IN] beaconTimingDelay The beacon timing delay
- * \param [IN] beaconTimingChannel The beacon timing channel
- * \param [IN] lastRxDone The time of the last frame reception
+ * \param [in] beaconTimingDelay The beacon timing delay
+ * \param [in] beaconTimingChannel The beacon timing channel
+ * \param [in] lastRxDone The time of the last frame reception
  */
 void LoRaMacClassBBeaconTimingAns( uint16_t beaconTimingDelay, uint8_t beaconTimingChannel, TimerTime_t lastRxDone );
 
@@ -435,7 +447,7 @@ void LoRaMacClassBDeviceTimeAns( void );
 /*!
  * \brief This function handles the BEACON_FREQ_REQ
  *
- * \param [IN] frequency Frequency to set
+ * \param [in] frequency Frequency to set
  *
  * \retval [true, if MAC shall send an answer; false, if not]
  */
@@ -444,7 +456,7 @@ bool LoRaMacClassBBeaconFreqReq( uint32_t frequency );
 /*!
  * \brief Queries the ping slot window time
  *
- * \param [IN] txTimeOnAir TX time on air for the next uplink
+ * \param [in] txTimeOnAir TX time on air for the next uplink
  *
  * \retval Returns the time the uplink should be delayed
  */
@@ -466,13 +478,28 @@ void LoRaMacClassBStartRxSlots( void );
  * \brief Starts the timers for the RX slots. This includes the
  *        timers for ping and multicast slots.
  *
- * \param [IN] periodicity Downlink periodicity
- *
- * \param [IN] multicastChannel Related multicast channel
+ * \param [in] multicastChannel Related multicast channel
  */
 void LoRaMacClassBSetMulticastPeriodicity( MulticastCtx_t* multicastChannel );
 
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+/*!
+ * \brief Sets the FPending bit status of the related downlink slot
+ *
+ * \param [in] address Slot address, could be unicast or multicast
+ *
+ * \param [in] fPendingSet Set to 1, if the fPending bit in the
+ *             sequence is set, otherwise 0.
+ */
+void LoRaMacClassBSetFPendingBit( uint32_t address, uint8_t fPendingSet );
+#endif /* LORAMAC_VERSION */
+
+/*!
+ * \brief Class B process function.
+ */
 void LoRaMacClassBProcess( void );
+
+/*! \} defgroup LORAMACCLASSB */
 
 #ifdef __cplusplus
 }

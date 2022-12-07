@@ -32,7 +32,7 @@
 #define __LORAMAC_HANDLER_TYPES_H__
 
 /* Includes ------------------------------------------------------------------*/
-#include "LoRaMac.h"
+#include "LoRaMacInterfaces.h"
 
 /* Exported defines ----------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
@@ -66,6 +66,8 @@ typedef enum
     LORAMAC_HANDLER_COMPLIANCE_RUNNING = -4,
     LORAMAC_HANDLER_CRYPTO_ERROR = -5,
     LORAMAC_HANDLER_DUTYCYCLE_RESTRICTED = -6,
+    LORAMAC_HANDLER_PAYLOAD_LENGTH_RESTRICTED = -7,
+    LORAMAC_HANDLER_NVM_DATA_UP_TO_DATE = -8,
     LORAMAC_HANDLER_SUCCESS = 0
 }LmHandlerErrorStatus_t;
 
@@ -101,6 +103,11 @@ typedef enum
     LORAMAC_HANDLER_NVM_STORE,
 }LmHandlerNvmContextStates_t;
 
+typedef enum
+{
+    LORAMAC_HANDLER_L2_VERSION,
+    LORAMAC_HANDLER_REGION_VERSION,
+}LmHandlerVersionType_t;
 /*!
  * Commissioning parameters
  */
@@ -132,7 +139,6 @@ typedef struct LmHandlerRequestParams_s
         Mlme_t Mlme;
     }RequestType;
 }LmHandlerRequestParams_t;
-
 
 /* External variables --------------------------------------------------------*/
 /* Exported macros -----------------------------------------------------------*/

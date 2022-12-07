@@ -1,36 +1,36 @@
 /**
- * Copyright (c) 1990 The Regents of the University of California. 
-* All rights reserved. 
-* 
-* Redistribution and use in source and binary forms are permitted 
-* provided that the above copyright notice and this paragraph are 
-* duplicated in all such forms and that any documentation, 
-* advertising materials, and other materials related to such 
-* distribution and use acknowledge that the software was developed 
-* by the University of California, Berkeley.  The name of the 
-* University may not be used to endorse or promote products derived 
-* from this software without specific prior written permission. 
-* THIS SOFTWARE IS PROVIDED ``AS IS'' AND WITHOUT ANY EXPRESS OR 
-* IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED 
-* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. 
-*/
-/******************************************************************************
- * @file    stm32_tiny_sscanf.c
- * @author  MCD Application Team
- * @brief   Tiny implementation of sscanf
- ******************************************************************************
- * @attention
- *
- * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics. 
- * All rights reserved.</center></h2>
- *
- * This software component is licensed by ST under BSD 3-Clause license,
- * the "License"; You may not use this file except in compliance with the 
- * License. You may obtain a copy of the License at:
- *                        opensource.org/licenses/BSD-3-Clause
- *
- ******************************************************************************
- */
+  * Copyright (c) 1990 The Regents of the University of California.
+  * All rights reserved.
+  *
+  * Redistribution and use in source and binary forms are permitted
+  * provided that the above copyright notice and this paragraph are
+  * duplicated in all such forms and that any documentation,
+  * advertising materials, and other materials related to such
+  * distribution and use acknowledge that the software was developed
+  * by the University of California, Berkeley.  The name of the
+  * University may not be used to endorse or promote products derived
+  * from this software without specific prior written permission.
+  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND WITHOUT ANY EXPRESS OR
+  * IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
+  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+  */
+/**
+  ******************************************************************************
+  * @file    stm32_tiny_sscanf.c
+  * @author  MCD Application Team
+  * @brief   Tiny implementation of sscanf
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2019 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
 
 
 /*
@@ -48,7 +48,7 @@
  * That means that we expect a single space, and not any of ispace() character
  * (space, tabs,...)
  */
- 
+
 /* Includes ------------------------------------------------------------------*/
 #include <stdio.h>
 #include <string.h>
@@ -59,12 +59,12 @@
 #include "stm32_tiny_sscanf.h"
 
 /* Private typedef -----------------------------------------------------------*/
-/* Private define ------------------------------------------------------------*/
+/* Private defines -----------------------------------------------------------*/
 #define TINY_SSCANF
 #define TINY_NO_OX
 #define TINY_SPACE_NOT_SPECIALCASE
 
-/* Private macro -------------------------------------------------------------*/
+/* Private macros ------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Functions Definition ------------------------------------------------------*/
 
@@ -172,15 +172,15 @@ VFSCANF(const char *str, const char *fmt0, va_list ap)
   char *p0;  /* saves original value of p when necessary */
   char ccltab[256];  /* character class table for %[...] */
 #endif
-  
+
   /* `basefix' is used to avoid `if' tests in the integer scanner */
 #ifdef TINY_SSCANF
   /* basefix[] can be removed as we do not support %i */
-#else  
+#else
   static short basefix[17] =
     { 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
 #endif
-    
+
    fp_p = str;
   fp_r = strlen(str);
 
@@ -298,7 +298,7 @@ literal:
       base = 0;
       break;
 #endif
-    
+
 #ifdef TINY_SSCANF
 #else
     case 'O':  /* compat */
@@ -310,7 +310,7 @@ literal:
       base = 8;
       break;
 #endif
-    
+
     case 'u':
       c = CT_INT;
       flags |= UNSIGNED;
@@ -319,7 +319,7 @@ literal:
 
     case 'X':
     case 'x':
-#ifdef TINY_NO_OX 
+#ifdef TINY_NO_OX
 #else
       flags |= PFXOK;  /* enable 0x prefixing */
 #endif
@@ -331,8 +331,8 @@ literal:
 #ifdef FLOATING_POINT
     case 'E':
     case 'G':
-    case 'e': 
-    case 'f': 
+    case 'e':
+    case 'f':
     case 'g':
       c = CT_FLOAT;
       break;
@@ -407,7 +407,7 @@ literal:
     if (fp_r <= 0 && __srefill(fp))
       goto input_failure;
 
-    
+
     /*
      * Consume leading white space, except for formats
      * that suppress this.
@@ -429,7 +429,7 @@ literal:
        */
     }
 #endif
-    
+
     /*
      * Do the conversion.
      */
@@ -471,7 +471,7 @@ literal:
       }
       break;
 #endif
-      
+
 #ifdef TINY_SSCANF
 #else
     case CT_CCL:
@@ -515,7 +515,7 @@ literal:
       nread += n;
       break;
 #endif
-      
+
 #ifdef TINY_SSCANF
 #else
     case CT_STRING:
@@ -548,7 +548,7 @@ literal:
       }
       continue;
 #endif
-      
+
     case CT_INT:
       /* scan an integer as if by strtoimax/strtoumax */
 #ifdef hardway
@@ -566,7 +566,7 @@ literal:
 #else
       flags |= SIGNOK | NDIGITS | NZDIGITS;
 #endif
-      
+
       sign_minus = 0;
       value = 0;
       for (p = buf; width; width--) {
@@ -590,33 +590,33 @@ literal:
          * have scanned any nonzero digits).
          */
         case '0':
-#ifdef TINY_NO_OX 
+#ifdef TINY_NO_OX
           /* FALLTHROUGH */
-#else        
+#else
 #ifdef TINY_SSCANF
 #else
           if (base == 0) {
             base = 8;
             flags |= PFXOK;
           }
-#endif 
+#endif
           if (!(flags & NDIGITS)) {
             value = value * base;
           }
-          
+
           if (flags & NZDIGITS)
               flags &= ~(SIGNOK|NZDIGITS|NDIGITS);
           else
               flags &= ~(SIGNOK|PFXOK|NDIGITS);
           goto ok;
 #endif
-          
+
 #ifdef TINY_SSCANF
         /* we only support base 10 and 16 */
         case '1': case '2': case '3':
         case '4': case '5': case '6': case '7':
         case '8': case '9':
-#ifdef TINY_NO_OX 
+#ifdef TINY_NO_OX
           flags &= ~(SIGNOK | NDIGITS);
 #else
           flags &= ~(SIGNOK | PFXOK | NDIGITS);
@@ -641,27 +641,27 @@ literal:
           value = value * base + c - '0';
           goto ok;
 #endif
-          
+
         /* letters ok iff hex */
         case 'A': case 'B': case 'C':
         case 'D': case 'E': case 'F':
           /* no need to fix base here */
           if (base <= 10)
             break;  /* not legal here */
-#ifdef TINY_NO_OX 
+#ifdef TINY_NO_OX
           flags &= ~(SIGNOK | NDIGITS);
 #else
           flags &= ~(SIGNOK | PFXOK | NDIGITS);
 #endif
           value = value * base + c - 'A' + 10;
-          goto ok;          
-        
+          goto ok;
+
         case 'a': case 'b': case 'c':
         case 'd': case 'e': case 'f':
           /* no need to fix base here */
           if (base <= 10)
             break;  /* not legal here */
-#ifdef TINY_NO_OX 
+#ifdef TINY_NO_OX
           flags &= ~(SIGNOK | NDIGITS);
 #else
           flags &= ~(SIGNOK | PFXOK | NDIGITS);
@@ -727,12 +727,12 @@ literal:
           --c;
           --p;
           ungetc(c++, fp);
-          /* There is a dummy post-increment to 
+          /* There is a dummy post-increment to
              avoid an unused value warning */
         }
         goto match_failure;
       }
-#ifdef TINY_NO_OX 
+#ifdef TINY_NO_OX
 #else
       c = ((u_char *)p)[-1];
       if (c == 'x' || c == 'X') {
@@ -740,7 +740,7 @@ literal:
         ungetc(c, fp);
       }
 #endif
-      
+
 #ifdef TINY_SSCANF
       {
 #else
@@ -764,7 +764,7 @@ literal:
           *va_arg(ap, size_t *) = value;
         else if (flags & PTRINT)
           *va_arg(ap, ptrdiff_t *) = value;
-        else 
+        else
 #endif
         if (flags & LONG)
           *va_arg(ap, long *) = value;
@@ -984,13 +984,9 @@ tiny_sscanf(const char *str, const char *fmt, ...)
 {
   int ret;
   va_list ap;
-  
+
   va_start(ap, fmt);
   ret = tiny_vfscanf(str, fmt, ap);
   va_end(ap);
   return (ret);
 }
-
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-

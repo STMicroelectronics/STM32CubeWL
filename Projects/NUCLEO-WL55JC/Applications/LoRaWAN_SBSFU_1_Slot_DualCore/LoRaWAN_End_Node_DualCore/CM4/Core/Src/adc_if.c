@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -100,7 +99,7 @@ int16_t SYS_GetTemperatureLevel(void)
   /* USER CODE BEGIN SYS_GetTemperatureLevel_1 */
 
   /* USER CODE END SYS_GetTemperatureLevel_1 */
-  int16_t temperatureDegreeC = 0;
+  __IO int16_t temperatureDegreeC = 0;
   uint32_t measuredLevel = 0;
   uint16_t batteryLevelmV = SYS_GetBatteryLevel();
 
@@ -127,8 +126,6 @@ int16_t SYS_GetTemperatureLevel(void)
                                                               measuredLevel,
                                                               LL_ADC_RESOLUTION_12B);
   }
-
-  APP_LOG(TS_ON, VLEVEL_L, "temp= %d\n\r", temperatureDegreeC);
 
   /* from int16 to q8.7*/
   temperatureDegreeC <<= 8;
@@ -215,7 +212,7 @@ static uint32_t ADC_ReadChannels(uint32_t channel)
   HAL_ADC_PollForConversion(&hadc, HAL_MAX_DELAY);
 
   /** Wait for end of conversion */
-  HAL_ADC_Stop(&hadc) ;   /* it calls also ADC_Disable() */
+  HAL_ADC_Stop(&hadc);   /* it calls also ADC_Disable() */
 
   ADCxConvertedValues = HAL_ADC_GetValue(&hadc);
 
@@ -226,5 +223,3 @@ static uint32_t ADC_ReadChannels(uint32_t channel)
 
   /* USER CODE END ADC_ReadChannels_2 */
 }
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

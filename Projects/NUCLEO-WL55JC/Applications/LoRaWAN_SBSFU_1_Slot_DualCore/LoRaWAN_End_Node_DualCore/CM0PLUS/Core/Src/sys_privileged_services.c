@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    sys_privileged_services.c
@@ -6,16 +7,16 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
@@ -106,7 +107,6 @@ void __ASM SYS_CRITICALSECTION_SvcCall(uint32_t *ret, uint32_t syscall, ...)
   BX LR
 }
 #endif /* (__ICCARM__) || defined(__GNUC__) */
-
 
 /**
   * @brief This functions triggers a NVIC system call (supervisor call): request privileged operation
@@ -297,7 +297,6 @@ void APP_NVIC_SVC_Handler(uint32_t *args)
   *pRet = ret;
 }
 
-
 /**
   * @brief Maps MSP on Privileged region and set up PSP to current stack pointer
   * @param void
@@ -317,10 +316,9 @@ void ThumbState_RemapMspAndSwitchToPspStack(void)
   */
 void ThumbState_EnterUnprivilegedMode(void)
 {
-  __set_CONTROL(__get_CONTROL() | 3); /* bit 0 = 1: unpriviledged      bit 1=1: stack=PSP */
+  __set_CONTROL(__get_CONTROL() | 3); /* bit 0 = 1: unprivileged      bit 1=1: stack=PSP */
   __ISB();
 }
-
 
 /**
   * @brief This is a helper function to determine if we are currently running in non-privileged mode or not
@@ -331,6 +329,3 @@ uint32_t ThumbState_IsUnprivileged(void)
 {
   return ((__get_IPSR() == 0U) && ((__get_CONTROL() & 1U) == 1U));
 }
-
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

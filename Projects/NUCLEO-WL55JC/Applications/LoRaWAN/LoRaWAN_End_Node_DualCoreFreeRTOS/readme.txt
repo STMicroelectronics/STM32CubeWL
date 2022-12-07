@@ -2,22 +2,20 @@
   @page LoRaWAN_End_Node_DualCoreFreeRTOS Readme file
 
   @verbatim
-  ******************** (C) COPYRIGHT 2020 STMicroelectronics *******************
+  ******************************************************************************
   * @file    Applications/LoRaWAN/LoRaWAN_End_Node_DualCoreFreeRTOS/readme.txt
   * @author  MCD Application Team
   * @brief   This application is a simple demo application software of a LoRa
   *          modem connecting to Network server. Data sent can be checked on
   *          Network server for eg Loriot. Traces are displayed over UART
   ******************************************************************************
-  * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2020-2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   @endverbatim
@@ -41,6 +39,8 @@ Applications, SubGHz_Phy, LoRaWAN, End_Node, DualCore, FreeRTOS
   - LoRaWAN_End_Node_DualCoreFreeRTOS/CM0PLUS/Core/Inc/ca_conf.h                This file contains configuration for Cryptographic API (CA)
                                                                                 module functionalities.
   - LoRaWAN_End_Node_DualCoreFreeRTOS/CM0PLUS/Core/Inc/ca_low_level.h           This file contains the low level definitions of the Cryptographic API (CA) module.
+  - LoRaWAN_End_Node_DualCoreFreeRTOS/CM0PLUS/Core/Inc/gpio.h                   This file contains all the function prototypes for
+                                                                                the gpio.c file
   - LoRaWAN_End_Node_DualCoreFreeRTOS/CM0PLUS/Core/Inc/ipcc.h                   This file contains all the function prototypes for
                                                                                 the ipcc.c file
   - LoRaWAN_End_Node_DualCoreFreeRTOS/CM0PLUS/Core/Inc/ipcc_if.h                This file contains the interface of the ipcc driver on CM0PLUS.
@@ -99,7 +99,10 @@ Applications, SubGHz_Phy, LoRaWAN, End_Node, DualCore, FreeRTOS
   - LoRaWAN_End_Node_DualCoreFreeRTOS/CM4/Core/Inc/adc_if.h                     Header for ADC interface configuration
   - LoRaWAN_End_Node_DualCoreFreeRTOS/CM4/Core/Inc/dma.h                        This file contains all the function prototypes for
                                                                                 the dma.c file
+  - LoRaWAN_End_Node_DualCoreFreeRTOS/CM4/Core/Inc/flash_if.h                   This file contains definitions for FLASH Interface functionalities.
   - LoRaWAN_End_Node_DualCoreFreeRTOS/CM4/Core/Inc/FreeRTOSConfig.h             !!! No description found !!!
+  - LoRaWAN_End_Node_DualCoreFreeRTOS/CM4/Core/Inc/gpio.h                       This file contains all the function prototypes for
+                                                                                the gpio.c file
   - LoRaWAN_End_Node_DualCoreFreeRTOS/CM4/Core/Inc/ipcc.h                       This file contains all the function prototypes for
                                                                                 the ipcc.c file
   - LoRaWAN_End_Node_DualCoreFreeRTOS/CM4/Core/Inc/ipcc_if.h                    This file contains the interface of the ipcc driver on CM4.
@@ -142,6 +145,8 @@ Applications, SubGHz_Phy, LoRaWAN, End_Node, DualCore, FreeRTOS
   - LoRaWAN_End_Node_DualCoreFreeRTOS/Common/System/sys_debug.h                 Configuration of the debug.c instances
 
   - LoRaWAN_End_Node_DualCoreFreeRTOS/CM0PLUS/Core/Src/ca_low_level.c           This file contains the low level implementations of the Cryptographic API (CA) module.
+  - LoRaWAN_End_Node_DualCoreFreeRTOS/CM0PLUS/Core/Src/gpio.c                   This file provides code for the configuration
+                                                                                of all used GPIO pins.
   - LoRaWAN_End_Node_DualCoreFreeRTOS/CM0PLUS/Core/Src/ipcc.c                   This file provides code for the configuration
                                                                                 of the IPCC instances.
   - LoRaWAN_End_Node_DualCoreFreeRTOS/CM0PLUS/Core/Src/ipcc_if.c                Interface to IPCC: handles IRQs and abstract application from Ipcc handler and channel direction
@@ -181,13 +186,16 @@ Applications, SubGHz_Phy, LoRaWAN, End_Node, DualCore, FreeRTOS
   - LoRaWAN_End_Node_DualCoreFreeRTOS/CM4/Core/Src/app_freertos.c               !!! No description found !!!
   - LoRaWAN_End_Node_DualCoreFreeRTOS/CM4/Core/Src/dma.c                        This file provides code for the configuration
                                                                                 of all the requested memory to memory DMA transfers.
+  - LoRaWAN_End_Node_DualCoreFreeRTOS/CM4/Core/Src/flash_if.c                   This file provides set of firmware functions to manage Flash
+                                                                                Interface functionalities.
+  - LoRaWAN_End_Node_DualCoreFreeRTOS/CM4/Core/Src/gpio.c                       This file provides code for the configuration
+                                                                                of all used GPIO pins.
   - LoRaWAN_End_Node_DualCoreFreeRTOS/CM4/Core/Src/ipcc.c                       This file provides code for the configuration
                                                                                 of the IPCC instances.
   - LoRaWAN_End_Node_DualCoreFreeRTOS/CM4/Core/Src/ipcc_if.c                    Interface to IPCC: handles IRQs and abstract application from Ipcc handler and channel direction
   - LoRaWAN_End_Node_DualCoreFreeRTOS/CM4/Core/Src/main.c                       : Main program body
   - LoRaWAN_End_Node_DualCoreFreeRTOS/CM4/Core/Src/stm32wlxx_hal_msp.c          This file provides code for the MSP Initialization
                                                                                 and de-Initialization codes.
-  - LoRaWAN_End_Node_DualCoreFreeRTOS/CM4/Core/Src/stm32wlxx_hal_timebase_tim.c HAL time base based on the hardware TIM.
   - LoRaWAN_End_Node_DualCoreFreeRTOS/CM4/Core/Src/stm32wlxx_it.c               Interrupt Service Routines.
   - LoRaWAN_End_Node_DualCoreFreeRTOS/CM4/Core/Src/stm32_lpm_if.c               Low layer function to enter/exit low power modes (stop, sleep)
   - LoRaWAN_End_Node_DualCoreFreeRTOS/CM4/Core/Src/sys_app.c                    Initializes HW and SW system entities (not related to the radio)
@@ -209,7 +217,7 @@ Applications, SubGHz_Phy, LoRaWAN, End_Node, DualCore, FreeRTOS
   - LoRaWAN_End_Node_DualCoreFreeRTOS/CM4/MbMux/radio_mbwrapper.c               This file implements the CM4 side wrapper of the Radio interface
                                                                                 shared between M0 and M4.
   - LoRaWAN_End_Node_DualCoreFreeRTOS/Common/System/system_stm32wlxx.c          CMSIS Cortex Device Peripheral Access Layer System Source File
-  - LoRaWAN_End_Node_DualCoreFreeRTOS/Common/System/sys_debug.c                 Enables 4 debug pins for internal signals RealTime debugging
+  - LoRaWAN_End_Node_DualCoreFreeRTOS/Common/System/sys_debug.c                 Configure probes pins RealTime debugging and JTAG/SerialWires for LowPower
   - LoRaWAN_End_Node_DualCoreFreeRTOS/STM32CubeIDE/CM0PLUS/Application/User/Core/syscalls.cSTM32CubeIDE Minimal System calls file
   - LoRaWAN_End_Node_DualCoreFreeRTOS/STM32CubeIDE/CM0PLUS/Application/User/Core/sysmem.cSTM32CubeIDE System Memory calls file
   - LoRaWAN_End_Node_DualCoreFreeRTOS/STM32CubeIDE/CM4/Application/User/Core/syscalls.cSTM32CubeIDE Minimal System calls file
@@ -269,6 +277,23 @@ In order to make the program work, you must do the following :
          (CM0PLUS is in a while loop waiting CM4 to give green light to go further)
          (this is done to prevent CM0PLUS to execute too much code before attaching)
   - on CM4 execute MBMUXIF_SetCpusSynchroFlag(1); this will allow CM0PLUS to exit the while loop
+
+@par How to use MX to modify some RF middleware and application settings
+  This example is compatible (with some problems/limitations) with STM32CubeMX 
+  and the RF application and middleware configuration can be modified via GUI. Few warnings and guidelines:
+  - ioc file is provided in the project directory and can be opened with STM32CubeMX v6.5.0 or higher.
+  - warning: when regenerating with the provided ioc file, 
+    the IDE projects are regenerated and paths to HAL and MWs files from STM32Cube/Repository location are erroneously added; to avoid that, 
+    user shall uncheck the "Use Default Firmware Location" in the GUI "Project-Manager" panel
+    and shall replace "Firmware Relative Path" with the root directory of the STM32CubeWL firmware package  (e.g. C:\myDir\STM32Cube_FW_WL_V1.2.0\);
+    problem will be fixed in next STM32CubeMX version.
+  - .extSettings file allows to add to the generated IDE projects additional files not generated natively by MX (e.g. BSP files).
+  - when regenerating on existing code and existing linker files:
+    - STM32CubeMX updates the existing project content and preserves linker files.
+    - STM32CubeMX does not update the USER CODE sections (lines between /* USER CODE BEGIN Xxx */ and /* USER CODE END Xxx */).
+  - when regenerating after copying only the ioc file in an empty directory:
+    - STM32CubeMX generates default project files and default linker files. (Please check original linker file from project directory)
+    - it is up to the user to to fill the USER CODE sections with his application code.
 
  * <h3><center>&copy; COPYRIGHT STMicroelectronics</center></h3>
  */

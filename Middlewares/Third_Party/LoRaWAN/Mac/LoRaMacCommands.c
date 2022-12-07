@@ -28,16 +28,21 @@
  *
  * \author    Johannes Bruder ( STACKFORCE )
  */
-#include <stddef.h>
-
 #include "utilities.h"
 #include "LoRaMacCommands.h"
 #include "LoRaMacConfirmQueue.h"
+#include "LoRaMacVersion.h"
 
+#ifndef NUM_OF_MAC_COMMANDS
 /*!
  * Number of MAC Command slots
  */
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000300 ))
 #define NUM_OF_MAC_COMMANDS 15
+#elif (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+#define NUM_OF_MAC_COMMANDS 32
+#endif /* LORAMAC_VERSION */
+#endif
 
 /*!
  * Size of the CID field of MAC commands
@@ -88,7 +93,7 @@ static LoRaMacCommandsCtx_t CommandsCtx;
 /*!
  * \brief Determines if a MAC command slot is free
  *
- * \param[IN]     slot           - Slot to check
+ * \param [in]    slot           - Slot to check
  * \retval                       - Status of the operation
  */
 static bool IsSlotFree( const MacCommand_t* slot )
@@ -129,7 +134,7 @@ static MacCommand_t* MallocNewMacCommandSlot( void )
 /*!
  * \brief Free memory slot
  *
- * \param[IN]     slot           - Slot to free
+ * \param [in]    slot           - Slot to free
  *
  * \retval                       - Status of the operation
  */
@@ -150,7 +155,7 @@ static bool FreeMacCommandSlot( MacCommand_t* slot )
 /*!
  * \brief Initialize list
  *
- * \param[IN]     list           - List that shall be initialized
+ * \param [in]    list           - List that shall be initialized
  * \retval                       - Status of the operation
  */
 static bool LinkedListInit( MacCommandsList_t* list )
@@ -169,8 +174,8 @@ static bool LinkedListInit( MacCommandsList_t* list )
 /*!
  * \brief Add an element to the list
  *
- * \param[IN]     list           - List where the element shall be added.
- * \param[IN]     element        - Element to add
+ * \param [in]    list           - List where the element shall be added.
+ * \param [in]    element        - Element to add
  * \retval                       - Status of the operation
  */
 static bool LinkedListAdd( MacCommandsList_t* list, MacCommand_t* element )
@@ -204,8 +209,8 @@ static bool LinkedListAdd( MacCommandsList_t* list, MacCommand_t* element )
 /*!
  * \brief Return the previous element in the list.
  *
- * \param[IN]     list           - List
- * \param[IN]     element        - Element where the previous element shall be searched
+ * \param [in]    list           - List
+ * \param [in]    element        - Element where the previous element shall be searched
  * \retval                       - Status of the operation
  */
 static MacCommand_t* LinkedListGetPrevious( MacCommandsList_t* list, MacCommand_t* element )
@@ -240,8 +245,8 @@ static MacCommand_t* LinkedListGetPrevious( MacCommandsList_t* list, MacCommand_
 /*!
  * \brief Remove an element from the list
  *
- * \param[IN]     list           - List where the element shall be removed from.
- * \param[IN]     element        - Element to remove
+ * \param [in]    list           - List where the element shall be removed from.
+ * \param [in]    element        - Element to remove
  * \retval                       - Status of the operation
  */
 static bool LinkedListRemove( MacCommandsList_t* list, MacCommand_t* element )
@@ -276,7 +281,7 @@ static bool LinkedListRemove( MacCommandsList_t* list, MacCommand_t* element )
 /*
  * \brief Determines if a MAC command is sticky or not
  *
- * \param[IN]   cid                - MAC command identifier
+ * \param [in]  cid                - MAC command identifier
  *
  * \retval                     - Status of the operation
  */
@@ -288,6 +293,9 @@ static bool IsSticky( uint8_t cid )
         case MOTE_MAC_RX_PARAM_SETUP_ANS:
         case MOTE_MAC_RX_TIMING_SETUP_ANS:
         case MOTE_MAC_TX_PARAM_SETUP_ANS:
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+        case MOTE_MAC_PING_SLOT_CHANNEL_ANS:
+#endif /* LORAMAC_VERSION */
             return true;
         default:
             return false;

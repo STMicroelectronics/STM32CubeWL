@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -107,8 +106,8 @@ int8_t MBMUXIF_LoraInit(void)
 
   p_cm0plus_system_info = MBMUXIF_SystemGetFeatCapabInfoPtr(FEAT_INFO_SYSTEM_ID);
   /* abstract CM0 release version from RC (release candidate) and compare */
-  cm0_vers = p_cm0plus_system_info->Feat_Info_Feature_Version >> __APP_VERSION_SUB2_SHIFT;
-  if (cm0_vers < (__LAST_COMPATIBLE_CM0_RELEASE >> __APP_VERSION_SUB2_SHIFT))
+  cm0_vers = p_cm0plus_system_info->Feat_Info_Feature_Version >> APP_VERSION_SUB2_SHIFT;
+  if (cm0_vers < (LAST_COMPATIBLE_CM0_RELEASE >> APP_VERSION_SUB2_SHIFT))
   {
     ret = -4; /* version incompatibility */
   }
@@ -120,9 +119,14 @@ int8_t MBMUXIF_LoraInit(void)
   {
     ret = MBMUX_RegisterFeature(FEAT_INFO_LORAWAN_ID, MBMUX_NOTIF_ACK, MBMUXIF_IsrLoraNotifRcvCb, aLoraNotifAckBuff, sizeof(aLoraNotifAckBuff));
   }
+
   if (ret >= 0)
   {
     UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_MbLoRaNotifRcv), UTIL_SEQ_RFU, MBMUXIF_TaskLoraNotifRcv);
+  }
+
+  if (ret >= 0)
+  {
     ret = MBMUXIF_SystemSendCm0plusRegistrationCmd(FEAT_INFO_LORAWAN_ID);
     if (ret < 0)
     {
@@ -231,5 +235,3 @@ static void MBMUXIF_TaskLoraNotifRcv(void)
 /* USER CODE BEGIN PrFD */
 
 /* USER CODE END PrFD */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

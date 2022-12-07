@@ -1,7 +1,7 @@
 /*!
- * \file      systime.h
+ * \file      stm32_systime.h
  *
- * \brief     System time functions implementation.
+ * \brief     System time functions implementation
  *
  * \copyright Revised BSD License, see section \ref LICENSE.
  *
@@ -23,23 +23,22 @@
  * \author    MCD Application Team ( STMicroelectronics International )
  */
 /**
-******************************************************************************
-* @file    stm32_systime.h
-* @author  MCD Application Team
-* @brief   System time functions implementation
-******************************************************************************
-* @attention
-*
-* <h2><center>&copy; Copyright (c) 2019 STMicroelectronics. 
-* All rights reserved.</center></h2>
-*
-* This software component is licensed by ST under BSD 3-Clause license,
-* the "License"; You may not use this file except in compliance with the 
-* License. You may obtain a copy of the License at:
-*                        opensource.org/licenses/BSD-3-Clause
-*
-******************************************************************************
-*/
+  ******************************************************************************
+  * @file    stm32_systime.h
+  * @author  MCD Application Team
+  * @brief   System time functions implementation
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2019 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __STM32_SYS_TIME_H__
@@ -57,8 +56,8 @@ extern "C"
 /* Includes ------------------------------------------------------------------*/
 #include <stdint.h>
 #include "time.h"
-  
-  
+
+
 /* Exported constants --------------------------------------------------------*/
 /** @defgroup SYSTIME_exported_constants SYSTIME exported constants
   *  @{
@@ -110,7 +109,7 @@ extern "C"
 /**
   *  @}
   */
- 
+
 /* External Typedef --------------------------------------------------------*/
 
 /** @defgroup SYSTIME_exported_TypeDef SYSTIME exported Typedef
@@ -124,7 +123,7 @@ typedef struct SysTime_s
 uint32_t Seconds;
 int16_t SubSeconds;
 }SysTime_t;
-  
+
 /**
  * @brief SysTime driver definition
  */
@@ -140,7 +139,7 @@ typedef struct
 /**
   *  @}
   */
-  
+
 /* Exported macros -----------------------------------------------------------*/
 /* Exported variables ------------------------------------------------------------*/
 
@@ -208,7 +207,7 @@ SysTime_t SysTimeGetMcuTime( void );
 * Converts the given SysTime to the equivalent RTC value in milliseconds
 *
 * @param [IN] sysTime System time to be converted
-* 
+*
 * @retval timeMs The RTC converted time value in ms
 */
 uint32_t SysTimeToMs( SysTime_t sysTime );
@@ -217,7 +216,7 @@ uint32_t SysTimeToMs( SysTime_t sysTime );
 * Converts the given RTC value in milliseconds to the equivalent SysTime
 *
 * \param [IN] timeMs The RTC time value in ms to be converted
-* 
+*
 * \retval sysTime Converted system time
 */
 SysTime_t SysTimeFromMs( uint32_t timeMs );
@@ -250,6 +249,4 @@ void SysTimeLocalTime( const uint32_t timestamp, struct tm *localtime );
 }
 #endif
 
-#endif // __STM32_SYS_TIME_H__
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+#endif /* __STM32_SYS_TIME_H__ */

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Release Notes for LoRaWAN Middleware</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="_htmresc/mini-st_2020.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <link rel="icon" type="image/x-icon" href="_htmresc/favicon.png" />
+</head>
+<body>
+<div class="row">
+<div class="col-sm-12 col-lg-4">
+<center>
+<h1 id="release-notes-for">Release Notes for</h1>
+<h1 id="lorawan-middleware"><mark>LoRaWAN Middleware</mark></h1>
+<p>Copyright © 2020 STMicroelectronics<br />
+</p>
+<a href="https://www.st.com" class="logo"><img src="_htmresc/st_logo_2020.png" alt="ST logo" /></a>
+</center>
+<h1 id="purpose">Purpose</h1>
+<p>This Middleware provides the LoRaWAN Stack. This stack is based on the LoRaMac from Semtech/StackForce (see <a href="readme.md">readme.md</a>)</p>
+<p>This driver is composed of 5 directories:</p>
+<ul>
+<li>Utilities : It provides LoRaWAN utilities</li>
+<li>Mac : It provides LoRaWAN stack and regions algorithm</li>
+<li>LmHandler : It provides LoRaWAN stack interface to the upper layer</li>
+<li>Crypto : It manages LoRaWAN cryptographic, optionally interfacing the KMS</li>
+<li>Conf : Configuration template files</li>
+</ul>
+</div>
+<section id="update-history" class="col-sm-12 col-lg-8">
+<h1>Update History</h1>
+<div class="collapse">
+<input type="checkbox" id="collapse-section22" checked aria-hidden="true"> <label for="collapse-section22" aria-hidden="true"><strong>V2.4.0 / 14-Dec-2021</strong></label>
+<div>
+<h2 id="main-changes">Main Changes</h2>
+<ul>
+<li>Feature: Integration of LoRaWAN v1.0.4 from LoRa Mac Semtech/StackForce develop branch (31-May-2021 commits, version 4.5.2)</li>
+<li>Feature: NVM Context store/restore implementation with Flash usage and SRAM2 retention (required by Certification code)</li>
+<li>Feature: US915/CN470/AU915 HYBRID Frequency sub-band can be overloaded in lorawan_conf.h</li>
+<li>Fix: Negative sensor Temperature</li>
+<li>Fix: LmHandlerSend function returns an error when the App data is not sent because piggyback FOpts MAC commands is set as priority in the uplink payload</li>
+<li>Fix: FragDecoder fragment max size update to support upper DRs</li>
+<li>Licensing update: New way to declare licenses</li>
+<li>Release Notes update</li>
+</ul>
+<h2 id="known-limitations">Known limitations:</h2>
+<p>None</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section21" aria-hidden="true"> <label for="collapse-section21" aria-hidden="true"><strong>V2.3.0 / 8-May-2021</strong></label>
+<div>
+<h2 id="main-changes-1">Main Changes</h2>
+<ul>
+<li>Implements LoRa Mac from Semtech/StackForce develop branch (18-Jan-2021 commits, version 4.4.7)</li>
+<li>SecureElementDeleteDerivedKeys dynamic implementation in using KMS APIs</li>
+<li>Cleanup NVM key attributes with KMS default values definition</li>
+<li>Printable Keys (Root and derived) with KEY_EXTRACTABLE</li>
+<li>Remove GCCv9 compiler warnings</li>
+<li>Fix SetAppEUI/SetDevEUI functions</li>
+<li>Add LinkCheckReq and DeviceTimeReq support</li>
+<li>Fragmentation processing move to application layer</li>
+<li>Release Notes update</li>
+</ul>
+<h2 id="known-limitations-1">Known limitations:</h2>
+<p>None</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section20" aria-hidden="true"> <label for="collapse-section20" aria-hidden="true"><strong>V2.2.1 / 2-Oct-2020</strong></label>
+<div>
+<h2 id="main-changes-2">Main Changes</h2>
+<ul>
+<li>Multiple tools write to the same file’ if AES + LoRaWAN + option .c/.h</li>
+<li>Update file-license</li>
+<li>remove KMS init from LoRaWAN Middleware (move to application part)</li>
+<li>Update Key List usage with a reworked init part: set a static const + memcpy to prevent a Stop/Restart of LoRaMAC</li>
+<li>Release Notes update</li>
+</ul>
+<h2 id="known-limitations-2">Known limitations:</h2>
+<p>None</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section19" aria-hidden="true"> <label for="collapse-section19" aria-hidden="true"><strong>V2.2.0 / 4-Sept-2020</strong></label>
+<div>
+<h2 id="main-changes-3">Main Changes</h2>
+<ul>
+<li>Implements LoRa Mac from Semtech/StackForce develop branch (26-May-2020 commits, version 4.4.4)</li>
+<li>Fixed SetLoRaSymbNumTimeout. RX Continuous bug on ClassC</li>
+<li>revert AU915 regional parameters 1.0.3 errata feature</li>
+<li>Remove LoRaWAN 1.1 + MC Group[1..3] Keys</li>
+<li>Add missing ping_slot_nb_channels case to getPhy regions (hopping feature)</li>
+<li>RepeaterSupport feature set back</li>
+<li>LmHandlerSend error codes implementation</li>
+</ul>
+<h2 id="known-limitations-3">Known limitations:</h2>
+<p>None</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section18" aria-hidden="true"> <label for="collapse-section18" aria-hidden="true"><strong>V2.1.0 / 29-June-2020</strong></label>
+<div>
+<h2 id="main-changes-4">Main Changes</h2>
+<ul>
+<li>Moves the contents of folder Patterns/Advanced/ to LmHandler/</li>
+<li>Imports some features from Semtech/StackForce develop branch:
+<ul>
+<li>Remove repeater support. Will be removed from future Regional Parameters specifications.</li>
+<li>Add Ping_Slot channel freq to prevent the offset between the RU864 Beacon and Ping_Slot frequencies</li>
+<li>Update of TimeOnAir calculation</li>
+<li>Update of CryptoJoinAccept with fix of security vulnerabilities</li>
+<li>Fix uplink messages burst with ClassB usage</li>
+</ul></li>
+<li>New LmHandler services addition: Firmware Management and Data Distribution</li>
+<li>Fix some Keil-related issues</li>
+<li>Update files license and copyright year</li>
+</ul>
+<h2 id="known-limitations-4">Known limitations:</h2>
+<ul>
+<li>IN865 ClassB beacon reception</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section17" aria-hidden="true"> <label for="collapse-section17" aria-hidden="true"><strong>V2.0.1 / 02-April-2020</strong></label>
+<div>
+<h2 id="main-changes-5">Main Changes</h2>
+<ul>
+<li>readme.md update to version 4.4.3</li>
+</ul>
+<h2 id="known-limitations-5">Known limitations:</h2>
+<p>None</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section16" aria-hidden="true"> <label for="collapse-section16" aria-hidden="true"><strong>V2.0.0 / 06-March-2020</strong></label>
+<div>
+<h2 id="main-changes-6">Main Changes</h2>
+<ul>
+<li>Implements LoRa Mac from Semtech/StackForce develop branch (17-Dec-2019 commits, version 4.4.3)</li>
+<li>Patterns:
+<ul>
+<li>integration of Semtech LmHandler</li>
+<li>ST specific certif features factorization</li>
+<li>rearchitecture : removal of lora.c</li>
+<li>new services addition: compliance, clock sync, multicast &amp; fragmentation</li>
+</ul></li>
+<li>KMS integration done in Crypto &amp; LmHandler folders (mbed-crypto called)</li>
+</ul>
+<h2 id="known-limitations-6">Known limitations:</h2>
+<ul>
+<li>IN865 ClassB beacon reception</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section15" aria-hidden="true"> <label for="collapse-section15" aria-hidden="true"><strong>V1.2.4 / 28-Nov-2019</strong></label>
+<div>
+<h2 id="main-changes-7">Main Changes</h2>
+<ul>
+<li>Implements LoRa Mac from Semtech/StackForce develop branch (31-Oct-2019 commits, version 4.4.2)</li>
+<li>Patterns/basic and Patterns/modem directory structure change</li>
+<li>update files license</li>
+<li>certification obtained with LoRAWAN version v1.0.2 in the following regions:
+<ul>
+<li>EU868</li>
+<li>IN865</li>
+<li>KR920</li>
+<li>AS923</li>
+<li>US915</li>
+</ul></li>
+</ul>
+<h2 id="known-limitations-7">Known limitations:</h2>
+<p>None</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section14" aria-hidden="true"> <label for="collapse-section14" aria-hidden="true"><strong>V1.2.3 / 20-Sept-2019</strong></label>
+<div>
+<h2 id="main-changes-8">Main Changes</h2>
+<ul>
+<li>Implements LoRa Mac from Semtech/StackForce develop branch (17-Jun-2019 commits, 4.4.2 release candidate) <a href="https://github.com/Lora-net/LoRaMac-node/tree/6231a5d65806142a6f887e6183227b8da9e49238">https://github.com/Lora-net/LoRaMac-node/tree/6231a5d65806142a6f887e6183227b8da9e49238</a></li>
+<li>Various bug fixes and enhancements</li>
+<li>Removed inclusions of radio.h, utilities.h, etc. from loraMac.h API</li>
+<li>Lora.c/h and lora-test.c/h moved from Certifications/ to Patterns/Basic</li>
+</ul>
+<h2 id="known-limitations-8">Known limitations:</h2>
+<p>None</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section13" aria-hidden="true"> <label for="collapse-section13" aria-hidden="true"><strong>V1.2.2 / 17-June-2019</strong></label>
+<div>
+<h2 id="main-changes-9">Main Changes</h2>
+<ul>
+<li>Trace logging &amp; LoRa Mac version display updates</li>
+<li>Some function prototypes added</li>
+</ul>
+<h2 id="known-limitations-9">Known limitations:</h2>
+<p>None</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section12" aria-hidden="true"> <label for="collapse-section12" aria-hidden="true"><strong>V1.2.1 / 13-December-2018</strong></label>
+<div>
+<h2 id="main-changes-10">Main Changes</h2>
+<ul>
+<li>implements LoRa Mac 4.4.2-rc.5 from Semtech/StackForce develop branch</li>
+</ul>
+<h2 id="known-limitations-10">Known limitations:</h2>
+<p>None</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section11" aria-hidden="true"> <label for="collapse-section11" aria-hidden="true"><strong>V1.2.0 / 10-July-2018</strong></label>
+<div>
+<h2 id="main-changes-11">Main Changes</h2>
+<ul>
+<li>Implements LoRa Mac 4.4.2-rc.1 from Semtech/StackForce develop branch</li>
+<li>Supports Class B</li>
+<li>Features secure element API</li>
+<li>Added RU864 region</li>
+<li>Removed US915-Hybrid</li>
+</ul>
+<h2 id="known-limitations-11">Known limitations:</h2>
+<p>None</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section10" aria-hidden="true"> <label for="collapse-section10" aria-hidden="true"><strong>V1.1.5 / 30-March-2018</strong></label>
+<div>
+<h2 id="main-changes-12">Main Changes</h2>
+<ul>
+<li>Implements LoRa Mac 4.4.1 from Semtech/StackForce</li>
+</ul>
+<h2 id="known-limitations-12">Known limitations:</h2>
+<p>None</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section9" aria-hidden="true"> <label for="collapse-section9" aria-hidden="true"><strong>V1.1.4 / 08-January-2018</strong></label>
+<div>
+<h2 id="main-changes-13">Main Changes</h2>
+<ul>
+<li>Bug fix in McpsIndication related to downlink Application data buffer</li>
+</ul>
+<h2 id="known-limitations-13">Known limitations:</h2>
+<p>None</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section8" aria-hidden="true"> <label for="collapse-section8" aria-hidden="true"><strong>V1.1.3 / 20-December-2017</strong></label>
+<div>
+<h2 id="main-changes-14">Main Changes</h2>
+<ul>
+<li>Implements LoRa Mac from Semtech/StackForce develop branch (10-Oct-2017 commits, 4.4.1 release candidate) <a href="https://github.com/Lora-net/LoRaMac-node/tree/ae0c9cc5d53ebbc11437dfe9711a1c3a1114dc5f">https://github.com/Lora-net/LoRaMac-node/tree/ae0c9cc5d53ebbc11437dfe9711a1c3a1114dc5f</a></li>
+<li>Merge pull request #302 from nestorayuso/patch-3</li>
+</ul>
+<h2 id="known-limitations-14">Known limitations:</h2>
+<p>None</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section7" aria-hidden="true"> <label for="collapse-section7" aria-hidden="true"><strong>V1.1.2 / 08-September-2017</strong></label>
+<div>
+<h2 id="main-changes-15">Main Changes</h2>
+<ul>
+<li>Implements LoRa Mac 4.4.0 release from Semtech/StackForce <a href="https://github.com/Lora-net/LoRaMac-node/tree/f42be67be402a40b3586724800771bfe13fb18e6">https://github.com/Lora-net/LoRaMac-node/tree/f42be67be402a40b3586724800771bfe13fb18e6</a></li>
+<li>AckTimeoutRetriesCounter must be reset every time a new request (unconfirmed or confirmed) is performed.</li>
+<li>Added verification for the power parameter in order to check that it is greater or equal to 0.</li>
+<li>Enhancement for regions without FSK modulation support.</li>
+<li>Bug fix for RX window 2 in class c mode.</li>
+<li>AdrAckReq bit must be set to false as soon as we reach the lowest datarate.</li>
+<li>MacCommandsBufferIndex must be reset when the mac commands are being sent on port 0.</li>
+<li>Fixed RegionCommonSetBandTxDone in order to also update band-&gt;LastTxDoneTime when performing the Join procedure.</li>
+<li>Added verification of payload size for Unconfirmed and Confirmed messages depending on Dwell time.</li>
+<li>Added missing Rx1 timeout handling.</li>
+<li>Updated all regions to use MAX output power by default.</li>
+<li>Merge remote-tracking branch ‘origin/develop’ into develop</li>
+<li>Bug fix in KR920 - update the maxEIRP calculation for continuous wave</li>
+<li>Bug fix in IN865 - Update the band of the default channels</li>
+<li>Bug fix in AS923 - for RX use always the payload limitation of dwell 0</li>
+<li>Update function RegionCommonChanVerifyDr. Perform an ‘AND’ operation for security</li>
+<li>Move the verification of ADR parameters into the common section. Update all regions with the related changes</li>
+<li>Update comment for function RegionLinkAdrReq</li>
+<li>Apply variables to data structure LinkAdrReqParams_t</li>
+<li>Bug fix for KR920</li>
+<li>Rename data structure LinkAdrParams_t</li>
+<li>Issue(#238): Apply missing variable in sSetBandTxDoneParams</li>
+<li>Bug fix in processing MAC commands for case SRV_MAC_TX_PARAM_SETUP_REQ.</li>
+<li>Isse(#238): Apply missing variable in struct sBand</li>
+<li>Update the MAC to enable the server to control the Channels Mask and the number of transmissions even ADR is off</li>
+<li>Issue(#238): Update the backoff procedure for all regions. Move code parts into the common section</li>
+<li>Update implementation to allow automatic MAC answers on port 0</li>
+<li>Issue(#253): Delete all preconfigured channels when performing a join request</li>
+<li>Initialize variable phyParam in functions RegionXXGetPhyParam</li>
+<li>Remove assert_param from the radio drivers</li>
+<li>Synchronize function RegionXXTxConfig</li>
+<li>Update carrier sense functionality for LBT</li>
+<li>Issue(#259): Update comment for variable HasLoopedThroughMain</li>
+<li>Issue(#257): Fix typo in OnRxWindow2TimerEvent</li>
+<li>Change scientific notation to numeric notation</li>
+<li>Merge pull request #260 from clmklk/AU915</li>
+<li>AU915: update Datarate limits according to LoRaWan 1.0.2rB</li>
+<li>AU915: update Downstream datarate table according to LoRaWan 1.0.2rB</li>
+<li>Merge pull request #225 from OpenChirp/patch_1</li>
+</ul>
+<h2 id="known-limitations-15">Known limitations:</h2>
+<p>None</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section6" aria-hidden="true"> <label for="collapse-section6" aria-hidden="true"><strong>V1.1.1 / 01-June-2017</strong></label>
+<div>
+<h2 id="main-changes-16">Main Changes</h2>
+<ul>
+<li>Implements LoRa Mac from Semtech/StackForce develop branch (30-May-2017 commits, 4.4.0 release candidate) <a href="https://github.com/Lora-net/LoRaMac-node/tree/e2f35db75c1b449379d3b520c2d4e5922a9f5c81">https://github.com/Lora-net/LoRaMac-node/tree/e2f35db75c1b449379d3b520c2d4e5922a9f5c81</a></li>
+<li>Issue(235): Update functions RegionXXNextChannel.</li>
+<li>Issue(238): Update initialization value of nextTxDelay.</li>
+<li>Issue(234): Report back the aggregated time off.</li>
+<li>Issue(232): Relocate function call to CalculateBackOff.</li>
+<li>Issue(239): Update band TX power to the maximum.</li>
+<li>Update LimitTxPower for US915.</li>
+<li>Bug fix in function RegionCN470Verify.</li>
+<li>Bug fix in function RegionAU915Verify.</li>
+<li>Issue(229): Fix issue when receiving frames in second RX2 in Class C.</li>
+<li>Add a ommand to get the next lower datarate.</li>
+<li>Group initializations</li>
+<li>Update regional definitions of KR920.</li>
+<li>Update regional definitions of EU868.</li>
+<li>Issue(239): Update regional definitions of AU915.</li>
+<li>Update regional definitions of AU915.</li>
+<li>Update regional definitions of AS923.</li>
+<li>Update TX power computations.</li>
+<li>Remove duplicated call to ApplyDrOffset in function RegionRxConfig.</li>
+<li>Relocate the datarate, up- and downlink dwell time into a structure.</li>
+<li>Change API of RegionGetPhyParam and the related functions.</li>
+<li>Bug fix in function LoRaMacQueryTxPossible.</li>
+<li>Apply patch for dwell time and minimum datarate.</li>
+<li>Change the default datarate to DR_2 for AS923.</li>
+<li>Take dwell time for ADR calculations and datarate settings into account.</li>
+<li>Update LoRaMacQueryTxPossible to reset the MAC commands buffer.</li>
+<li>Issue(#221): Add the dwell time in function ValidatePayloadLength.</li>
+<li>Increase the transmission and reception timeout for KR920.</li>
+<li>Bug fix in functions OnRxWindowXTimerEvent.</li>
+<li>Remove datarate assignment.</li>
+<li>Setup the downlink and uplink dwell time default value to 1.</li>
+<li>Add frequency range check for AS923</li>
+<li>Issue(#221): Bug fix in max payload size calculation.</li>
+<li>GitHub reported issues corrections.</li>
+<li>Changed the AdrAckCounter handling as expected by the test houses.</li>
+<li>Fix an issue where the node stopped transmitting.</li>
+<li>Removed useless LoRaMacPayload buffer.</li>
+<li>MAC layer indications handling simplification.</li>
+<li>Relocate parameter settings from ResetMacParameters to the initialization.</li>
+</ul>
+<h2 id="known-limitations-16">Known limitations:</h2>
+<p>None</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section5" aria-hidden="true"> <label for="collapse-section5" aria-hidden="true"><strong>V1.1.0 / 27-February-2017</strong></label>
+<div>
+<h2 id="main-changes-17">Main Changes</h2>
+<ul>
+<li>Implements LoRa Mac 4.4.0 from Semtech/StackForce from the develop branchr</li>
+</ul>
+<h2 id="known-limitations-17">Known limitations:</h2>
+<p>None</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section4" aria-hidden="true"> <label for="collapse-section4" aria-hidden="true"><strong>V1.0.3 / 01-January-2017</strong></label>
+<div>
+<h2 id="main-changes-18">Main Changes</h2>
+<ul>
+<li>Read date between 2 successive read time to make sure date is ok</li>
+</ul>
+<h2 id="known-limitations-18">Known limitations:</h2>
+<p>None</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section3" aria-hidden="true"> <label for="collapse-section3" aria-hidden="true"><strong>V1.0.2 / 15-November-2016</strong></label>
+<div>
+<h2 id="main-changes-19">Main Changes</h2>
+<ul>
+<li>Corrected 1 bug in LoRaMac-board.h: RX_WND_2_CHANNEL for EU is now back at DR_0</li>
+<li>Corrected 1 bug in LoRaMac.c for dataRate adaptation</li>
+</ul>
+<h2 id="known-limitations-19">Known limitations:</h2>
+<p>None</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section2" aria-hidden="true"> <label for="collapse-section2" aria-hidden="true"><strong>V1.0.1 / 15-September-2016</strong></label>
+<div>
+<h2 id="main-changes-20">Main Changes</h2>
+<ul>
+<li>Implements LoRa Mac 4.3.0 from Semtech/StackForce</li>
+</ul>
+<h2 id="known-limitations-20">Known limitations:</h2>
+<p>None</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section1" aria-hidden="true"> <label for="collapse-section1" aria-hidden="true"><strong>V1.0.0 / 01-July-2016</strong></label>
+<div>
+<h2 id="main-changes-21">Main Changes</h2>
+<ul>
+<li>First V1.0.0 customized version for STM32Cube solution.</li>
+<li>Commissioning_template.h in /Conf contains all Lora Ids to connect on LoRa network
+<ul>
+<li>It is provided as a template. It must be moved to /Projects/inc/ as Commissioning.h</li>
+</ul></li>
+<li>All files in Conf/src are provided as template and must be copied in /Projects/src.</li>
+<li>All files in Conf/inc are provided as template and must be copied in /Projects/inc.
+<ul>
+<li>#if 0 and #endif must be removed to enable the template in the user directory</li>
+</ul></li>
+<li>Implements LoRa Mac 4.2.0 from Semtech/StackForce
+<ul>
+<li>.c : replace floating exponent e3 and e6 by int number</li>
+<li>.c : cast uint32_t</li>
+</ul></li>
+<li>Modified intensively timeServer.c</li>
+<li>new low layer interfacing Cube HAL (hw_rtc.c, hw_gpio.c and hw_spi.c)</li>
+<li>added lora.c as an interface layer to ease product integration</li>
+</ul>
+<h2 id="known-limitations-21">Known limitations:</h2>
+<p>None</p>
+</div>
+</div>
+</section>
+</div>
+<footer class="sticky">
+<div class="columns">
+<div class="column" style="width:95%;">
+<p>For complete documentation on STM32WLxx, visit: <a href="http://www.st.com/stm32wl">www.st.com/stm32wl</a></p>
+<p><em>This release note uses up to date web standards and, for this reason, should not be opened with Internet Explorer but preferably with popular browsers such as Google Chrome, Mozilla Firefox, Opera or Microsoft Edge.</em></p>
+</div><div class="column" style="width:5%;">
+<p><abbr title="Based on template cx566953 version 2.0">Info</abbr></p>
+</div>
+</div>
+</footer>
+</body>
+</html>

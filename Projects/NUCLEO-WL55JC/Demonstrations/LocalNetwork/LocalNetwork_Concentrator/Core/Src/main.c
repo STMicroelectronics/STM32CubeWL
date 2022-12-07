@@ -6,18 +6,18 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
+#include "gpio.h"
 #include "platform.h"
 #include "stm32_seq.h"
 #include "demo_command.h"
@@ -95,17 +95,9 @@ int main(void)
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
+  MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
   SystemApp_Init();
-
-  /*Init LEDs*/
-  BSP_LED_Init(LED_RED);
-  BSP_LED_Off(LED_RED);
-  BSP_LED_Init(LED_GREEN);
-  BSP_LED_Off(LED_GREEN);
-  BSP_LED_Init(LED_BLUE);
-  BSP_LED_Off(LED_BLUE);
-
 
   /************************************************
    *
@@ -153,9 +145,11 @@ void SystemClock_Config(void)
   */
   HAL_PWR_EnableBkUpAccess();
   __HAL_RCC_LSEDRIVE_CONFIG(RCC_LSEDRIVE_LOW);
+
   /** Configure the main internal regulator output voltage
   */
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+
   /** Initializes the CPU, AHB and APB busses clocks
   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSE|RCC_OSCILLATORTYPE_MSI;
@@ -168,6 +162,7 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+
   /** Configure the SYSCLKSource, HCLK, PCLK1 and PCLK2 clocks dividers
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK3|RCC_CLOCKTYPE_HCLK
@@ -226,7 +221,6 @@ void assert_failed(uint8_t *file, uint32_t line)
 
 /* Private  functions ---------------------------------------------------------*/
 
-
 /* USER CODE BEGIN 4 */
 /**
  * @brief Wrapper to start CMD task.
@@ -236,5 +230,3 @@ static void launch_CMD_task(void)
   UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_Vcom), CFG_SEQ_Prio_0);
 }
 /* USER CODE END 4 */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

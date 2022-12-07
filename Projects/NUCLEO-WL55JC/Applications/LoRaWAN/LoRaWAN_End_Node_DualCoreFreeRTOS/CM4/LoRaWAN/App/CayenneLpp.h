@@ -67,25 +67,25 @@ uint8_t CayenneLppAddDigitalInput(uint8_t channel, uint8_t value);
 
 uint8_t CayenneLppAddDigitalOutput(uint8_t channel, uint8_t value);
 
-uint8_t CayenneLppAddAnalogInput(uint8_t channel, uint16_t value);
+uint8_t CayenneLppAddAnalogInput( uint8_t channel, float value );
 
-uint8_t CayenneLppAddAnalogOutput(uint8_t channel, uint16_t value);
+uint8_t CayenneLppAddAnalogOutput( uint8_t channel, float value );
 
 uint8_t CayenneLppAddLuminosity(uint8_t channel, uint16_t lux);
 
 uint8_t CayenneLppAddPresence(uint8_t channel, uint8_t value);
 
-uint8_t CayenneLppAddTemperature(uint8_t channel, int16_t celsius);
+uint8_t CayenneLppAddTemperature( uint8_t channel, float celsius );
 
-uint8_t CayenneLppAddRelativeHumidity(uint8_t channel, uint16_t rh);
+uint8_t CayenneLppAddRelativeHumidity( uint8_t channel, float rh );
 
-uint8_t CayenneLppAddAccelerometer(uint8_t channel, int16_t x, int16_t y, int16_t z);
+uint8_t CayenneLppAddAccelerometer( uint8_t channel, float x, float y, float z );
 
-uint8_t CayenneLppAddBarometricPressure(uint8_t channel, uint16_t hpa);
+uint8_t CayenneLppAddBarometricPressure( uint8_t channel, float hpa );
 
-uint8_t CayenneLppAddGyrometer(uint8_t channel, int16_t x, int16_t y, int16_t z);
+uint8_t CayenneLppAddGyrometer( uint8_t channel, float x, float y, float z );
 
-uint8_t CayenneLppAddGps(uint8_t channel, int32_t latitude, int32_t longitude, int32_t meters);
+uint8_t CayenneLppAddGps( uint8_t channel, float latitude, float longitude, float meters );
 
 /* USER CODE BEGIN EFP */
 

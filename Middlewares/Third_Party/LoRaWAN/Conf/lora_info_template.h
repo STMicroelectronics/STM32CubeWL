@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    lora_info_template.h
@@ -6,16 +7,17 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
+
 #ifndef __LORA_INFO_H__
 #define __LORA_INFO_H__
 
@@ -68,15 +70,12 @@ typedef struct
 
 /* Exported functions ------------------------------------------------------- */
 /**
-  * @brief initialises the LoraInfo table
-  * @param none
-  * @retval  none
+  * @brief initialize the LoraInfo table
   */
 void LoraInfo_Init(void);
 
 /**
   * @brief returns the pointer to the LoraInfo capabilities table
-  * @param none
   * @retval LoraInfo pointer
   */
 LoraInfo_t *LoraInfo_GetPtr(void);
@@ -90,5 +89,3 @@ LoraInfo_t *LoraInfo_GetPtr(void);
 #endif
 
 #endif /* __LORA_INFO_H__ */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

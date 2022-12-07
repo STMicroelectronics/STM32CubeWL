@@ -6,15 +6,14 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2020(-2021) STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
- ******************************************************************************
+  ******************************************************************************
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
@@ -25,33 +24,31 @@
 #ifdef __cplusplus
  extern "C" {
 #endif
-   
+
 /* Includes ------------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 
-#define __LORAWAN_VERSION_MAIN   (0x02U) /*!< [31:24] main version */
-#define __LORAWAN_VERSION_SUB1   (0x03U) /*!< [23:16] sub1 version */
-#define __LORAWAN_VERSION_SUB2   (0x00U) /*!< [15:8]  sub2 version */
-#define __LORAWAN_VERSION_RC     (0x00U) /*!< [7:0]  release candidate */
+#define LORAWAN_VERSION_MAIN   (0x02U) /*!< [31:24] main version */
+#define LORAWAN_VERSION_SUB1   (0x04U) /*!< [23:16] sub1 version */
+#define LORAWAN_VERSION_SUB2   (0x00U) /*!< [15:8]  sub2 version */
+#define LORAWAN_VERSION_RC     (0x00U) /*!< [7:0]  release candidate */
 
-#define __LORAWAN_MAIN_SHIFT     24
-#define __LORAWAN_SUB1_SHIFT     16
-#define __LORAWAN_SUB2_SHIFT     8
-#define __LORAWAN_RC_SHIFT       0
+#define LORAWAN_MAIN_SHIFT     24
+#define LORAWAN_SUB1_SHIFT     16
+#define LORAWAN_SUB2_SHIFT     8
+#define LORAWAN_RC_SHIFT       0
 
 /* Exported types ------------------------------------------------------------*/
 /* External variables --------------------------------------------------------*/
 /* Exported macros -----------------------------------------------------------*/
-#define __LORAWAN_VERSION        ((__LORAWAN_VERSION_MAIN  <<__LORAWAN_MAIN_SHIFT)  \
-                                  |(__LORAWAN_VERSION_SUB1 << __LORAWAN_SUB1_SHIFT) \
-                                  |(__LORAWAN_VERSION_SUB2 << __LORAWAN_SUB2_SHIFT )\
-                                  |(__LORAWAN_VERSION_RC   << __LORAWAN_RC_SHIFT))
-/* Exported functions ------------------------------------------------------- */ 
+#define LORAWAN_VERSION        ((LORAWAN_VERSION_MAIN  << LORAWAN_MAIN_SHIFT)\
+                                |(LORAWAN_VERSION_SUB1 << LORAWAN_SUB1_SHIFT)\
+                                |(LORAWAN_VERSION_SUB2 << LORAWAN_SUB2_SHIFT)\
+                                |(LORAWAN_VERSION_RC   << LORAWAN_RC_SHIFT))
+/* Exported functions ------------------------------------------------------- */
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /*__LORAWAN_VERSION_H__*/
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

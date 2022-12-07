@@ -278,6 +278,26 @@
 			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCN470.c</locationURI>
 		</link>
 		<link>
+			<name>Middlewares/LoRaWAN/RegionCN470A20.c</name>
+			<type>1</type>
+			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCN470A20.c</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/LoRaWAN/RegionCN470A26.c</name>
+			<type>1</type>
+			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCN470A26.c</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/LoRaWAN/RegionCN470B20.c</name>
+			<type>1</type>
+			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCN470B20.c</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/LoRaWAN/RegionCN470B26.c</name>
+			<type>1</type>
+			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCN470B26.c</locationURI>
+		</link>
+		<link>
 			<name>Middlewares/LoRaWAN/RegionCN779.c</name>
 			<type>1</type>
 			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCN779.c</locationURI>
@@ -366,6 +386,16 @@
 			<name>Application/User/Core/dma.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/dma.c</locationURI>
+		</link>
+		<link>
+			<name>Application/User/Core/flash_if.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/flash_if.c</locationURI>
+		</link>
+		<link>
+			<name>Application/User/Core/gpio.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/gpio.c</locationURI>
 		</link>
 		<link>
 			<name>Application/User/Core/main.c</name>

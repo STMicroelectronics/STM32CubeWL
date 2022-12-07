@@ -138,7 +138,7 @@
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>BIN\UL2V8M.DLL</Flash2>
-          <Flash3></Flash3>
+          <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -352,7 +352,7 @@
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
             <useXO>0</useXO>
-            <ClangAsOpt>4</ClangAsOpt>
+            <ClangAsOpt>1</ClangAsOpt>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
@@ -407,6 +407,16 @@
               <FileName>dma.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/dma.c</FilePath>
+            </File>
+            <File>
+              <FileName>gpio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\gpio.c</FilePath>
+            </File>
+            <File>
+              <FileName>flash_if.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\flash_if.c</FilePath>
             </File>
             <File>
               <FileName>stm32_lpm_if.c</FileName>
@@ -707,6 +717,26 @@
               <FileName>RegionCN470.c</FileName>
               <FileType>1</FileType>
               <FilePath>../../../../../../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCN470.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionCN470A20.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCN470A20.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionCN470A26.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCN470A26.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionCN470B20.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCN470B20.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionCN470B26.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCN470B26.c</FilePath>
             </File>
             <File>
               <FileName>RegionCN779.c</FileName>

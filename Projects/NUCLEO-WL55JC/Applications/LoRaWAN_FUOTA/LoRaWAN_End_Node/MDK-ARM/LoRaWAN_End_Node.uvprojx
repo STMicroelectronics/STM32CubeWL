@@ -409,6 +409,11 @@
               <FilePath>../Core/Src/dma.c</FilePath>
             </File>
             <File>
+              <FileName>gpio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\gpio.c</FilePath>
+            </File>
+            <File>
               <FileName>stm32_lpm_if.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/stm32_lpm_if.c</FilePath>
@@ -717,6 +722,26 @@
               <FileName>RegionCN470.c</FileName>
               <FileType>1</FileType>
               <FilePath>../../../../../../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCN470.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionCN470A20.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCN470A20.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionCN470A26.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCN470A26.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionCN470B20.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCN470B20.c</FilePath>
+            </File>
+            <File>
+              <FileName>RegionCN470B26.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCN470B26.c</FilePath>
             </File>
             <File>
               <FileName>RegionCN779.c</FileName>

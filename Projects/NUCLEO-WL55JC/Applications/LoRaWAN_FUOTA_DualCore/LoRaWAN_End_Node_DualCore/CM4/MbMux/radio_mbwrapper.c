@@ -8,13 +8,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -700,7 +699,7 @@ static void RadioWrite(uint16_t addr, uint8_t data)
   /* USER CODE BEGIN RadioWrite_1 */
 
   /* USER CODE END RadioWrite_1 */
-  return ;
+  return;
   /* USER CODE BEGIN RadioWrite_2 */
 
   /* USER CODE END RadioWrite_2 */
@@ -722,7 +721,7 @@ static void RadioWriteRegisters(uint16_t addr, uint8_t *buffer, uint8_t size)
   /* USER CODE BEGIN RadioWriteRegisters_1 */
 
   /* USER CODE END RadioWriteRegisters_1 */
-  return ;
+  return;
   /* USER CODE BEGIN RadioWriteRegisters_2 */
 
   /* USER CODE END RadioWriteRegisters_2 */
@@ -733,7 +732,7 @@ static void RadioReadRegisters(uint16_t addr, uint8_t *buffer, uint8_t size)
   /* USER CODE BEGIN RadioReadRegisters_1 */
 
   /* USER CODE END RadioReadRegisters_1 */
-  return ;
+  return;
   /* USER CODE BEGIN RadioReadRegisters_2 */
 
   /* USER CODE END RadioReadRegisters_2 */
@@ -744,7 +743,7 @@ static void RadioSetMaxPayloadLength(RadioModems_t modem, uint8_t max)
   /* USER CODE BEGIN RadioSetMaxPayloadLength_1 */
 
   /* USER CODE END RadioSetMaxPayloadLength_1 */
-  return ;
+  return;
   /* USER CODE BEGIN RadioSetMaxPayloadLength_2 */
 
   /* USER CODE END RadioSetMaxPayloadLength_2 */
@@ -755,7 +754,7 @@ static void RadioSetPublicNetwork(bool enable)
   /* USER CODE BEGIN RadioSetPublicNetwork_1 */
 
   /* USER CODE END RadioSetPublicNetwork_1 */
-  return ;
+  return;
   /* USER CODE BEGIN RadioSetPublicNetwork_2 */
 
   /* USER CODE END RadioSetPublicNetwork_2 */
@@ -788,7 +787,7 @@ static void RadioRxBoosted(uint32_t timeout)
   /* USER CODE BEGIN RadioRxBoosted_1 */
 
   /* USER CODE END RadioRxBoosted_1 */
-  return ;
+  return;
   /* USER CODE BEGIN RadioRxBoosted_2 */
 
   /* USER CODE END RadioRxBoosted_2 */
@@ -799,7 +798,7 @@ static void RadioSetRxDutyCycle(uint32_t rxTime, uint32_t sleepTime)
   /* USER CODE BEGIN RadioSetRxDutyCycle_1 */
 
   /* USER CODE END RadioSetRxDutyCycle_1 */
-  return ;
+  return;
   /* USER CODE BEGIN RadioSetRxDutyCycle_2 */
 
   /* USER CODE END RadioSetRxDutyCycle_2 */
@@ -810,7 +809,7 @@ static void RadioTxPrbs(void)
   /* USER CODE BEGIN RadioTxPrbs_1 */
 
   /* USER CODE END RadioTxPrbs_1 */
-  return ;
+  return;
   /* USER CODE BEGIN RadioTxPrbs_2 */
 
   /* USER CODE END RadioTxPrbs_2 */
@@ -821,7 +820,7 @@ static void RadioTxCw(int8_t power)
   /* USER CODE BEGIN RadioTxCw_1 */
 
   /* USER CODE END RadioTxCw_1 */
-  return ;
+  return;
   /* USER CODE BEGIN RadioTxCw_2 */
 
   /* USER CODE END RadioTxCw_2 */
@@ -853,5 +852,3 @@ static int32_t RadioSetTxGenericConfig(GenericModems_t modem, TxConfigGeneric_t 
 /* USER CODE BEGIN PrFD */
 
 /* USER CODE END PrFD */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

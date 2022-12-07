@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -43,11 +42,6 @@ extern "C" {
 #define ACTIVE_REGION                               LORAMAC_REGION_EU868
 
 /*!
- * LoRaWAN default endNode class port
- */
-#define LORAWAN_DEFAULT_CLASS                       CLASS_A
-
-/*!
  * LoRaWAN Adaptive Data Rate
  * @note Please note that when ADR is enabled the end-device should be static
  */
@@ -63,15 +57,24 @@ extern "C" {
  * Default Unicast ping slots periodicity
  *
  * \remark periodicity is equal to 2^LORAWAN_DEFAULT_PING_SLOT_PERIODICITY seconds
- *         example: 2^3 = 8 seconds. The end-device will open an Rx slot every 8 seconds.
+ *         example: 2^4 = 16 seconds. The end-device will open an Rx slot every 16 seconds.
  */
 #define LORAWAN_DEFAULT_PING_SLOT_PERIODICITY       4
+
+/*!
+ * Default response timeout for class b and class c confirmed
+ * downlink frames in milli seconds.
+ *
+ * The value shall not be smaller than RETRANSMIT_TIMEOUT plus
+ * the maximum time on air.
+ */
+#define LORAWAN_DEFAULT_CLASS_B_C_RESP_TIMEOUT      8000
 
 /* USER CODE BEGIN EC */
 
 /* USER CODE END EC */
 
-/* Exported macro ------------------------------------------------------------*/
+/* Exported macros -----------------------------------------------------------*/
 /* USER CODE BEGIN EM */
 
 /* USER CODE END EM */
@@ -91,5 +94,3 @@ void LoRaWAN_Init(void);
 #endif
 
 #endif /*__LORA_APP_H__*/
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

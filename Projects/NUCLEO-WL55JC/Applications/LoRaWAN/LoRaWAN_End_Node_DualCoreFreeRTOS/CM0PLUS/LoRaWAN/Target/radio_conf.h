@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -46,16 +45,6 @@ extern "C" {
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
-/**
-  * @brief Set RX pin to high or low level
-  */
-#define DBG_GPIO_RADIO_RX(set_rst) PROBE_GPIO_##set_rst##_LINE(PROBE_LINE1_PORT, PROBE_LINE1_PIN);
-
-/**
-  * @brief Set TX pin to high or low level
-  */
-#define DBG_GPIO_RADIO_TX(set_rst) PROBE_GPIO_##set_rst##_LINE(PROBE_LINE2_PORT, PROBE_LINE2_PIN);
-
 /**
   * @brief Max payload buffer size
   */
@@ -113,6 +102,27 @@ extern "C" {
 #define DCDC_ENABLE                 ( 1UL )
 
 /* USER CODE BEGIN EC */
+/**
+  * @brief disable the Sigfox radio modulation
+  * @note enabled by default
+  */
+#define RADIO_SIGFOX_ENABLE 0
+
+/**
+  * @brief disable the radio generic features
+  * @note enabled by default
+  */
+#define RADIO_GENERIC_CONFIG_ENABLE 0
+
+/**
+  * @brief Set RX pin to high or low level
+  */
+#define DBG_GPIO_RADIO_RX(set_rst) PROBE_GPIO_##set_rst##_LINE(PROBE_LINE1_PORT, PROBE_LINE1_PIN);
+
+/**
+  * @brief Set TX pin to high or low level
+  */
+#define DBG_GPIO_RADIO_TX(set_rst) PROBE_GPIO_##set_rst##_LINE(PROBE_LINE2_PORT, PROBE_LINE2_PIN);
 
 /* USER CODE END EC */
 
@@ -170,5 +180,3 @@ extern "C" {
 #endif
 
 #endif /* __RADIO_CONF_H__*/
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

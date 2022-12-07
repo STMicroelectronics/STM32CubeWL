@@ -14,15 +14,16 @@
 ;*                      After Reset the Cortex-M0+ processor is in Thread mode,
 ;*                      priority is Privileged, and the Stack is set to Main.
 ;********************************************************************************
+;* @attention
 ;*
-;* Copyright (c) 2020(2021) STMicroelectronics.
+;* Copyright (c) 2020-2021 STMicroelectronics.
 ;* All rights reserved.
 ;*
 ;* This software is licensed under terms that can be found in the LICENSE file
 ;* in the root directory of this software component.
 ;* If no LICENSE file comes with this software, it is provided AS-IS.
 ;
-;*******************************************************************************
+;********************************************************************************
 ;
 ;
 ; The modules in this file are included in the libraries, and may be replaced
@@ -312,5 +313,3 @@ SUBGHZ_Radio_IRQHandler
         B SUBGHZ_Radio_IRQHandler
 
         END
-
-;************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE*****

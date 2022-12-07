@@ -52,11 +52,6 @@ In case of ciphering or deciphering issue, LED3 toggle each 200ms.
 The Plain data, encrypted data and decrypted data can be displayed on a PC
 HyperTerminal using the UART. USE_VCP_CONNECTION=1 must be added in command line.
 
-@par Keywords
-
-Security, Cryptography, CRYPT, AES, ECB, DMA, cipher, UART
-
-
 @note Care must be taken when using HAL_Delay(), this function provides accurate
       delay (in milliseconds) based on variable incremented in SysTick ISR. This
       implies that if HAL_Delay() is called from a peripheral ISR process, then
@@ -66,6 +61,10 @@ Security, Cryptography, CRYPT, AES, ECB, DMA, cipher, UART
 
 @note The application need to ensure that the SysTick time base is always set to 1 millisecond
       to have correct HAL operation.
+
+@par Keywords
+
+Security, Cryptography, CRYPT, AES, ECB, DMA, cipher, UART
 
 @par Directory contents
 

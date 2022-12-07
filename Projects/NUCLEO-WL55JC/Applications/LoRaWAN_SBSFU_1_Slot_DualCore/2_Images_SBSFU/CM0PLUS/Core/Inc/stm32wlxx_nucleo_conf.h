@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2020(-2021) STMicroelectronics.
+  * Copyright (c) 2020-2021 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -49,7 +49,7 @@
 #define USE_COM_LOG                         0U
 
 /* IRQ priorities */
-#define BSP_BUTTON_SWx_IT_PRIORITY         15U
+#define BSP_BUTTON_USER_IT_PRIORITY         15U
 
 /**
   * @}
@@ -72,5 +72,3 @@
 #endif
 
 #endif /* STM32WLXX_NUCLEO_CONF_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

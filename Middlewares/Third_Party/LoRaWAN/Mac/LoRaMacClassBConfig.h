@@ -28,7 +28,7 @@
  *
  * \author    Daniel Jaeckle ( STACKFORCE )
  *
- * \defgroup  LORAMACCLASSB LoRa MAC Class B configuration
+ * \defgroup  LORAMACCLASSBCONFIG LoRa MAC Class B configuration
  *            This header file contains parameters to configure the class b operation.
  *            By default, all parameters are set according to the specification.
  * \{
@@ -116,6 +116,8 @@ extern "C"
  * Defines the expansion factor for the beacon movement
  */
 #define CLASSB_WINDOW_MOVE_EXPANSION_FACTOR         2
+
+/*! \} defgroup LORAMACCLASSBCONFIG */
 
 #ifdef __cplusplus
 }

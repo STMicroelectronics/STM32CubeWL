@@ -8,13 +8,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -176,9 +175,9 @@ int32_t FLASH_IF_Write64(uint32_t address, uint64_t data)
   }
 
   return FLASH_OK;
-  /* USER CODE BEGIN HW_FLASH_Write_2 */
+  /* USER CODE BEGIN FLASH_IF_Write64_2 */
 
-  /* USER CODE END HW_FLASH_Write_2 */
+  /* USER CODE END FLASH_IF_Write64_2 */
 }
 
 int32_t FLASH_IF_EraseByPages(uint32_t page, uint16_t n, int32_t interrupt)
@@ -327,5 +326,3 @@ static int32_t FLASH_IF_IsEmpty(uint8_t *addr, uint32_t size)
 /* USER CODE BEGIN PrFD */
 
 /* USER CODE END PrFD */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE***/

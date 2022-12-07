@@ -61,8 +61,13 @@ define exported symbol __ICFEDIT_SE_region_RAM_end__       = 0x200033FF;
 
 /* SBSFU RAM region */
 define exported symbol __ICFEDIT_SB_region_RAM_start__ = __ICFEDIT_SE_region_RAM_end__ + 1;
-define exported symbol __ICFEDIT_SB_region_RAM_end__   = 0x20007FFF;
+define exported symbol __ICFEDIT_SB_region_RAM_end__   = 0x2000EFFF;
+
+/*  NVM RAM Data region */
+define exported symbol __ICFEDIT_LW_NVM_region_RAM_start__ = __ICFEDIT_SB_region_RAM_end__ + 1;
+define exported symbol __ICFEDIT_LW_NVM_region_RAM_end__   = 0x2000FFFF;
 
 /* RAM regions definition */
 define region SE_RAM_region    = mem:[from __ICFEDIT_SE_region_RAM_stack_top__ to __ICFEDIT_SE_region_RAM_end__];
 define region SB_RAM_region    = mem:[from __ICFEDIT_SB_region_RAM_start__ to __ICFEDIT_SB_region_RAM_end__];
+define region LW_NVM_region    = mem:[from __ICFEDIT_LW_NVM_region_RAM_start__ to __ICFEDIT_LW_NVM_region_RAM_end__];

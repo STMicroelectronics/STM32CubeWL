@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2020 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -71,8 +70,7 @@ typedef struct
                                 This parameter can be a value of @ref TIMEx_Break_Input_Source_Enable */
   uint32_t Polarity;       /*!< Specifies the break input source polarity.
                                 This parameter can be a value of @ref TIMEx_Break_Input_Source_Polarity */
-}
-TIMEx_BreakInputConfigTypeDef;
+} TIMEx_BreakInputConfigTypeDef;
 
 /**
   * @}
@@ -123,8 +121,8 @@ TIMEx_BreakInputConfigTypeDef;
 /** @defgroup TIMEx_Break_Input TIM Extended Break input
   * @{
   */
-#define TIM_BREAKINPUT_BRK     0x00000001U                                      /* !< Timer break input  */
-#define TIM_BREAKINPUT_BRK2    0x00000002U                                      /* !< Timer break2 input */
+#define TIM_BREAKINPUT_BRK     0x00000001U                                      /*!< Timer break input  */
+#define TIM_BREAKINPUT_BRK2    0x00000002U                                      /*!< Timer break2 input */
 /**
   * @}
   */
@@ -142,8 +140,8 @@ TIMEx_BreakInputConfigTypeDef;
 /** @defgroup TIMEx_Break_Input_Source_Enable TIM Extended Break input source enabling
   * @{
   */
-#define TIM_BREAKINPUTSOURCE_DISABLE     0x00000000U                            /* !< Break input source is disabled */
-#define TIM_BREAKINPUTSOURCE_ENABLE      0x00000001U                            /* !< Break input source is enabled */
+#define TIM_BREAKINPUTSOURCE_DISABLE     0x00000000U                            /*!< Break input source is disabled */
+#define TIM_BREAKINPUTSOURCE_ENABLE      0x00000001U                            /*!< Break input source is enabled */
 /**
   * @}
   */
@@ -151,8 +149,8 @@ TIMEx_BreakInputConfigTypeDef;
 /** @defgroup TIMEx_Break_Input_Source_Polarity TIM Extended Break input polarity
   * @{
   */
-#define TIM_BREAKINPUTSOURCE_POLARITY_LOW     0x00000001U                       /* !< Break input source is active low */
-#define TIM_BREAKINPUTSOURCE_POLARITY_HIGH    0x00000000U                       /* !< Break input source is active_high */
+#define TIM_BREAKINPUTSOURCE_POLARITY_LOW     0x00000001U                       /*!< Break input source is active low */
+#define TIM_BREAKINPUTSOURCE_POLARITY_HIGH    0x00000000U                       /*!< Break input source is active_high */
 /**
   * @}
   */
@@ -344,7 +342,7 @@ HAL_TIM_ChannelStateTypeDef HAL_TIMEx_GetChannelNState(TIM_HandleTypeDef *htim, 
 /* End of exported functions -------------------------------------------------*/
 
 /* Private functions----------------------------------------------------------*/
-/** @addtogroup TIMEx_Private_Functions TIMEx Private Functions
+/** @addtogroup TIMEx_Private_Functions TIM Extended Private Functions
   * @{
   */
 void TIMEx_DMACommutationCplt(DMA_HandleTypeDef *hdma);
@@ -368,5 +366,3 @@ void TIMEx_DMACommutationHalfCplt(DMA_HandleTypeDef *hdma);
 
 
 #endif /* STM32WLxx_HAL_TIM_EX_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -49,14 +49,13 @@ extern "C"
 {
 #endif
 
-#include <stdint.h>
 #include "LoRaMacTypes.h"
 #include "lorawan_conf.h"  /* LORAWAN_KMS */
 #if (!defined (LORAWAN_KMS) || (LORAWAN_KMS == 0))
 #else /* LORAWAN_KMS == 1 */
 #include "kms_if.h"
 #endif /* LORAWAN_KMS */
-  
+
 /*!
  * Secure-element keys size in bytes
  */
@@ -103,11 +102,11 @@ typedef struct sKey
      * Key identifier
      */
     KeyIdentifier_t KeyID;
+#if (!defined (LORAWAN_KMS) || (LORAWAN_KMS == 0))
     /*!
      * Key value
      */
     uint8_t KeyValue[SE_KEY_SIZE];
-#if (!defined (LORAWAN_KMS) || (LORAWAN_KMS == 0))
 #else /* LORAWAN_KMS == 1 */
     /*!
      * Key object index in the above list
@@ -136,7 +135,6 @@ typedef struct sSecureElementNvCtx
      */
     uint32_t Crc32;
 } SecureElementNvmData_t;
-
 
 /*! \} addtogroup SECUREELEMENT */
 

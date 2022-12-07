@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -51,13 +50,16 @@ typedef enum
 typedef enum
 {
   /* CmdResp */
-  LMHANDLER_INITIALIZATION_ID = 0,
+  LMHANDLER_INIT_ID = 0,
+  LMHANDLER_DEINIT_ID,
   LMHANDLER_CONFIGURE_ID,
   LMHANDLER_JOIN_STATUS_ID,
   LMHANDLER_JOIN_ID,
   LMHANDLER_STOP_ID,
+  LMHANDLER_HALT_ID,
   LMHANDLER_SEND_ID,
   LMHANDLER_PROCESS_ID,
+  LMHANDLER_GET_DUTY_CYCLE_TIME_ID,
   LMHANDLER_REQUEST_CLASS_ID,
   LMHANDLER_GET_CLASS_ID,
   LMHANDLER_GET_DEVEUI_ID,
@@ -101,11 +103,15 @@ typedef enum
   LMHANDLER_GET_BEACON_STATE_ID,
   LMHANDLER_LINK_CHECK_REQ_ID,
   LMHANDLER_DEVICE_TIME_REQ_ID,
+  LMHANDLER_GET_VERSION_ID,
+  LMHANDLER_NVM_DATA_STORE_ID,
 
   LMHANDLER_INFO_INIT_ID,
   /* NotifAck */
   LMHANDLER_GET_BATTERY_LEVEL_CB_ID,
   LMHANDLER_GET_TEMPERATURE_CB_ID,
+  LMHANDLER_ON_RESTORE_CONTEXT_REQ_CB_ID,
+  LMHANDLER_ON_STORE_CONTEXT_REQ_CB_ID,
   LMHANDLER_ON_NVM_DATA_CHANGE_CB_ID,
   LMHANDLER_ON_NETWORK_PARAMS_CHANGE_CB_ID,
   LMHANDLER_ON_JOIN_REQ_CB_ID,
@@ -113,7 +119,11 @@ typedef enum
   LMHANDLER_ON_RX_DATA_CB_ID,
   LMHANDLER_ON_CLASS_CHANGE_CB_ID,
   LMHANDLER_ON_BEACON_STATUS_CHANGE_CB_ID,
-  LMHANDLER_ON_ON_SYS_TIME_UPDATE_CB_ID,
+  LMHANDLER_ON_SYS_TIME_UPDATE_CB_ID,
+  LMHANDLER_ON_TX_PERIOD_CHANGED_CB_ID,
+  LMHANDLER_ON_TX_CTRL_CHANGED_CB_ID,
+  LMHANDLER_ON_PING_SLOT_PERIOD_CHANGED_CB_ID,
+  LMHANDLER_ON_SYSTEM_RESET_CB_ID,
   LMHANDLER_ON_MAC_PROCESS_CB_ID,
   /* USER CODE BEGIN LORA_MsgIdTypeDef */
 
@@ -233,5 +243,3 @@ typedef enum
 #endif
 
 #endif /* __MSG_ID_H__ */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

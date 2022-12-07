@@ -34,15 +34,14 @@
 #include "Region/Region.h"
 #include "RegionBaseUS.h"
 
-
 /*!
  * \brief Searches for available 125 kHz channels in the given channel mask.
  *
- * \param [IN] currentChannelMaskLeft The remaining channel mask.
+ * \param [in] currentChannelMaskLeft The remaining channel mask.
  *
- * \param [OUT] findAvailableChannelsIndex List containing the indexes of all available 125 kHz channels.
+ * \param [out] findAvailableChannelsIndex List containing the indexes of all available 125 kHz channels.
  *
- * \param [OUT] availableChannels Number of available 125 kHz channels.
+ * \param [out] availableChannels Number of available 125 kHz channels.
  *
  * \retval Status
  */
@@ -104,7 +103,6 @@ LoRaMacStatus_t RegionBaseUSComputeNext125kHzJoinChannel( uint16_t* channelsMask
         {
             currentChannelMaskLeft = ( ( channelsMaskRemaining[currentChannelMaskLeftIndex] >> 8 ) & 0x00FF );
         }
-
 
         if( FindAvailable125kHzChannels( currentChannelMaskLeft, findAvailableChannelsIndex, &availableChannels ) == LORAMAC_STATUS_PARAMETER_INVALID )
         {

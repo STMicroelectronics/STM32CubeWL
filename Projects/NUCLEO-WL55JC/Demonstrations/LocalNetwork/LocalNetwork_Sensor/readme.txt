@@ -2,22 +2,20 @@
   @page LocalNetwork_Sensor Readme file
 
   @verbatim
-  ******************** (C) COPYRIGHT 2020 STMicroelectronics *******************
+  ******************************************************************************
   * @file    Demonstrations/LocalNetwork/LocalNetwork_Sensor/readme.txt
   * @author  MCD Application Team
   * @brief   This application is a demo software of a Sensor sending
   *          Sensor data to the demo concentrator modem
   *          external host
   ******************************************************************************
-  * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2020-2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   @endverbatim
@@ -42,6 +40,8 @@ Demonstrations, SubGHz_Phy, LocalNetwork, Sensor
   - LocalNetwork_Sensor/Core/Inc/adc_if.h                                       Header for ADC interface configuration
   - LocalNetwork_Sensor/Core/Inc/dma.h                                          This file contains all the function prototypes for
                                                                                 the dma.c file
+  - LocalNetwork_Sensor/Core/Inc/gpio.h                                         This file contains all the function prototypes for
+                                                                                the gpio.c file
   - LocalNetwork_Sensor/Core/Inc/main.h                                         : Header for main.c file.
                                                                                 This file contains the common defines of the application.
   - LocalNetwork_Sensor/Core/Inc/platform.h                                     Header for General HW instances configuration
@@ -74,6 +74,8 @@ Demonstrations, SubGHz_Phy, LocalNetwork, Sensor
   - LocalNetwork_Sensor/Core/Src/adc_if.c                                       Read status related to the chip (battery level, VREF, chip temperature)
   - LocalNetwork_Sensor/Core/Src/dma.c                                          This file provides code for the configuration
                                                                                 of all the requested memory to memory DMA transfers.
+  - LocalNetwork_Sensor/Core/Src/gpio.c                                         This file provides code for the configuration
+                                                                                of all used GPIO pins.
   - LocalNetwork_Sensor/Core/Src/main.c                                         : Main program body
   - LocalNetwork_Sensor/Core/Src/rtc.c                                          This file provides code for the configuration
                                                                                 of the RTC instances.
@@ -85,7 +87,7 @@ Demonstrations, SubGHz_Phy, LocalNetwork, Sensor
                                                                                 of the SUBGHZ instances.
   - LocalNetwork_Sensor/Core/Src/system_stm32wlxx.c                             CMSIS Cortex Device Peripheral Access Layer System Source File
   - LocalNetwork_Sensor/Core/Src/sys_app.c                                      Initializes HW and SW system entities (not related to the radio)
-  - LocalNetwork_Sensor/Core/Src/sys_debug.c                                    Enables 4 debug pins for internal signals RealTime debugging
+  - LocalNetwork_Sensor/Core/Src/sys_debug.c                                    Configure probes pins RealTime debugging and JTAG/SerialWires for LowPower
   - LocalNetwork_Sensor/Core/Src/timer_if.c                                     Configure RTC Alarm, Tick and Calendar manager
   - LocalNetwork_Sensor/Core/Src/usart.c                                        This file provides code for the configuration
                                                                                 of the USART instances.

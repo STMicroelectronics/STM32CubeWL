@@ -1,4 +1,4 @@
-#<SYMDEFS># ARM Linker, 6140002: Last Updated: Fri May 14 11:42:51 2021
+#<SYMDEFS># ARM Linker, 6140002: Last Updated: Mon Dec 13 15:57:12 2021
 0x08008801 T SE_APP_GetActiveFwInfo
 0x08008eb1 T SE_KMS_Initialize
 0x08008bed T SE_KMS_Finalize

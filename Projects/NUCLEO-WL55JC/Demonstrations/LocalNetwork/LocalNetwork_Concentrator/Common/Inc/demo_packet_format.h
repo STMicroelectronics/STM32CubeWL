@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    demo_packet_format.h
@@ -6,17 +7,17 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
-
+/* USER CODE END Header */
+/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __DEMO_PACKET_FORMAT_H__
 #define __DEMO_PACKET_FORMAT_H__
 
@@ -34,7 +35,7 @@ extern "C" {
   * Always 4 B.
   * Beacon packet doesn't have length or CRC.
   */
-typedef  struct
+typedef __PACKED_STRUCT
 {
   uint8_t version_major :3;   /**<Major version of concentrator*/
   uint8_t subregion :5; /**<Subregion number*/
@@ -42,16 +43,16 @@ typedef  struct
   uint16_t offset :10;  /**<Time offset from the exact start of slot [ms]*/
   uint16_t pattern :2;  /**<Constant pattern to lower risk of catching different LoRa system*/
   uint16_t sum :4;      /**<Checksum of previous nibbles (negative value, sum of all nibbles = 0)*/
-} __packed DEMO_packet_beacon_t;
+} DEMO_packet_beacon_t;
 
 #define DEMO_BEACON_PATTERN        0x2     /*Inserted into DEMO_packet_beacon_t::pattern*/
 
-typedef  struct
+typedef __PACKED_STRUCT
 {
   uint8_t mark :4;     /**<Is zero for the connect header*/
   uint8_t slot :4;     /**<Slot which is connected*/
   /**Following are 4 B of eui that is connected*/
-} __packed DEMO_coding_connect_t;   /**<Header for sensor connecting and slot control*/
+} DEMO_coding_connect_t;   /**<Header for sensor connecting and slot control*/
 
 #define DEMO_HDR_CONNECT_MARK           0x0 /*This value marks connect header*/
 
@@ -71,16 +72,16 @@ typedef struct
 #define DEMO_HDR_PARAM_PERIOD_MAX    7  /*Maximum period*/
 #define DEMO_HDR_CHAN_NR_MAX         7  /*Static channel maximum*/
 
-typedef union
+typedef __PACKED_UNION
 {
   DEMO_coding_hdr_t hdr;                /**<2 B header to change coding*/
   DEMO_coding_connect_t connect;        /**<1 B to connect sensor to proper slot*/
-} __packed DEMO_coding_combined_t;               /**<Combined header put into Sync*/
+} DEMO_coding_combined_t;               /**<Combined header put into Sync*/
 
 /**
   * @brief Slot coding specific for LoRa.
   */
-typedef struct
+typedef __PACKED_STRUCT
 {
   uint8_t de :1;        /**<LowDataRateOptimize, used when symbol length > 16 ms*/
 
@@ -121,7 +122,7 @@ typedef struct
   uint8_t sf :4;
 
   uint8_t :4;
-} __packed DEMO_coding_lora_t;
+} DEMO_coding_lora_t;
 
 /**
   * @brief LoRa parameters limits.
@@ -137,7 +138,7 @@ typedef struct
 /**
   * @brief Change of FSK coding.
   */
-typedef struct
+typedef __PACKED_STRUCT
 {
   uint32_t br :24;      /**<Data rate [600..300000 bits/s]*/
 
@@ -167,7 +168,7 @@ typedef struct
     **/
   uint32_t bt :3;
   uint32_t :5;
-} __packed DEMO_coding_fsk_t;
+} DEMO_coding_fsk_t;
 
 /**
   * @brief FSK parameters limits.
@@ -187,7 +188,7 @@ typedef struct
 /**
   * @brief Sync data structure. Maximally 27 B.
   */
-typedef struct
+typedef __PACKED_STRUCT
 {
   /**
     * @brief Mask of occupied frequencies for 16 slots.
@@ -206,7 +207,7 @@ typedef struct
     * each followed by DEMO_coding_lora_t, DEMO_coding_gfsk_t or 4 B eui to connect.
     */
   uint8_t codings[DEMO_SYNC_CODINGS_LEN];
-} __packed DEMO_packet_sync_t;
+} DEMO_packet_sync_t;
 
 
 #define DEMO_SENSOR_MAX_PAYLOAD    26   /*Maximal payload for sensor*/
@@ -214,7 +215,7 @@ typedef struct
 /**
   * @brief Sensor packet data structure.
   */
-typedef struct
+typedef __PACKED_STRUCT
 {
   uint32_t eui;         /**<Lower part of EUI read from HW*/
   uint8_t packet_cnt;   /**<Counts packets*/
@@ -222,7 +223,7 @@ typedef struct
   uint8_t version_minor :5;     /**<Minor version of a sensor*/
 
   /*Following are DEMO_data_t. Together up to DEMO_SENSOR_MAX_PAYLOAD bytes*/
-} __packed DEMO_packet_sensor_header_t;
+} DEMO_packet_sensor_header_t;
 
 
 #ifdef __cplusplus

@@ -184,7 +184,11 @@ extern "C"
 /*!
  * Size of RFU 1 field
  */
+#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
 #define KR920_RFU1_SIZE                             2
+#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#define KR920_RFU1_SIZE                             1
+#endif /* REGION_VERSION */
 
 /*!
  * Size of RFU 2 field
@@ -275,7 +279,7 @@ static const uint8_t MaxPayloadOfDatarateRepeaterKR920[] = { 51, 51, 51, 115, 22
 /*!
  * \brief The function gets a value of a specific phy attribute.
  *
- * \param [IN] getPhy Pointer to the function parameters.
+ * \param [in] getPhy Pointer to the function parameters.
  *
  * \retval Returns a structure containing the PHY parameter.
  */
@@ -284,23 +288,23 @@ PhyParam_t RegionKR920GetPhyParam( GetPhyParams_t* getPhy );
 /*!
  * \brief Updates the last TX done parameters of the current channel.
  *
- * \param [IN] txDone Pointer to the function parameters.
+ * \param [in] txDone Pointer to the function parameters.
  */
 void RegionKR920SetBandTxDone( SetBandTxDoneParams_t* txDone );
 
 /*!
  * \brief Initializes the channels masks and the channels.
  *
- * \param [IN] type Sets the initialization type.
+ * \param [in] params Sets the initialization type.
  */
 void RegionKR920InitDefaults( InitDefaultsParams_t* params );
 
 /*!
  * \brief Verifies a parameter.
  *
- * \param [IN] verify Pointer to the function parameters.
+ * \param [in] verify Pointer to the function parameters.
  *
- * \param [IN] type Sets the initialization type.
+ * \param [in] phyAttribute Sets the initialization type.
  *
  * \retval Returns true, if the parameter is valid.
  */
@@ -310,14 +314,14 @@ bool RegionKR920Verify( VerifyParams_t* verify, PhyAttribute_t phyAttribute );
  * \brief The function parses the input buffer and sets up the channels of the
  *        CF list.
  *
- * \param [IN] applyCFList Pointer to the function parameters.
+ * \param [in] applyCFList Pointer to the function parameters.
  */
 void RegionKR920ApplyCFList( ApplyCFListParams_t* applyCFList );
 
 /*!
  * \brief Sets a channels mask.
  *
- * \param [IN] chanMaskSet Pointer to the function parameters.
+ * \param [in] chanMaskSet Pointer to the function parameters.
  *
  * \retval Returns true, if the channels mask could be set.
  */
@@ -326,24 +330,24 @@ bool RegionKR920ChanMaskSet( ChanMaskSetParams_t* chanMaskSet );
 /*!
  * Computes the Rx window timeout and offset.
  *
- * \param [IN] datarate     Rx window datarate index to be used
+ * \param [in] datarate     Rx window datarate index to be used
  *
- * \param [IN] minRxSymbols Minimum required number of symbols to detect an Rx frame.
+ * \param [in] minRxSymbols Minimum required number of symbols to detect an Rx frame.
  *
- * \param [IN] rxError      System maximum timing error of the receiver. In milliseconds
+ * \param [in] rxError      System maximum timing error of the receiver. In milliseconds
  *                          The receiver will turn on in a [-rxError : +rxError] ms
  *                          interval around RxOffset
  *
- * \param [OUT]rxConfigParams Returns updated WindowTimeout and WindowOffset fields.
+ * \param [out] rxConfigParams Returns updated WindowTimeout and WindowOffset fields.
  */
 void RegionKR920ComputeRxWindowParameters( int8_t datarate, uint8_t minRxSymbols, uint32_t rxError, RxConfigParams_t *rxConfigParams );
 
 /*!
  * \brief Configuration of the RX windows.
  *
- * \param [IN] rxConfig Pointer to the function parameters.
+ * \param [in] rxConfig Pointer to the function parameters.
  *
- * \param [OUT] datarate The datarate index which was set.
+ * \param [out] datarate The datarate index which was set.
  *
  * \retval Returns true, if the configuration was applied successfully.
  */
@@ -352,11 +356,11 @@ bool RegionKR920RxConfig( RxConfigParams_t* rxConfig, int8_t* datarate );
 /*!
  * \brief TX configuration.
  *
- * \param [IN] txConfig Pointer to the function parameters.
+ * \param [in] txConfig Pointer to the function parameters.
  *
- * \param [OUT] txPower The tx power index which was set.
+ * \param [out] txPower The tx power index which was set.
  *
- * \param [OUT] txTimeOnAir The time-on-air of the frame.
+ * \param [out] txTimeOnAir The time-on-air of the frame.
  *
  * \retval Returns true, if the configuration was applied successfully.
  */
@@ -365,7 +369,15 @@ bool RegionKR920TxConfig( TxConfigParams_t* txConfig, int8_t* txPower, TimerTime
 /*!
  * \brief The function processes a Link ADR Request.
  *
- * \param [IN] linkAdrReq Pointer to the function parameters.
+ * \param [in] linkAdrReq Pointer to the function parameters.
+ *
+ * \param [out] drOut The datarate which was applied.
+ *
+ * \param [out] txPowOut The TX power which was applied.
+ *
+ * \param [out] nbRepOut The number of repetitions to apply.
+ *
+ * \param [out] nbBytesParsed The number bytes which were parsed.
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  */
@@ -374,7 +386,7 @@ uint8_t RegionKR920LinkAdrReq( LinkAdrReqParams_t* linkAdrReq, int8_t* drOut, in
 /*!
  * \brief The function processes a RX Parameter Setup Request.
  *
- * \param [IN] rxParamSetupReq Pointer to the function parameters.
+ * \param [in] rxParamSetupReq Pointer to the function parameters.
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  */
@@ -383,7 +395,7 @@ uint8_t RegionKR920RxParamSetupReq( RxParamSetupReqParams_t* rxParamSetupReq );
 /*!
  * \brief The function processes a Channel Request.
  *
- * \param [IN] newChannelReq Pointer to the function parameters.
+ * \param [in] newChannelReq Pointer to the function parameters.
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  */
@@ -392,7 +404,7 @@ int8_t RegionKR920NewChannelReq( NewChannelReqParams_t* newChannelReq );
 /*!
  * \brief The function processes a TX ParamSetup Request.
  *
- * \param [IN] txParamSetupReq Pointer to the function parameters.
+ * \param [in] txParamSetupReq Pointer to the function parameters.
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  *         Returns -1, if the functionality is not implemented. In this case, the end node
@@ -403,7 +415,7 @@ int8_t RegionKR920TxParamSetupReq( TxParamSetupReqParams_t* txParamSetupReq );
 /*!
  * \brief The function processes a DlChannel Request.
  *
- * \param [IN] dlChannelReq Pointer to the function parameters.
+ * \param [in] dlChannelReq Pointer to the function parameters.
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  */
@@ -412,7 +424,9 @@ int8_t RegionKR920DlChannelReq( DlChannelReqParams_t* dlChannelReq );
 /*!
  * \brief Alternates the datarate of the channel for the join request.
  *
- * \param [IN] currentDr current datarate.
+ * \param [in] currentDr Current datarate.
+ *
+ * \param [in] type Alternation type.
  *
  * \retval Datarate to apply.
  */
@@ -421,12 +435,14 @@ int8_t RegionKR920AlternateDr( int8_t currentDr, AlternateDrType_t type );
 /*!
  * \brief Searches and set the next random available channel
  *
- * \param [OUT] channel Next channel to use for TX.
+ * \param [in] nextChanParams pointer of selected channel parameters
  *
- * \param [OUT] time Time to wait for the next transmission according to the duty
+ * \param [out] channel Next channel to use for TX.
+ *
+ * \param [out] time Time to wait for the next transmission according to the duty
  *              cycle.
  *
- * \param [OUT] aggregatedTimeOff Updates the aggregated time off.
+ * \param [out] aggregatedTimeOff Updates the aggregated time off.
  *
  * \retval Function status [1: OK, 0: Unable to find a channel on the current datarate]
  */
@@ -435,7 +451,7 @@ LoRaMacStatus_t RegionKR920NextChannel( NextChanParams_t* nextChanParams, uint8_
 /*!
  * \brief Adds a channel.
  *
- * \param [IN] channelAdd Pointer to the function parameters.
+ * \param [in] channelAdd Pointer to the function parameters.
  *
  * \retval Status of the operation.
  */
@@ -444,27 +460,29 @@ LoRaMacStatus_t RegionKR920ChannelAdd( ChannelAddParams_t* channelAdd );
 /*!
  * \brief Removes a channel.
  *
- * \param [IN] channelRemove Pointer to the function parameters.
+ * \param [in] channelRemove Pointer to the function parameters.
  *
  * \retval Returns true, if the channel was removed successfully.
  */
 bool RegionKR920ChannelsRemove( ChannelRemoveParams_t* channelRemove  );
 
+#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
 /*!
  * \brief Sets the radio into continuous wave mode.
  *
  * \param [IN] continuousWave Pointer to the function parameters.
  */
 void RegionKR920SetContinuousWave( ContinuousWaveParams_t* continuousWave );
+#endif /* REGION_VERSION */
 
 /*!
  * \brief Computes new datarate according to the given offset
  *
- * \param [IN] downlinkDwellTime Downlink dwell time configuration. 0: No limit, 1: 400ms
+ * \param [in] downlinkDwellTime Downlink dwell time configuration. 0: No limit, 1: 400ms
  *
- * \param [IN] dr Current datarate
+ * \param [in] dr Current datarate
  *
- * \param [IN] drOffset Offset to be applied
+ * \param [in] drOffset Offset to be applied
  *
  * \retval newDr Computed datarate.
  */
@@ -473,7 +491,9 @@ uint8_t RegionKR920ApplyDrOffset( uint8_t downlinkDwellTime, int8_t dr, int8_t d
 /*!
  * \brief Sets the radio into beacon reception mode
  *
- * \param [IN] rxBeaconSetup Pointer to the function parameters
+ * \param [in] rxBeaconSetup Pointer to the function parameters
+ *
+ * \param [out] outDr Datarate used to receive the beacon
  */
  void RegionKR920RxBeaconSetup( RxBeaconSetup_t* rxBeaconSetup, uint8_t* outDr );
 

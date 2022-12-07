@@ -38,7 +38,7 @@ extern "C"
 {
 #endif
 
-#include <stdint.h>
+#include "LoRaMacVersion.h"
 
 /*!
  * LoRaMac Class B Context structure for NVM parameters
@@ -73,6 +73,12 @@ typedef struct sLoRaMacClassBPingSlotNvmData
      * Datarate of the ping slot
      */
     int8_t Datarate;
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+    /*!
+     * Set to 1, if the FPending bit is set
+     */
+    uint8_t FPendingSet;
+#endif /* LORAMAC_VERSION */
 } LoRaMacClassBPingSlotNvmData_t;
 
 /*!
@@ -112,6 +118,8 @@ typedef struct sLoRaMacClassBNvmData
      */
     uint32_t Crc32;
 } LoRaMacClassBNvmData_t;
+
+/*! \} defgroup LORAMACCLASSB */
 
 #ifdef __cplusplus
 }

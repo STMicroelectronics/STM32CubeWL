@@ -57,8 +57,9 @@ extern "C"
 /*!
  * LoRaMac maximum number of channels
  */
-#define CN470_MAX_NB_CHANNELS                       96
+#define CN470_MAX_NB_CHANNELS                        96
 
+#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
 /*!
  * Minimal datarate that can be used by the node
  */
@@ -83,6 +84,32 @@ extern "C"
  * Default datarate used by the node
  */
 #define CN470_DEFAULT_DATARATE                      DR_0
+#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+/*!
+ * Minimal datarate that can be used by the node
+ */
+#define CN470_TX_MIN_DATARATE                       DR_1
+
+/*!
+ * Maximal datarate that can be used by the node
+ */
+#define CN470_TX_MAX_DATARATE                       DR_5
+
+/*!
+ * Minimal datarate that can be used by the node
+ */
+#define CN470_RX_MIN_DATARATE                       DR_1
+
+/*!
+ * Maximal datarate that can be used by the node
+ */
+#define CN470_RX_MAX_DATARATE                       DR_5
+
+/*!
+ * Default datarate used by the node
+ */
+#define CN470_DEFAULT_DATARATE                      DR_1
+#endif /* REGION_VERSION */
 
 /*!
  * Minimal Rx1 receive datarate offset
@@ -129,6 +156,7 @@ extern "C"
  */
 #define CN470_MAX_RX_WINDOW                         3000
 
+#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
 /*!
  * Second reception window channel frequency definition.
  */
@@ -138,6 +166,12 @@ extern "C"
  * Second reception window channel datarate definition.
  */
 #define CN470_RX_WND_2_DR                           DR_0
+#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+/*!
+ * Second reception window channel datarate definition.
+ */
+#define CN470_RX_WND_2_DR                           DR_1
+#endif /* REGION_VERSION */
 
 /*!
  * Default uplink dwell time configuration
@@ -147,6 +181,7 @@ extern "C"
 /*
  * CLASS B
  */
+#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
 /*!
  * Beacon frequency
  */
@@ -176,6 +211,17 @@ extern "C"
  * Size of RFU 1 field
  */
 #define CN470_RFU1_SIZE                             3
+#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+/*!
+ * Payload size of a beacon frame
+ */
+#define CN470_BEACON_SIZE                           19
+
+/*!
+ * Size of RFU 1 field
+ */
+#define CN470_RFU1_SIZE                             2
+#endif /* REGION_VERSION */
 
 /*!
  * Size of RFU 2 field
@@ -223,6 +269,46 @@ extern "C"
  */
 #define CN470_STEPWIDTH_RX1_CHANNEL                 ( (uint32_t) 200000 )
 
+#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#define CN470_DEFAULT_DR_RANGE                      { .Value = ( CN470_TX_MAX_DATARATE << 4 ) | CN470_TX_MIN_DATARATE }
+
+#define CN470_COMMON_JOIN_CHANNELS \
+{ \
+    { .Frequency = 470900000, .Rx1Frequency = 484500000, CN470_DEFAULT_DR_RANGE, .Band = 0 }, \
+    { .Frequency = 472500000, .Rx1Frequency = 486100000, CN470_DEFAULT_DR_RANGE, .Band = 0 }, \
+    { .Frequency = 474100000, .Rx1Frequency = 487700000, CN470_DEFAULT_DR_RANGE, .Band = 0 }, \
+    { .Frequency = 475700000, .Rx1Frequency = 489300000, CN470_DEFAULT_DR_RANGE, .Band = 0 }, \
+    { .Frequency = 504100000, .Rx1Frequency = 490900000, CN470_DEFAULT_DR_RANGE, .Band = 0 }, \
+    { .Frequency = 505700000, .Rx1Frequency = 492500000, CN470_DEFAULT_DR_RANGE, .Band = 0 }, \
+    { .Frequency = 507300000, .Rx1Frequency = 494100000, CN470_DEFAULT_DR_RANGE, .Band = 0 }, \
+    { .Frequency = 508900000, .Rx1Frequency = 495700000, CN470_DEFAULT_DR_RANGE, .Band = 0 }, \
+\
+    { .Frequency = 479900000, .Rx1Frequency = 479900000, CN470_DEFAULT_DR_RANGE, .Band = 0 }, \
+    { .Frequency = 499900000, .Rx1Frequency = 499900000, CN470_DEFAULT_DR_RANGE, .Band = 0 }, \
+\
+    { .Frequency = 470300000, .Rx1Frequency = 492500000, CN470_DEFAULT_DR_RANGE, .Band = 0 }, \
+    { .Frequency = 472300000, .Rx1Frequency = 492500000, CN470_DEFAULT_DR_RANGE, .Band = 0 }, \
+    { .Frequency = 474300000, .Rx1Frequency = 492500000, CN470_DEFAULT_DR_RANGE, .Band = 0 }, \
+    { .Frequency = 476300000, .Rx1Frequency = 492500000, CN470_DEFAULT_DR_RANGE, .Band = 0 }, \
+    { .Frequency = 478300000, .Rx1Frequency = 492500000, CN470_DEFAULT_DR_RANGE, .Band = 0 }, \
+\
+    { .Frequency = 480300000, .Rx1Frequency = 502500000, CN470_DEFAULT_DR_RANGE, .Band = 0 }, \
+    { .Frequency = 482300000, .Rx1Frequency = 502500000, CN470_DEFAULT_DR_RANGE, .Band = 0 }, \
+    { .Frequency = 484300000, .Rx1Frequency = 502500000, CN470_DEFAULT_DR_RANGE, .Band = 0 }, \
+    { .Frequency = 486300000, .Rx1Frequency = 502500000, CN470_DEFAULT_DR_RANGE, .Band = 0 }, \
+    { .Frequency = 488300000, .Rx1Frequency = 502500000, CN470_DEFAULT_DR_RANGE, .Band = 0 }, \
+}
+
+#define CN470_COMMON_JOIN_CHANNELS_SIZE             20
+
+#if ( HYBRID_ENABLED == 1 )
+#define CN470_JOIN_CHANNELS                         { 0x0001, 0x0000 }
+#else
+#define CN470_JOIN_CHANNELS                         { 0xFFFF, 0x000F }
+#endif  /* HYBRID_ENABLED */
+#endif /* REGION_VERSION */
+
+#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
 /*!
  * Data rates table definition
  */
@@ -244,11 +330,49 @@ static const uint8_t MaxPayloadOfDatarateCN470[] = { 51, 51, 51, 115, 242, 242 }
  */
 static const uint8_t MaxPayloadOfDatarateRepeaterCN470[] = { 51, 51, 51, 115, 222, 222 };
 /* ST_WORKAROUND_END */
+#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+/*!
+ * Data rates table definition
+ */
+static const uint8_t DataratesCN470[]  = { 12, 11, 10,  9,  8,  7, 7, 50 };
+
+/*!
+ * Bandwidths table definition in Hz
+ */
+static const uint32_t BandwidthsCN470[] = { 125000, 125000, 125000, 125000, 125000, 125000, 500000, 0 };
+
+/*!
+ * Up/Down link data rates offset definition
+ */
+static const int8_t DatarateOffsetsCN470[8][6] =
+{
+    { DR_0, DR_0, DR_0, DR_0, DR_0, DR_0 }, // DR_0
+    { DR_1, DR_1, DR_1, DR_1, DR_1, DR_1 }, // DR_1
+    { DR_2, DR_1, DR_1, DR_1, DR_1, DR_1 }, // DR_2
+    { DR_3, DR_2, DR_1, DR_1, DR_1, DR_1 }, // DR_3
+    { DR_4, DR_3, DR_2, DR_1, DR_1, DR_1 }, // DR_4
+    { DR_5, DR_4, DR_3, DR_2, DR_1, DR_1 }, // DR_5
+    { DR_6, DR_5, DR_4, DR_3, DR_2, DR_1 }, // DR_6
+    { DR_7, DR_6, DR_5, DR_4, DR_3, DR_2 }, // DR_7
+};
+
+/* ST_WORKAROUND_BEGIN: Keep repeater feature */
+/*!
+ * Maximum payload with respect to the datarate index. Cannot operate with repeater.
+ */
+static const uint8_t MaxPayloadOfDatarateCN470[] = { 0, 23, 86, 184, 242, 242, 242, 242 };
+
+/*!
+ * Maximum payload with respect to the datarate index. Can operate with repeater.
+ */
+static const uint8_t MaxPayloadOfDatarateRepeaterCN470[] = { 0, 23, 86, 164, 222, 222, 222, 222 };
+/* ST_WORKAROUND_END */
+#endif /* REGION_VERSION */
 
 /*!
  * \brief The function gets a value of a specific phy attribute.
  *
- * \param [IN] getPhy Pointer to the function parameters.
+ * \param [in] getPhy Pointer to the function parameters.
  *
  * \retval Returns a structure containing the PHY parameter.
  */
@@ -257,23 +381,23 @@ PhyParam_t RegionCN470GetPhyParam( GetPhyParams_t* getPhy );
 /*!
  * \brief Updates the last TX done parameters of the current channel.
  *
- * \param [IN] txDone Pointer to the function parameters.
+ * \param [in] txDone Pointer to the function parameters.
  */
 void RegionCN470SetBandTxDone( SetBandTxDoneParams_t* txDone );
 
 /*!
  * \brief Initializes the channels masks and the channels.
  *
- * \param [IN] type Sets the initialization type.
+ * \param [in] params Sets the initialization type.
  */
 void RegionCN470InitDefaults( InitDefaultsParams_t* params );
 
 /*!
  * \brief Verifies a parameter.
  *
- * \param [IN] verify Pointer to the function parameters.
+ * \param [in] verify Pointer to the function parameters.
  *
- * \param [IN] type Sets the initialization type.
+ * \param [in] phyAttribute Sets the initialization type.
  *
  * \retval Returns true, if the parameter is valid.
  */
@@ -283,14 +407,14 @@ bool RegionCN470Verify( VerifyParams_t* verify, PhyAttribute_t phyAttribute );
  * \brief The function parses the input buffer and sets up the channels of the
  *        CF list.
  *
- * \param [IN] applyCFList Pointer to the function parameters.
+ * \param [in] applyCFList Pointer to the function parameters.
  */
 void RegionCN470ApplyCFList( ApplyCFListParams_t* applyCFList );
 
 /*!
  * \brief Sets a channels mask.
  *
- * \param [IN] chanMaskSet Pointer to the function parameters.
+ * \param [in] chanMaskSet Pointer to the function parameters.
  *
  * \retval Returns true, if the channels mask could be set.
  */
@@ -299,24 +423,24 @@ bool RegionCN470ChanMaskSet( ChanMaskSetParams_t* chanMaskSet );
 /*!
  * Computes the Rx window timeout and offset.
  *
- * \param [IN] datarate     Rx window datarate index to be used
+ * \param [in] datarate     Rx window datarate index to be used
  *
- * \param [IN] minRxSymbols Minimum required number of symbols to detect an Rx frame.
+ * \param [in] minRxSymbols Minimum required number of symbols to detect an Rx frame.
  *
- * \param [IN] rxError      System maximum timing error of the receiver. In milliseconds
+ * \param [in] rxError      System maximum timing error of the receiver. In milliseconds
  *                          The receiver will turn on in a [-rxError : +rxError] ms
  *                          interval around RxOffset
  *
- * \param [OUT]rxConfigParams Returns updated WindowTimeout and WindowOffset fields.
+ * \param [out] rxConfigParams Returns updated WindowTimeout and WindowOffset fields.
  */
 void RegionCN470ComputeRxWindowParameters( int8_t datarate, uint8_t minRxSymbols, uint32_t rxError, RxConfigParams_t *rxConfigParams );
 
 /*!
  * \brief Configuration of the RX windows.
  *
- * \param [IN] rxConfig Pointer to the function parameters.
+ * \param [in] rxConfig Pointer to the function parameters.
  *
- * \param [OUT] datarate The datarate index which was set.
+ * \param [out] datarate The datarate index which was set.
  *
  * \retval Returns true, if the configuration was applied successfully.
  */
@@ -325,11 +449,11 @@ bool RegionCN470RxConfig( RxConfigParams_t* rxConfig, int8_t* datarate );
 /*!
  * \brief TX configuration.
  *
- * \param [IN] txConfig Pointer to the function parameters.
+ * \param [in] txConfig Pointer to the function parameters.
  *
- * \param [OUT] txPower The tx power index which was set.
+ * \param [out] txPower The tx power index which was set.
  *
- * \param [OUT] txTimeOnAir The time-on-air of the frame.
+ * \param [out] txTimeOnAir The time-on-air of the frame.
  *
  * \retval Returns true, if the configuration was applied successfully.
  */
@@ -338,7 +462,15 @@ bool RegionCN470TxConfig( TxConfigParams_t* txConfig, int8_t* txPower, TimerTime
 /*!
  * \brief The function processes a Link ADR Request.
  *
- * \param [IN] linkAdrReq Pointer to the function parameters.
+ * \param [in] linkAdrReq Pointer to the function parameters.
+ *
+ * \param [out] drOut The datarate which was applied.
+ *
+ * \param [out] txPowOut The TX power which was applied.
+ *
+ * \param [out] nbRepOut The number of repetitions to apply.
+ *
+ * \param [out] nbBytesParsed The number bytes which were parsed.
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  */
@@ -347,7 +479,7 @@ uint8_t RegionCN470LinkAdrReq( LinkAdrReqParams_t* linkAdrReq, int8_t* drOut, in
 /*!
  * \brief The function processes a RX Parameter Setup Request.
  *
- * \param [IN] rxParamSetupReq Pointer to the function parameters.
+ * \param [in] rxParamSetupReq Pointer to the function parameters.
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  */
@@ -356,7 +488,7 @@ uint8_t RegionCN470RxParamSetupReq( RxParamSetupReqParams_t* rxParamSetupReq );
 /*!
  * \brief The function processes a Channel Request.
  *
- * \param [IN] newChannelReq Pointer to the function parameters.
+ * \param [in] newChannelReq Pointer to the function parameters.
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  */
@@ -365,7 +497,7 @@ int8_t RegionCN470NewChannelReq( NewChannelReqParams_t* newChannelReq );
 /*!
  * \brief The function processes a TX ParamSetup Request.
  *
- * \param [IN] txParamSetupReq Pointer to the function parameters.
+ * \param [in] txParamSetupReq Pointer to the function parameters.
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  *         Returns -1, if the functionality is not implemented. In this case, the end node
@@ -376,7 +508,7 @@ int8_t RegionCN470TxParamSetupReq( TxParamSetupReqParams_t* txParamSetupReq );
 /*!
  * \brief The function processes a DlChannel Request.
  *
- * \param [IN] dlChannelReq Pointer to the function parameters.
+ * \param [in] dlChannelReq Pointer to the function parameters.
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  */
@@ -385,9 +517,9 @@ int8_t RegionCN470DlChannelReq( DlChannelReqParams_t* dlChannelReq );
 /*!
  * \brief Alternates the datarate of the channel for the join request.
  *
- * \param [IN] currentDr Current datarate.
+ * \param [in] currentDr Current datarate.
  *
- * \param [IN] type Alternation type.
+ * \param [in] type Alternation type.
  *
  * \retval Datarate to apply.
  */
@@ -396,12 +528,14 @@ int8_t RegionCN470AlternateDr( int8_t currentDr, AlternateDrType_t type );
 /*!
  * \brief Searches and set the next random available channel
  *
- * \param [OUT] channel Next channel to use for TX.
+ * \param [in] nextChanParams pointer of selected channel parameters
  *
- * \param [OUT] time Time to wait for the next transmission according to the duty
+ * \param [out] channel Next channel to use for TX.
+ *
+ * \param [out] time Time to wait for the next transmission according to the duty
  *              cycle.
  *
- * \param [OUT] aggregatedTimeOff Updates the aggregated time off.
+ * \param [out] aggregatedTimeOff Updates the aggregated time off.
  *
  * \retval Function status [1: OK, 0: Unable to find a channel on the current datarate]
  */
@@ -410,7 +544,7 @@ LoRaMacStatus_t RegionCN470NextChannel( NextChanParams_t* nextChanParams, uint8_
 /*!
  * \brief Adds a channel.
  *
- * \param [IN] channelAdd Pointer to the function parameters.
+ * \param [in] channelAdd Pointer to the function parameters.
  *
  * \retval Status of the operation.
  */
@@ -419,27 +553,29 @@ LoRaMacStatus_t RegionCN470ChannelAdd( ChannelAddParams_t* channelAdd );
 /*!
  * \brief Removes a channel.
  *
- * \param [IN] channelRemove Pointer to the function parameters.
+ * \param [in] channelRemove Pointer to the function parameters.
  *
  * \retval Returns true, if the channel was removed successfully.
  */
 bool RegionCN470ChannelsRemove( ChannelRemoveParams_t* channelRemove  );
 
+#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
 /*!
  * \brief Sets the radio into continuous wave mode.
  *
  * \param [IN] continuousWave Pointer to the function parameters.
  */
 void RegionCN470SetContinuousWave( ContinuousWaveParams_t* continuousWave );
+#endif /* REGION_VERSION */
 
 /*!
  * \brief Computes new datarate according to the given offset
  *
- * \param [IN] downlinkDwellTime Downlink dwell time configuration. 0: No limit, 1: 400ms
+ * \param [in] downlinkDwellTime Downlink dwell time configuration. 0: No limit, 1: 400ms
  *
- * \param [IN] dr Current datarate
+ * \param [in] dr Current datarate
  *
- * \param [IN] drOffset Offset to be applied
+ * \param [in] drOffset Offset to be applied
  *
  * \retval newDr Computed datarate.
  */
@@ -448,7 +584,9 @@ uint8_t RegionCN470ApplyDrOffset( uint8_t downlinkDwellTime, int8_t dr, int8_t d
 /*!
  * \brief Sets the radio into beacon reception mode
  *
- * \param [IN] rxBeaconSetup Pointer to the function parameters
+ * \param [in] rxBeaconSetup Pointer to the function parameters
+ *
+ * \param [out] outDr Datarate used to receive the beacon
  */
 void RegionCN470RxBeaconSetup( RxBeaconSetup_t* rxBeaconSetup, uint8_t* outDr );
 

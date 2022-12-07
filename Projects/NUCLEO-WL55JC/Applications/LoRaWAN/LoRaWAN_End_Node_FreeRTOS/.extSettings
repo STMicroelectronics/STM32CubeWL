@@ -1,0 +1,8 @@
+[ProjectFiles]
+HeaderPath=..\..\..\..\..\..\Drivers\BSP\STM32WLxx_Nucleo
+[Others]
+Define=
+HALModule=
+[Groups]
+Drivers/BSP/STM32WLxx_Nucleo=../../../../../../Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo.c; ../../../../../../Drivers/BSP/STM32WLxx_Nucleo/stm32wlxx_nucleo_radio.c
+Doc=../readme.txt;

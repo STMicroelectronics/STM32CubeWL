@@ -65,11 +65,16 @@ SE_region_RAM_end              = 0x200033FF;
 
 /* SBSFU RAM region */
 SB_region_RAM_start            = SE_region_RAM_end + 0x1;
-SB_region_RAM_end              = 0x20007FFF;
+SB_region_RAM_end              = 0x2000EFFF;
+
+/* NVM RAM Data region */
+LW_NVM_region_RAM_start        = SB_region_RAM_end + 0x1;
+LW_NVM_region_RAM_end          = 0x2000FFFF;
 
 /* RAM regions size definition */
 SE_region_RAM_size             = SE_region_RAM_end - SE_region_RAM_stack_top + 0x1;
 SB_region_RAM_size             = SB_region_RAM_end - SB_region_RAM_start + 0x1;
+LW_NVM_region_RAM_size         = LW_NVM_region_RAM_end - LW_NVM_region_RAM_start + 0x1;
 
 /******************************************************************************/
 /*                              RAM/ROM regions                               */
@@ -89,4 +94,5 @@ MEMORY
  SB_ROM_region (rx)               : ORIGIN = SB_region_ROM_start, LENGTH = SB_region_ROM_size
  SE_RAM_region (xrw)              : ORIGIN = SE_region_RAM_stack_top, LENGTH = SE_region_RAM_size
  SB_RAM_region (xrw)              : ORIGIN = SB_region_RAM_start, LENGTH = SB_region_RAM_size
+ LW_NVM_region_RAM (xrw)          : ORIGIN = LW_NVM_region_RAM_start, LENGTH = LW_NVM_region_RAM_size
 }

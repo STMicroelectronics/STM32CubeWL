@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -299,7 +298,7 @@ SFU_ErrorStatus VerifyFwSignatureScatter(SE_StatusTypeDef *pSeStatus, uint32_t S
           FLOW_STEP(uFlowCryptoValue, FLOW_STEP_INTEGRITY);
 
           /* Save result for active slot :
-             to avoid single fault attacje the signature will be double checked before UserApp execution */
+             to avoid single fault attack the signature will be double checked before UserApp execution */
           if ((SlotNumber >= SLOT_ACTIVE_1) && (SlotNumber < SLOT_DWL_1))
           {
             (void) memcpy(&fw_tag_validated[SlotNumber - SLOT_ACTIVE_1][0U], fw_tag_output, SE_TAG_LEN);
@@ -1042,7 +1041,7 @@ SFU_ErrorStatus SFU_IMG_CheckFwVersion(uint32_t ActiveSlot, uint16_t CurrentVers
   if (CurrentVersion == 0U)
   {
     /*
-     * If the header of the active firmware is not valid (could comes from an attack attempt, we authorize only the
+     * If the header of the active firmware is not valid (could come from an attack attempt, we authorize only the
      * installation of a specific version identified by SFU_FW_VERSION_INIT_NUM.
      */
     if (CandidateVersion == SFU_FW_VERSION_INIT_NUM)
@@ -1154,4 +1153,3 @@ SFU_ErrorStatus SFU_IMG_CheckCandidateVersion(uint32_t DwlSlot)
   /* Return the result */
   return (e_ret_status);
 }
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

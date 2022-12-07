@@ -40,10 +40,7 @@ extern "C"
 {
 #endif
 
-#include <stdint.h>
-#include <stddef.h>
 #include "LoRaMacTypes.h"
-
 
 /*
  * Number of MAC Command slots
@@ -119,16 +116,16 @@ typedef void ( *LoRaMacCommandsNvmEvent )( void );
 /*!
  * \brief Initialization of LoRaMac MAC commands module
  *
- * \retval                            - Status of the operation
+ * \retval                     - Status of the operation
  */
 LoRaMacCommandStatus_t LoRaMacCommandsInit( void );
 
 /*!
  * \brief Adds a new MAC command to be sent.
  *
- * \param[IN]   cid                - MAC command identifier
- * \param[IN]   payload            - MAC command payload containing parameters
- * \param[IN]   payloadSize        - Size of MAC command payload
+ * \param [in]  cid            - MAC command identifier
+ * \param [in]  payload        - MAC command payload containing parameters
+ * \param [in]  payloadSize    - Size of MAC command payload
  *
  * \retval                     - Status of the operation
  */
@@ -137,7 +134,7 @@ LoRaMacCommandStatus_t LoRaMacCommandsAddCmd( uint8_t cid, uint8_t* payload, siz
 /*!
  * \brief Remove a MAC command.
  *
- * \param[OUT]  cmd                - MAC command
+ * \param [out] macCmd         - MAC command
  *
  * \retval                     - Status of the operation
  */
@@ -146,8 +143,8 @@ LoRaMacCommandStatus_t LoRaMacCommandsRemoveCmd( MacCommand_t* macCmd );
 /*!
  * \brief Get the MAC command with corresponding CID.
  *
- * \param[IN]   cid                - MAC command identifier
- * \param[OUT]  cmd                - MAC command
+ * \param [in]  cid            - MAC command identifier
+ * \param [out] macCmd         - MAC command
  *
  * \retval                     - Status of the operation
  */
@@ -170,7 +167,7 @@ LoRaMacCommandStatus_t LoRaMacCommandsRemoveStickyAnsCmds( void );
 /*!
  * \brief Get size of all MAC commands serialized as buffer
  *
- * \param[out]   size               - Available size of memory for MAC commands
+ * \param [out] size           - Available size of memory for MAC commands
  *
  * \retval                     - Status of the operation
  */
@@ -179,9 +176,9 @@ LoRaMacCommandStatus_t LoRaMacCommandsGetSizeSerializedCmds( size_t* size );
 /*!
  * \brief Get as many as possible MAC commands serialized
  *
- * \param[IN]   availableSize      - Available size of memory for MAC commands
- * \param[out]  effectiveSize      - Size of memory which was effectively used for serializing.
- * \param[out]  buffer             - Destination data buffer
+ * \param [in]  availableSize  - Available size of memory for MAC commands
+ * \param [out] effectiveSize  - Size of memory which was effectively used for serializing.
+ * \param [out] buffer         - Destination data buffer
  *
  * \retval                     - Status of the operation
  */
@@ -190,7 +187,7 @@ LoRaMacCommandStatus_t LoRaMacCommandsSerializeCmds( size_t availableSize, size_
 /*!
  * \brief Determines if there are sticky MAC commands pending.
  *
- * \param[IN]   cmdsPending        - Indicates if there are sticky MAC commands in the queue.
+ * \param [in]  cmdsPending    - Indicates if there are sticky MAC commands in the queue.
  *
  * \retval                     - Status of the operation
  */
@@ -199,7 +196,7 @@ LoRaMacCommandStatus_t LoRaMacCommandsStickyCmdsPending( bool* cmdsPending );
 /*!
  * \brief Get the MAC command size with corresponding CID.
  *
- * \param[IN]   cid                - MAC command identifier
+ * \param [in]  cid            - MAC command identifier
  *
  * \retval Size of the command.
  */

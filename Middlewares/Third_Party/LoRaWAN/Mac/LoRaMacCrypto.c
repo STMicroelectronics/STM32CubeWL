@@ -40,16 +40,12 @@
   * @brief   LoRa MAC layer cryptography implementation
   ******************************************************************************
   */
-#include <stdbool.h>
-#include <stdlib.h>
-#include <stdint.h>
-
 #include "utilities.h"
 #include "secure-element.h"
 
 #include "LoRaMacParser.h"
 #include "LoRaMacSerializer.h"
-#include "LoRaMacCrypto.h"
+#include "LoRaMacVersion.h"
 
 /*
  * Frame direction definition for uplink communications
@@ -147,12 +143,12 @@ static KeyAddr_t KeyAddrList[NUM_OF_SEC_CTX] =
 /*
  * Encrypts the payload
  *
- * \param[IN]  keyID            - Key identifier
- * \param[IN]  address          - Address
- * \param[IN]  dir              - Frame direction ( Uplink or Downlink )
- * \param[IN]  frameCounter     - Frame counter
- * \param[IN]  size             - Size of data
- * \param[IN/OUT]  buffer       - Data buffer
+ * \param [in] keyID            - Key identifier
+ * \param [in] address          - Address
+ * \param [in] dir              - Frame direction ( Uplink or Downlink )
+ * \param [in] frameCounter     - Frame counter
+ * \param [in] size             - Size of data
+ * \param [in,out] buffer       - Data buffer
  * \retval                      - Status of the operation
  */
 static LoRaMacCryptoStatus_t PayloadEncrypt( uint8_t* buffer, int16_t size, KeyIdentifier_t keyID, uint32_t address, uint8_t dir, uint32_t frameCounter )
@@ -205,12 +201,12 @@ static LoRaMacCryptoStatus_t PayloadEncrypt( uint8_t* buffer, int16_t size, KeyI
 /*
  * Encrypts the FOpts
  *
- * \param[IN]  address          - Address
- * \param[IN]  dir              - Frame direction ( Uplink or Downlink )
- * \param[IN]  fCntID           - Frame counter identifier
- * \param[IN]  frameCounter     - Frame counter
- * \param[IN]  size             - Size of data
- * \param[IN/OUT]  buffer       - Data buffer
+ * \param [in] address          - Address
+ * \param [in] dir              - Frame direction ( Uplink or Downlink )
+ * \param [in] fCntID           - Frame counter identifier
+ * \param [in] frameCounter     - Frame counter
+ * \param [in] size             - Size of data
+ * \param [in,out] buffer       - Data buffer
  * \retval                      - Status of the operation
  */
 static LoRaMacCryptoStatus_t FOptsEncrypt( uint16_t size, uint32_t address, uint8_t dir, FCntIdentifier_t fCntID, uint32_t frameCounter, uint8_t* buffer )
@@ -288,13 +284,13 @@ static LoRaMacCryptoStatus_t FOptsEncrypt( uint16_t size, uint32_t address, uint
 /*
  * Prepares B0 block for cmac computation.
  *
- * \param[IN]  msgLen         - Length of message
- * \param[IN]  keyID          - Key identifier
- * \param[IN]  isAck          - True if it is a acknowledge frame ( Sets ConfFCnt in B0 block )
- * \param[IN]  devAddr        - Device address
- * \param[IN]  dir            - Frame direction ( Uplink:0, Downlink:1 )
- * \param[IN]  fCnt           - Frame counter
- * \param[IN/OUT]  b0         - B0 block
+ * \param [in] msgLen         - Length of message
+ * \param [in] keyID          - Key identifier
+ * \param [in] isAck          - True if it is a acknowledge frame ( Sets ConfFCnt in B0 block )
+ * \param [in] devAddr        - Device address
+ * \param [in] dir            - Frame direction ( Uplink:0, Downlink:1 )
+ * \param [in] fCnt           - Frame counter
+ * \param [in,out] b0         - B0 block
  * \retval                    - Status of the operation
  */
 static LoRaMacCryptoStatus_t PrepareB0( uint16_t msgLen, KeyIdentifier_t keyID, bool isAck, uint8_t dir, uint32_t devAddr, uint32_t fCnt, uint8_t* b0 )
@@ -352,14 +348,14 @@ static LoRaMacCryptoStatus_t PrepareB0( uint16_t msgLen, KeyIdentifier_t keyID, 
  *
  *  cmac = aes128_cmac(keyID, B0 | msg)
  *
- * \param[IN]  msg            - Message to compute the integrity code
- * \param[IN]  len            - Length of message
- * \param[IN]  keyID          - Key identifier
- * \param[IN]  isAck          - True if it is a acknowledge frame ( Sets ConfFCnt in B0 block )
- * \param[IN]  devAddr        - Device address
- * \param[IN]  dir            - Frame direction ( Uplink:0, Downlink:1 )
- * \param[IN]  fCnt           - Frame counter
- * \param[OUT] cmac           - Computed cmac
+ * \param [in] msg            - Message to compute the integrity code
+ * \param [in] len            - Length of message
+ * \param [in] keyID          - Key identifier
+ * \param [in] isAck          - True if it is a acknowledge frame ( Sets ConfFCnt in B0 block )
+ * \param [in] devAddr        - Device address
+ * \param [in] dir            - Frame direction ( Uplink:0, Downlink:1 )
+ * \param [in] fCnt           - Frame counter
+ * \param [out] cmac          - Computed cmac
  * \retval                    - Status of the operation
  */
 static LoRaMacCryptoStatus_t ComputeCmacB0( uint8_t* msg, uint16_t len, KeyIdentifier_t keyID, bool isAck, uint8_t dir, uint32_t devAddr, uint32_t fCnt, uint32_t* cmac )
@@ -388,14 +384,14 @@ static LoRaMacCryptoStatus_t ComputeCmacB0( uint8_t* msg, uint16_t len, KeyIdent
 /*!
  * Verifies cmac with adding B0 block in front.
  *
- * \param[IN]  msg            - Message to compute the integrity code
- * \param[IN]  len            - Length of message
- * \param[IN]  keyID          - Key identifier
- * \param[IN]  isAck          - True if it is a acknowledge frame ( Sets ConfFCnt in B0 block )
- * \param[IN]  devAddr        - Device address
- * \param[IN]  dir            - Frame direction ( Uplink:0, Downlink:1 )
- * \param[IN]  fCnt           - Frame counter
- * \param[in]  expectedCmac   - Expected cmac
+ * \param [in] msg            - Message to compute the integrity code
+ * \param [in] len            - Length of message
+ * \param [in] keyID          - Key identifier
+ * \param [in] isAck          - True if it is a acknowledge frame ( Sets ConfFCnt in B0 block )
+ * \param [in] devAddr        - Device address
+ * \param [in] dir            - Frame direction ( Uplink:0, Downlink:1 )
+ * \param [in] fCnt           - Frame counter
+ * \param [in] expectedCmac   - Expected cmac
  * \retval                    - Status of the operation
  */
 static LoRaMacCryptoStatus_t VerifyCmacB0( uint8_t* msg, uint16_t len, KeyIdentifier_t keyID, bool isAck, uint8_t dir, uint32_t devAddr, uint32_t fCnt, uint32_t expectedCmac )
@@ -437,14 +433,14 @@ static LoRaMacCryptoStatus_t VerifyCmacB0( uint8_t* msg, uint16_t len, KeyIdenti
 /*
  * Prpares B1 block for cmac computation.
  *
- * \param[IN]  msgLen         - Length of message
- * \param[IN]  keyID          - Key identifier
- * \param[IN]  isAck          - True if it is a acknowledge frame ( Sets ConfFCnt in B0 block )
- * \param[IN]  txDr           - Data rate used for the transmission
- * \param[IN]  txCh           - Index of the channel used for the transmission
- * \param[IN]  devAddr        - Device address
- * \param[IN]  fCntUp         - Frame counter
- * \param[IN/OUT]  b0         - B0 block
+ * \param [in] msgLen         - Length of message
+ * \param [in] keyID          - Key identifier
+ * \param [in] isAck          - True if it is a acknowledge frame ( Sets ConfFCnt in B0 block )
+ * \param [in] txDr           - Data rate used for the transmission
+ * \param [in] txCh           - Index of the channel used for the transmission
+ * \param [in] devAddr        - Device address
+ * \param [in] fCntUp         - Frame counter
+ * \param [in,out] b0         - B0 block
  * \retval                    - Status of the operation
  */
 static LoRaMacCryptoStatus_t PrepareB1( uint16_t msgLen, KeyIdentifier_t keyID, bool isAck, uint8_t txDr, uint8_t txCh, uint32_t devAddr, uint32_t fCntUp, uint8_t* b1 )
@@ -495,15 +491,15 @@ static LoRaMacCryptoStatus_t PrepareB1( uint16_t msgLen, KeyIdentifier_t keyID, 
  *
  *  cmac = aes128_cmac(keyID, B1 | msg)
  *
- * \param[IN]  msg            - Message to calculate the Integrity code
- * \param[IN]  len            - Length of message
- * \param[IN]  keyID          - Key identifier
- * \param[IN]  isAck          - True if it is a acknowledge frame ( Sets ConfFCnt in B0 block )
- * \param[IN]  txDr           - Data rate used for the transmission
- * \param[IN]  txCh           - Index of the channel used for the transmission
- * \param[IN]  devAddr        - Device address
- * \param[IN]  fCntUp         - Uplink Frame counter
- * \param[OUT] cmac           - Computed cmac
+ * \param [in] msg            - Message to calculate the Integrity code
+ * \param [in] len            - Length of message
+ * \param [in] keyID          - Key identifier
+ * \param [in] isAck          - True if it is a acknowledge frame ( Sets ConfFCnt in B0 block )
+ * \param [in] txDr           - Data rate used for the transmission
+ * \param [in] txCh           - Index of the channel used for the transmission
+ * \param [in] devAddr        - Device address
+ * \param [in] fCntUp         - Uplink Frame counter
+ * \param [out] cmac          - Computed cmac
  * \retval                    - Status of the operation
  */
 static LoRaMacCryptoStatus_t ComputeCmacB1( uint8_t* msg, uint16_t len, KeyIdentifier_t keyID, bool isAck, uint8_t txDr, uint8_t txCh, uint32_t devAddr, uint32_t fCntUp, uint32_t* cmac )
@@ -533,8 +529,8 @@ static LoRaMacCryptoStatus_t ComputeCmacB1( uint8_t* msg, uint16_t len, KeyIdent
 /*
  * Gets security item from list.
  *
- * \param[IN]  addrID          - Address identifier
- * \param[OUT] keyItem        - Key item reference
+ * \param [in] addrID         - Address identifier
+ * \param [out] keyItem       - Key item reference
  * \retval                    - Status of the operation
  */
 static LoRaMacCryptoStatus_t GetKeyAddrItem( AddressIdentifier_t addrID, KeyAddr_t** item )
@@ -553,10 +549,10 @@ static LoRaMacCryptoStatus_t GetKeyAddrItem( AddressIdentifier_t addrID, KeyAddr
 /*
  * Derives a session key as of LoRaWAN versions prior to 1.1.0
  *
- * \param[IN]  keyID          - Key Identifier for the key to be calculated
- * \param[IN]  joinNonce      - Sever nonce
- * \param[IN]  netID          - Network Identifier
- * \param[IN]  deviceNonce    - Device nonce
+ * \param [in] keyID          - Key Identifier for the key to be calculated
+ * \param [in] joinNonce      - Sever nonce
+ * \param [in] netID          - Network Identifier
+ * \param [in] deviceNonce    - Device nonce
  * \retval                    - Status of the operation
  */
 static LoRaMacCryptoStatus_t DeriveSessionKey10x( KeyIdentifier_t keyID, uint32_t joinNonce, uint32_t netID, uint16_t devNonce )
@@ -606,10 +602,10 @@ static LoRaMacCryptoStatus_t DeriveSessionKey10x( KeyIdentifier_t keyID, uint32_
 /*
  * Derives a session key as of LoRaWAN 1.1.0
  *
- * \param[IN]  keyID          - Key Identifier for the key to be calculated
- * \param[IN]  joinNonce      - Sever nonce
- * \param[IN]  joinEUI        - Join Server EUI
- * \param[IN]  deviceNonce    - Device nonce
+ * \param [in] keyID          - Key Identifier for the key to be calculated
+ * \param [in] joinNonce      - Sever nonce
+ * \param [in] joinEUI        - Join Server EUI
+ * \param [in] deviceNonce    - Device nonce
  * \retval                    - Status of the operation
  */
 static LoRaMacCryptoStatus_t DeriveSessionKey11x( KeyIdentifier_t keyID, uint32_t joinNonce, uint8_t* joinEUI, uint16_t devNonce )
@@ -661,8 +657,8 @@ static LoRaMacCryptoStatus_t DeriveSessionKey11x( KeyIdentifier_t keyID, uint32_
 /*
  * Derives a life time session key (JSIntKey or JSEncKey)  as of LoRaWAN 1.1.0
  *
- * \param[IN]  keyID          - Key Identifier for the key to be calculated
- * \param[IN]  devEUI         - Device EUI
+ * \param [in] keyID          - Key Identifier for the key to be calculated
+ * \param [in] devEUI         - Device EUI
  * \retval                    - Status of the operation
  */
 static LoRaMacCryptoStatus_t DeriveLifeTimeSessionKey( KeyIdentifier_t keyID, uint8_t* devEUI )
@@ -700,8 +696,8 @@ static LoRaMacCryptoStatus_t DeriveLifeTimeSessionKey( KeyIdentifier_t keyID, ui
 /*
  * Gets the last received frame counter
  *
- * \param[IN]     fCntID       - Frame counter identifier
- * \param[IN]     lastDown     - Last downlink counter value
+ * \param [in]    fCntID       - Frame counter identifier
+ * \param [in]    lastDown     - Last downlink counter value
  *
  * \retval                     - Status of the operation
  */
@@ -754,8 +750,8 @@ static LoRaMacCryptoStatus_t GetLastFcntDown( FCntIdentifier_t fCntID, uint32_t*
 /*
  * Checks the downlink counter value
  *
- * \param[IN]     fCntID       - Frame counter identifier
- * \param[IN]     currentDown  - Current downlink counter value
+ * \param [in]    fCntID       - Frame counter identifier
+ * \param [in]    currentDown  - Current downlink counter value
  *
  * \retval                     - Status of the operation
  */
@@ -781,8 +777,8 @@ static bool CheckFCntDown( FCntIdentifier_t fCntID, uint32_t currentDown )
 /*!
  * Updates the reference downlink counter
  *
- * \param[IN]     fCntID        - Frame counter identifier
- * \param[IN]     currentDown   - Current downlink counter value
+ * \param [in]    fCntID        - Frame counter identifier
+ * \param [in]    currentDown   - Current downlink counter value
  *
  * \retval                     - Status of the operation
  */
@@ -886,7 +882,7 @@ LoRaMacCryptoStatus_t LoRaMacCryptoGetFCntUp( uint32_t* currentUp )
 
     return LORAMAC_CRYPTO_SUCCESS;
 }
-
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000300 ))
 LoRaMacCryptoStatus_t LoRaMacCryptoGetFCntDown( FCntIdentifier_t fCntID, uint16_t maxFCntGap, uint32_t frameFcnt, uint32_t* currentDown )
 {
     uint32_t lastDown = 0;
@@ -940,6 +936,52 @@ LoRaMacCryptoStatus_t LoRaMacCryptoGetFCntDown( FCntIdentifier_t fCntID, uint16_
 
     return LORAMAC_CRYPTO_SUCCESS;
 }
+#elif (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+LoRaMacCryptoStatus_t LoRaMacCryptoGetFCntDown( FCntIdentifier_t fCntID, uint32_t frameFcnt, uint32_t* currentDown )
+{
+    uint32_t lastDown = 0;
+    int32_t fCntDiff = 0;
+    LoRaMacCryptoStatus_t cryptoStatus = LORAMAC_CRYPTO_ERROR;
+
+    if( currentDown == NULL )
+    {
+        return LORAMAC_CRYPTO_ERROR_NPE;
+    }
+
+    cryptoStatus = GetLastFcntDown( fCntID, &lastDown );
+    if( cryptoStatus != LORAMAC_CRYPTO_SUCCESS )
+    {
+        return cryptoStatus;
+    }
+
+    // For LoRaWAN 1.0.X only, allow downlink frames of 0
+    if( lastDown == FCNT_DOWN_INITAL_VALUE )
+    {
+        *currentDown = frameFcnt;
+    }
+    else
+    {
+        // Add difference, consider roll-over
+        fCntDiff = ( int32_t )( ( int64_t )frameFcnt - ( int64_t )( lastDown & 0x0000FFFF ) );
+
+        if( fCntDiff > 0 )
+        {  // Positive difference
+            *currentDown = lastDown + fCntDiff;
+        }
+        else if( fCntDiff == 0 )
+        {  // Duplicate FCnt value, keep the current value.
+            *currentDown = lastDown;
+            return LORAMAC_CRYPTO_FAIL_FCNT_DUPLICATED;
+        }
+        else
+        {  // Negative difference, assume a roll-over of one uint16_t
+            *currentDown = ( lastDown & 0xFFFF0000 ) + 0x10000 + frameFcnt;
+        }
+    }
+
+    return LORAMAC_CRYPTO_SUCCESS;
+}
+#endif /* LORAMAC_VERSION */
 
 #if( USE_LRWAN_1_1_X_CRYPTO == 1 )
 LoRaMacCryptoStatus_t LoRaMacCryptoGetRJcount( FCntIdentifier_t fCntID, uint16_t* rJcount )
@@ -1379,7 +1421,7 @@ LoRaMacCryptoStatus_t LoRaMacCryptoSecureMessage( uint32_t fCntUp, uint8_t txDr,
     }
     else
 #endif /* USE_LRWAN_1_1_X_CRYPTO */
-    {        
+    {
         // Use network session key
         /* ST_WORKAROUND_BEGIN: integrate 1.1.x keys only if required */
 #if ( USE_LRWAN_1_1_X_CRYPTO == 1 )
@@ -1497,7 +1539,7 @@ LoRaMacCryptoStatus_t LoRaMacCryptoUnsecureMessage( AddressIdentifier_t addrID, 
             {
                 return retval;
             }
-        } 
+        }
     }
 #endif
 

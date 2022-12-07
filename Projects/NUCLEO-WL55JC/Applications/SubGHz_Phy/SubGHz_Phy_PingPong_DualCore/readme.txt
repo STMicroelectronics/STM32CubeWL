@@ -2,7 +2,7 @@
   @page SubGHz_Phy_PingPong_DualCore Readme file
 
   @verbatim
-  ******************** (C) COPYRIGHT 2020 STMicroelectronics *******************
+  ******************************************************************************
   * @file    Applications/SubGHz_Phy/SubGHz_Phy_PingPong_DualCore/readme.txt
   * @author  MCD Application Team
   * @brief   This application is a simple demo application software between 2
@@ -10,15 +10,13 @@
   *          board embedding SubGHz_Phy_PingPong application too.
   *          IPCC and MBMUX are used for multicore communication.
   ******************************************************************************
-  * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2020-2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   @endverbatim
@@ -50,6 +48,8 @@ Applications, SubGHz_Phy, PingPong, DualCore
 @par Directory contents
 
 
+  - SubGHz_Phy_PingPong_DualCore/CM0PLUS/Core/Inc/gpio.h                        This file contains all the function prototypes for
+                                                                                the gpio.c file
   - SubGHz_Phy_PingPong_DualCore/CM0PLUS/Core/Inc/ipcc.h                        This file contains all the function prototypes for
                                                                                 the ipcc.c file
   - SubGHz_Phy_PingPong_DualCore/CM0PLUS/Core/Inc/ipcc_if.h                     This file contains the interface of the ipcc driver on CM0PLUS.
@@ -82,6 +82,8 @@ Applications, SubGHz_Phy, PingPong, DualCore
   - SubGHz_Phy_PingPong_DualCore/CM0PLUS/SubGHz_Phy/Target/timer.h              Wrapper to timer server
   - SubGHz_Phy_PingPong_DualCore/CM4/Core/Inc/dma.h                             This file contains all the function prototypes for
                                                                                 the dma.c file
+  - SubGHz_Phy_PingPong_DualCore/CM4/Core/Inc/gpio.h                            This file contains all the function prototypes for
+                                                                                the gpio.c file
   - SubGHz_Phy_PingPong_DualCore/CM4/Core/Inc/ipcc.h                            This file contains all the function prototypes for
                                                                                 the ipcc.c file
   - SubGHz_Phy_PingPong_DualCore/CM4/Core/Inc/ipcc_if.h                         This file contains the interface of the ipcc driver on CM4.
@@ -114,6 +116,8 @@ Applications, SubGHz_Phy, PingPong, DualCore
   - SubGHz_Phy_PingPong_DualCore/Common/MbMux/msg_id.h                          MBMUX message ID enumeration
   - SubGHz_Phy_PingPong_DualCore/Common/System/sys_debug.h                      Configuration of the debug.c instances
 
+  - SubGHz_Phy_PingPong_DualCore/CM0PLUS/Core/Src/gpio.c                        This file provides code for the configuration
+                                                                                of all used GPIO pins.
   - SubGHz_Phy_PingPong_DualCore/CM0PLUS/Core/Src/ipcc.c                        This file provides code for the configuration
                                                                                 of the IPCC instances.
   - SubGHz_Phy_PingPong_DualCore/CM0PLUS/Core/Src/ipcc_if.c                     Interface to IPCC: handles IRQs and abstract application from Ipcc handler and channel direction
@@ -139,6 +143,8 @@ Applications, SubGHz_Phy, PingPong, DualCore
   - SubGHz_Phy_PingPong_DualCore/CM0PLUS/SubGHz_Phy/Target/radio_board_if.c     This file provides an interface layer between MW and Radio Board
   - SubGHz_Phy_PingPong_DualCore/CM4/Core/Src/dma.c                             This file provides code for the configuration
                                                                                 of all the requested memory to memory DMA transfers.
+  - SubGHz_Phy_PingPong_DualCore/CM4/Core/Src/gpio.c                            This file provides code for the configuration
+                                                                                of all used GPIO pins.
   - SubGHz_Phy_PingPong_DualCore/CM4/Core/Src/ipcc.c                            This file provides code for the configuration
                                                                                 of the IPCC instances.
   - SubGHz_Phy_PingPong_DualCore/CM4/Core/Src/ipcc_if.c                         Interface to IPCC: handles IRQs and abstract application from Ipcc handler and channel direction
@@ -161,7 +167,7 @@ Applications, SubGHz_Phy, PingPong, DualCore
   - SubGHz_Phy_PingPong_DualCore/CM4/SubGHz_Phy/App/app_subghz_phy.c            Application of the SubGHz_Phy Middleware
   - SubGHz_Phy_PingPong_DualCore/CM4/SubGHz_Phy/App/subghz_phy_app.c            Application of the SubGHz_Phy Middleware
   - SubGHz_Phy_PingPong_DualCore/Common/System/system_stm32wlxx.c               CMSIS Cortex Device Peripheral Access Layer System Source File
-  - SubGHz_Phy_PingPong_DualCore/Common/System/sys_debug.c                      Enables 4 debug pins for internal signals RealTime debugging
+  - SubGHz_Phy_PingPong_DualCore/Common/System/sys_debug.c                      Configure probes pins RealTime debugging and JTAG/SerialWires for LowPower
   - SubGHz_Phy_PingPong_DualCore/STM32CubeIDE/CM0PLUS/Application/User/Core/syscalls.cSTM32CubeIDE Minimal System calls file
   - SubGHz_Phy_PingPong_DualCore/STM32CubeIDE/CM0PLUS/Application/User/Core/sysmem.cSTM32CubeIDE System Memory calls file
   - SubGHz_Phy_PingPong_DualCore/STM32CubeIDE/CM4/Application/User/Core/syscalls.cSTM32CubeIDE Minimal System calls file
@@ -220,6 +226,34 @@ In order to make the program work, you must do the following :
          (CM0PLUS is in a while loop waiting CM4 to give green light to go further)
          (this is done to prevent CM0PLUS to execute too much code before attaching)
   - on CM4 execute MBMUXIF_SetCpusSynchroFlag(1); this will allow CM0PLUS to exit the while loop
+
+@par How to use MX to modify some RF middleware and application settings
+  This example is compatible (with some problems/limitations) with STM32CubeMX 
+  and the RF application and middleware configuration can be modified via GUI. Few warnings and guidelines:
+  - ioc file is provided in the project directory and can be opened with STM32CubeMX v6.5.0 or higher.
+  - warning: when regenerating with the provided ioc file, 
+    the IDE projects are regenerated and paths to HAL and MWs files from STM32Cube/Repository location are erroneously added; to avoid that, 
+    user shall uncheck the "Use Default Firmware Location" in the GUI "Project-Manager" panel
+    and shall replace "Firmware Relative Path" with the root directory of the STM32CubeWL firmware package  (e.g. C:\myDir\STM32Cube_FW_WL_V1.2.0\);
+    problem will be fixed in next STM32CubeMX version.
+  - .extSettings file allows to add to the generated IDE projects additional files not generated natively by MX (e.g. BSP files).
+  - when regenerating on existing code and existing linker files:
+    - STM32CubeMX updates the existing project content and preserves linker files.
+    - STM32CubeMX does not update the USER CODE sections (lines between /* USER CODE BEGIN Xxx */ and /* USER CODE END Xxx */).
+  - when regenerating after copying only the ioc file in an empty directory:
+    - STM32CubeMX generates default project files and default linker files. (Please check original linker file from project directory)
+    - it is up to the user to to fill the USER CODE sections with his application code.
+
+@par How to use it with Azure ThreadX RTOS?
+  This example can be combined with Azure ThreadX RTOS via STM32CubeMX (CM4 core only).
+  The video tutorial: "STM32WL - How to port an existing RF application on Azure ThreadX RTOS"
+  is available on https://www.youtube.com/playlist?list=PLnMKNibPkDnE2eaR-ZGM3ZJXadyQLtTpX
+  but not sufficient for the complete porting of this example.
+  After following the video instructions the user shall open "CM4\subghz_phy_app.c" and manually:
+  - delete "stm32_seq.h" inclusion
+  - delete the line "UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_SubGHz_Phy_App_Process), UTIL_SEQ_RFU, PingPong_Process);
+  - call PingPong_Process(); function within /* USER CODE App_Main_Thread_Entry_Loop */
+  - replace "UTIL_SEQ_SetTask(..) calls" with tx_thread_resume(&App_MainThread);
 
  * <h3><center>&copy; COPYRIGHT STMicroelectronics</center></h3>
  */

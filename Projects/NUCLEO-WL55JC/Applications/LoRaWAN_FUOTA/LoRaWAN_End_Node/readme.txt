@@ -2,21 +2,19 @@
   @page LoRaWAN_End_Node Readme file
 
   @verbatim
-  ******************** (C) COPYRIGHT 2020 STMicroelectronics *******************
+  ******************************************************************************
   * @file    Applications/LoRaWAN_FUOTA/LoRaWAN_End_Node/readme.txt
   * @author  MCD Application Team
   * @brief   This application is a simple demo application software of a LoRa
   *          modem connecting to Network server with firmware update over the air download capabilities
   ******************************************************************************
-  * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2020-2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   @endverbatim
@@ -45,6 +43,8 @@ Applications, SubGHz_Phy, LoRaWAN, End_Node, SingleCore, FUOTA, BFU, KMS
   - LoRaWAN_End_Node/Core/Inc/dma.h                                             This file contains all the function prototypes for
                                                                                 the dma.c file
   - LoRaWAN_End_Node/Core/Inc/flash_if.h                                        This file contains definitions for FLASH Interface functionalities.
+  - LoRaWAN_End_Node/Core/Inc/gpio.h                                            This file contains all the function prototypes for
+                                                                                the gpio.c file
   - LoRaWAN_End_Node/Core/Inc/kms_if.h                                          This file contains kms interfaces with middleware
   - LoRaWAN_End_Node/Core/Inc/main.h                                            : Header for main.c file.
                                                                                 This file contains the common defines of the application.
@@ -91,6 +91,8 @@ Applications, SubGHz_Phy, LoRaWAN, End_Node, SingleCore, FUOTA, BFU, KMS
                                                                                 of all the requested memory to memory DMA transfers.
   - LoRaWAN_End_Node/Core/Src/flash_if.c                                        This file provides set of firmware functions to manage Flash
                                                                                 Interface functionalities.
+  - LoRaWAN_End_Node/Core/Src/gpio.c                                            This file provides code for the configuration
+                                                                                of all used GPIO pins.
   - LoRaWAN_End_Node/Core/Src/main.c                                            : Main program body
   - LoRaWAN_End_Node/Core/Src/rtc.c                                             This file provides code for the configuration
                                                                                 of the RTC instances.
@@ -102,7 +104,7 @@ Applications, SubGHz_Phy, LoRaWAN, End_Node, SingleCore, FUOTA, BFU, KMS
                                                                                 of the SUBGHZ instances.
   - LoRaWAN_End_Node/Core/Src/system_stm32wlxx.c                                CMSIS Cortex Device Peripheral Access Layer System Source File
   - LoRaWAN_End_Node/Core/Src/sys_app.c                                         Initializes HW and SW system entities (not related to the radio)
-  - LoRaWAN_End_Node/Core/Src/sys_debug.c                                       Enables 4 debug pins for internal signals RealTime debugging
+  - LoRaWAN_End_Node/Core/Src/sys_debug.c                                       Configure probes pins RealTime debugging and JTAG/SerialWires for LowPower
   - LoRaWAN_End_Node/Core/Src/sys_sensors.c                                     Manages the sensors on the application
   - LoRaWAN_End_Node/Core/Src/timer_if.c                                        Configure RTC Alarm, Tick and Calendar manager
   - LoRaWAN_End_Node/Core/Src/usart.c                                           This file provides code for the configuration
@@ -114,7 +116,7 @@ Applications, SubGHz_Phy, LoRaWAN, End_Node, SingleCore, FUOTA, BFU, KMS
   - LoRaWAN_End_Node/LoRaWAN/App/fw_update_agent.c                              This file provides set of functions to manage Firmware Update functionalities.
   - LoRaWAN_End_Node/LoRaWAN/App/lora_app.c                                     Application of the LRWAN Middleware
   - LoRaWAN_End_Node/LoRaWAN/App/lora_info.c                                    To give info to the application about LoRaWAN configuration
-  - LoRaWAN_End_Node/LoRaWAN/Target/frag_decoder_if.c                           Implements the Data Distribution Agent
+  - LoRaWAN_End_Node/LoRaWAN/Target/frag_decoder_if.c                           Implements the interface of LoRa-Alliance fragmentation decoder
   - LoRaWAN_End_Node/LoRaWAN/Target/radio_board_if.c                            This file provides an interface layer between MW and Radio Board
   - LoRaWAN_End_Node/STM32CubeIDE/Application/User/Core/syscalls.c              STM32CubeIDE Minimal System calls file
   - LoRaWAN_End_Node/STM32CubeIDE/Application/User/Core/sysmem.c                STM32CubeIDE System Memory calls file

@@ -1060,6 +1060,9 @@
                     <name>$PROJ_DIR$\..\Core\Src\dma.c</name>
                 </file>
                 <file>
+                    <name>$PROJ_DIR$\..\Core\Src\gpio.c</name>
+                </file>
+                <file>
                     <name>$PROJ_DIR$\..\Core\Src\main.c</name>
                 </file>
                 <file>

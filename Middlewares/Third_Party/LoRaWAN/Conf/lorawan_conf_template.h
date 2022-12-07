@@ -1,3 +1,4 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    lorawan_conf_template.h
@@ -6,16 +7,16 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
+/* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __LORAWAN_CONF_H__
@@ -35,6 +36,36 @@ extern "C" {
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
+#if defined(__ICCARM__)
+#define SOFT_SE_PLACE_IN_NVM_START _Pragma(" default_variable_attributes = @ \".USER_embedded_Keys\"")
+#elif defined(__CC_ARM)
+#define SOFT_SE_PLACE_IN_NVM_START _Pragma("  arm section rodata = \".USER_embedded_Keys\"")
+#elif defined(__GNUC__)
+#define SOFT_SE_PLACE_IN_NVM_START __attribute__((section(".USER_embedded_Keys")))
+#endif
+
+/* Stop placing data in specified section*/
+#if defined(__ICCARM__)
+#define SOFT_SE_PLACE_IN_NVM_STOP _Pragma("default_variable_attributes =")
+#elif defined(__CC_ARM)
+#define SOFT_SE_PLACE_IN_NVM_STOP _Pragma("arm section code")
+#endif
+
+/*!
+ * @brief LoRaWAN version definition
+ * @note  possible values: 0x01000300 or 0x01000400
+ */
+#define LORAMAC_SPECIFICATION_VERSION                   0x01000400
+
+/* USER CODE BEGIN LORAWAN_KMS */
+#define LORAWAN_KMS 0
+/* USER CODE END LORAWAN_KMS */
+
+#if (!defined (LORAWAN_KMS) || (LORAWAN_KMS == 0))
+#else /* LORAWAN_KMS == 1 */
+#define OVER_THE_AIR_ACTIVATION 1
+#define ACTIVATION_BY_PERSONALIZATION 1
+#endif /* LORAWAN_KMS */
 
 /* Region ------------------------------------*/
 /* the region listed here will be linked in the MW code */
@@ -67,13 +98,13 @@ extern "C" {
  * Enables/Disables the context storage management storage.
  * Must be enabled for LoRaWAN 1.0.4 or later.
  */
-#define CONTEXT_MANAGEMENT_ENABLED                      0
+#define CONTEXT_MANAGEMENT_ENABLED                      1
 
 /* Class B ------------------------------------*/
-#define LORAMAC_CLASSB_ENABLED  0
+#define LORAMAC_CLASSB_ENABLED                          0
 
 #if ( LORAMAC_CLASSB_ENABLED == 1 )
-/* CLASS B LSE crystall calibration*/
+/* CLASS B LSE crystal calibration*/
 /**
   * \brief Temperature coefficient of the clock source
   */
@@ -94,6 +125,16 @@ extern "C" {
   */
 #define RTC_TEMP_DEV_TURNOVER                           ( 5.0 )
 #endif /* LORAMAC_CLASSB_ENABLED == 1 */
+
+/**
+  * \brief Disable the ClassA receive windows after Tx (after the Join Accept if OTAA mode defined)
+  * \note  Behavior to reduce power consumption but not compliant with LoRa Alliance recommendations.
+  *        All device parameters (Spreading Factor, channels selection, Tx Power, ...) should be fixed
+  *        and the adaptive datarate should be disabled.
+  * /warning This limitation may have consequences for the proper functioning of the device,
+             if the LoRaMac ever generates MAC commands that require a response.
+  */
+#define DISABLE_LORAWAN_RX_WINDOW                       0
 
 /* USER CODE BEGIN EC */
 
@@ -126,5 +167,3 @@ extern "C" {
 #endif
 
 #endif /* __LORAWAN_CONF_H__ */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

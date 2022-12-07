@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2020(-2021) STMicroelectronics.
+  * Copyright (c) 2020-2021 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -135,17 +135,17 @@ typedef enum
 }Presence_TypeDef;
 /**
   * @}
-  */ 
+  */
 
 /** @defgroup STM32WLXX_NUCLEO_LOW_LEVEL_Exported_Constants LOW LEVEL Exported Constants
   * @{
-  */ 
+  */
 
 /**
   * @brief STM32WLXX NUCLEO BSP Driver version number
   */
 #define __STM32WLXX_NUCLEO_BSP_VERSION_MAIN   (0x01U) /*!< [31:24] main version */
-#define __STM32WLXX_NUCLEO_BSP_VERSION_SUB1   (0x01U) /*!< [23:16] sub1 version */
+#define __STM32WLXX_NUCLEO_BSP_VERSION_SUB1   (0x02U) /*!< [23:16] sub1 version */
 #define __STM32WLXX_NUCLEO_BSP_VERSION_SUB2   (0x00U) /*!< [15:8]  sub2 version */
 #define __STM32WLXX_NUCLEO_BSP_VERSION_RC     (0x00U) /*!< [7:0]  release candidate */ 
 #define __STM32WLXX_NUCLEO_BSP_VERSION        ((__STM32WLXX_NUCLEO_BSP_VERSION_MAIN << 24)\
@@ -155,7 +155,7 @@ typedef enum
 
 /** 
   * @brief Define for STM32WLXX_NUCLEO board  
-  */ 
+  */
 #if !defined (USE_STM32WLXX_NUCLEO)
  #define USE_STM32WLXX_NUCLEO
 #endif
@@ -184,11 +184,11 @@ typedef enum
 #define LEDx_GPIO_CLK_DISABLE(__INDEX__)        __HAL_RCC_GPIOB_CLK_DISABLE() /* All Led on same port */
 /**
   * @}
-  */ 
+  */
   
 /** @defgroup STM32WLXX_NUCLEO_LOW_LEVEL_BUTTON LOW LEVEL BUTTON Constants
   * @{
-  */  
+  */
 #define BUTTONn                                 3
 
 /**
@@ -245,7 +245,7 @@ typedef enum
 #if (USE_BSP_COM_FEATURE > 0)
 /** @defgroup STM32WLXX_NUCLEO_LOW_LEVEL_COM LOW LEVEL COM Port Constants
   * @{
-  */  
+  */
 #define COM1_UART                             LPUART1
 #define COM1_CLK_ENABLE()                     __HAL_RCC_LPUART1_CLK_ENABLE()
 #define COM1_CLK_DISABLE()                    __HAL_RCC_LPUART1_CLK_DISABLE()
@@ -317,7 +317,7 @@ void             BSP_PB_IRQHandler(Button_TypeDef Button);
 #if (USE_BSP_COM_FEATURE > 0)
 /** @defgroup STM32WLXX_NUCLEO_LOW_LEVEL_COM_Functions LOW LEVEL COM Port Functions
   * @{
-  */  
+  */
 int32_t  BSP_COM_Init(COM_TypeDef COM, COM_InitTypeDef *COM_Init);
 int32_t  BSP_COM_DeInit(COM_TypeDef COM);
 #if (USE_COM_LOG > 0)
@@ -354,6 +354,3 @@ HAL_StatusTypeDef MX_LPUART1_Init(UART_HandleTypeDef *huart, MX_UART_InitTypeDef
 #endif
 
 #endif /* STM32WLXX_NUCLEO_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-

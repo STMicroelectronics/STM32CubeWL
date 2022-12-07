@@ -8,13 +8,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -480,7 +479,7 @@ static SFU_ErrorStatus DecryptImageFromDwlSlotToActiveSlot(uint32_t ActiveSlot, 
     return e_ret_status;
   }
 
-  /* Control the firwmare size vs slot size */
+  /* Control the firmware size vs slot size */
   if ((pFwImageHeader->FwSize + SFU_IMG_IMAGE_OFFSET) > SLOT_SIZE(ActiveSlot))
   {
     return e_ret_status;
@@ -862,7 +861,7 @@ SFU_ErrorStatus SFU_IMG_TriggerImageInstallation(uint32_t DwlSlot)
   pbuffer = (uint8_t *) SlotHeaderAdd[active_slot];
   e_ret_status = SFU_LL_FLASH_Read((uint8_t *) &fw_image_header_validated, pbuffer,
                                    sizeof(fw_image_header_validated));
-  
+
   /*
    * Installing the new firmware image consists in decrypting the candidate firmware image.
    * fw_image_header_to_test is already populated after SFU_IMG_CheckPendingInstallation() call.
@@ -914,6 +913,3 @@ SFU_ErrorStatus SFU_IMG_EraseDownloadedImg(uint32_t DwlSlot)
 }
 
 #endif /* (SECBOOT_LOADER == SECBOOT_USE_STANDALONE_LOADER) || (SFU_NO_SWAP) */
-
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

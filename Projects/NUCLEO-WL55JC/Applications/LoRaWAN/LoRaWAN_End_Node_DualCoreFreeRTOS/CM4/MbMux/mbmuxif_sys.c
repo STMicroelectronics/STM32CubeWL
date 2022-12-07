@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -58,7 +57,7 @@ static FLASH_OBProgramInitTypeDef OptionsBytesStruct;
 static __IO uint8_t AllowSequencerForSysCmd = 0;
 static __IO uint8_t MbSystemRespRcvFlag;
 
-UTIL_MEM_PLACE_IN_SECTION("MAPPING_TABLE") static  MBMUX_ComTable_t MBSYS_RefTable UTIL_MEM_ALIGN(16) ;
+UTIL_MEM_PLACE_IN_SECTION("MAPPING_TABLE") static  MBMUX_ComTable_t MBSYS_RefTable UTIL_MEM_ALIGN(16);
 
 MBMUX_ComTable_t *pMb_RefTable = &MBSYS_RefTable;
 MBMUX_ComParam_t *SystemComObj;
@@ -66,12 +65,13 @@ MBMUX_ComParam_t *SystemComObj;
 UTIL_MEM_PLACE_IN_SECTION("MB_MEM1") uint32_t aSystemCmdRespBuff[MAX_PARAM_OF_SYS_CMD_FUNCTIONS];/*shared*/
 UTIL_MEM_PLACE_IN_SECTION("MB_MEM1") uint32_t aSystemNotifAckBuff[MAX_PARAM_OF_SYS_NOTIF_FUNCTIONS];/*shared*/
 UTIL_MEM_PLACE_IN_SECTION("MB_MEM1") uint32_t aSystemPrioACmdRespBuff[MAX_PARAM_OF_SYS_PRIOA_CMD_FUNCTIONS];/*shared*/
-UTIL_MEM_PLACE_IN_SECTION("MB_MEM1") uint32_t aSystemPrioANotifAckBuff[MAX_PARAM_OF_SYS_PRIOA_NOTIF_FUNCTIONS];/*shared*/
+UTIL_MEM_PLACE_IN_SECTION("MB_MEM1") uint32_t
+aSystemPrioANotifAckBuff[MAX_PARAM_OF_SYS_PRIOA_NOTIF_FUNCTIONS];/*shared*/
 UTIL_MEM_PLACE_IN_SECTION("MB_MEM1") uint32_t aSystemPrioBCmdRespBuff[MAX_PARAM_OF_SYS_PRIOB_CMD_FUNCTIONS];/*shared*/
-UTIL_MEM_PLACE_IN_SECTION("MB_MEM1") uint32_t aSystemPrioBNotifAckBuff[MAX_PARAM_OF_SYS_PRIOB_NOTIF_FUNCTIONS];/*shared*/
+UTIL_MEM_PLACE_IN_SECTION("MB_MEM1") uint32_t
+aSystemPrioBNotifAckBuff[MAX_PARAM_OF_SYS_PRIOB_NOTIF_FUNCTIONS];/*shared*/
 
 static osSemaphoreId_t Sem_MbSystemRespRcv;
-
 osThreadId_t Thd_SysNotifRcvProcessId;
 
 const osThreadAttr_t Thd_SysNotifRcvProcess_attr =
@@ -82,9 +82,8 @@ const osThreadAttr_t Thd_SysNotifRcvProcess_attr =
   .cb_size = CFG_MB_SYS_PROCESS_CB_SIZE,
   .stack_mem = CFG_MB_SYS_PROCESS_STACK_MEM,
   .priority = CFG_MB_SYS_PROCESS_PRIORITY,
-  .stack_size = CFG_MB_SYS_PROCESS_STACk_SIZE
+  .stack_size = CFG_MB_SYS_PROCESS_STACK_SIZE
 };
-static void Thd_SysNotifRcvProcess(void *argument);
 
 /* USER CODE BEGIN PV */
 
@@ -132,6 +131,11 @@ static void MBMUXIF_IsrSystemPrioBRespRcvCb(void *ComObj);
   */
 static void MBMUXIF_IsrSystemPrioBNotifRcvCb(void *ComObj);
 
+/**
+  * @brief  FreeRTOS process when receiving MailBox System Notification .
+  */
+static void Thd_SysNotifRcvProcess(void *argument);
+
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -139,7 +143,7 @@ static void MBMUXIF_IsrSystemPrioBNotifRcvCb(void *ComObj);
 /* Exported functions --------------------------------------------------------*/
 int8_t MBMUXIF_SystemInit(void)
 {
-  int8_t ret;
+  int8_t ret = 0;
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
 
   /* USER CODE BEGIN MBMUXIF_SystemInit_1 */
@@ -229,14 +233,19 @@ int8_t MBMUXIF_SystemInit(void)
   }
   Sem_MbSystemRespRcv = osSemaphoreNew(1, 0, NULL);   /*< Create the semaphore and make it busy at initialization */
 
-  /* Init MailBoxMultiplexer */
-  MBMUX_Init(pMb_RefTable);
+  if (ret >= 0)
+  {
+    /* Init MailBoxMultiplexer */
+    MBMUX_Init(pMb_RefTable);
 
-  ret = MBMUX_RegisterFeature(FEAT_INFO_SYSTEM_ID, MBMUX_CMD_RESP, MBMUXIF_IsrSystemRespRcvCb, aSystemCmdRespBuff, sizeof(aSystemCmdRespBuff));
+    ret = MBMUX_RegisterFeature(FEAT_INFO_SYSTEM_ID, MBMUX_CMD_RESP, MBMUXIF_IsrSystemRespRcvCb, aSystemCmdRespBuff, sizeof(aSystemCmdRespBuff));
+  }
+
   if (ret >= 0)
   {
     ret = MBMUX_RegisterFeature(FEAT_INFO_SYSTEM_ID, MBMUX_NOTIF_ACK, MBMUXIF_IsrSystemNotifRcvCb, aSystemNotifAckBuff, sizeof(aSystemNotifAckBuff));
   }
+
   if (ret >= 0)
   {
     ret = 0;
@@ -473,7 +482,7 @@ int8_t MBMUXIF_SystemSendCm0plusRegistrationCmd(FEAT_INFO_IdTypeDef e_featID)
 {
   MBMUX_ComParam_t *com_obj;
   uint32_t ret = 0;
-  uint32_t *com_buffer ;
+  uint32_t *com_buffer;
   uint16_t i = 0;
   /* USER CODE BEGIN MBMUXIF_SystemSendCm0plusRegistrationCmd_1 */
 
@@ -543,6 +552,8 @@ static void Thd_SysNotifRcvProcess(void *argument)
     osThreadFlagsWait(1, osFlagsWaitAny, osWaitForever);
     MBMUXIF_TaskSystemNotifRcv();  /*what you want to do*/
   }
+  /* Following USER CODE SECTION will be never reached */
+  /* it can be use for compilation flag like #else or #endif */
   /* USER CODE BEGIN Thd_SysNotifRcvProcess_Last */
 
   /* USER CODE END Thd_SysNotifRcvProcess_Last */
@@ -596,5 +607,3 @@ static void MBMUXIF_IsrSystemPrioBNotifRcvCb(void *ComObj)
 /* USER CODE BEGIN PrFD */
 
 /* USER CODE END PrFD */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

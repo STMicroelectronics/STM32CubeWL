@@ -8,6 +8,17 @@
   *           + IO operation functions
   *           + Peripheral State and Errors functions
   *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2020 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
  @verbatim
  ==============================================================================
                        ##### How to use this driver #####
@@ -115,18 +126,6 @@
      not defined, the callback registration feature is not available and all callbacks
      are set to the corresponding weak functions.
 #endif
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
-  ******************************************************************************
   */
 
 /* Includes ------------------------------------------------------------------*/
@@ -942,7 +941,7 @@ HAL_StatusTypeDef HAL_SUBGHZ_ExecSetCmd(SUBGHZ_HandleTypeDef *hsubghz,
   HAL_StatusTypeDef status;
 
   /* LORA Modulation not available on STM32WLx4xx devices */
-  assert_param(IS_SUBGHZ_MODULATION_SUPPORTED(Command, pBuffer[0]));
+  assert_param(IS_SUBGHZ_MODULATION_SUPPORTED(Command, pBuffer[0U]));
 
   if (hsubghz->State == HAL_SUBGHZ_STATE_READY)
   {
@@ -1198,13 +1197,13 @@ HAL_StatusTypeDef HAL_SUBGHZ_ReadBuffer(SUBGHZ_HandleTypeDef *hsubghz,
   */
 void HAL_SUBGHZ_IRQHandler(SUBGHZ_HandleTypeDef *hsubghz)
 {
-  uint8_t tmpisr[2] = {0};
+  uint8_t tmpisr[2U] = {0U};
   uint16_t itsource;
 
   /* Retrieve Interrupts from SUBGHZ Irq Register */
-  (void)HAL_SUBGHZ_ExecGetCmd(hsubghz, RADIO_GET_IRQSTATUS, tmpisr, 2);
-  itsource = tmpisr[0];
-  itsource = (itsource << 8) | tmpisr[1];
+  (void)HAL_SUBGHZ_ExecGetCmd(hsubghz, RADIO_GET_IRQSTATUS, tmpisr, 2U);
+  itsource = tmpisr[0U];
+  itsource = (itsource << 8U) | tmpisr[1U];
 
   /* Packet transmission completed Interrupt */
   if (SUBGHZ_CHECK_IT_SOURCE(itsource, SUBGHZ_IT_TX_CPLT) != RESET)
@@ -1571,7 +1570,7 @@ void  SUBGHZSPI_DeInit(void)
 }
 
 /**
-  * @brief  Transmit data trough SUBGHZSPI peripheral
+  * @brief  Transmit data through SUBGHZSPI peripheral
   * @param  hsubghz pointer to a SUBGHZ_HandleTypeDef structure that contains
   *         the handle information for SUBGHZ module.
   * @param  Data  data to transmit
@@ -1630,7 +1629,7 @@ HAL_StatusTypeDef SUBGHZSPI_Transmit(SUBGHZ_HandleTypeDef *hsubghz,
 }
 
 /**
-  * @brief  Receive data trough SUBGHZSPI peripheral
+  * @brief  Receive data through SUBGHZSPI peripheral
   * @param  hsubghz pointer to a SUBGHZ_HandleTypeDef structure that contains
   *         the handle information for SUBGHZ module.
   * @param  pData  pointer on data to receive
@@ -1764,4 +1763,3 @@ HAL_StatusTypeDef SUBGHZ_WaitOnBusy(SUBGHZ_HandleTypeDef *hsubghz)
   * @}
   */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

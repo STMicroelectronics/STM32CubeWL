@@ -181,6 +181,11 @@
 			<locationURI>PARENT-2-PROJECT_LOC/CM4/Core/Src/dma.c</locationURI>
 		</link>
 		<link>
+			<name>Application/User/Core/gpio.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/CM4/Core/Src/gpio.c</locationURI>
+		</link>
+		<link>
 			<name>Application/User/Core/ipcc.c</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/CM4/Core/Src/ipcc.c</locationURI>

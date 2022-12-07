@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -57,6 +56,8 @@
 
 /* Private variables ---------------------------------------------------------*/
 static MBMUX_ComParam_t *LoraComObj;
+static osSemaphoreId_t Sem_MbLoRaRespRcv;
+osThreadId_t Thd_LoraNotifRcvProcessId;
 
 /**
   * @brief LoRa cmd buffer to exchange data between CM4 and CM0+
@@ -90,10 +91,6 @@ static void MBMUXIF_IsrLoraNotifRcvCb(void *ComObj);
   */
 static void MBMUXIF_TaskLoraNotifRcv(void);
 
-static osSemaphoreId_t Sem_MbLoRaRespRcv;
-
-osThreadId_t Thd_LoraNotifRcvProcessId;
-
 const osThreadAttr_t Thd_LoraNotifRcvProcess_attr =
 {
   .name = CFG_MB_LORA_PROCESS_NAME,
@@ -102,8 +99,11 @@ const osThreadAttr_t Thd_LoraNotifRcvProcess_attr =
   .cb_size = CFG_MB_LORA_PROCESS_CB_SIZE,
   .stack_mem = CFG_MB_LORA_PROCESS_STACK_MEM,
   .priority = CFG_MB_LORA_PROCESS_PRIORITY,
-  .stack_size = CFG_MB_LORA_PROCESS_STACk_SIZE
+  .stack_size = CFG_MB_LORA_PROCESS_STACK_SIZE
 };
+/**
+  * @brief  FreeRTOS process when receiving MailBox Lora Notification .
+  */
 static void Thd_LoraNotifRcvProcess(void *argument);
 /* USER CODE BEGIN PFP */
 
@@ -122,8 +122,8 @@ int8_t MBMUXIF_LoraInit(void)
 
   p_cm0plus_system_info = MBMUXIF_SystemGetFeatCapabInfoPtr(FEAT_INFO_SYSTEM_ID);
   /* abstract CM0 release version from RC (release candidate) and compare */
-  cm0_vers = p_cm0plus_system_info->Feat_Info_Feature_Version >> __APP_VERSION_SUB2_SHIFT;
-  if (cm0_vers < (__LAST_COMPATIBLE_CM0_RELEASE >> __APP_VERSION_SUB2_SHIFT))
+  cm0_vers = p_cm0plus_system_info->Feat_Info_Feature_Version >> APP_VERSION_SUB2_SHIFT;
+  if (cm0_vers < (LAST_COMPATIBLE_CM0_RELEASE >> APP_VERSION_SUB2_SHIFT))
   {
     ret = -4; /* version incompatibility */
   }
@@ -135,15 +135,21 @@ int8_t MBMUXIF_LoraInit(void)
   {
     ret = MBMUX_RegisterFeature(FEAT_INFO_LORAWAN_ID, MBMUX_NOTIF_ACK, MBMUXIF_IsrLoraNotifRcvCb, aLoraNotifAckBuff, sizeof(aLoraNotifAckBuff));
   }
+
   if (ret >= 0)
   {
     Thd_LoraNotifRcvProcessId = osThreadNew(Thd_LoraNotifRcvProcess, NULL, &Thd_LoraNotifRcvProcess_attr);
+  }
+
+  if (ret >= 0)
+  {
     ret = MBMUXIF_SystemSendCm0plusRegistrationCmd(FEAT_INFO_LORAWAN_ID);
     if (ret < 0)
     {
       ret = -3;
     }
   }
+
   Sem_MbLoRaRespRcv = osSemaphoreNew(1, 0, NULL);   /*< Create the semaphore and make it busy at initialization */
 
   if (ret >= 0)
@@ -255,6 +261,8 @@ static void Thd_LoraNotifRcvProcess(void *argument)
     osThreadFlagsWait(1, osFlagsWaitAny, osWaitForever);
     MBMUXIF_TaskLoraNotifRcv();  /*what you want to do*/
   }
+  /* Following USER CODE SECTION will be never reached */
+  /* it can be use for compilation flag like #else or #endif */
   /* USER CODE BEGIN Thd_LoraNotifRcvProcess_Last */
 
   /* USER CODE END Thd_LoraNotifRcvProcess_Last */
@@ -263,5 +271,3 @@ static void Thd_LoraNotifRcvProcess(void *argument)
 /* USER CODE BEGIN PrFD */
 
 /* USER CODE END PrFD */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

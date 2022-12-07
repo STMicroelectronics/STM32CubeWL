@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright(c) 2017 STMicroelectronics International N.V.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -27,19 +26,24 @@
 #define SWAP_START                   0x08002000
 #define SWAP_END                     0x08002FFF
 
+/* Dwl slot #1  (64 kbytes) */
+#define SLOT_DWL_1_START             0x08003000
+#define SLOT_DWL_1_END               0x08012FFF
+
+/* Active slot #2  (44 kbytes) */
+#define SLOT_ACTIVE_2_HEADER         0x0803F000
+#define SLOT_ACTIVE_2_START          0x08013000
+#define SLOT_ACTIVE_2_END            0x0801DFFF
+
+/* NVM FLASH Data */
+/* WARNING: Symbols not used. The NVMS address is defined in lora_app.c */
+#define LW_NVM_ROM_START             0x0801E000
+#define LW_NVM_ROM_END               0x0801EFFF
+
 /* Active slot #1  (64 kbytes) */
 #define SLOT_ACTIVE_1_HEADER         0x0803F800
 #define SLOT_ACTIVE_1_START          0x0801F000
 #define SLOT_ACTIVE_1_END            0x0802EFFF
-
-/* Active slot #2  (48 kbytes) */
-#define SLOT_ACTIVE_2_HEADER         0x0803F000
-#define SLOT_ACTIVE_2_START          0x08013000
-#define SLOT_ACTIVE_2_END            0x0801EFFF
-
-/* Dwl slot #1  (64 kbytes) */
-#define SLOT_DWL_1_START             0x08003000
-#define SLOT_DWL_1_END               0x08012FFF
 
 /* Slots not configured */
 #define SLOT_ACTIVE_3_HEADER         0x00000000

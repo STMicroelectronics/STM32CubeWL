@@ -367,6 +367,7 @@
           <state>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\ST\STM32_Key_Management_Services\Interface\CryptoApi</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\ST\STM32_Key_Management_Services\Modules</state>
           <state>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\mbed-crypto\include</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac</state>
           <state>$PROJ_DIR$\..\..\2_Images_SBSFU\CM0PLUS\SBSFU\App</state>
           <state>$PROJ_DIR$\..\..\2_Images_SBSFU\Common</state>
           <state>$PROJ_DIR$\..\..\Linker_Common\EWARM</state>

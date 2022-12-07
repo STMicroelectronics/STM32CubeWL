@@ -1,7 +1,7 @@
 /*!
- * \file      sx126x.h
+ * \file      radio_driver.h
  *
- * \brief     SX126x driver implementation
+ * \brief     STM32WL_SubGHz_Phy driver implementation
  *
  * \copyright Revised BSD License, see section \ref LICENSE.
  *
@@ -181,16 +181,44 @@ extern "C" {
 #define REG_TX_CLAMP                                0x08D8
 
 /**
+  * @brief  Sub-GHz radio RAM definition
+  * @note   The sub-GHz radio peripheral RAM address can be accessed by sub-GHz radio command
+  *         SUBGRF_WriteRegisters() and SUBGRF_ReadRegisters() "
+  * @note   These RAM addresses are used to control accurately ramp-up, ramp-down and length of a frame
+  */
+/*Sub-GHz radio Ramp Up High register*/
+#define SUBGHZ_RAM_RAMPUPH                          0x00F0
+/*Sub-GHz radio Ramp Up Low register*/
+#define SUBGHZ_RAM_RAMPUPL                          0x00F1
+/*Sub-GHz radio Ramp Down High register*/
+#define SUBGHZ_RAM_RAMPDNH                          0x00F2
+/*Sub-GHz radio Ramp Down Low register*/
+#define SUBGHZ_RAM_RAMPDNL                          0x00F3
+/*Sub-GHz radio frame limit High register*/
+#define SUBGHZ_RAM_FRAMELIMH                        0x00F4
+/*Sub-GHz radio frame limit Low register*/
+#define SUBGHZ_RAM_FRAMELIML                        0x00F5
+
+/**
   * @brief  Sub-GHz radio register (re) definition
   * @note   The sub-GHz radio peripheral registers can be accessed by sub-GHz radio command
   *         SUBGRF_WriteRegisters() and SUBGRF_ReadRegisters() "
   */
+
 /*Sub-GHz radio generic bit synchronization register*/
 #define SUBGHZ_GBSYNCR                              REG_BIT_SYNC
+/*Sub-GHz radio generic CFO High register */
+#define SUBGHZ_GCFORH                               0x06B0
+/*Sub-GHz radio generic CFO Low register */
+#define SUBGHZ_GCFORL                               0x06B1
+/*Sub-GHz radio generic pktCtl1 register*/
+#define SUBGHZ_GPKTCTL1R                            0x06B4
 /*Sub-GHz radio generic packet control 1A register*/
 #define SUBGHZ_GPKTCTL1AR                           REG_LR_WHITSEEDBASEADDR_MSB
 /*Sub-GHz radio generic whitening LSB register*/
-#define SUBGHZ_GWHITEINIRL                          REG_LR_WHITSEEDBASEADDR_LSB  
+#define SUBGHZ_GWHITEINIRL                          REG_LR_WHITSEEDBASEADDR_LSB
+/*Sub-GHz radio generic rtx register*/
+#define SUBGHZ_GRTXPLDLEN                           0x06BB
 /*Sub-GHz radio generic CRC initial MSB register*/
 #define SUBGHZ_GCRCINIRH                            REG_LR_CRCSEEDBASEADDR
 /*Sub-GHz radio generic CRC initial LSB register*/
@@ -204,7 +232,7 @@ extern "C" {
 /*Sub-GHz radio generic synchronization word control register 6*/
 #define SUBGHZ_GSYNCR6                              0x06C1
 /*Sub-GHz radio generic synchronization word control register 5*/
-#define SUBGHZ_GSYNCR5                              0x06C2 
+#define SUBGHZ_GSYNCR5                              0x06C2
 /*Sub-GHz radio generic synchronization word control register 4*/
 #define SUBGHZ_GSYNCR4                              0x06C3
 /*Sub-GHz radio generic synchronization word control register 3*/
@@ -212,13 +240,31 @@ extern "C" {
 /*Sub-GHz radio generic synchronization word control register 2*/
 #define SUBGHZ_GSYNCR2                              0x06C5
 /*Sub-GHz radio generic synchronization word control register 1*/
-#define SUBGHZ_GSYNCR1                              0x06C6 
+#define SUBGHZ_GSYNCR1                              0x06C6
 /*Sub-GHz radio generic synchronization word control register 0*/
 #define SUBGHZ_GSYNCR0                              0x06C7
+/*Sub-GHz radio generic node address register*/
+#define SUBGHZ_GNODEADDR                            0x06CD
+/*Sub-GHz radio generic broadacst address register*/
+#define SUBGHZ_GBCASTADDR                           0x06CE
+/*Sub-GHz radio generic Afc register*/
+#define SUBGHZ_GAFCR                                0x06D1
+/*Sub-GHz radio Lora Payload Length */
+#define SUBGHZ_LPLDLENR                             REG_LR_PAYLOADLENGTH
+/*Sub-GHz radio Lora synchro timeout */
+#define SUBGHZ_LSYNCTIMEOUTR                        REG_LR_SYNCH_TIMEOUT
+/*Sub-GHz radio Lora IQ polarity register*/
+#define SUBGHZ_LIQPOLR                              0x0736
 /*Sub-GHz radio LoRa synchronization word MSB register*/
 #define SUBGHZ_LSYNCRH                              REG_LR_SYNCWORD
 /*Sub-GHz radio LoRa synchronization word LSB register*/
 #define SUBGHZ_LSYNCRL                              0x0741
+/*Sub-GHz radio txAddrPtr register*/
+#define SUBGHZ_TXADRPTR                             0x0802
+/*Sub-GHz radio rxAddrPtr register*/
+#define SUBGHZ_RXADRPTR                             0x0803
+/*Sub-GHz radio Rx Bandwidth selector register */
+#define SUBGHZ_BWSELR                               0x0807
 /*Sub-GHz radio random number register 3*/
 #define SUBGHZ_RNGR3                                RANDOM_NUMBER_GENERATORBASEADDR
 /*Sub-GHz radio  random number register 2*/
@@ -227,37 +273,39 @@ extern "C" {
 #define SUBGHZ_RNGR1                                0x081B
 /*Sub-GHz radio  random number register 0*/
 #define SUBGHZ_RNGR0                                0x081C
+/*Sub-GHz radio SD resolution*/
+#define SUBGHZ_SDCFG0R                              0x0889
+/*Sub-GHz radio Agc Gfo Reset Rssi Control register*/
+#define SUBGHZ_AGCRSSICTL0R                         0x089B
 /*Sub-GHz radio receiver gain control register*/
 #define SUBGHZ_RXGAINCR                             REG_RX_GAIN
+/*Sub-GHz radio Agc Gfo Reset Config register*/
+#define SUBGHZ_AGCGFORSTCFGR                        0x08B8
+/*Sub-GHz radio Agc Gfo Reset Power Threshold register*/
+#define SUBGHZ_AGCGFORSTPOWTHR                      0x08B9
+/*Sub-GHz radio Tx clamp register*/
+#define SUBGHZ_TXCLAMPR                             REG_TX_CLAMP
 /*Sub-GHz radio PA over current protection register*/
 #define SUBGHZ_PAOCPR                               REG_OCP
+/*Sub-GHz radio rtc control register*/
+#define SUBGHZ_RTCCTLR                              0x0902
+/*Sub-GHz radio rtc period register*/
+#define SUBGHZ_RTCPRDR2                             0x0903
+#define SUBGHZ_RTCPRDR1                             0x0904
+#define SUBGHZ_RTCPRDR0                             0x0905
 /*Sub-GHz radio HSE32 OSC_IN capacitor trim register*/
-#define SUBGHZ_HSEINTRIMR                           REG_XTA_TRIM 
+#define SUBGHZ_HSEINTRIMR                           REG_XTA_TRIM
 /*Sub-GHz radio HSE32 OSC_OUT capacitor trim register*/
-#define SUBGHZ_HSEOUTTRIMR                          REG_XTB_TRIM 
+#define SUBGHZ_HSEOUTTRIMR                          REG_XTB_TRIM
 /*Sub-GHz radio SMPS control 0 register */
 #define SUBGHZ_SMPSC0R                              0x0916
 /*Sub-GHz radio power control register*/
 #define SUBGHZ_PCR                                  0x091A
 /*Sub-GHz radio SMPS control 2 register */
 #define SUBGHZ_SMPSC2R                              0x0923
-/*Sub-GHz radio Rx Bandwidth selector register */
-#define SUBGHZ_BWSEL                                0x0807
-/*Sub-GHz radio CFO High register */
-#define SUBGHZ_CFO_H                                0x06B0
-/*Sub-GHz radio CFO Low register */
-#define SUBGHZ_CFO_L                                0x06B1
-/*Sub-GHz radio rxAddrPtr register*/
-#define SUBGHZ_RX_ADR_PTR                           0x0803
-/*Sub-GHz radio txAddrPtr register*/
-#define SUBGHZ_TX_ADR_PTR                           0x0802
-/*Sub-GHz radio rtx register*/
-#define SUBGHZ_RTXPLDLEN                            0x06BB
-/*Sub-GHz radio pktCtl1 register*/
-#define SUBGHZ_PKTCTL1                              0x06B4
-/*Sub-GHz radio pktCtl1a register*/
-#define SUBGHZ_PKTCTL1A                             0x06B8
-  
+/*Sub-GHz event mask register*/
+#define SUBGHZ_EVENTMASKR                           0x0944
+
 #define SMPS_CLK_DET_ENABLE ((uint8_t) (1<<6))
 
 #define SMPS_DRV_20  ((uint8_t) ((0x0)<<1))
@@ -265,7 +313,6 @@ extern "C" {
 #define SMPS_DRV_60  ((uint8_t) ((0x2)<<1))
 #define SMPS_DRV_100 ((uint8_t) ((0x3)<<1))
 #define SMPS_DRV_MASK ((uint8_t) ((0x3)<<1))
-
 
 /* Exported types ------------------------------------------------------------*/
 /*!
@@ -299,8 +346,6 @@ enum IrqPblSyncHeaderCode_t
     IRQ_SYNCWORD_VALID_CODE                 = 0x02,
     IRQ_HEADER_VALID_CODE                   = 0x04,
 };
-
-
 
 /*!
  * \brief Declares the oscillator in use while in standby mode
@@ -578,8 +623,6 @@ typedef enum
     IRQ_RADIO_ALL                           = 0xFFFF,
 }RadioIrqMasks_t;
 
-
-
 /*!
  * \brief The type describing the modulation parameters for every packet types
  */
@@ -773,8 +816,6 @@ typedef enum
  */
 typedef void ( *DioIrqHandler )( RadioIrqMasks_t radioIrq );
 
-
-
 #define RX_BUFFER_SIZE                              256
 
 /* External variables --------------------------------------------------------*/
@@ -846,7 +887,7 @@ void SUBGRF_SetCrcSeed( uint16_t seed );
 /*!
  * \brief Sets the seed used for the CRC calculation
  *
- * \param [in]  seed          The seed value
+ * \param [in]  polynomial    The polynomial value
  *
  */
 void SUBGRF_SetCrcPolynomial( uint16_t polynomial );
@@ -1182,7 +1223,6 @@ void SUBGRF_ClearIrqStatus( uint16_t irq );
  * \brief Write radio register
  * \param [in]  address       The address of the register
  * \param [in]  data          data to write
- * \retval  none
  */
 void SUBGRF_WriteRegister( uint16_t address, uint8_t data );
 
@@ -1195,30 +1235,28 @@ uint8_t SUBGRF_ReadRegister( uint16_t address );
 
 /*!
  * \brief Sets RF switch for TX & RX
- * \param [in]  paSelect       Low Power or High Power board
- * \param [in]  rxtx        RX/TX mode
- * \retval none
+ * \param [in]  paSelect      Low Power or High Power board
+ * \param [in]  rxtx          RX/TX mode
  */
 void SUBGRF_SetSwitch (uint8_t paSelect, RFState_t rxtx);
 
 /*!
  * \brief Set the Tx End Device conducted power
- * \param [in]  power           Tx power level [0..15]
- * \retval      paSelect        [RFO_LP, RFO_HP]
+ * \param [in]  power         Tx power level [0..15]
+ * \retval      paSelect      [RFO_LP, RFO_HP]
  */
-uint8_t SUBGRF_SetRfTxPower(  int8_t power );
+uint8_t SUBGRF_SetRfTxPower( int8_t power );
 
 /*!
  * \brief   Service to get the radio wake-up time.
- * \param   none
- * \retval  Value of the radio wake-up time.
+ * \return  Value of the radio wake-up time.
  */
 uint32_t SUBGRF_GetRadioWakeUpTime( void );
 
 /*!
  * \brief Returns the known FSK bandwidth registers value
  *
- * \param [IN] bandwidth Bandwidth value in Hz
+ * \param [in] bandwidth Bandwidth value in Hz
  * \retval regValue Bandwidth register value.
  */
 uint8_t SUBGRF_GetFskBandwidthRegValue( uint32_t bandwidth );
@@ -1226,14 +1264,12 @@ uint8_t SUBGRF_GetFskBandwidthRegValue( uint32_t bandwidth );
  * \brief SUBGRF_GetCFO get the frequency offset between the remote transmitter and the radio receiver
  *
  * \param [in] bitrate     gfsk bitrate
- * \param [OUT] cfo        carrier frequency offset in Hertz
+ * \param [out] cfo        carrier frequency offset in Hertz
  */
-void SUBGRF_GetCFO( uint32_t BitRate, int32_t * Cfo);
+void SUBGRF_GetCFO( uint32_t bitrate, int32_t *cfo);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif // __RADIO_DRIVER_H__
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

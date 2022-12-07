@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -124,12 +123,12 @@ extern "C" {
 
 /**
   * @brief Region 4 - Forbid all access to the active slot.
-  *                   In addition to region 3, from 0x08004000 ==> 0x0801BFFF (96 kbytes)
+  *                   In addition to region 3, from 0x08004000 ==> 0x08017FFF (80 kbytes)
   */
 #define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_RGNV  MPU_REGION_NUMBER4
 #define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_START FLASH_BASE
 #define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_SIZE  MPU_REGION_SIZE_128KB
-#define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_SREG  0x81U    /*!< 128 Kbytes / 8 * 6 ==> 96 Kbytes */
+#define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_SREG  0xC1U    /*!< 128 Kbytes / 8 * 5 ==> 80 Kbytes */
 #define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_PERM  MPU_REGION_NO_ACCESS
 #define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_EXECV MPU_INSTRUCTION_ACCESS_DISABLE
 #define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_TEXV  MPU_TEX_LEVEL0
@@ -137,10 +136,24 @@ extern "C" {
 #define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_C     MPU_ACCESS_NOT_CACHEABLE
 
 /**
-  * @brief Region 5 - Enable the read operation for SBSFU synchronization flag.
+  * @brief Region 5 - Forbid all access to the active slot.
+  *                   In addition to region 4, from 0x08018000 ==> 0x0801AFFF (12 kbytes)
+  */
+#define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST2_RGNV  MPU_REGION_NUMBER5
+#define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST2_START ((uint32_t)0x08018000)
+#define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST2_SIZE  MPU_REGION_SIZE_16KB
+#define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST2_SREG  0xC0U    /*!< 16 Kbytes / 8 * 6 ==> 12 Kbytes */
+#define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST2_PERM  MPU_REGION_NO_ACCESS
+#define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST2_EXECV MPU_INSTRUCTION_ACCESS_DISABLE
+#define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST2_TEXV  MPU_TEX_LEVEL0
+#define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST2_B     MPU_ACCESS_BUFFERABLE
+#define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST2_C     MPU_ACCESS_NOT_CACHEABLE
+
+/**
+  * @brief Region 6 - Enable the read operation for SBSFU synchronization flag.
   *                   Execution capability disabled
   */
-#define SFU_PROTECT_MPU_SRAM_FLAG_RGNV  MPU_REGION_NUMBER5
+#define SFU_PROTECT_MPU_SRAM_FLAG_RGNV  MPU_REGION_NUMBER6
 #define SFU_PROTECT_MPU_SRAM_FLAG_START M4_M0PLUS_FLAG_RAM_START /*!< SBSFU synchronization flag */
 #define SFU_PROTECT_MPU_SRAM_FLAG_SIZE  MPU_REGION_SIZE_32B
 #define SFU_PROTECT_MPU_SRAM_FLAG_SREG  0x00U                /*!< All subregions activated */
@@ -175,18 +188,32 @@ extern "C" {
 /**
   * @brief Region 4 - Enable the execution for active slot in unprivileged mode.
   *                   Read only capability configured
-  *                   In addition to region 3, from 0x08004000 ==> 0x0801BFFF (96 kbytes)
+  *                   In addition to region 3, from 0x08004000 ==> 0x08017FFF (80 kbytes)
   */
 #define APP_PROTECT_MPU_FLASHEXE_ADJUST_RGNV  MPU_REGION_NUMBER4
 #define APP_PROTECT_MPU_FLASHEXE_ADJUST_START FLASH_BASE
 #define APP_PROTECT_MPU_FLASHEXE_ADJUST_SIZE  MPU_REGION_SIZE_128KB
-#define APP_PROTECT_MPU_FLASHEXE_ADJUST_SREG  0x81U    /*!< 128 Kbytes / 8 * 6 ==> 80 Kbytes */
+#define APP_PROTECT_MPU_FLASHEXE_ADJUST_SREG  0xC1U    /*!< 128 Kbytes / 8 * 5 ==> 80 Kbytes */
 #define APP_PROTECT_MPU_FLASHEXE_ADJUST_PERM  MPU_REGION_PRIV_RO_URO
 #define APP_PROTECT_MPU_FLASHEXE_ADJUST_EXECV MPU_INSTRUCTION_ACCESS_ENABLE
 #define APP_PROTECT_MPU_FLASHEXE_ADJUST_TEXV  MPU_TEX_LEVEL0
 #define APP_PROTECT_MPU_FLASHEXE_ADJUST_B     MPU_ACCESS_BUFFERABLE
 #define APP_PROTECT_MPU_FLASHEXE_ADJUST_C     MPU_ACCESS_NOT_CACHEABLE
 
+/**
+  * @brief Region 5 - Enable the execution for active slot in unprivileged mode.
+  *                   Read only capability configured
+  *                   In addition to region 4, from 0x08018000 ==> 0x0801AFFF (12 kbytes)
+  */
+#define APP_PROTECT_MPU_FLASHEXE_ADJUST2_RGNV  MPU_REGION_NUMBER5
+#define APP_PROTECT_MPU_FLASHEXE_ADJUST2_START ((uint32_t)0x08018000)
+#define APP_PROTECT_MPU_FLASHEXE_ADJUST2_SIZE  MPU_REGION_SIZE_16KB
+#define APP_PROTECT_MPU_FLASHEXE_ADJUST2_SREG  0xC0U    /*!< 16 Kbytes / 8 * 6 ==> 12 Kbytes */
+#define APP_PROTECT_MPU_FLASHEXE_ADJUST2_PERM  MPU_REGION_NO_ACCESS
+#define APP_PROTECT_MPU_FLASHEXE_ADJUST2_EXECV MPU_INSTRUCTION_ACCESS_DISABLE
+#define APP_PROTECT_MPU_FLASHEXE_ADJUST2_TEXV  MPU_TEX_LEVEL0
+#define APP_PROTECT_MPU_FLASHEXE_ADJUST2_B     MPU_ACCESS_BUFFERABLE
+#define APP_PROTECT_MPU_FLASHEXE_ADJUST2_C     MPU_ACCESS_NOT_CACHEABLE
 
 #define SFU_DBG_PORT            GPIOA
 #define SFU_DBG_CLK_ENABLE()    __HAL_RCC_GPIOA_CLK_ENABLE()
@@ -223,5 +250,3 @@ SFU_ErrorStatus    SFU_LL_SECU_SetProtectionMPU_UserApp(void);
 #endif
 
 #endif /* SFU_LOW_LEVEL_SECURITY_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

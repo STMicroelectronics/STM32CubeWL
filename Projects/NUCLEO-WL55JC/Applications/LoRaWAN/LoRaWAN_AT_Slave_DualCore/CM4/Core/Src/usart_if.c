@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -211,28 +210,34 @@ void vcom_Resume(void)
   /* USER CODE END vcom_Resume_2 */
 }
 
-void HAL_UART_TxCpltCallback(UART_HandleTypeDef *hlpuart1)
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 {
   /* USER CODE BEGIN HAL_UART_TxCpltCallback_1 */
 
   /* USER CODE END HAL_UART_TxCpltCallback_1 */
   /* buffer transmission complete*/
-  TxCpltCallback(NULL);
+  if (huart->Instance == LPUART1)
+  {
+    TxCpltCallback(NULL);
+  }
   /* USER CODE BEGIN HAL_UART_TxCpltCallback_2 */
 
   /* USER CODE END HAL_UART_TxCpltCallback_2 */
 }
 
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *hlpuart1)
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
   /* USER CODE BEGIN HAL_UART_RxCpltCallback_1 */
 
   /* USER CODE END HAL_UART_RxCpltCallback_1 */
-  if ((NULL != RxCpltCallback) && (HAL_UART_ERROR_NONE == hlpuart1->ErrorCode))
+  if (huart->Instance == LPUART1)
   {
-    RxCpltCallback(&charRx, 1, 0);
+    if ((NULL != RxCpltCallback) && (HAL_UART_ERROR_NONE == huart->ErrorCode))
+    {
+      RxCpltCallback(&charRx, 1, 0);
+    }
+    HAL_UART_Receive_IT(huart, &charRx, 1);
   }
-  HAL_UART_Receive_IT(hlpuart1, &charRx, 1);
   /* USER CODE BEGIN HAL_UART_RxCpltCallback_2 */
 
   /* USER CODE END HAL_UART_RxCpltCallback_2 */
@@ -247,5 +252,3 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *hlpuart1)
 /* USER CODE BEGIN PrFD */
 
 /* USER CODE END PrFD */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

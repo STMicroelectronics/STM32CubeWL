@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -24,12 +23,13 @@
 #include "sys_app.h"
 #include "subghz_phy_app.h"
 #include "radio.h"
-#include "app_version.h"
 
 /* USER CODE BEGIN Includes */
 #include "stm32_timer.h"
 #include "stm32_seq.h"
 #include "utilities_def.h"
+#include "app_version.h"
+#include "subghz_phy_version.h"
 /* USER CODE END Includes */
 
 /* External variables ---------------------------------------------------------*/
@@ -175,28 +175,24 @@ void RxLongPacketChunk(uint8_t *buffer, uint8_t chunk_size);
 void SubghzApp_Init(void)
 {
   /* USER CODE BEGIN SubghzApp_Init_1 */
+
 #if (TEST_MODE == RADIO_RX)
   RxConfigGeneric_t RxConfig = {0};
-  /* RX LEDs*/
-  BSP_LED_Init(LED_GREEN);
-  BSP_LED_Init(LED_RED);
 #elif (TEST_MODE == RADIO_TX)
   TxConfigGeneric_t TxConfig;
-  BSP_PB_Init(BUTTON_SW1, BUTTON_MODE_EXTI);
-  BSP_PB_Init(BUTTON_SW2, BUTTON_MODE_EXTI);
-  BSP_PB_Init(BUTTON_SW3, BUTTON_MODE_EXTI);
-  /* TX LED*/
-  BSP_LED_Init(LED_BLUE);
 #else
 #endif /* TEST_MODE */
-  /* Print APP version*/
-  APP_LOG(TS_OFF, VLEVEL_M, "APP_VERSION= V%X.%X.%X\r\n",
-          (uint8_t)(__APP_VERSION >> __APP_VERSION_MAIN_SHIFT),
-          (uint8_t)(__APP_VERSION >> __APP_VERSION_SUB1_SHIFT),
-          (uint8_t)(__APP_VERSION >> __APP_VERSION_SUB2_SHIFT));
+  /* Get SubGHY_Phy APP version*/
+  APP_LOG(TS_OFF, VLEVEL_M, "APPLICATION_VERSION: V%X.%X.%X\r\n",
+          (uint8_t)(APP_VERSION_MAIN),
+          (uint8_t)(APP_VERSION_SUB1),
+          (uint8_t)(APP_VERSION_SUB2));
 
-  /* Init leds*/
-  BSP_LED_Init(LED_GREEN);
+  /* Get MW SubGhz_Phy info */
+  APP_LOG(TS_OFF, VLEVEL_M, "MW_RADIO_VERSION:    V%X.%X.%X\r\n",
+          (uint8_t)(SUBGHZ_PHY_VERSION_MAIN),
+          (uint8_t)(SUBGHZ_PHY_VERSION_SUB1),
+          (uint8_t)(SUBGHZ_PHY_VERSION_SUB2));
 
   APP_LOG(TS_OFF, VLEVEL_M, "---------------\n\r");
   APP_LOG(TS_OFF, VLEVEL_M, "FSK_MODULATION\n\r");
@@ -233,7 +229,7 @@ void SubghzApp_Init(void)
   RxConfig.fsk.SyncWordLength = sizeof(syncword); /*in Byte*/
   RxConfig.fsk.PreambleMinDetect = RADIO_FSK_PREAMBLE_DETECTOR_08_BITS;
   RxConfig.fsk.SyncWord = syncword; /*SyncWord Buffer*/
-  RxConfig.fsk.whiteSeed = 0x01FF ; /*WhiteningSeed*/
+  RxConfig.fsk.whiteSeed = 0x01FF; /*WhiteningSeed*/
 #if (APP_LONG_PACKET==0)
   RxConfig.fsk.LengthMode  = RADIO_FSK_PACKET_VARIABLE_LENGTH; /* legacy: payload length field is 1 byte long*/
 #else
@@ -261,13 +257,12 @@ void SubghzApp_Init(void)
 
   /*fsk modulation*/
   TxConfig.fsk.ModulationShaping = RADIO_FSK_MOD_SHAPING_G_BT_05;
-  TxConfig.fsk.Bandwidth = FSK_BANDWIDTH;
   TxConfig.fsk.FrequencyDeviation = FSK_FDEV;
   TxConfig.fsk.BitRate = FSK_DATARATE; /*BitRate*/
   TxConfig.fsk.PreambleLen = 4;   /*in Byte        */
   TxConfig.fsk.SyncWordLength = sizeof(syncword); /*in Byte        */
   TxConfig.fsk.SyncWord = syncword; /*SyncWord Buffer*/
-  TxConfig.fsk.whiteSeed =  0x01FF ; /*WhiteningSeed  */
+  TxConfig.fsk.whiteSeed =  0x01FF; /*WhiteningSeed  */
 #if (APP_LONG_PACKET==0)
   TxConfig.fsk.HeaderType  = RADIO_FSK_PACKET_VARIABLE_LENGTH; /*legacy: payload length field is 1 byte long*/
 #else
@@ -302,7 +297,6 @@ void SubghzApp_Init(void)
 /* USER CODE END EF */
 
 /* Private functions ---------------------------------------------------------*/
-
 static void OnTxDone(void)
 {
   /* USER CODE BEGIN OnTxDone */
@@ -395,7 +389,7 @@ static void Per_Process(void)
   {
     int16_t rssi = last_rx_rssi;
     int8_t cfo = last_rx_cfo;
-    BSP_LED_On(LED_GREEN) ;
+    HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_SET); /* LED_GREEN */
     APP_TPRINTF("OnRxDone\r\n");
     APP_TPRINTF("RssiValue=%d dBm, cfo=%d kHz\r\n", rssi, cfo);
     APP_TPRINTF("payloadLen=%d bytes\r\n", payloadLen);
@@ -415,7 +409,7 @@ static void Per_Process(void)
   }
   else
   {
-    BSP_LED_On(LED_RED);
+    HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_SET); /* LED_RED */
   }
 
   if (RadioRxTimeout_flag == 1)
@@ -451,10 +445,10 @@ static void Per_Process(void)
   (void) Radio.ReceiveLongPacket(0, RX_TIMEOUT_VALUE, RxLongPacketChunk);
 #endif /* APP_LONG_PACKET */
   HAL_Delay(10);
-  BSP_LED_Off(LED_GREEN) ;
-  BSP_LED_Off(LED_RED) ;
+  HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_RESET); /* LED_GREEN */
+  HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_RESET); /* LED_RED */
 #elif (TEST_MODE == RADIO_TX)
-  BSP_LED_Off(LED_BLUE) ;
+  HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET); /* LED_BLUE */
   if (RadioTxDone_flag == 1)
   {
     APP_TPRINTF("OnTxDone\r\n");
@@ -486,7 +480,7 @@ static void Per_Process(void)
   }
 #endif /* APP_LONG_PACKET */
   APP_TPRINTF("Tx %d \r\n", packetCnt);
-  BSP_LED_On(LED_BLUE) ;
+  HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET); /* LED_BLUE */
 #endif /* TEST_MODE */
 }
 
@@ -495,7 +489,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
   switch (GPIO_Pin)
   {
-    case  BUTTON_SW1_PIN:
+    case  BUT1_Pin:
       /* Note: when "EventType == TX_ON_TIMER" this GPIO is not initialized */
       /*increment by 16*/
       payloadLen += 16;
@@ -506,8 +500,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
       APP_TPRINTF("New Tx Payload Length= %d\r\n", payloadLen);
 
       break;
-    case  BUTTON_SW2_PIN:
-
+    case  BUT2_Pin:
       /*increment by 1*/
       payloadLen += 1;
       if (payloadLen > MAX_APP_BUFFER_SIZE)
@@ -517,9 +510,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
       APP_TPRINTF("New Tx Payload Length= %d\r\n", payloadLen);
 
       break;
-
-    case  BUTTON_SW3_PIN:
-
+    case  BUT3_Pin:
       TxPayloadMode = (TxPayloadMode + 1) % 2;
       if (TxPayloadMode == 1)
       {
@@ -529,9 +520,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
       {
         APP_TPRINTF("Payload Inc mode\r\n");
       }
-
       break;
-
     default:
       break;
   }
@@ -565,5 +554,3 @@ static int32_t tx_payload_generator(void)
 }
 #endif /* TEST_MODE */
 /* USER CODE END PrFD */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

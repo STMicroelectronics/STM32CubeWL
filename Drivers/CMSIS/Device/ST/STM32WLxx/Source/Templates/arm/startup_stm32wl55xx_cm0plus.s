@@ -1,4 +1,4 @@
-;******************************************************************************
+;********************************************************************************
 ;* File Name          : startup_stm32wl55xx_cm0plus.s
 ;* Author             : MCD Application Team
 ;* Description        : STM32WL55xx devices vector table for MDK-ARM toolchain.
@@ -11,17 +11,17 @@
 ;*                      After Reset the Cortex-M0+ processor is in Thread mode,
 ;*                      priority is Privileged, and the Stack is set to Main.
 ;* <<< Use Configuration Wizard in Context Menu >>>   
-;******************************************************************************
+;********************************************************************************
 ;* @attention
 ;*
-;* Copyright (c) 2020(2021) STMicroelectronics.
+;* Copyright (c) 2020-2021 STMicroelectronics.
 ;* All rights reserved.
 ;*
 ;* This software is licensed under terms that can be found in the LICENSE file
 ;* in the root directory of this software component.
 ;* If no LICENSE file comes with this software, it is provided AS-IS.
 ;*
-;******************************************************************************
+;********************************************************************************
 
 ; Amount of memory (in bytes) allocated for Stack
 ; Tailor this value to your application needs
@@ -222,9 +222,9 @@ SUBGHZ_Radio_IRQHandler
 
                 ALIGN
 
-;*******************************************************************************
+;********************************************************************************
 ; User Stack and Heap initialization
-;*******************************************************************************
+;********************************************************************************
                  IF      :DEF:__MICROLIB
 
                  EXPORT  __initial_sp
@@ -249,5 +249,3 @@ __user_initial_stackheap
                  ENDIF
 
                  END
-
-;************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE*****

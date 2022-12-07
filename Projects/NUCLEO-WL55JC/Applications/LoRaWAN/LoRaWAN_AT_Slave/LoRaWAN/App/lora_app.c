@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -21,7 +20,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "platform.h"
-#include "Region.h" /* Needed for LORAWAN_DEFAULT_DATA_RATE */
 #include "sys_app.h"
 #include "lora_app.h"
 #include "stm32_seq.h"
@@ -34,6 +32,7 @@
 #include "LmHandler.h"
 #include "lora_command.h"
 #include "lora_at.h"
+#include "flash_if.h"
 
 /* USER CODE BEGIN Includes */
 
@@ -50,6 +49,11 @@
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
+/**
+  * LEDs period value of the timer in ms
+  */
+#define LED_PERIOD_TIME 500
+
 /* USER CODE BEGIN PD */
 
 /* USER CODE END PD */
@@ -67,28 +71,88 @@
 static void OnJoinRequest(LmHandlerJoinParams_t *joinParams);
 
 /**
+  * @brief callback when LoRaWAN application has sent a frame
   * @brief  tx event callback function
   * @param  params status of last Tx
   */
 static void OnTxData(LmHandlerTxParams_t *params);
 
 /**
-  * @brief callback when LoRa application has received a frame
+  * @brief callback when LoRaWAN application has received a frame
   * @param appData data received in the last Rx
   * @param params status of last Rx
   */
 static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params);
 
-/*!
- * Will be called each time a Radio IRQ is handled by the MAC layer
- *
- */
+/**
+  * @brief callback when LoRaWAN Beacon status is updated
+  * @param params status of Last Beacon
+  */
+static void OnBeaconStatusChange(LmHandlerBeaconParams_t *params);
+
+/**
+  * @brief callback when LoRaWAN application Class is changed
+  * @param deviceClass new class
+  */
+static void OnClassChange(DeviceClass_t deviceClass);
+
+/**
+  * @brief  Notifies the upper layer that the NVM context has changed
+  * @param  state Indicates if we are storing (true) or restoring (false) the NVM context
+  */
+static void OnNvmDataChange(LmHandlerNvmContextStates_t state);
+
+/**
+  * @brief  Store the NVM Data context to the Flash
+  * @param  nvm ptr on nvm structure
+  * @param  nvm_size number of data bytes which were stored
+  */
+static void OnStoreContextRequest(void *nvm, uint32_t nvm_size);
+
+/**
+  * @brief  Restore the NVM Data context from the Flash
+  * @param  nvm ptr on nvm structure
+  * @param  nvm_size number of data bytes which were restored
+  */
+static void OnRestoreContextRequest(void *nvm, uint32_t nvm_size);
+
+/**
+  * Will be called each time a Radio IRQ is handled by the MAC layer
+  *
+  */
 static void OnMacProcessNotify(void);
 
 /**
   * @brief  call back when LoRaWan Stack needs update
   */
 static void CmdProcessNotify(void);
+
+/**
+  * @brief Change the periodicity of the uplink frames
+  * @param periodicity uplink frames period in ms
+  * @note Compliance test protocol callbacks
+  */
+static void OnTxPeriodicityChanged(uint32_t periodicity);
+
+/**
+  * @brief Change the confirmation control of the uplink frames
+  * @param isTxConfirmed Indicates if the uplink requires an acknowledgement
+  * @note Compliance test protocol callbacks
+  */
+static void OnTxFrameCtrlChanged(LmHandlerMsgTypes_t isTxConfirmed);
+
+/**
+  * @brief Change the periodicity of the ping slot frames
+  * @param pingSlotPeriodicity ping slot frames period in ms
+  * @note Compliance test protocol callbacks
+  */
+static void OnPingSlotPeriodicityChanged(uint8_t pingSlotPeriodicity);
+
+/**
+  * @brief Will be called to reset the system
+  * @note Compliance test protocol callbacks
+  */
+static void OnSystemReset(void);
 
 /* USER CODE BEGIN PFP */
 
@@ -118,14 +182,23 @@ static void OnJoinTimerLedEvent(void *context);
   */
 static LmHandlerCallbacks_t LmHandlerCallbacks =
 {
-  .GetBatteryLevel =           GetBatteryLevel,
-  .GetTemperature =            GetTemperatureLevel,
-  .GetUniqueId =               GetUniqueId,
-  .GetDevAddr =                GetDevAddr,
-  .OnMacProcess =              OnMacProcessNotify,
-  .OnJoinRequest =             OnJoinRequest,
-  .OnTxData =                  OnTxData,
-  .OnRxData =                  OnRxData
+  .GetBatteryLevel =              GetBatteryLevel,
+  .GetTemperature =               GetTemperatureLevel,
+  .GetUniqueId =                  GetUniqueId,
+  .GetDevAddr =                   GetDevAddr,
+  .OnRestoreContextRequest =      OnRestoreContextRequest,
+  .OnStoreContextRequest =        OnStoreContextRequest,
+  .OnMacProcess =                 OnMacProcessNotify,
+  .OnNvmDataChange =              OnNvmDataChange,
+  .OnJoinRequest =                OnJoinRequest,
+  .OnTxData =                     OnTxData,
+  .OnRxData =                     OnRxData,
+  .OnBeaconStatusChange =         OnBeaconStatusChange,
+  .OnClassChange =                OnClassChange,
+  .OnTxPeriodicityChanged =       OnTxPeriodicityChanged,
+  .OnTxFrameCtrlChanged =         OnTxFrameCtrlChanged,
+  .OnPingSlotPeriodicityChanged = OnPingSlotPeriodicityChanged,
+  .OnSystemReset =                OnSystemReset,
 };
 
 /**
@@ -134,10 +207,11 @@ static LmHandlerCallbacks_t LmHandlerCallbacks =
 static LmHandlerParams_t LmHandlerParams =
 {
   .ActiveRegion =             ACTIVE_REGION,
-  .DefaultClass =             LORAWAN_DEFAULT_CLASS,
+  .DefaultClass =             CLASS_A,
   .AdrEnable =                LORAWAN_ADR_STATE,
   .TxDatarate =               LORAWAN_DEFAULT_DATA_RATE,
-  .PingPeriodicity =          LORAWAN_DEFAULT_PING_SLOT_PERIODICITY
+  .PingSlotPeriodicity =      LORAWAN_DEFAULT_PING_SLOT_PERIODICITY,
+  .RxBCTimeout =              LORAWAN_DEFAULT_CLASS_B_C_RESP_TIMEOUT
 };
 
 /* USER CODE BEGIN PV */
@@ -165,50 +239,62 @@ static UTIL_TIMER_Object_t JoinLedTimer;
 
 void LoRaWAN_Init(void)
 {
+  /* USER CODE BEGIN LoRaWAN_Init_LV */
+  uint32_t feature_version = 0UL;
+  /* USER CODE END LoRaWAN_Init_LV */
+
   CMD_Init(CmdProcessNotify);
 
   /* USER CODE BEGIN LoRaWAN_Init_1 */
 
-  BSP_LED_Init(LED_BLUE);
-  BSP_LED_Init(LED_GREEN);
-  BSP_LED_Init(LED_RED);
-  BSP_PB_Init(BUTTON_SW2, BUTTON_MODE_EXTI);
+  /* Get LoRaWAN APP version*/
+  APP_LOG(TS_OFF, VLEVEL_M, "APPLICATION_VERSION: V%X.%X.%X\r\n",
+          (uint8_t)(APP_VERSION_MAIN),
+          (uint8_t)(APP_VERSION_SUB1),
+          (uint8_t)(APP_VERSION_SUB2));
 
-  /* Get LoRa APP version*/
-  APP_LOG(TS_OFF, VLEVEL_M, "APP_VERSION:        V%X.%X.%X\r\n",
-          (uint8_t)(__LORA_APP_VERSION >> __APP_VERSION_MAIN_SHIFT),
-          (uint8_t)(__LORA_APP_VERSION >> __APP_VERSION_SUB1_SHIFT),
-          (uint8_t)(__LORA_APP_VERSION >> __APP_VERSION_SUB2_SHIFT));
-
-  /* Get MW LoraWAN info */
-  APP_LOG(TS_OFF, VLEVEL_M, "MW_LORAWAN_VERSION: V%X.%X.%X\r\n",
-          (uint8_t)(__LORAWAN_VERSION >> __APP_VERSION_MAIN_SHIFT),
-          (uint8_t)(__LORAWAN_VERSION >> __APP_VERSION_SUB1_SHIFT),
-          (uint8_t)(__LORAWAN_VERSION >> __APP_VERSION_SUB2_SHIFT));
+  /* Get MW LoRaWAN info */
+  APP_LOG(TS_OFF, VLEVEL_M, "MW_LORAWAN_VERSION:  V%X.%X.%X\r\n",
+          (uint8_t)(LORAWAN_VERSION_MAIN),
+          (uint8_t)(LORAWAN_VERSION_SUB1),
+          (uint8_t)(LORAWAN_VERSION_SUB2));
 
   /* Get MW SubGhz_Phy info */
-  APP_LOG(TS_OFF, VLEVEL_M, "MW_RADIO_VERSION:   V%X.%X.%X\r\n",
-          (uint8_t)(__SUBGHZ_PHY_VERSION >> __APP_VERSION_MAIN_SHIFT),
-          (uint8_t)(__SUBGHZ_PHY_VERSION >> __APP_VERSION_SUB1_SHIFT),
-          (uint8_t)(__SUBGHZ_PHY_VERSION >> __APP_VERSION_SUB2_SHIFT));
+  APP_LOG(TS_OFF, VLEVEL_M, "MW_RADIO_VERSION:    V%X.%X.%X\r\n",
+          (uint8_t)(SUBGHZ_PHY_VERSION_MAIN),
+          (uint8_t)(SUBGHZ_PHY_VERSION_SUB1),
+          (uint8_t)(SUBGHZ_PHY_VERSION_SUB2));
 
-  UTIL_TIMER_Create(&TxLedTimer, 0xFFFFFFFFU, UTIL_TIMER_ONESHOT, OnTxTimerLedEvent, NULL);
-  UTIL_TIMER_Create(&RxLedTimer, 0xFFFFFFFFU, UTIL_TIMER_ONESHOT, OnRxTimerLedEvent, NULL);
-  UTIL_TIMER_Create(&JoinLedTimer, 0xFFFFFFFFU, UTIL_TIMER_PERIODIC, OnJoinTimerLedEvent, NULL);
-  UTIL_TIMER_SetPeriod(&TxLedTimer, 500);
-  UTIL_TIMER_SetPeriod(&RxLedTimer, 500);
-  UTIL_TIMER_SetPeriod(&JoinLedTimer, 500);
+  /* Get LoRaWAN Link Layer info */
+  LmHandlerGetVersion(LORAMAC_HANDLER_L2_VERSION, &feature_version);
+  APP_LOG(TS_OFF, VLEVEL_M, "L2_SPEC_VERSION:     V%X.%X.%X\r\n",
+          (uint8_t)(feature_version >> 24),
+          (uint8_t)(feature_version >> 16),
+          (uint8_t)(feature_version >> 8));
+
+  /* Get LoRaWAN Regional Parameters info */
+  LmHandlerGetVersion(LORAMAC_HANDLER_REGION_VERSION, &feature_version);
+  APP_LOG(TS_OFF, VLEVEL_M, "RP_SPEC_VERSION:     V%X-%X.%X.%X\r\n",
+          (uint8_t)(feature_version >> 24),
+          (uint8_t)(feature_version >> 16),
+          (uint8_t)(feature_version >> 8),
+          (uint8_t)(feature_version));
+
+  UTIL_TIMER_Create(&TxLedTimer, LED_PERIOD_TIME, UTIL_TIMER_ONESHOT, OnTxTimerLedEvent, NULL);
+  UTIL_TIMER_Create(&RxLedTimer, LED_PERIOD_TIME, UTIL_TIMER_ONESHOT, OnRxTimerLedEvent, NULL);
+  UTIL_TIMER_Create(&JoinLedTimer, LED_PERIOD_TIME, UTIL_TIMER_PERIODIC, OnJoinTimerLedEvent, NULL);
 
   /* USER CODE END LoRaWAN_Init_1 */
 
   UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LmHandlerProcess), UTIL_SEQ_RFU, LmHandlerProcess);
+
   UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_Vcom), UTIL_SEQ_RFU, CMD_Process);
 
   /* Init Info table used by LmHandler*/
   LoraInfo_Init();
 
   /* Init the Lora Stack*/
-  LmHandlerInit(&LmHandlerCallbacks);
+  LmHandlerInit(&LmHandlerCallbacks, APP_VERSION);
 
   LmHandlerConfigure(&LmHandlerParams);
 
@@ -235,7 +321,7 @@ static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params)
   /* USER CODE BEGIN OnRxData_1 */
   if ((appData != NULL) || (params != NULL))
   {
-    BSP_LED_On(LED_BLUE) ;
+    HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET); /* LED_BLUE */
 
     UTIL_TIMER_Start(&RxLedTimer);
 
@@ -247,17 +333,17 @@ static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params)
 /* USER CODE BEGIN PrFD_LedEvents */
 static void OnTxTimerLedEvent(void *context)
 {
-  BSP_LED_Off(LED_GREEN) ;
+  HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_RESET); /* LED_GREEN */
 }
 
 static void OnRxTimerLedEvent(void *context)
 {
-  BSP_LED_Off(LED_BLUE) ;
+  HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET); /* LED_BLUE */
 }
 
 static void OnJoinTimerLedEvent(void *context)
 {
-  BSP_LED_Toggle(LED_RED) ;
+  HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin); /* LED_RED */
 }
 
 /* USER CODE END PrFD_LedEvents */
@@ -270,7 +356,7 @@ static void OnTxData(LmHandlerTxParams_t *params)
     /* Process Tx event only if its a mcps response to prevent some internal events (mlme) */
     if (params->IsMcpsConfirm != 0)
     {
-      BSP_LED_On(LED_GREEN) ;
+      HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_SET); /* LED_GREEN */
       UTIL_TIMER_Start(&TxLedTimer);
     }
     AT_event_confirm(params);
@@ -286,12 +372,29 @@ static void OnJoinRequest(LmHandlerJoinParams_t *joinParams)
     if (joinParams->Status == LORAMAC_HANDLER_SUCCESS)
     {
       UTIL_TIMER_Stop(&JoinLedTimer);
-      BSP_LED_Off(LED_RED) ;
+      HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_RESET); /* LED_RED */
 
     }
     AT_event_join(joinParams);
   }
   /* USER CODE END OnJoinRequest_1 */
+}
+
+static void OnBeaconStatusChange(LmHandlerBeaconParams_t *params)
+{
+  /* USER CODE BEGIN OnBeaconStatusChange_1 */
+  if (params != NULL)
+  {
+    AT_event_Beacon(params);
+  }
+  /* USER CODE END OnBeaconStatusChange_1 */
+}
+
+static void OnClassChange(DeviceClass_t deviceClass)
+{
+  /* USER CODE BEGIN OnClassChange_1 */
+  AT_event_ClassUpdate(deviceClass);
+  /* USER CODE END OnClassChange_1 */
 }
 
 static void CmdProcessNotify(void)
@@ -317,4 +420,68 @@ static void OnMacProcessNotify(void)
   /* USER CODE END OnMacProcessNotify_2 */
 }
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+static void OnTxPeriodicityChanged(uint32_t periodicity)
+{
+  /* USER CODE BEGIN OnTxPeriodicityChanged_1 */
+
+  /* USER CODE END OnTxPeriodicityChanged_1 */
+}
+
+static void OnTxFrameCtrlChanged(LmHandlerMsgTypes_t isTxConfirmed)
+{
+  /* USER CODE BEGIN OnTxFrameCtrlChanged_1 */
+
+  /* USER CODE END OnTxFrameCtrlChanged_1 */
+}
+
+static void OnPingSlotPeriodicityChanged(uint8_t pingSlotPeriodicity)
+{
+  /* USER CODE BEGIN OnPingSlotPeriodicityChanged_1 */
+
+  /* USER CODE END OnPingSlotPeriodicityChanged_1 */
+  LmHandlerParams.PingSlotPeriodicity = pingSlotPeriodicity;
+  /* USER CODE BEGIN OnPingSlotPeriodicityChanged_2 */
+
+  /* USER CODE END OnPingSlotPeriodicityChanged_2 */
+}
+
+static void OnSystemReset(void)
+{
+  /* USER CODE BEGIN OnSystemReset_1 */
+
+  /* USER CODE END OnSystemReset_1 */
+}
+
+static void OnNvmDataChange(LmHandlerNvmContextStates_t state)
+{
+  /* USER CODE BEGIN OnNvmDataChange_1 */
+
+  /* USER CODE END OnNvmDataChange_1 */
+  AT_event_OnNvmDataChange(state);
+  /* USER CODE BEGIN OnNvmDataChange_Last */
+
+  /* USER CODE END OnNvmDataChange_Last */
+}
+
+static void OnStoreContextRequest(void *nvm, uint32_t nvm_size)
+{
+  /* USER CODE BEGIN OnStoreContextRequest_1 */
+
+  /* USER CODE END OnStoreContextRequest_1 */
+  AT_event_OnStoreContextRequest(nvm, nvm_size);
+  /* USER CODE BEGIN OnStoreContextRequest_Last */
+
+  /* USER CODE END OnStoreContextRequest_Last */
+}
+
+static void OnRestoreContextRequest(void *nvm, uint32_t nvm_size)
+{
+  /* USER CODE BEGIN OnRestoreContextRequest_1 */
+
+  /* USER CODE END OnRestoreContextRequest_1 */
+  AT_event_OnRestoreContextRequest(nvm, nvm_size);
+  /* USER CODE BEGIN OnRestoreContextRequest_Last */
+
+  /* USER CODE END OnRestoreContextRequest_Last */
+}
+

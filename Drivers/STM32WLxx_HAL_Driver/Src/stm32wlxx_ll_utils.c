@@ -6,13 +6,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2020 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                       opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -581,8 +580,16 @@ ErrorStatus LL_PLL_ConfigSystemClock_HSE(LL_UTILS_PLLInitTypeDef *UTILS_PLLInitS
   if (UTILS_PLL_IsBusy() == SUCCESS)
   {
     /* Calculate the new PLL output frequency */
-    pllrfreq = UTILS_GetPLLOutputFrequency(HSE_VALUE, UTILS_PLLInitStruct);
-
+    if (LL_RCC_HSE_IsEnabledDiv2() != 1UL)
+    {
+      pllrfreq = UTILS_GetPLLOutputFrequency(HSE_VALUE, UTILS_PLLInitStruct);
+    } 
+    else
+    {
+      /* HSE Pre is set */
+      pllrfreq = UTILS_GetPLLOutputFrequency(HSE_VALUE/2UL, UTILS_PLLInitStruct);
+    }
+    
 #if defined(DUAL_CORE)
     hclk2freq = __LL_RCC_CALC_HCLK2_FREQ(pllrfreq, UTILS_ClkInitStruct->CPU2CLKDivider);
 
@@ -788,5 +795,3 @@ static ErrorStatus UTILS_EnablePLLAndSwitchSystem(uint32_t SYSCLK_Frequency,
 /**
   * @}
   */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

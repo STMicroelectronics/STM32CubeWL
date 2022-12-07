@@ -5,15 +5,14 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2020(-2021) STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
- ******************************************************************************
+  ******************************************************************************
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
@@ -24,7 +23,7 @@
 #ifdef __cplusplus
  extern "C" {
 #endif
-   
+
 /* Includes ------------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 
@@ -33,24 +32,22 @@
                       0x72  SX1272
                       0x76  SX1276 */
 
-#define __SUBGHZ_PHY_TYPE           (0x01U) /*!< [31:24] main version */
-#define __SUBGHZ_PHY_VERSION_MAIN   (0x01U) /*!< [23:16] main version */
-#define __SUBGHZ_PHY_VERSION_SUB1   (0x01U) /*!< [15:8]  sub1 version */
-#define __SUBGHZ_PHY_VERSION_SUB2   (0x00U) /*!< [7:0]   sub2 version */ 
-#define __SUBGHZ_PHY_VERSION        ((__SUBGHZ_PHY_VERSION_MAIN << 24)  \
-                                     |(__SUBGHZ_PHY_VERSION_SUB1 << 16) \
-                                     |(__SUBGHZ_PHY_VERSION_SUB2 << 8 ) \
-                                     |(__SUBGHZ_PHY_TYPE))
-   
+#define SUBGHZ_PHY_VERSION_MAIN   (0x01U) /*!< [31:24] main version */
+#define SUBGHZ_PHY_VERSION_SUB1   (0x02U) /*!< [23:16] sub1 version */
+#define SUBGHZ_PHY_VERSION_SUB2   (0x00U) /*!< [15:8]  sub2 version */
+#define SUBGHZ_PHY_TYPE           (0x01U) /*!< [7:0] type version */
+#define SUBGHZ_PHY_VERSION        ((SUBGHZ_PHY_VERSION_MAIN  << 24) \
+                                   |(SUBGHZ_PHY_VERSION_SUB1 << 16) \
+                                   |(SUBGHZ_PHY_VERSION_SUB2 << 8)  \
+                                   |(SUBGHZ_PHY_TYPE))
+
 /* Exported types ------------------------------------------------------------*/
 /* External variables --------------------------------------------------------*/
 /* Exported macros -----------------------------------------------------------*/
-/* Exported functions ------------------------------------------------------- */ 
+/* Exported functions ------------------------------------------------------- */
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /*__SUBGHZ_PHY_VERSION_H__*/
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

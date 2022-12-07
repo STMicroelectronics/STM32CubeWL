@@ -64,10 +64,17 @@ extern "C"
  */
 #define AU915_TX_MIN_DATARATE                       DR_0
 
+#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
 /*!
  * Maximal datarate that can be used by the node
  */
 #define AU915_TX_MAX_DATARATE                       DR_6
+#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+/*!
+ * Maximal datarate that can be used by the node
+ */
+#define AU915_TX_MAX_DATARATE                       DR_13
+#endif /* REGION_VERSION */
 
 /*!
  * Minimal datarate that can be used by the node
@@ -173,7 +180,8 @@ extern "C"
  */
 #define AU915_BEACON_NB_CHANNELS                    8
 
-/* ST_WORAROUND_BEGIN: Regional Parameters 1.0.3.revA ERRATA not yet available */
+#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
+/* ST_WORKAROUND_BEGIN: Regional Parameters 1.0.3.revA ERRATA not yet available */
 /*!
  * Payload size of a beacon frame
  */
@@ -192,6 +200,22 @@ extern "C"
 #define AU915_RFU2_SIZE                             1
 /* #define AU915_RFU2_SIZE                             3 */
 /* ST_WORKAROUND_END */
+#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+/*!
+ * Payload size of a beacon frame
+ */
+#define AU915_BEACON_SIZE                           23
+
+/*!
+ * Size of RFU 1 field
+ */
+#define AU915_RFU1_SIZE                             4
+
+/*!
+ * Size of RFU 2 field
+ */
+#define AU915_RFU2_SIZE                             3
+#endif /* REGION_VERSION */
 /*!
  * Datarate of the beacon channel
  */
@@ -282,13 +306,17 @@ static const uint8_t MaxPayloadOfDatarateDwell1AU915[] = { 0, 0, 11, 53, 125, 24
  * The table is valid for the dwell time configuration of 1 for uplinks. The table provides
  * repeater support.
  */
+#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
 static const uint8_t MaxPayloadOfDatarateRepeaterDwell1AU915[] = { 0, 0, 11, 53, 125, 242, 242, 0, 33, 109, 222, 222, 222, 222 };
+#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+static const uint8_t MaxPayloadOfDatarateRepeaterDwell1AU915[] = { 0, 0, 11, 53, 125, 222, 222, 0, 33, 109, 222, 222, 222, 222 };
+#endif /* REGION_VERSION */
 /* ST_WORKAROUND_END */
 
 /*!
  * \brief The function gets a value of a specific phy attribute.
  *
- * \param [IN] getPhy Pointer to the function parameters.
+ * \param [in] getPhy Pointer to the function parameters.
  *
  * \retval Returns a structure containing the PHY parameter.
  */
@@ -297,23 +325,23 @@ PhyParam_t RegionAU915GetPhyParam( GetPhyParams_t* getPhy );
 /*!
  * \brief Updates the last TX done parameters of the current channel.
  *
- * \param [IN] txDone Pointer to the function parameters.
+ * \param [in] txDone Pointer to the function parameters.
  */
 void RegionAU915SetBandTxDone( SetBandTxDoneParams_t* txDone );
 
 /*!
  * \brief Initializes the channels masks and the channels.
  *
- * \param [IN] type Sets the initialization type.
+ * \param [in] params Sets the initialization type.
  */
 void RegionAU915InitDefaults( InitDefaultsParams_t* params );
 
 /*!
  * \brief Verifies a parameter.
  *
- * \param [IN] verify Pointer to the function parameters.
+ * \param [in] verify Pointer to the function parameters.
  *
- * \param [IN] type Sets the initialization type.
+ * \param [in] phyAttribute Sets the initialization type.
  *
  * \retval Returns true, if the parameter is valid.
  */
@@ -323,14 +351,14 @@ bool RegionAU915Verify( VerifyParams_t* verify, PhyAttribute_t phyAttribute );
  * \brief The function parses the input buffer and sets up the channels of the
  *        CF list.
  *
- * \param [IN] applyCFList Pointer to the function parameters.
+ * \param [in] applyCFList Pointer to the function parameters.
  */
 void RegionAU915ApplyCFList( ApplyCFListParams_t* applyCFList );
 
 /*!
  * \brief Sets a channels mask.
  *
- * \param [IN] chanMaskSet Pointer to the function parameters.
+ * \param [in] chanMaskSet Pointer to the function parameters.
  *
  * \retval Returns true, if the channels mask could be set.
  */
@@ -339,24 +367,24 @@ bool RegionAU915ChanMaskSet( ChanMaskSetParams_t* chanMaskSet );
 /*!
  * Computes the Rx window timeout and offset.
  *
- * \param [IN] datarate     Rx window datarate index to be used
+ * \param [in] datarate     Rx window datarate index to be used
  *
- * \param [IN] minRxSymbols Minimum required number of symbols to detect an Rx frame.
+ * \param [in] minRxSymbols Minimum required number of symbols to detect an Rx frame.
  *
- * \param [IN] rxError      System maximum timing error of the receiver. In milliseconds
+ * \param [in] rxError      System maximum timing error of the receiver. In milliseconds
  *                          The receiver will turn on in a [-rxError : +rxError] ms
  *                          interval around RxOffset
  *
- * \param [OUT]rxConfigParams Returns updated WindowTimeout and WindowOffset fields.
+ * \param [out] rxConfigParams Returns updated WindowTimeout and WindowOffset fields.
  */
 void RegionAU915ComputeRxWindowParameters( int8_t datarate, uint8_t minRxSymbols, uint32_t rxError, RxConfigParams_t *rxConfigParams );
 
 /*!
  * \brief Configuration of the RX windows.
  *
- * \param [IN] rxConfig Pointer to the function parameters.
+ * \param [in] rxConfig Pointer to the function parameters.
  *
- * \param [OUT] datarate The datarate index which was set.
+ * \param [out] datarate The datarate index which was set.
  *
  * \retval Returns true, if the configuration was applied successfully.
  */
@@ -365,11 +393,11 @@ bool RegionAU915RxConfig( RxConfigParams_t* rxConfig, int8_t* datarate );
 /*!
  * \brief TX configuration.
  *
- * \param [IN] txConfig Pointer to the function parameters.
+ * \param [in] txConfig Pointer to the function parameters.
  *
- * \param [OUT] txPower The tx power index which was set.
+ * \param [out] txPower The tx power index which was set.
  *
- * \param [OUT] txTimeOnAir The time-on-air of the frame.
+ * \param [out] txTimeOnAir The time-on-air of the frame.
  *
  * \retval Returns true, if the configuration was applied successfully.
  */
@@ -378,7 +406,15 @@ bool RegionAU915TxConfig( TxConfigParams_t* txConfig, int8_t* txPower, TimerTime
 /*!
  * \brief The function processes a Link ADR Request.
  *
- * \param [IN] linkAdrReq Pointer to the function parameters.
+ * \param [in] linkAdrReq Pointer to the function parameters.
+ *
+ * \param [out] drOut The datarate which was applied.
+ *
+ * \param [out] txPowOut The TX power which was applied.
+ *
+ * \param [out] nbRepOut The number of repetitions to apply.
+ *
+ * \param [out] nbBytesParsed The number bytes which were parsed.
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  */
@@ -387,7 +423,7 @@ uint8_t RegionAU915LinkAdrReq( LinkAdrReqParams_t* linkAdrReq, int8_t* drOut, in
 /*!
  * \brief The function processes a RX Parameter Setup Request.
  *
- * \param [IN] rxParamSetupReq Pointer to the function parameters.
+ * \param [in] rxParamSetupReq Pointer to the function parameters.
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  */
@@ -396,7 +432,7 @@ uint8_t RegionAU915RxParamSetupReq( RxParamSetupReqParams_t* rxParamSetupReq );
 /*!
  * \brief The function processes a Channel Request.
  *
- * \param [IN] newChannelReq Pointer to the function parameters.
+ * \param [in] newChannelReq Pointer to the function parameters.
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  */
@@ -405,7 +441,7 @@ int8_t RegionAU915NewChannelReq( NewChannelReqParams_t* newChannelReq );
 /*!
  * \brief The function processes a TX ParamSetup Request.
  *
- * \param [IN] txParamSetupReq Pointer to the function parameters.
+ * \param [in] txParamSetupReq Pointer to the function parameters.
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  *         Returns -1, if the functionality is not implemented. In this case, the end node
@@ -416,7 +452,7 @@ int8_t RegionAU915TxParamSetupReq( TxParamSetupReqParams_t* txParamSetupReq );
 /*!
  * \brief The function processes a DlChannel Request.
  *
- * \param [IN] dlChannelReq Pointer to the function parameters.
+ * \param [in] dlChannelReq Pointer to the function parameters.
  *
  * \retval Returns the status of the operation, according to the LoRaMAC specification.
  */
@@ -425,7 +461,9 @@ int8_t RegionAU915DlChannelReq( DlChannelReqParams_t* dlChannelReq );
 /*!
  * \brief Alternates the datarate of the channel for the join request.
  *
- * \param [IN] currentDr Current datarate.
+ * \param [in] currentDr Current datarate.
+ *
+ * \param [in] type Alternation type.
  *
  * \retval Datarate to apply.
  */
@@ -434,12 +472,14 @@ int8_t RegionAU915AlternateDr( int8_t currentDr, AlternateDrType_t type );
 /*!
  * \brief Searches and set the next random available channel
  *
- * \param [OUT] channel Next channel to use for TX.
+ * \param [in] nextChanParams pointer of selected channel parameters
  *
- * \param [OUT] time Time to wait for the next transmission according to the duty
+ * \param [out] channel Next channel to use for TX.
+ *
+ * \param [out] time Time to wait for the next transmission according to the duty
  *              cycle.
  *
- * \param [OUT] aggregatedTimeOff Updates the aggregated time off.
+ * \param [out] aggregatedTimeOff Updates the aggregated time off.
  *
  * \retval Function status [1: OK, 0: Unable to find a channel on the current datarate]
  */
@@ -448,7 +488,7 @@ LoRaMacStatus_t RegionAU915NextChannel( NextChanParams_t* nextChanParams, uint8_
 /*!
  * \brief Adds a channel.
  *
- * \param [IN] channelAdd Pointer to the function parameters.
+ * \param [in] channelAdd Pointer to the function parameters.
  *
  * \retval Status of the operation.
  */
@@ -457,27 +497,29 @@ LoRaMacStatus_t RegionAU915ChannelAdd( ChannelAddParams_t* channelAdd );
 /*!
  * \brief Removes a channel.
  *
- * \param [IN] channelRemove Pointer to the function parameters.
+ * \param [in] channelRemove Pointer to the function parameters.
  *
  * \retval Returns true, if the channel was removed successfully.
  */
 bool RegionAU915ChannelsRemove( ChannelRemoveParams_t* channelRemove  );
 
+#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
 /*!
  * \brief Sets the radio into continuous wave mode.
  *
  * \param [IN] continuousWave Pointer to the function parameters.
  */
 void RegionAU915SetContinuousWave( ContinuousWaveParams_t* continuousWave );
+#endif /* REGION_VERSION */
 
 /*!
  * \brief Computes new datarate according to the given offset
  *
- * \param [IN] downlinkDwellTime Downlink dwell time configuration. 0: No limit, 1: 400ms
+ * \param [in] downlinkDwellTime Downlink dwell time configuration. 0: No limit, 1: 400ms
  *
- * \param [IN] dr Current datarate
+ * \param [in] dr Current datarate
  *
- * \param [IN] drOffset Offset to be applied
+ * \param [in] drOffset Offset to be applied
  *
  * \retval newDr Computed datarate.
  */
@@ -486,7 +528,9 @@ uint8_t RegionAU915ApplyDrOffset( uint8_t downlinkDwellTime, int8_t dr, int8_t d
 /*!
  * \brief Sets the radio into beacon reception mode
  *
- * \param [IN] rxBeaconSetup Pointer to the function parameters
+ * \param [in] rxBeaconSetup Pointer to the function parameters
+ *
+ * \param [out] outDr Datarate used to receive the beacon
  */
  void RegionAU915RxBeaconSetup( RxBeaconSetup_t* rxBeaconSetup, uint8_t* outDr );
 

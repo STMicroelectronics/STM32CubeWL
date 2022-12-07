@@ -33,6 +33,7 @@
   * @brief   Secure Element identity and keys
   ******************************************************************************
   */
+
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __SOFT_SE_IDENTITY_H__
 #define __SOFT_SE_IDENTITY_H__
@@ -40,6 +41,18 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/* Exported Includes --------------------------------------------------------*/
+/* USER CODE BEGIN Includes */
+
+/* USER CODE END Includes */
+
+/* Exported types ------------------------------------------------------------*/
+/* USER CODE BEGIN ET */
+
+/* USER CODE END ET */
+
+/* Exported constants --------------------------------------------------------*/
 
 /*!
  ******************************************************************************
@@ -82,7 +95,7 @@ extern "C" {
 /*!
  * end-device IEEE EUI (big endian)
  */
-#define LORAWAN_DEVICE_EUI                                 { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }
+#define LORAWAN_DEVICE_EUI                                 { 0x00, 0x80, 0xE1, 0x01, 0x01, 0x01, 0x01, 0x01 }
 
 /*!
  * App/Join server IEEE EUI (big endian)
@@ -99,7 +112,7 @@ extern "C" {
 /*!
  * Device address on the network (big endian)
  */
-#define LORAWAN_DEVICE_ADDRESS                             ( uint32_t )0x00000000
+#define LORAWAN_DEVICE_ADDRESS                             ( uint32_t )0x0100000A
 
 /*!
  * Application root key
@@ -133,7 +146,7 @@ extern "C" {
 
 #if (USE_LRWAN_1_1_X_CRYPTO == 1)
 #define SESSION_KEYS_LIST                                                                                           \
-           {                                                                                                        \
+        {                                                                                                           \
             /*!                                                                                                     \
              * Join session integrity key (Dynamically updated)                                                     \
              * WARNING: NOT USED FOR 1.0.x DEVICES                                                                  \
@@ -372,7 +385,11 @@ extern "C" {
             .KeyValue = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, \
                           0x00 },                                                                                   \
         },                                                                                                          \
-    },
+    }
+
+/* USER CODE BEGIN EC */
+
+/* USER CODE END EC */
 
 #ifdef __cplusplus
 }

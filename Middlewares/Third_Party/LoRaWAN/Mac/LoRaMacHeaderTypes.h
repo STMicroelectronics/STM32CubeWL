@@ -163,7 +163,7 @@ extern "C"
 
 /*!
  * FRMPayload overhead to be used when setting the Radio.SetMaxPayloadLength
- * 
+ *
  * Overhead to be used when setting the Radio.SetMaxPayloadLength in RxWindowSetup function.
  *
  * MHDR(1) + FHDR(7) + Port(1) + MIC(4)
@@ -176,7 +176,7 @@ extern "C"
 
 /*!
  * FRMPayload minimum size
- * 
+ *
  * MHDR(1) + FHDR(7) + MIC(4)
  */
 #define LORAMAC_FRAME_PAYLOAD_MIN_SIZE      ( LORAMAC_MHDR_FIELD_SIZE + ( LORAMAC_FHDR_DEV_ADDR_FIELD_SIZE + \

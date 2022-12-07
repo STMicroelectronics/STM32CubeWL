@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
  */
@@ -40,6 +39,8 @@ extern "C" {
 #include "sys_privileged_wrap.h"
 #include "stm32_seq.h"
 
+/* enum number of task and priority*/
+#include "utilities_def.h"
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */
@@ -50,24 +51,6 @@ extern "C" {
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
-/*---------------------------------------------------------------------------*/
-/*                             sequencer configuration                       */
-/*---------------------------------------------------------------------------*/
-/**
-  * @brief Sequencer flag reserved for future use
-  */
-#define UTIL_SEQ_RFU 0
-
-/**
-  * @brief default number of tasks configured in sequencer
-  */
-#define SEQ_CONF_TASK_NBR    4
-
-/**
-  * @brief default value of priority task
-  */
-#define SEQ_CONF_PRIO_NBR    1
-
 #define VLEVEL_OFF    0  /*!< used to set UTIL_ADV_TRACE_SetVerboseLevel() (not as message param) */
 #define VLEVEL_ALWAYS 0  /*!< used as message params, if this level is given
                               trace will be printed even when UTIL_ADV_TRACE_SetVerboseLevel(OFF) */
@@ -89,6 +72,9 @@ extern "C" {
 /* USER CODE END EV */
 
 /* Exported macros -----------------------------------------------------------*/
+/******************************************************************************
+  * common
+  ******************************************************************************/
 /**
   * @brief Memory placement macro
   */
@@ -109,6 +95,47 @@ extern "C" {
 #else
 #define ALIGN(n)             __attribute__((aligned(n)))
 #endif /* WIN32 */
+
+/**
+  * @brief macro used to initialize the critical section
+  */
+#define UTILS_INIT_CRITICAL_SECTION()
+
+/**
+  * @brief macro used to enter the critical section
+  */
+#define UTILS_ENTER_CRITICAL_SECTION() uint32_t nvic_iser_state= SYS_PRIVIL_EnterCriticalSection()
+
+/**
+  * @brief macro used to exit the critical section
+  */
+#define UTILS_EXIT_CRITICAL_SECTION()  SYS_PRIVIL_ExitCriticalSection(nvic_iser_state)
+
+/******************************************************************************
+  * tiny low power manager
+  ******************************************************************************/
+/**
+  * @brief macro used to Enter critical section specifically for UTIL_LPM_EnterLowPower()
+  */
+#define UTIL_LPM_ENTER_CRITICAL_SECTION_ELP()
+/**
+  * @brief macro used to Exit critical section specifically for UTIL_LPM_EnterLowPower()
+  */
+#define UTIL_LPM_EXIT_CRITICAL_SECTION_ELP()
+/******************************************************************************
+  * sequencer
+  ******************************************************************************/
+
+/**
+  * @brief default number of tasks configured in sequencer
+  */
+#define UTIL_SEQ_CONF_TASK_NBR    CFG_SEQ_Task_NBR
+
+/**
+  * @brief default value of priority task
+  */
+
+#define UTIL_SEQ_CONF_PRIO_NBR    CFG_SEQ_Prio_NBR
 
 /**
   * @brief macro used to initialize the critical section
@@ -135,6 +162,10 @@ extern "C" {
   */
 #define UTIL_SEQ_EXIT_CRITICAL_SECTION_IDLE( )    SYS_PRIVIL_EnableIrqsAndGoUnpriv()
 
+/******************************************************************************
+  * tim_serv
+  * (any macro that does not need to be modified can be removed)
+  ******************************************************************************/
 /**
   * @brief Security: Map UTIL_TIMER_IRQ on Sequencer Task (rather then Isr) such to run Unprivileged
   */
@@ -147,29 +178,6 @@ extern "C" {
   */
 #define UTIL_SEQ_MEMSET8( dest, value, size )   UTIL_MEM_set_8( dest, value, size )
 
-/**
-  * @brief macro used to initialize the critical section
-  */
-#define UTILS_INIT_CRITICAL_SECTION()
-
-/**
-  * @brief macro used to enter the critical section
-  */
-#define UTILS_ENTER_CRITICAL_SECTION() uint32_t nvic_iser_state= SYS_PRIVIL_EnterCriticalSection()
-
-/**
-  * @brief macro used to exit the critical section
-  */
-#define UTILS_EXIT_CRITICAL_SECTION()  SYS_PRIVIL_ExitCriticalSection(nvic_iser_state)
-/**
-  * @brief macro used to Enter critical section specifically for UTIL_LPM_EnterLowPower()
-  */
-#define UTIL_LPM_ENTER_CRITICAL_SECTION_ELP()
-/**
-  * @brief macro used to Exit critical section specifically for UTIL_LPM_EnterLowPower()
-  */
-#define UTIL_LPM_EXIT_CRITICAL_SECTION_ELP()
-
 /******************************************************************************
   * trace\advanced
   * the define option
@@ -180,7 +188,7 @@ extern "C" {
 
 #define UTIL_ADV_TRACE_CONDITIONNAL                                                      /*!< not used */
 #define UTIL_ADV_TRACE_UNCHUNK_MODE                                                      /*!< not used */
-#define UTIL_ADV_TRACE_MEMLOCATION                 UTIL_MEM_PLACE_IN_SECTION("MB_MEM2")  /*!< memory placement for trace buffer */
+#define UTIL_ADV_TRACE_MEMLOCATION                 UTIL_MEM_PLACE_IN_SECTION("MB_MEM3")  /*!< memory placement for trace buffer */
 #define UTIL_ADV_TRACE_DEBUG(...)                                                        /*!< not used */
 #define UTIL_ADV_TRACE_INIT_CRITICAL_SECTION( )    UTILS_INIT_CRITICAL_SECTION()         /*!< init the critical section in trace feature */
 #define UTIL_ADV_TRACE_ENTER_CRITICAL_SECTION( )   UTILS_ENTER_CRITICAL_SECTION()        /*!< enter the critical section in trace feature */
@@ -205,5 +213,3 @@ extern "C" {
 #endif
 
 #endif /*__UTILITIES_CONF_H__ */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -439,6 +439,11 @@
               <FilePath>..\CM4\Core\Src\dma.c</FilePath>
             </File>
             <File>
+              <FileName>gpio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\CM4\Core\Src\gpio.c</FilePath>
+            </File>
+            <File>
               <FileName>ipcc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\CM4\Core\Src\ipcc.c</FilePath>
@@ -492,6 +497,11 @@
               <FileName>stm32wlxx_hal_msp.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\CM4\Core\Src\stm32wlxx_hal_msp.c</FilePath>
+            </File>
+            <File>
+              <FileName>flash_if.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\CM4\Core\Src\flash_if.c</FilePath>
             </File>
           </Files>
         </Group>

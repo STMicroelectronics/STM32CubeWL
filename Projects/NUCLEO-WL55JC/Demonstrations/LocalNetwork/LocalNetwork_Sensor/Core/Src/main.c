@@ -6,18 +6,18 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
+#include "gpio.h"
 #include "sys_app.h"
 #include "demo_sensor.h"
 #include "version.h"
@@ -105,16 +105,10 @@ int main(void)
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
+  MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
   SystemApp_Init();
 
-  /*Init LEDs*/
-  BSP_LED_Init(LED_RED);
-  BSP_LED_Off(LED_RED);
-  BSP_LED_Init(LED_GREEN);
-  BSP_LED_Off(LED_GREEN);
-  BSP_LED_Init(LED_BLUE);
-  BSP_LED_Off(LED_BLUE);
   UTIL_TIMER_Create(&LedTimer, 125, UTIL_TIMER_ONESHOT, LedsOff, NULL);
 
   /************************************************
@@ -167,9 +161,11 @@ void SystemClock_Config(void)
   */
   HAL_PWR_EnableBkUpAccess();
   __HAL_RCC_LSEDRIVE_CONFIG(RCC_LSEDRIVE_LOW);
+
   /** Configure the main internal regulator output voltage
   */
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+
   /** Initializes the CPU, AHB and APB busses clocks
   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSE|RCC_OSCILLATORTYPE_MSI;
@@ -182,6 +178,7 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+
   /** Configure the SYSCLKSource, HCLK, PCLK1 and PCLK2 clocks dividers
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK3|RCC_CLOCKTYPE_HCLK
@@ -227,9 +224,9 @@ static void LedsOff(void* context)
   UNUSED(context);
 
 #if SENS_LED_BLINK != 0
-  BSP_LED_Off(LED_RED);
-  BSP_LED_Off(LED_GREEN);
-  BSP_LED_Off(LED_BLUE);
+  HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET); /* LED_BLUE */
+  HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_RESET); /* LED_GREEN */
+  HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_RESET); /* LED_RED */
 #endif /*SENS_LED_BLINK*/
 }
 
@@ -243,10 +240,26 @@ static void LedBlink(void)
   {
     switch(SENS_GetState())
     {
-      case SENS_STATE_Connect: BSP_LED_Toggle(LED_GREEN); BSP_LED_Off(LED_RED);   BSP_LED_Off(LED_BLUE);  break;
-      case SENS_STATE_Lost:   BSP_LED_Toggle(LED_RED);   BSP_LED_Off(LED_GREEN); BSP_LED_Off(LED_BLUE);  break;
-      case SENS_STATE_Scan:   BSP_LED_Toggle(LED_RED);   BSP_LED_Off(LED_GREEN); BSP_LED_Off(LED_BLUE);  break;
-      case SENS_STATE_Sync:   BSP_LED_Toggle(LED_BLUE);  BSP_LED_Off(LED_RED);   BSP_LED_Off(LED_GREEN); break;
+      case SENS_STATE_Connect:
+        HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin); /* LED_GREEN */
+        HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_RESET); /* LED_RED */
+        HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET); /* LED_BLUE */
+        break;
+      case SENS_STATE_Lost:
+        HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin); /* LED_RED */
+        HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_RESET); /* LED_GREEN */
+        HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET); /* LED_BLUE */
+        break;
+      case SENS_STATE_Scan:
+        HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin); /* LED_RED */
+        HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_RESET); /* LED_GREEN */
+        HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET); /* LED_BLUE */
+        break;
+      case SENS_STATE_Sync:
+        HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin); /* LED_BLUE */
+        HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_RESET); /* LED_RED */
+        HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_RESET); /* LED_GREEN */
+        break;
       default: break;
     }
     UTIL_TIMER_Stop(&LedTimer);
@@ -256,10 +269,18 @@ static void LedBlink(void)
   {
     switch(SENS_GetState())
     {
-      case SENS_STATE_Connect: BSP_LED_On(LED_GREEN); break;
-      case SENS_STATE_Lost: BSP_LED_On(LED_RED); break;
-      case SENS_STATE_Scan: BSP_LED_On(LED_RED); break;
-      case SENS_STATE_Sync: BSP_LED_On(LED_BLUE); break;
+      case SENS_STATE_Connect:
+        HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_SET); /* LED_GREEN */
+        break;
+      case SENS_STATE_Lost:
+        HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_SET); /* LED_RED */
+        break;
+      case SENS_STATE_Scan:
+        HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_SET); /* LED_RED */
+        break;
+      case SENS_STATE_Sync:
+        HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET); /* LED_BLUE */
+        break;
       default: break;
     }
     UTIL_TIMER_Start(&LedTimer);
@@ -302,5 +323,3 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -2,22 +2,20 @@
   @page LoRaWAN_End_Node_DualCore Readme file
 
   @verbatim
-  ******************** (C) COPYRIGHT 2020 STMicroelectronics *******************
+  ******************************************************************************
   * @file    Applications/LoRaWAN_SBSFU_1_Slot_DualCore/LoRaWAN_End_Node_DualCore/readme.txt
   * @author  MCD Application Team
   * @brief   This application is a simple demo application software of a LoRa
   *          modem connecting to Network server and provides protections offered by Secure Boot and Secure Engine.
   *          The application keys are managed by key management services.
   ******************************************************************************
-  * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2020-2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   @endverbatim
@@ -37,7 +35,9 @@ Applications, SubGHz_Phy, LoRaWAN, End_Node, DualCore, SBSFU, KMS
 @par Directory contents
 
 
-  - LoRaWAN_End_Node_DualCore/CM0PLUS/Core/Inc/cmsis_nvic_virtual.h             Maps the NVIC functions on _SVC for Unpriviledge usage
+  - LoRaWAN_End_Node_DualCore/CM0PLUS/Core/Inc/cmsis_nvic_virtual.h             Maps the NVIC functions on _SVC for Unprivileged usage
+  - LoRaWAN_End_Node_DualCore/CM0PLUS/Core/Inc/gpio.h                           This file contains all the function prototypes for
+                                                                                the gpio.c file
   - LoRaWAN_End_Node_DualCore/CM0PLUS/Core/Inc/ipcc.h                           This file contains all the function prototypes for
                                                                                 the ipcc.c file
   - LoRaWAN_End_Node_DualCore/CM0PLUS/Core/Inc/ipcc_if.h                        This file contains the interface of the ipcc driver on CM0PLUS.
@@ -86,6 +86,9 @@ Applications, SubGHz_Phy, LoRaWAN, End_Node, DualCore, SBSFU, KMS
   - LoRaWAN_End_Node_DualCore/CM4/Core/Inc/adc_if.h                             Header for ADC interface configuration
   - LoRaWAN_End_Node_DualCore/CM4/Core/Inc/dma.h                                This file contains all the function prototypes for
                                                                                 the dma.c file
+  - LoRaWAN_End_Node_DualCore/CM4/Core/Inc/flash_if.h                           This file contains definitions for FLASH Interface functionalities.
+  - LoRaWAN_End_Node_DualCore/CM4/Core/Inc/gpio.h                               This file contains all the function prototypes for
+                                                                                the gpio.c file
   - LoRaWAN_End_Node_DualCore/CM4/Core/Inc/ipcc.h                               This file contains all the function prototypes for
                                                                                 the ipcc.c file
   - LoRaWAN_End_Node_DualCore/CM4/Core/Inc/ipcc_if.h                            This file contains the interface of the ipcc driver on CM4.
@@ -127,6 +130,8 @@ Applications, SubGHz_Phy, LoRaWAN, End_Node, DualCore, SBSFU, KMS
   - LoRaWAN_End_Node_DualCore/Common/MbMux/msg_id.h                             MBMUX message ID enumeration
   - LoRaWAN_End_Node_DualCore/Common/System/sys_debug.h                         Configuration of the debug.c instances
 
+  - LoRaWAN_End_Node_DualCore/CM0PLUS/Core/Src/gpio.c                           This file provides code for the configuration
+                                                                                of all used GPIO pins.
   - LoRaWAN_End_Node_DualCore/CM0PLUS/Core/Src/ipcc.c                           This file provides code for the configuration
                                                                                 of the IPCC instances.
   - LoRaWAN_End_Node_DualCore/CM0PLUS/Core/Src/ipcc_if.c                        Interface to IPCC: handles IRQs and abstract application from Ipcc handler and channel direction
@@ -141,7 +146,7 @@ Applications, SubGHz_Phy, LoRaWAN, End_Node, DualCore, SBSFU, KMS
                                                                                 of the SUBGHZ instances.
   - LoRaWAN_End_Node_DualCore/CM0PLUS/Core/Src/sys_app.c                        Initializes HW and SW system entities (not related to the radio)
   - LoRaWAN_End_Node_DualCore/CM0PLUS/Core/Src/sys_privileged_services.c        gives access to COrtex services like ThumbState, SVC, MPU
-  - LoRaWAN_End_Node_DualCore/CM0PLUS/Core/Src/sys_privileged_wrap.c            Wrapper functions to call SVC when in Unprivilege mode
+  - LoRaWAN_End_Node_DualCore/CM0PLUS/Core/Src/sys_privileged_wrap.c            Wrapper functions to call SVC when in Unprivileged mode
   - LoRaWAN_End_Node_DualCore/CM0PLUS/Core/Src/timer_if.c                       Configure RTC Alarm, Tick and Calendar manager
   - LoRaWAN_End_Node_DualCore/CM0PLUS/KMS/App/app_kms.c                         !!! No description found !!!
   - LoRaWAN_End_Node_DualCore/CM0PLUS/LoRaWAN/App/app_lorawan.c                 Application of the LRWAN Middleware
@@ -163,6 +168,10 @@ Applications, SubGHz_Phy, LoRaWAN, End_Node, DualCore, SBSFU, KMS
   - LoRaWAN_End_Node_DualCore/CM4/Core/Src/adc_if.c                             Read status related to the chip (battery level, VREF, chip temperature)
   - LoRaWAN_End_Node_DualCore/CM4/Core/Src/dma.c                                This file provides code for the configuration
                                                                                 of all the requested memory to memory DMA transfers.
+  - LoRaWAN_End_Node_DualCore/CM4/Core/Src/flash_if.c                           This file provides set of firmware functions to manage Flash
+                                                                                Interface functionalities.
+  - LoRaWAN_End_Node_DualCore/CM4/Core/Src/gpio.c                               This file provides code for the configuration
+                                                                                of all used GPIO pins.
   - LoRaWAN_End_Node_DualCore/CM4/Core/Src/ipcc.c                               This file provides code for the configuration
                                                                                 of the IPCC instances.
   - LoRaWAN_End_Node_DualCore/CM4/Core/Src/ipcc_if.c                            Interface to IPCC: handles IRQs and abstract application from Ipcc handler and channel direction
@@ -190,7 +199,7 @@ Applications, SubGHz_Phy, LoRaWAN, End_Node, DualCore, SBSFU, KMS
   - LoRaWAN_End_Node_DualCore/CM4/MbMux/radio_mbwrapper.c                       This file implements the CM4 side wrapper of the Radio interface
                                                                                 shared between M0 and M4.
   - LoRaWAN_End_Node_DualCore/Common/System/system_stm32wlxx.c                  CMSIS Cortex Device Peripheral Access Layer System Source File
-  - LoRaWAN_End_Node_DualCore/Common/System/sys_debug.c                         Enables 4 debug pins for internal signals RealTime debugging
+  - LoRaWAN_End_Node_DualCore/Common/System/sys_debug.c                         Configure probes pins RealTime debugging and JTAG/SerialWires for LowPower
   - LoRaWAN_End_Node_DualCore/STM32CubeIDE/CM0PLUS/Application/User/Core/syscalls.cSTM32CubeIDE Minimal System calls file
   - LoRaWAN_End_Node_DualCore/STM32CubeIDE/CM0PLUS/Application/User/Core/sysmem.cSTM32CubeIDE System Memory calls file
   - LoRaWAN_End_Node_DualCore/STM32CubeIDE/CM4/Application/User/Core/syscalls.c STM32CubeIDE Minimal System calls file

@@ -47,6 +47,7 @@
  ******************************************************************************
  */
 #include "se-identity.h"
+#include "LoRaMacVersion.h"
 
 /* USER CODE BEGIN EC1 */
 
@@ -56,9 +57,7 @@
  * When using ABP activation the MAC layer must know in advance to which server
  * version it will be connected.
  */
-#define ABP_ACTIVATION_LRWAN_VERSION_V10x                  0x01000300 /* 1.0.3.0 */
-
-#define ABP_ACTIVATION_LRWAN_VERSION                       ABP_ACTIVATION_LRWAN_VERSION_V10x
+#define ABP_ACTIVATION_LRWAN_VERSION                       LORAMAC_VERSION
 
 /*!
  * Indicates if the end-device support the operation with repeaters

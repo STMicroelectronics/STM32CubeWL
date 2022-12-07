@@ -39,9 +39,7 @@
   ******************************************************************************
   */
 #include "radio.h"
-#include "RegionCommon.h"
 #include "RegionRU864.h"
-#include "lorawan_conf.h"  /* REGION_* */
 
 // Definitions
 #define CHANNELS_MASK_SIZE              1
@@ -50,8 +48,14 @@
 /*
  * Non-volatile module context.
  */
+#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
 static RegionNvmDataGroup1_t* RegionNvmGroup1;
 static RegionNvmDataGroup2_t* RegionNvmGroup2;
+#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+// static RegionNvmDataGroup1_t* RegionNvmGroup1; /* Unused for this region */
+static RegionNvmDataGroup2_t* RegionNvmGroup2;
+static Band_t* RegionBands;
+#endif /* REGION_VERSION */
 
 // Static functions
 static bool VerifyRfFreq( uint32_t freq )
@@ -186,6 +190,7 @@ PhyParam_t RegionRU864GetPhyParam( GetPhyParams_t* getPhy )
             phyParam.Value = REGION_COMMON_DEFAULT_JOIN_ACCEPT_DELAY2;
             break;
         }
+#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
         case PHY_MAX_FCNT_GAP:
         {
             phyParam.Value = REGION_COMMON_DEFAULT_MAX_FCNT_GAP;
@@ -196,6 +201,14 @@ PhyParam_t RegionRU864GetPhyParam( GetPhyParams_t* getPhy )
             phyParam.Value = ( REGION_COMMON_DEFAULT_ACK_TIMEOUT + randr( -REGION_COMMON_DEFAULT_ACK_TIMEOUT_RND, REGION_COMMON_DEFAULT_ACK_TIMEOUT_RND ) );
             break;
         }
+#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+        case PHY_RETRANSMIT_TIMEOUT:
+        {
+            phyParam.Value = ( REGION_COMMON_DEFAULT_RETRANSMIT_TIMEOUT + randr( -REGION_COMMON_DEFAULT_RETRANSMIT_TIMEOUT_RND, REGION_COMMON_DEFAULT_RETRANSMIT_TIMEOUT_RND ) );
+            break;
+        }
+#endif /* REGION_VERSION */
+
         case PHY_DEF_DR1_OFFSET:
         {
             phyParam.Value = REGION_COMMON_DEFAULT_RX1_DR_OFFSET;
@@ -301,8 +314,14 @@ PhyParam_t RegionRU864GetPhyParam( GetPhyParams_t* getPhy )
 void RegionRU864SetBandTxDone( SetBandTxDoneParams_t* txDone )
 {
 #if defined( REGION_RU864 )
+#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
     RegionCommonSetBandTxDone( &RegionNvmGroup1->Bands[RegionNvmGroup2->Channels[txDone->Channel].Band],
                                txDone->LastTxAirTime, txDone->Joined, txDone->ElapsedTimeSinceStartUp );
+#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+    RegionCommonSetBandTxDone( &RegionBands[RegionNvmGroup2->Channels[txDone->Channel].Band],
+                               txDone->LastTxAirTime, txDone->Joined, txDone->ElapsedTimeSinceStartUp );
+#endif /* REGION_VERSION */
+
 #endif /* REGION_RU864 */
 }
 
@@ -323,11 +342,19 @@ void RegionRU864InitDefaults( InitDefaultsParams_t* params )
                 return;
             }
 
+#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
             RegionNvmGroup1 = (RegionNvmDataGroup1_t*) params->NvmGroup1;
             RegionNvmGroup2 = (RegionNvmDataGroup2_t*) params->NvmGroup2;
 
             // Default bands
             memcpy1( ( uint8_t* )RegionNvmGroup1->Bands, ( uint8_t* )bands, sizeof( Band_t ) * RU864_MAX_NB_BANDS );
+#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+            RegionNvmGroup2 = (RegionNvmDataGroup2_t*) params->NvmGroup2;
+            RegionBands = (Band_t*) params->Bands;
+
+            // Default bands
+            memcpy1( ( uint8_t* )RegionBands, ( uint8_t* )bands, sizeof( Band_t ) * RU864_MAX_NB_BANDS );
+#endif /* REGION_VERSION */
 
             // Default channels
             RegionNvmGroup2->Channels[0] = ( ChannelParams_t ) RU864_LC1;
@@ -580,7 +607,11 @@ bool RegionRU864TxConfig( TxConfigParams_t* txConfig, int8_t* txPower, TimerTime
 #if defined( REGION_RU864 )
     RadioModems_t modem;
     int8_t phyDr = DataratesRU864[txConfig->Datarate];
+#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
     int8_t txPowerLimited = RegionCommonLimitTxPower( txConfig->TxPower, RegionNvmGroup1->Bands[RegionNvmGroup2->Channels[txConfig->Channel].Band].TxMaxPower );
+#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+    int8_t txPowerLimited = RegionCommonLimitTxPower( txConfig->TxPower, RegionBands[RegionNvmGroup2->Channels[txConfig->Channel].Band].TxMaxPower );
+#endif /* REGION_VERSION */
     uint32_t bandwidth = RegionCommonGetBandwidth( txConfig->Datarate, BandwidthsRU864 );
     int8_t phyTxPower = 0;
 
@@ -867,7 +898,11 @@ LoRaMacStatus_t RegionRU864NextChannel( NextChanParams_t* nextChanParams, uint8_
     countChannelsParams.Datarate = nextChanParams->Datarate;
     countChannelsParams.ChannelsMask = RegionNvmGroup2->ChannelsMask;
     countChannelsParams.Channels = RegionNvmGroup2->Channels;
+#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
     countChannelsParams.Bands = RegionNvmGroup1->Bands;
+#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+    countChannelsParams.Bands = RegionBands;
+#endif /* REGION_VERSION */
     countChannelsParams.MaxNbChannels = RU864_MAX_NB_CHANNELS;
     countChannelsParams.JoinChannels = &joinChannels;
 
@@ -983,6 +1018,7 @@ bool RegionRU864ChannelsRemove( ChannelRemoveParams_t* channelRemove  )
 #endif /* REGION_RU864 */
 }
 
+#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
 void RegionRU864SetContinuousWave( ContinuousWaveParams_t* continuousWave )
 {
 #if defined( REGION_RU864 )
@@ -996,6 +1032,7 @@ void RegionRU864SetContinuousWave( ContinuousWaveParams_t* continuousWave )
     Radio.SetTxContinuousWave( frequency, phyTxPower, continuousWave->Timeout );
 #endif /* REGION_RU864 */
 }
+#endif /* REGION_VERSION */
 
 uint8_t RegionRU864ApplyDrOffset( uint8_t downlinkDwellTime, int8_t dr, int8_t drOffset )
 {

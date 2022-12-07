@@ -42,7 +42,6 @@ extern "C"
 {
 #endif
 
-#include <stdint.h>
 #include "LoRaMacHeaderTypes.h"
 
 /*!
@@ -205,7 +204,6 @@ typedef struct sLoRaMacMessageJoinAccept
     uint32_t MIC;
 }LoRaMacMessageJoinAccept_t;
 
-
 /*!
  * LoRaMac type for Data MAC messages
  * (Unconfirmed Data Up, Confirmed Data Up, Unconfirmed Data Down, Confirmed Data Down)
@@ -237,7 +235,7 @@ typedef struct sLoRaMacMessageData
      */
     uint8_t* FRMPayload;
     /*!
-     * Size of frame payload (not included in LoRaMac messages) 
+     * Size of frame payload (not included in LoRaMac messages)
      */
     uint8_t FRMPayloadSize;
     /*!

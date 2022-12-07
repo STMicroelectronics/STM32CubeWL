@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -61,25 +60,18 @@ void Error_Handler(void);
 #define RTC_N_PREDIV_S 10
 #define RTC_PREDIV_S ((1<<RTC_N_PREDIV_S)-1)
 #define RTC_PREDIV_A ((1<<(15-RTC_N_PREDIV_S))-1)
-#define LPUART_BAUDRATE 9600
 #define LED1_Pin GPIO_PIN_15
 #define LED1_GPIO_Port GPIOB
 #define LED2_Pin GPIO_PIN_9
 #define LED2_GPIO_Port GPIOB
 #define PROB3_Pin GPIO_PIN_14
 #define PROB3_GPIO_Port GPIOB
-#define RF_CTRL3_Pin GPIO_PIN_3
-#define RF_CTRL3_GPIO_Port GPIOC
 #define BUT1_Pin GPIO_PIN_0
 #define BUT1_GPIO_Port GPIOA
 #define PROB2_Pin GPIO_PIN_13
 #define PROB2_GPIO_Port GPIOB
-#define RF_CTRL2_Pin GPIO_PIN_5
-#define RF_CTRL2_GPIO_Port GPIOC
 #define PROB1_Pin GPIO_PIN_12
 #define PROB1_GPIO_Port GPIOB
-#define RF_CTRL1_Pin GPIO_PIN_4
-#define RF_CTRL1_GPIO_Port GPIOC
 #define BUT3_Pin GPIO_PIN_6
 #define BUT3_GPIO_Port GPIOC
 #define BUT2_Pin GPIO_PIN_1
@@ -90,8 +82,6 @@ void Error_Handler(void);
 #define USARTx_RX_GPIO_Port GPIOA
 #define USARTx_TX_Pin GPIO_PIN_2
 #define USARTx_TX_GPIO_Port GPIOA
-#define PROB4_Pin GPIO_PIN_10
-#define PROB4_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
@@ -101,5 +91,3 @@ void Error_Handler(void);
 #endif
 
 #endif /* __MAIN_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

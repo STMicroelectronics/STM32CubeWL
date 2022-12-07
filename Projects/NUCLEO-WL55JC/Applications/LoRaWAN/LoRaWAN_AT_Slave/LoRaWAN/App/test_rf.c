@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -56,8 +55,8 @@
 #define LORA_IQ_INVERSION_OFF         false
 #define TX_TEST_TONE                  (1<<0)
 #define RX_TEST_RSSI                  (1<<1)
-#define TX_TEST_LORA                  (1<<2)
-#define RX_TEST_LORA                  (1<<3)
+#define TX_TEST_MODU                  (1<<2)
+#define RX_TEST_MODU                  (1<<3)
 #define RX_TIMEOUT_VALUE              5000
 #define RX_CONTINUOUS_ON              1
 #define PRBS9_INIT                    ( ( uint16_t) 2 )
@@ -188,7 +187,7 @@ int32_t TST_RxRssi(void)
     RxConfig.fsk.PreambleLen = 3;   /*in Byte*/
     RxConfig.fsk.SyncWordLength = 3; /*in Byte*/
     RxConfig.fsk.SyncWord = syncword; /*SyncWord Buffer*/
-    RxConfig.fsk.whiteSeed = 0x01FF ; /*WhiteningSeed*/
+    RxConfig.fsk.whiteSeed = 0x01FF; /*WhiteningSeed*/
     RxConfig.fsk.LengthMode = RADIO_FSK_PACKET_VARIABLE_LENGTH; /* If the header is explicit, it will be transmitted in the GFSK packet. If the header is implicit, it will not be transmitted*/
     RxConfig.fsk.CrcLength = RADIO_FSK_CRC_2_BYTES_CCIT;       /* Size of the CRC block in the GFSK packet*/
     RxConfig.fsk.CrcPolynomial = 0x1021;
@@ -272,11 +271,11 @@ int32_t TST_TX_Start(int32_t nb_packet)
   int32_t i;
   TxConfigGeneric_t TxConfig;
 
-  if ((TestState & TX_TEST_LORA) != TX_TEST_LORA)
+  if ((TestState & TX_TEST_MODU) != TX_TEST_MODU)
   {
-    TestState |= TX_TEST_LORA;
+    TestState |= TX_TEST_MODU;
 
-    APP_TPRINTF("Tx LoRa Test\r\n");
+    APP_TPRINTF("Tx Test\r\n");
 
     /* Radio initialization */
     RadioEvents.TxDone = OnTxDone;
@@ -299,18 +298,33 @@ int32_t TST_TX_Start(int32_t nb_packet)
         /*fsk modulation*/
         uint8_t syncword[] = { 0xC1, 0x94, 0xC1, 0x00, 0x00, 0x00, 0x00, 0x00 };
         TxConfig.fsk.ModulationShaping = (RADIO_FSK_ModShapings_t)((testParam.BTproduct == 0) ? 0 : testParam.BTproduct + 7);
-        TxConfig.fsk.Bandwidth = testParam.bandwidth;
         TxConfig.fsk.FrequencyDeviation = testParam.fskDev;
         TxConfig.fsk.BitRate = testParam.loraSf_datarate; /*BitRate*/
         TxConfig.fsk.PreambleLen = 3;   /*in Byte        */
         TxConfig.fsk.SyncWordLength = 3; /*in Byte        */
         TxConfig.fsk.SyncWord = syncword; /*SyncWord Buffer*/
-        TxConfig.fsk.whiteSeed = 0x01FF ; /*WhiteningSeed  */
+        TxConfig.fsk.whiteSeed = 0x01FF; /*WhiteningSeed  */
         TxConfig.fsk.HeaderType = RADIO_FSK_PACKET_VARIABLE_LENGTH; /* If the header is explicit, it will be transmitted in the GFSK packet. If the header is implicit, it will not be transmitted*/
         TxConfig.fsk.CrcLength = RADIO_FSK_CRC_2_BYTES_CCIT;       /* Size of the CRC block in the GFSK packet*/
         TxConfig.fsk.CrcPolynomial = 0x1021;
         TxConfig.fsk.Whitening = RADIO_FSK_DC_FREE_OFF;
         Radio.RadioSetTxGenericConfig(GENERIC_FSK, &TxConfig, testParam.power, TX_TIMEOUT_VALUE);
+      }
+      else if (testParam.modulation == TEST_MSK)
+      {
+        /*fsk modulation*/
+        uint8_t syncword[] = { 0xC1, 0x94, 0xC1, 0x00, 0x00, 0x00, 0x00, 0x00 };
+        TxConfig.msk.ModulationShaping = (RADIO_FSK_ModShapings_t)((testParam.BTproduct == 0) ? 0 : testParam.BTproduct + 7);
+        TxConfig.msk.BitRate = testParam.loraSf_datarate; /*BitRate*/
+        TxConfig.msk.PreambleLen = 3;   /*in Byte        */
+        TxConfig.msk.SyncWordLength = 3; /*in Byte        */
+        TxConfig.msk.SyncWord = syncword; /*SyncWord Buffer*/
+        TxConfig.msk.whiteSeed = 0x01FF; /*WhiteningSeed  */
+        TxConfig.msk.HeaderType = RADIO_FSK_PACKET_VARIABLE_LENGTH; /* If the header is explicit, it will be transmitted in the GFSK packet. If the header is implicit, it will not be transmitted*/
+        TxConfig.msk.CrcLength = RADIO_FSK_CRC_2_BYTES_CCIT;       /* Size of the CRC block in the GFSK packet*/
+        TxConfig.msk.CrcPolynomial = 0x1021;
+        TxConfig.msk.Whitening = RADIO_FSK_DC_FREE_OFF;
+        Radio.RadioSetTxGenericConfig(GENERIC_MSK, &TxConfig, testParam.power, TX_TIMEOUT_VALUE);
       }
       else if (testParam.modulation == TEST_LORA)
       {
@@ -362,7 +376,7 @@ int32_t TST_TX_Start(int32_t nb_packet)
       RadioTxTimeout_flag = 0;
       RadioError_flag = 0;
     }
-    TestState &= ~TX_TEST_LORA;
+    TestState &= ~TX_TEST_MODU;
     return 0;
   }
   else
@@ -386,9 +400,9 @@ int32_t TST_RX_Start(int32_t nb_packet)
   uint32_t PER = 0;
   RxConfigGeneric_t RxConfig = {0};
 
-  if (((TestState & RX_TEST_LORA) != RX_TEST_LORA) && (nb_packet > 0))
+  if (((TestState & RX_TEST_MODU) != RX_TEST_MODU) && (nb_packet > 0))
   {
-    TestState |= RX_TEST_LORA;
+    TestState |= RX_TEST_MODU;
 
     /* Radio initialization */
     RadioEvents.TxDone = OnTxDone;
@@ -414,7 +428,7 @@ int32_t TST_RX_Start(int32_t nb_packet)
         RxConfig.fsk.SyncWordLength = 3; /*in Byte*/
         RxConfig.fsk.SyncWord = syncword; /*SyncWord Buffer*/
         RxConfig.fsk.PreambleMinDetect = RADIO_FSK_PREAMBLE_DETECTOR_08_BITS;
-        RxConfig.fsk.whiteSeed = 0x01FF ; /*WhiteningSeed*/
+        RxConfig.fsk.whiteSeed = 0x01FF; /*WhiteningSeed*/
         RxConfig.fsk.LengthMode = RADIO_FSK_PACKET_VARIABLE_LENGTH; /* If the header is explicit, it will be transmitted in the GFSK packet. If the header is implicit, it will not be transmitted*/
         RxConfig.fsk.CrcLength = RADIO_FSK_CRC_2_BYTES_CCIT;       /* Size of the CRC block in the GFSK packet*/
         RxConfig.fsk.CrcPolynomial = 0x1021;
@@ -438,10 +452,18 @@ int32_t TST_RX_Start(int32_t nb_packet)
       }
       else
       {
-        return -1; /*error*/
+        /* excluding MSK Rx */
+        return -1; /* error */
       }
 
-      Radio.Rx(RX_TIMEOUT_VALUE);
+      if (testParam.lna == 0)
+      {
+        Radio.Rx(RX_TIMEOUT_VALUE);
+      }
+      else
+      {
+        Radio.RxBoosted(RX_TIMEOUT_VALUE);
+      }
 
       /* Wait Rx done/timeout */
       UTIL_SEQ_WaitEvt(1 << CFG_SEQ_Evt_RadioOnTstRF);
@@ -490,7 +512,7 @@ int32_t TST_RX_Start(int32_t nb_packet)
       PER = (100 * (count_RxKo)) / (count_RxKo + count_RxOk);
       APP_TPRINTF("Rx %d of %d  >>> PER= %d %%\r\n", i, nb_packet, PER);
     }
-    TestState &= ~RX_TEST_LORA;
+    TestState &= ~RX_TEST_MODU;
     return 0;
   }
   else
@@ -601,5 +623,3 @@ static int32_t Prbs9_generator(uint8_t *payload, uint8_t len)
 /* USER CODE BEGIN PrFD */
 
 /* USER CODE END PrFD */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

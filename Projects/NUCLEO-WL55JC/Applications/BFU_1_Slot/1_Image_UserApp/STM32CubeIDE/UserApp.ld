@@ -11,6 +11,7 @@ _estack = ORIGIN(APPLI_RAM) + LENGTH(APPLI_RAM); /* end of "RAM" Ram type memory
 _Min_Heap_Size  = 0x200; /* required amount of heap  */
 _Min_Stack_Size = 0x800; /* required amount of stack */
 
+INCLUDE se_interface_app.ld
 INCLUDE mapping_fwimg.ld
 INCLUDE mapping_sbsfu.ld
 

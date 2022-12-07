@@ -1,9 +1,70 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US"><head></head>
-<body><font color="blue"><b><u>STM32CubeWL Firmware Package v1.0.0 / 28-October-2020</u></b></font><br>
-<br>
-<p class="MsoNormal" style="margin: 4.5pt 0cm 4.5pt 18pt;"><b style=""><u><span style="font-size: 10pt; font-family: Verdana; color: black;">Main
-Changes</span></u></b></p><p class="MsoNormal" style="margin: 4.5pt 0cm 4.5pt 18pt;"><small><span style="font-size: 10pt; color: black;"></span><b style=""><u><span style="font-size: 10pt; color: black;"></span></u></b>CMSIS/LL/HAL
-Drivers with full Quality criteria (MISRA-C® 2012 &amp; CodeSonar)</small></p><p class="MsoNormal" style="margin: 4.5pt 0cm 4.5pt 18pt;"><small><span style="font-size: 10pt; color: black;">All Middlewares Legacy&nbsp; (FatFS, FreeRTOS)&nbsp;</span></small></p><p class="MsoNormal" style="margin: 4.5pt 0cm 4.5pt 18pt;"><small><span style="font-size: 10pt; color: black;">All Middlewares RF (LoRaWAN, Sigfox, SubGhz_Phy)&nbsp;</span></small></p><p class="MsoNormal" style="margin: 4.5pt 0cm 4.5pt 18pt;"><small><span style="font-size: 10pt; color: black;">All Middlewares Security (STM32_Secure_Engine, STM32_Key_Management_Services, mbed-crypto)&nbsp;</span></small></p><p class="MsoNormal" style="margin: 4.5pt 0cm 4.5pt 18pt;"><small><span style="font-size: 10pt; color: black;">All Utilities&nbsp;</span></small></p><p class="MsoNormal" style="margin: 4.5pt 0cm 4.5pt 18pt;"><small>CubeFW
-contains 254 examples &amp; applications with EWARM as basis
-toolchain,&nbsp; ported to MDK-ARM &amp; CubeIDE</small></p><p class="MsoNormal" style="margin: 4.5pt 0cm 4.5pt 18pt;"><span style="font-size: 10pt; font-family: Verdana; color: black;"></span><span style="font-size: 10pt; font-family: Verdana; color: black;"></span><span style="font-size: 10pt; font-family: Verdana; color: black;"></span><span style="font-size: 10pt; font-family: Verdana; color: black;"></span></p><p class="MsoNormal" style="margin: 4.5pt 0cm 4.5pt 18pt;"></p><br></body></html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<title>_htmresc\ReleaseNotes.html</title>
+</head>
+
+<body style="font-size: 10pt; font-family: Verdana;">
+
+<h3 style="color: blue; text-decoration: underline;">STM32CubeWL Firmware Package v1.2.0 / 04-February-2022</h3>
+
+<div style="margin-left: 18pt;">
+<p>
+<b><u>Main Changes</u></b>
+</p>
+
+<p>
+<b>CMSIS/LL/HAL Drivers updates:</b>
+</p>
+<p>
+- Maintenance to include latest corrections
+</p>
+
+<p>
+<b>LoRaWAN Middleware updates:</b>
+</p>
+<p>
+- Feature: Integration of LoRaWAN v1.0.4 from LoRa Mac Semtech/StackForce develop branch (31-May-2021 commits, version 4.5.2)
+</p>
+<p>
+- Feature: NVM Context store/restore implementation with Flash usage and SRAM2 retention (required by Certification code)
+</p>
+<p>
+- Feature: US915/CN470/AU915 HYBRID Frequency sub-band can be overloaded in lorawan_conf.h
+</p>
+<p>
+- Fix: Negative sensor Temperature
+</p>
+<p>
+- Fix: LmHandlerSend function returns an error when the App data is not sent because piggyback FOpts MAC commands is set as priority in the uplink payload
+</p>
+<p>
+- Fix: FragDecoder fragment max size update to support upper DRs
+</p>
+
+<p>
+<b>Sigfox Middleware updates:</b>
+</p>
+<p>
+- Crypto : V1.0.0
+</p>
+<p>
+- Monarch: V2.0.1 (STMicroelectronics Patent)
+</p>
+<p>
+- SigfoxLib: V2.10.0
+</p>
+<p>
+- SigfoxLibTest: V0.8.0
+</p>
+
+<p>
+<b>Utilities updates:</b>
+</p>
+<p>
+- Maintenance to include latest corrections
+</p>
+
+</div>
+</body>
+</html>

@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2017 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -126,12 +125,12 @@ extern "C" {
 
 /**
   * @brief Region 4 - Forbid all access to the active slot.
-  *                   In addition to region 3, From 0x08018000 ==> 0x0801EFFF (28 kbytes)
+  *                   In addition to region 3, From 0x08018000 ==> 0x0801DFFF (24 kbytes)
   */
 #define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_RGNV  MPU_REGION_NUMBER4
 #define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_START 0x08018000UL
 #define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_SIZE  MPU_REGION_SIZE_32KB
-#define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_SREG  0x80U    /*!< 32 Kbytes / 8 * 7 ==> 28 Kbytes */
+#define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_SREG  0xC0U    /*!< 32 Kbytes / 8 * 6 ==> 24 Kbytes */
 #define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_PERM  MPU_REGION_NO_ACCESS
 #define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_EXECV MPU_INSTRUCTION_ACCESS_DISABLE
 #define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_TEXV  MPU_TEX_LEVEL0
@@ -176,12 +175,12 @@ extern "C" {
 
 /**
   * @brief Region 4 - Forbid all access to the active slot.
-  *                   In addition to region 3, From 0x08018000 ==> 0x0801EFFF (28 kbytes)
+  *                   In addition to region 3, From 0x08018000 ==> 0x0801DFFF (24 kbytes)
   */
 #define APP_PROTECT_MPU_FLASHEXE_ADJUST_RGNV  MPU_REGION_NUMBER4
 #define APP_PROTECT_MPU_FLASHEXE_ADJUST_START 0x08018000UL
 #define APP_PROTECT_MPU_FLASHEXE_ADJUST_SIZE  MPU_REGION_SIZE_32KB
-#define APP_PROTECT_MPU_FLASHEXE_ADJUST_SREG  0x80U    /*!< 32 Kbytes / 8 * 7 ==> 28 Kbytes */
+#define APP_PROTECT_MPU_FLASHEXE_ADJUST_SREG  0xC0U    /*!< 32 Kbytes / 8 * 6 ==> 24 Kbytes */
 #define APP_PROTECT_MPU_FLASHEXE_ADJUST_PERM  MPU_REGION_PRIV_RO_URO
 #define APP_PROTECT_MPU_FLASHEXE_ADJUST_EXECV MPU_INSTRUCTION_ACCESS_ENABLE
 #define APP_PROTECT_MPU_FLASHEXE_ADJUST_TEXV  MPU_TEX_LEVEL0
@@ -228,5 +227,3 @@ SE_ErrorStatus SE_SFU_IMG_Read(SE_StatusTypeDef *pSE_Status, uint8_t *pDestinati
 #endif
 
 #endif /* SFU_LOW_LEVEL_SECURITY_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

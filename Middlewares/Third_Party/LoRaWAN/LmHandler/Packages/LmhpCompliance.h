@@ -21,17 +21,17 @@
 #ifndef __LMHP_COMPLIANCE__
 #define __LMHP_COMPLIANCE__
 
-#include "LoRaMac.h"
-#include "LmHandlerTypes.h"
 #include "LmhPackage.h"
+#include "LoRaMacVersion.h"
 
 /*!
  * Compliance package identifier.
- * 
+ *
  * \remark This value must be unique amongst the packages
  */
 #define PACKAGE_ID_COMPLIANCE                       0
 
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000300 ))
 /*!
  * Compliance test protocol handler parameters
  */
@@ -62,6 +62,30 @@ typedef struct LmhpComplianceParams_s
      */
     void ( *StartPeripherals )( void );
 }LmhpComplianceParams_t;
+#elif (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+/*!
+ * Compliance test protocol handler parameters
+ */
+typedef struct LmhpComplianceParams_s
+{
+    /*!
+     * Current firmware version
+     */
+    Version_t FwVersion;
+    /*!
+     *
+     */
+    void ( *OnTxPeriodicityChanged )( uint32_t periodicity );
+    /*!
+     *
+     */
+    void ( *OnTxFrameCtrlChanged )( LmHandlerMsgTypes_t isTxConfirmed );
+    /*!
+     *
+     */
+    void ( *OnPingSlotPeriodicityChanged )( uint8_t pingSlotPeriodicity );
+}LmhpComplianceParams_t;
+#endif /* LORAMAC_VERSION */
 
 LmhPackage_t *LmhpCompliancePackageFactory( void );
 

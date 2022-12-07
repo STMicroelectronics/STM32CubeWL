@@ -8,13 +8,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -32,6 +31,7 @@
 #include "LmHandler_mbwrapper.h"
 #include "LmHandler.h"
 #include "lora_info.h"
+#include "lora_app_version.h"
 
 /* USER CODE BEGIN Includes */
 
@@ -66,9 +66,13 @@ typedef enum TxEventType_e
 #ifndef MAX
 #define MAX( a, b ) ( ( ( a ) > ( b ) ) ? ( a ) : ( b ) )
 #endif /* MAX */
-#define LMH_ON_JOIN_SIZE (sizeof(LmHandlerJoinParams_t))
-#define LMH_ON_TX_SIZE   (sizeof(LmHandlerTxParams_t))
-#define LMH_ON_RX_SIZE   (((sizeof(LmHandlerAppData_t) + 7) & ~7) + 256 + (sizeof(LmHandlerRxParams_t)))
+#ifndef ALIGN_X
+#define ALIGN_X( operand, alignment ) ( ((operand + (alignment - 1)) & ~(alignment - 1)) )
+#endif /* ALIGN_X */
+#define LMH_ON_JOIN_SIZE (ALIGN_X(sizeof(LmHandlerJoinParams_t), 8) + (sizeof(CommissioningParams_t)))
+#define LMH_ON_TX_SIZE   (ALIGN_X(sizeof(LmHandlerTxParams_t), 8) + (sizeof(CommissioningParams_t)))
+#define LMH_ON_RX_SIZE   (ALIGN_X(sizeof(LmHandlerAppData_t), 8)\
+                          + 256 + ALIGN_X(sizeof(LmHandlerRxParams_t), 8) + (sizeof(CommissioningParams_t)))
 #define LORA_MBWRAP_SHBUF_SIZE MAX(LMH_ON_JOIN_SIZE, MAX(LMH_ON_TX_SIZE, LMH_ON_RX_SIZE))
 
 /* USER CODE BEGIN PD */
@@ -83,9 +87,13 @@ typedef enum TxEventType_e
 /* Private function prototypes -----------------------------------------------*/
 static uint8_t GetBatteryLevel_mbwrapper(void);
 
-static uint16_t GetTemperatureLevel_mbwrapper(void);
+static int16_t GetTemperatureLevel_mbwrapper(void);
 
-static void OnNvmDataChange_mbwrapper(LmHandlerNvmContextStates_t state, uint16_t size);
+static void OnRestoreContextRequest_mbwrapper(void *nvm, uint32_t nvm_size);
+
+static void OnStoreContextRequest_mbwrapper(void *nvm, uint32_t nvm_size);
+
+static void OnNvmDataChange_mbwrapper(LmHandlerNvmContextStates_t state);
 
 static void OnNetworkParametersChange_mbwrapper(CommissioningParams_t *params);
 
@@ -101,6 +109,14 @@ static void OnBeaconStatusChange_mbwrapper(LmHandlerBeaconParams_t *params);
 
 static void OnSysTimeUpdate_mbwrapper(void);
 
+static void OnTxPeriodicityChanged_mbwrapper(uint32_t periodicity);
+
+static void OnTxFrameCtrlChanged_mbwrapper(LmHandlerMsgTypes_t isTxConfirmed);
+
+static void OnPingSlotPeriodicityChanged_mbwrapper(uint8_t pingSlotPeriodicity);
+
+static void OnSystemReset_mbwrapper(void);
+
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -109,26 +125,32 @@ static void OnSysTimeUpdate_mbwrapper(void);
 /**
   * @brief LmHandler buffer to exchange data between from CM0+ to CM4
   */
-UTIL_MEM_PLACE_IN_SECTION("MB_MEM2") uint8_t aLoraMbWrapShare2Buffer[LORA_MBWRAP_SHBUF_SIZE];
+UTIL_MEM_PLACE_IN_SECTION("MB_MEM3") uint8_t aLoraMbWrapShare2Buffer[LORA_MBWRAP_SHBUF_SIZE];
 
 /**
   * @brief local structure of LmHandler callbacks for notification processes
   */
 static LmHandlerCallbacks_t callback_mbwrapper =
 {
-  .GetBatteryLevel =           GetBatteryLevel_mbwrapper,
-  .GetTemperature =            GetTemperatureLevel_mbwrapper,
-  .GetUniqueId =               GetUniqueId,
-  .GetDevAddr =                GetDevAddr,
-  .OnMacProcess =              OnMacProcessNotify,
-  .OnNvmDataChange =           OnNvmDataChange_mbwrapper,
-  .OnNetworkParametersChange = OnNetworkParametersChange_mbwrapper,
-  .OnJoinRequest =             OnJoinRequest_mbwrapper,
-  .OnTxData =                  OnTxData_mbwrapper,
-  .OnRxData =                  OnRxData_mbwrapper,
-  .OnClassChange =             OnClassChange_mbwrapper,
-  .OnBeaconStatusChange =      OnBeaconStatusChange_mbwrapper,
-  .OnSysTimeUpdate =           OnSysTimeUpdate_mbwrapper
+  .GetBatteryLevel =              GetBatteryLevel_mbwrapper,
+  .GetTemperature =               GetTemperatureLevel_mbwrapper,
+  .GetUniqueId =                  GetUniqueId,
+  .GetDevAddr =                   GetDevAddr,
+  .OnRestoreContextRequest =      OnRestoreContextRequest_mbwrapper,
+  .OnStoreContextRequest =        OnStoreContextRequest_mbwrapper,
+  .OnMacProcess =                 OnMacProcessNotify,
+  .OnNvmDataChange =              OnNvmDataChange_mbwrapper,
+  .OnNetworkParametersChange =    OnNetworkParametersChange_mbwrapper,
+  .OnJoinRequest =                OnJoinRequest_mbwrapper,
+  .OnTxData =                     OnTxData_mbwrapper,
+  .OnRxData =                     OnRxData_mbwrapper,
+  .OnClassChange =                OnClassChange_mbwrapper,
+  .OnBeaconStatusChange =         OnBeaconStatusChange_mbwrapper,
+  .OnSysTimeUpdate =              OnSysTimeUpdate_mbwrapper,
+  .OnTxPeriodicityChanged =       OnTxPeriodicityChanged_mbwrapper,
+  .OnTxFrameCtrlChanged =         OnTxFrameCtrlChanged_mbwrapper,
+  .OnPingSlotPeriodicityChanged = OnPingSlotPeriodicityChanged_mbwrapper,
+  .OnSystemReset =                OnSystemReset_mbwrapper
 };
 
 /* USER CODE BEGIN PV */
@@ -143,8 +165,6 @@ void Process_Lora_Cmd(MBMUX_ComParam_t *ComObj)
   /* USER CODE END Process_Lora_Cmd_1 */
   uint32_t *com_buffer = NULL;
   LmHandlerErrorStatus_t errorStatus;
-  LmHandlerFlagStatus_t flagStatus;
-  int32_t ret_code;
 
   APP_LOG(TS_ON, VLEVEL_H, ">CM0PLUS(LoRa)\r\n");
 
@@ -153,13 +173,21 @@ void Process_Lora_Cmd(MBMUX_ComParam_t *ComObj)
   /* process Command */
   switch (ComObj->MsgId)
   {
-    case   LMHANDLER_INITIALIZATION_ID:
-      errorStatus = LmHandlerInit(&callback_mbwrapper);
+    case   LMHANDLER_INIT_ID:
+      errorStatus = LmHandlerInit(&callback_mbwrapper, APP_VERSION);
 
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
       ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       InitPackageProcess();
+      break;
+
+    case   LMHANDLER_DEINIT_ID:
+      errorStatus = LmHandlerDeInit();
+
+      /* prepare response buffer */
+      ComObj->ParamCnt = 0; /* reset ParamCnt */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
 
     case   LMHANDLER_CONFIGURE_ID:
@@ -171,15 +199,17 @@ void Process_Lora_Cmd(MBMUX_ComParam_t *ComObj)
       break;
 
     case   LMHANDLER_JOIN_STATUS_ID:
-      flagStatus = LmHandlerJoinStatus();
+    {
+      LmHandlerFlagStatus_t flagStatus = LmHandlerJoinStatus();
 
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
       ComObj->ReturnVal = (uint32_t) flagStatus; /* */
-      break;
+    }
+    break;
 
     case   LMHANDLER_JOIN_ID:
-      LmHandlerJoin((ActivationType_t) com_buffer[0]);
+      LmHandlerJoin((ActivationType_t) com_buffer[0], (bool) com_buffer[1]);
 
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
@@ -194,6 +224,14 @@ void Process_Lora_Cmd(MBMUX_ComParam_t *ComObj)
       ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
 
+    case   LMHANDLER_HALT_ID:
+      errorStatus = LmHandlerHalt();
+
+      /* prepare response buffer */
+      ComObj->ParamCnt = 0; /* reset ParamCnt */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
+      break;
+
     case   LMHANDLER_SEND_ID:
     {
       LmHandlerAppData_t appData;
@@ -201,7 +239,7 @@ void Process_Lora_Cmd(MBMUX_ComParam_t *ComObj)
       appData.BufferSize = (uint8_t)com_buffer[1];
       appData.Buffer = (uint8_t *)com_buffer[2];
 
-      errorStatus = LmHandlerSend(&appData, (LmHandlerMsgTypes_t) com_buffer[3], (UTIL_TIMER_Time_t *)com_buffer[4], (bool)com_buffer[5]);
+      errorStatus = LmHandlerSend(&appData, (LmHandlerMsgTypes_t) com_buffer[3], (bool)com_buffer[4]);
 
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
@@ -215,6 +253,16 @@ void Process_Lora_Cmd(MBMUX_ComParam_t *ComObj)
       ComObj->ParamCnt = 0; /* reset ParamCnt */
       ComObj->ReturnVal = 0; /* */
       break;
+    case   LMHANDLER_GET_DUTY_CYCLE_TIME_ID:
+    {
+      TimerTime_t dutyCycleWaitTime;
+      dutyCycleWaitTime = LmHandlerGetDutyCycleWaitTime();
+      /* prepare response buffer */
+      ComObj->ParamCnt = 0; /* reset ParamCnt */
+      ComObj->ReturnVal = (uint32_t) dutyCycleWaitTime; /* */
+    }
+    break;
+
     case   LMHANDLER_REQUEST_CLASS_ID:
       errorStatus = LmHandlerRequestClass((DeviceClass_t) com_buffer[0]);
       /* prepare response buffer */
@@ -222,256 +270,268 @@ void Process_Lora_Cmd(MBMUX_ComParam_t *ComObj)
       ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_GET_CLASS_ID:
-      ret_code = LmHandlerGetCurrentClass((DeviceClass_t *) com_buffer[0]);
+      errorStatus = LmHandlerGetCurrentClass((DeviceClass_t *) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_GET_DEVEUI_ID:
-      ret_code = LmHandlerGetDevEUI((uint8_t *) com_buffer[0]);
+      errorStatus = LmHandlerGetDevEUI((uint8_t *) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_SET_DEVEUI_ID:
-      ret_code = LmHandlerSetDevEUI((uint8_t *) com_buffer[0]);
+      errorStatus = LmHandlerSetDevEUI((uint8_t *) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_GET_APPEUI_ID:
-      ret_code = LmHandlerGetAppEUI((uint8_t *) com_buffer[0]);
+      errorStatus = LmHandlerGetAppEUI((uint8_t *) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_SET_APPEUI_ID:
-      ret_code = LmHandlerSetAppEUI((uint8_t *) com_buffer[0]);
+      errorStatus = LmHandlerSetAppEUI((uint8_t *) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_GET_NWKKEY_ID:
-      ret_code = LmHandlerGetNwkKey((uint8_t *) com_buffer[0]);
+      errorStatus = LmHandlerGetNwkKey((uint8_t *) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_SET_NWKKEY_ID:
-      ret_code = LmHandlerSetNwkKey((uint8_t *) com_buffer[0]);
+      errorStatus = LmHandlerSetNwkKey((uint8_t *) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_GET_APPKEY_ID:
-      ret_code = LmHandlerGetAppKey((uint8_t *) com_buffer[0]);
+      errorStatus = LmHandlerGetAppKey((uint8_t *) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_SET_APPKEY_ID:
-      ret_code = LmHandlerSetAppKey((uint8_t *) com_buffer[0]);
+      errorStatus = LmHandlerSetAppKey((uint8_t *) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_GET_NWKSKEY_ID:
-      ret_code = LmHandlerGetNwkSKey((uint8_t *) com_buffer[0]);
+      errorStatus = LmHandlerGetNwkSKey((uint8_t *) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_SET_NWKSKEY_ID:
-      ret_code = LmHandlerSetNwkSKey((uint8_t *) com_buffer[0]);
+      errorStatus = LmHandlerSetNwkSKey((uint8_t *) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_GET_APPSKEY_ID:
-      ret_code = LmHandlerGetAppSKey((uint8_t *) com_buffer[0]);
+      errorStatus = LmHandlerGetAppSKey((uint8_t *) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_SET_APPSKEY_ID:
-      ret_code = LmHandlerSetAppSKey((uint8_t *) com_buffer[0]);
+      errorStatus = LmHandlerSetAppSKey((uint8_t *) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_GET_NWKID_ID:
-      ret_code = LmHandlerGetNetworkID((uint32_t *) com_buffer[0]);
+      errorStatus = LmHandlerGetNetworkID((uint32_t *) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_SET_NWKID_ID:
-      ret_code = LmHandlerSetNetworkID((uint32_t) com_buffer[0]);
+      errorStatus = LmHandlerSetNetworkID((uint32_t) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_GET_DEVADDR_ID:
-      ret_code = LmHandlerGetDevAddr((uint32_t *) com_buffer[0]);
+      errorStatus = LmHandlerGetDevAddr((uint32_t *) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_SET_DEVADDR_ID:
-      ret_code = LmHandlerSetDevAddr((uint32_t) com_buffer[0]);
+      errorStatus = LmHandlerSetDevAddr((uint32_t) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_GET_ACTIVE_REGION_ID:
-      ret_code = LmHandlerGetActiveRegion((LoRaMacRegion_t *) com_buffer[0]);
+      errorStatus = LmHandlerGetActiveRegion((LoRaMacRegion_t *) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_SET_ACTIVE_REGION_ID:
-      ret_code = LmHandlerSetActiveRegion((LoRaMacRegion_t) com_buffer[0]);
+      errorStatus = LmHandlerSetActiveRegion((LoRaMacRegion_t) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_GET_ADR_ENABLE_ID:
-      ret_code = LmHandlerGetAdrEnable((bool *) com_buffer[0]);
+      errorStatus = LmHandlerGetAdrEnable((bool *) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_SET_ADR_ENABLE_ID:
-      ret_code = LmHandlerSetAdrEnable((bool) com_buffer[0]);
+      errorStatus = LmHandlerSetAdrEnable((bool) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_GET_TX_DATARATE_ID:
-      ret_code = LmHandlerGetTxDatarate((int8_t *) com_buffer[0]);
+      errorStatus = LmHandlerGetTxDatarate((int8_t *) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_SET_TX_DATARATE_ID:
-      ret_code = LmHandlerSetTxDatarate((int8_t) com_buffer[0]);
+      errorStatus = LmHandlerSetTxDatarate((int8_t) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_GET_DUTY_CYCLE_ID:
-      ret_code = LmHandlerGetDutyCycleEnable((bool *) com_buffer[0]);
+      errorStatus = LmHandlerGetDutyCycleEnable((bool *) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_SET_DUTY_CYCLE_ID:
-      ret_code = LmHandlerSetDutyCycleEnable((bool) com_buffer[0]);
+      errorStatus = LmHandlerSetDutyCycleEnable((bool) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_GET_RX2_PARAMS_ID:
-      ret_code = LmHandlerGetRX2Params((RxChannelParams_t *) com_buffer[0]);
+      errorStatus = LmHandlerGetRX2Params((RxChannelParams_t *) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_GET_TX_PWR_ID:
-      ret_code = LmHandlerGetTxPower((int8_t *) com_buffer[0]);
+      errorStatus = LmHandlerGetTxPower((int8_t *) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_GET_RX1_DELAY_ID:
-      ret_code = LmHandlerGetRx1Delay((uint32_t *) com_buffer[0]);
+      errorStatus = LmHandlerGetRx1Delay((uint32_t *) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_GET_RX2_DELAY_ID:
-      ret_code = LmHandlerGetRx2Delay((uint32_t *) com_buffer[0]);
+      errorStatus = LmHandlerGetRx2Delay((uint32_t *) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_GET_JOIN_RX1_DELAY_ID:
-      ret_code = LmHandlerGetJoinRx1Delay((uint32_t *) com_buffer[0]);
+      errorStatus = LmHandlerGetJoinRx1Delay((uint32_t *) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_GET_JOIN_RX2_DELAY_ID:
-      ret_code = LmHandlerGetJoinRx2Delay((uint32_t *) com_buffer[0]);
+      errorStatus = LmHandlerGetJoinRx2Delay((uint32_t *) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_SET_RX2_PARAMS_ID:
-      ret_code = LmHandlerSetRX2Params((RxChannelParams_t *) com_buffer[0]);
+      errorStatus = LmHandlerSetRX2Params((RxChannelParams_t *) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_SET_TX_PWR_ID:
-      ret_code = LmHandlerSetTxPower((int8_t) com_buffer[0]);
+      errorStatus = LmHandlerSetTxPower((int8_t) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_SET_RX1_DELAY_ID:
-      ret_code = LmHandlerSetRx1Delay((uint32_t) com_buffer[0]);
+      errorStatus = LmHandlerSetRx1Delay((uint32_t) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_SET_RX2_DELAY_ID:
-      ret_code = LmHandlerSetRx2Delay((uint32_t) com_buffer[0]);
+      errorStatus = LmHandlerSetRx2Delay((uint32_t) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_SET_JOIN_RX1_DELAY_ID:
-      ret_code = LmHandlerSetJoinRx1Delay((uint32_t) com_buffer[0]);
+      errorStatus = LmHandlerSetJoinRx1Delay((uint32_t) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_SET_JOIN_RX2_DELAY_ID:
-      ret_code = LmHandlerSetJoinRx2Delay((uint32_t) com_buffer[0]);
+      errorStatus = LmHandlerSetJoinRx2Delay((uint32_t) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_GET_PING_PERIODICITY_ID:
-      ret_code = LmHandlerGetPingPeriodicity((uint8_t *) com_buffer[0]);
+      errorStatus = LmHandlerGetPingPeriodicity((uint8_t *) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_SET_PING_PERIODICITY_ID:
-      ret_code = LmHandlerSetPingPeriodicity((uint8_t) com_buffer[0]);
+      errorStatus = LmHandlerSetPingPeriodicity((uint8_t) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_GET_BEACON_STATE_ID:
-      ret_code = LmHandlerGetBeaconState((BeaconState_t *) com_buffer[0]);
+      errorStatus = LmHandlerGetBeaconState((BeaconState_t *) com_buffer[0]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case LMHANDLER_LINK_CHECK_REQ_ID:
-      ret_code = LmHandlerLinkCheckReq();
+      errorStatus = LmHandlerLinkCheckReq();
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case LMHANDLER_DEVICE_TIME_REQ_ID:
-      ret_code = LmHandlerDeviceTimeReq();
+      errorStatus = LmHandlerDeviceTimeReq();
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) ret_code; /* */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
+      break;
+    case LMHANDLER_GET_VERSION_ID:
+      errorStatus = LmHandlerGetVersion((LmHandlerVersionType_t)com_buffer[0], (uint32_t *) com_buffer[1]);
+      /* prepare response buffer */
+      ComObj->ParamCnt = 0; /* reset ParamCnt */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
+      break;
+    case LMHANDLER_NVM_DATA_STORE_ID:
+      errorStatus = LmHandlerNvmDataStore();
+      /* prepare response buffer */
+      ComObj->ParamCnt = 0; /* reset ParamCnt */
+      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
     case   LMHANDLER_INFO_INIT_ID:
       LoraInfo_Init();
@@ -531,7 +591,7 @@ static uint8_t GetBatteryLevel_mbwrapper(void)
  *
  * \retval  Temperature level
  */
-static uint16_t GetTemperatureLevel_mbwrapper(void)
+static int16_t GetTemperatureLevel_mbwrapper(void)
 {
   /* USER CODE BEGIN GetTemperatureLevel_mbwrapper_1 */
 
@@ -545,13 +605,63 @@ static uint16_t GetTemperatureLevel_mbwrapper(void)
   MBMUXIF_LoraSendNotif();
   /* waiting for event */
   /* once event is received and semaphore released: */
-  return (uint16_t) com_obj->ReturnVal;
+  return (int16_t) com_obj->ReturnVal;
   /* USER CODE BEGIN GetTemperatureLevel_mbwrapper_2 */
 
   /* USER CODE END GetTemperatureLevel_mbwrapper_2 */
 }
 
-static void OnNvmDataChange_mbwrapper(LmHandlerNvmContextStates_t state, uint16_t size)
+static void OnRestoreContextRequest_mbwrapper(void *nvm, uint32_t nvm_size)
+{
+  /* USER CODE BEGIN OnRestoreContextRequest_mbwrapper_1 */
+
+  /* USER CODE END OnRestoreContextRequest_mbwrapper_1 */
+  MBMUX_ComParam_t *com_obj;
+  uint32_t *com_buffer = NULL;
+
+  com_obj = MBMUXIF_GetLoraFeatureNotifComPtr();
+  com_obj->MsgId = LMHANDLER_ON_RESTORE_CONTEXT_REQ_CB_ID;
+
+  com_buffer = MBMUX_SEC_VerifySramBufferPtr(com_obj->ParamBuf, com_obj->BufSize);
+  com_buffer[0] = (uint32_t)nvm;
+  com_buffer[1] = nvm_size;
+  com_obj->ParamCnt = 2;
+
+  MBMUXIF_LoraSendNotif();
+  /* waiting for event */
+  /* once event is received and semaphore released: */
+  return;
+  /* USER CODE BEGIN OnRestoreContextRequest_mbwrapper_2 */
+
+  /* USER CODE END OnRestoreContextRequest_mbwrapper_2 */
+}
+
+static void OnStoreContextRequest_mbwrapper(void *nvm, uint32_t nvm_size)
+{
+  /* USER CODE BEGIN OnStoreContextRequest_mbwrapper_1 */
+
+  /* USER CODE END OnStoreContextRequest_mbwrapper_1 */
+  MBMUX_ComParam_t *com_obj;
+  uint32_t *com_buffer = NULL;
+
+  com_obj = MBMUXIF_GetLoraFeatureNotifComPtr();
+  com_obj->MsgId = LMHANDLER_ON_STORE_CONTEXT_REQ_CB_ID;
+
+  com_buffer = MBMUX_SEC_VerifySramBufferPtr(com_obj->ParamBuf, com_obj->BufSize);
+  com_buffer[0] = (uint32_t)nvm;
+  com_buffer[1] = nvm_size;
+  com_obj->ParamCnt = 2;
+
+  MBMUXIF_LoraSendNotif();
+  /* waiting for event */
+  /* once event is received and semaphore released: */
+  return;
+  /* USER CODE BEGIN OnStoreContextRequest_mbwrapper_2 */
+
+  /* USER CODE END OnStoreContextRequest_mbwrapper_2 */
+}
+
+static void OnNvmDataChange_mbwrapper(LmHandlerNvmContextStates_t state)
 {
   /* USER CODE BEGIN OnNvmDataChange_mbwrapper_1 */
 
@@ -564,8 +674,7 @@ static void OnNvmDataChange_mbwrapper(LmHandlerNvmContextStates_t state, uint16_
 
   com_buffer = MBMUX_SEC_VerifySramBufferPtr(com_obj->ParamBuf, com_obj->BufSize);
   com_buffer[0] = (uint32_t)state;
-  com_buffer[1] = (uint32_t)size;
-  com_obj->ParamCnt = 2;
+  com_obj->ParamCnt = 1;
 
   MBMUXIF_LoraSendNotif();
   /* waiting for event */
@@ -619,10 +728,18 @@ static void OnJoinRequest_mbwrapper(LmHandlerJoinParams_t *joinParams)
   /* USER CODE END OnJoinRequest_mbwrapper_1 */
   MBMUX_ComParam_t *com_obj;
   uint32_t *com_buffer = NULL;
+  uint32_t next_addr = 0;
 
   if (joinParams != NULL)
   {
     UTIL_MEM_cpy_8(aLoraMbWrapShare2Buffer, joinParams, sizeof(LmHandlerJoinParams_t));
+    /* need to 8-align the next address */
+    next_addr += ALIGN_X(sizeof(LmHandlerJoinParams_t), 8);
+    if (joinParams->CommissioningParams != NULL)
+    {
+      UTIL_MEM_cpy_8(&aLoraMbWrapShare2Buffer[next_addr], joinParams->CommissioningParams, sizeof(CommissioningParams_t));
+      ((LmHandlerJoinParams_t *)aLoraMbWrapShare2Buffer)->CommissioningParams = (CommissioningParams_t *)&aLoraMbWrapShare2Buffer[next_addr];
+    }
   }
 
   com_obj = MBMUXIF_GetLoraFeatureNotifComPtr();
@@ -655,10 +772,18 @@ static void OnTxData_mbwrapper(LmHandlerTxParams_t *params)
   /* USER CODE END OnTxData_mbwrapper_1 */
   MBMUX_ComParam_t *com_obj;
   uint32_t *com_buffer = NULL;
+  uint32_t next_addr = 0;
 
   if (params != NULL)
   {
     UTIL_MEM_cpy_8(aLoraMbWrapShare2Buffer, params, sizeof(LmHandlerTxParams_t));
+    /* need to 8-align the next address */
+    next_addr += ALIGN_X(sizeof(LmHandlerTxParams_t), 8);
+    if (params->CommissioningParams != NULL)
+    {
+      UTIL_MEM_cpy_8(&aLoraMbWrapShare2Buffer[next_addr], params->CommissioningParams, sizeof(CommissioningParams_t));
+      ((LmHandlerTxParams_t *)aLoraMbWrapShare2Buffer)->CommissioningParams = (CommissioningParams_t *)&aLoraMbWrapShare2Buffer[next_addr];
+    }
   }
 
   com_obj = MBMUXIF_GetLoraFeatureNotifComPtr();
@@ -693,25 +818,35 @@ static void OnRxData_mbwrapper(LmHandlerAppData_t *appData, LmHandlerRxParams_t 
   /* USER CODE END OnRxData_mbwrapper_1 */
   MBMUX_ComParam_t *com_obj;
   uint32_t *com_buffer = NULL;
-  uint8_t next_addr = 0;
+  uint32_t next_addr = 0;
+  uint32_t param_addr = 0;
 
   if (appData != NULL)
   {
     UTIL_MEM_cpy_8(aLoraMbWrapShare2Buffer, appData, sizeof(LmHandlerAppData_t));
     /* need to 8-align the next address */
-    next_addr = (sizeof(LmHandlerAppData_t) + 7) & ~7;
+    next_addr += ALIGN_X(sizeof(LmHandlerAppData_t), 8);
 
     if (appData->BufferSize > 0)
     {
       UTIL_MEM_cpy_8(&aLoraMbWrapShare2Buffer[next_addr], appData->Buffer, appData->BufferSize);
       ((LmHandlerAppData_t *)aLoraMbWrapShare2Buffer)->Buffer = &aLoraMbWrapShare2Buffer[next_addr];
-      next_addr = (appData->BufferSize + 7) & ~7;
+      /* need to 8-align the next address */
+      next_addr += ALIGN_X(appData->BufferSize, 8);
     }
   }
 
   if (params != NULL)
   {
     UTIL_MEM_cpy_8(&aLoraMbWrapShare2Buffer[next_addr], params, sizeof(LmHandlerRxParams_t));
+    param_addr = next_addr;
+    /* need to 8-align the next address */
+    next_addr += ALIGN_X(sizeof(CommissioningParams_t), 8);
+    if (params->CommissioningParams != NULL)
+    {
+      UTIL_MEM_cpy_8(&aLoraMbWrapShare2Buffer[next_addr], params->CommissioningParams, sizeof(CommissioningParams_t));
+      ((LmHandlerRxParams_t *)&aLoraMbWrapShare2Buffer[param_addr])->CommissioningParams = (CommissioningParams_t *)&aLoraMbWrapShare2Buffer[next_addr];
+    }
   }
 
   com_obj = MBMUXIF_GetLoraFeatureNotifComPtr();
@@ -733,7 +868,7 @@ static void OnRxData_mbwrapper(LmHandlerAppData_t *appData, LmHandlerRxParams_t 
   }
   else
   {
-    com_buffer[1] = (uint32_t) &aLoraMbWrapShare2Buffer[next_addr];
+    com_buffer[1] = (uint32_t) &aLoraMbWrapShare2Buffer[param_addr];
   }
 
   com_obj->ParamCnt = 2;
@@ -809,26 +944,115 @@ static void OnBeaconStatusChange_mbwrapper(LmHandlerBeaconParams_t *params)
 
 static void OnSysTimeUpdate_mbwrapper(void)
 {
-  /* USER CODE BEGIN OnBeaconStatusChange_mbwrapper_1 */
+  /* USER CODE BEGIN OnSysTimeUpdate_mbwrapper_1 */
 
-  /* USER CODE END OnBeaconStatusChange_mbwrapper_1 */
+  /* USER CODE END OnSysTimeUpdate_mbwrapper_1 */
   MBMUX_ComParam_t *com_obj;
 
   com_obj = MBMUXIF_GetLoraFeatureNotifComPtr();
-  com_obj->MsgId = LMHANDLER_ON_ON_SYS_TIME_UPDATE_CB_ID;
+  com_obj->MsgId = LMHANDLER_ON_SYS_TIME_UPDATE_CB_ID;
   com_obj->ParamCnt = 0;
 
   MBMUXIF_LoraSendNotif();
   /* waiting for event */
   /* once event is received and semaphore released: */
   return;
-  /* USER CODE BEGIN OnBeaconStatusChange_mbwrapper_2 */
+  /* USER CODE BEGIN OnSysTimeUpdate_mbwrapper_2 */
 
-  /* USER CODE END OnBeaconStatusChange_mbwrapper_2 */
+  /* USER CODE END OnSysTimeUpdate_mbwrapper_2 */
+}
+
+static void OnTxPeriodicityChanged_mbwrapper(uint32_t periodicity)
+{
+  /* USER CODE BEGIN OnTxPeriodicityChanged_mbwrapper_1 */
+
+  /* USER CODE END OnTxPeriodicityChanged_mbwrapper_1 */
+  MBMUX_ComParam_t *com_obj;
+  uint32_t *com_buffer = NULL;
+
+  com_obj = MBMUXIF_GetLoraFeatureNotifComPtr();
+  com_obj->MsgId = LMHANDLER_ON_TX_PERIOD_CHANGED_CB_ID;
+
+  com_buffer = MBMUX_SEC_VerifySramBufferPtr(com_obj->ParamBuf, com_obj->BufSize);
+  com_buffer[0] = periodicity;
+  com_obj->ParamCnt = 1;
+
+  MBMUXIF_LoraSendNotif();
+  /* waiting for event */
+  /* once event is received and semaphore released: */
+  return;
+  /* USER CODE BEGIN OnTxPeriodicityChanged_mbwrapper_2 */
+
+  /* USER CODE END OnTxPeriodicityChanged_mbwrapper_2 */
+}
+
+static void OnTxFrameCtrlChanged_mbwrapper(LmHandlerMsgTypes_t isTxConfirmed)
+{
+  /* USER CODE BEGIN OnTxFrameCtrlChanged_mbwrapper_1 */
+
+  /* USER CODE END OnTxFrameCtrlChanged_mbwrapper_1 */
+  MBMUX_ComParam_t *com_obj;
+  uint32_t *com_buffer = NULL;
+
+  com_obj = MBMUXIF_GetLoraFeatureNotifComPtr();
+  com_obj->MsgId = LMHANDLER_ON_TX_CTRL_CHANGED_CB_ID;
+
+  com_buffer = MBMUX_SEC_VerifySramBufferPtr(com_obj->ParamBuf, com_obj->BufSize);
+  com_buffer[0] = (uint32_t)isTxConfirmed;
+  com_obj->ParamCnt = 1;
+
+  MBMUXIF_LoraSendNotif();
+  /* waiting for event */
+  /* once event is received and semaphore released: */
+  return;
+  /* USER CODE BEGIN OnTxFrameCtrlChanged_mbwrapper_2 */
+
+  /* USER CODE END OnTxFrameCtrlChanged_mbwrapper_2 */
+}
+static void OnPingSlotPeriodicityChanged_mbwrapper(uint8_t pingSlotPeriodicity)
+{
+  /* USER CODE BEGIN OnPingSlotPeriodicityChanged_mbwrapper_1 */
+
+  /* USER CODE END OnPingSlotPeriodicityChanged_mbwrapper_1 */
+  MBMUX_ComParam_t *com_obj;
+  uint32_t *com_buffer = NULL;
+
+  com_obj = MBMUXIF_GetLoraFeatureNotifComPtr();
+  com_obj->MsgId = LMHANDLER_ON_PING_SLOT_PERIOD_CHANGED_CB_ID;
+
+  com_buffer = MBMUX_SEC_VerifySramBufferPtr(com_obj->ParamBuf, com_obj->BufSize);
+  com_buffer[0] = (uint32_t)pingSlotPeriodicity;
+  com_obj->ParamCnt = 1;
+
+  MBMUXIF_LoraSendNotif();
+  /* waiting for event */
+  /* once event is received and semaphore released: */
+  return;
+  /* USER CODE BEGIN OnPingSlotPeriodicityChanged_mbwrapper_2 */
+
+  /* USER CODE END OnPingSlotPeriodicityChanged_mbwrapper_2 */
+}
+
+static void OnSystemReset_mbwrapper(void)
+{
+  /* USER CODE BEGIN OnSystemReset_mbwrapper_1 */
+
+  /* USER CODE END OnSystemReset_mbwrapper_1 */
+  MBMUX_ComParam_t *com_obj;
+
+  com_obj = MBMUXIF_GetLoraFeatureNotifComPtr();
+  com_obj->MsgId = LMHANDLER_ON_SYSTEM_RESET_CB_ID;
+  com_obj->ParamCnt = 0;
+
+  MBMUXIF_LoraSendNotif();
+  /* waiting for event */
+  /* once event is received and semaphore released: */
+  return;
+  /* USER CODE BEGIN OnSystemReset_mbwrapper_2 */
+
+  /* USER CODE END OnSystemReset_mbwrapper_2 */
 }
 
 /* USER CODE BEGIN PrFD */
 
 /* USER CODE END PrFD */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
