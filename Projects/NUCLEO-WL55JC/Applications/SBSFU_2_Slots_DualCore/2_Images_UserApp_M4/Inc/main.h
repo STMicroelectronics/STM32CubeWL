@@ -29,4 +29,10 @@
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 
+void Error_Handler(void);
+
+/* USER CODE BEGIN EFP */
+void SFU_EXCPT_Security_Error(void);
+/* USER CODE END EFP */
+
 #endif /* MAIN_H */

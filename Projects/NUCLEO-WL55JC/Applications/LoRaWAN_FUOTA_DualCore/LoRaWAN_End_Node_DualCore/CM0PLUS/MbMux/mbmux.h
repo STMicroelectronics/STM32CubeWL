@@ -66,7 +66,8 @@ void MBMUX_Init(MBMUX_ComTable_t *const pMBMUX_ComTable);
   * @param   MsgCb      application callback for notification processing
   * @retval  -1 if ch hasn't been registered by CM4, otherwise the nr of the assigned ch
   */
-int8_t MBMUX_RegisterFeatureCallback(FEAT_INFO_IdTypeDef e_featID, MBMUX_ComType_t ComType, void (*MsgCb)(void *ComObj));
+int8_t MBMUX_RegisterFeatureCallback(FEAT_INFO_IdTypeDef e_featID, MBMUX_ComType_t ComType,
+                                     void (*MsgCb)(void *ComObj));
 
 /**
   * @brief   Release an ipcc channel from the given feature and direction

@@ -3,6 +3,7 @@
   * @file    LmhpFirmwareManagement.h
   * @author  MCD Application Team
   * @brief   Implements the LoRa-Alliance Firmware Management package
+  *          Specification: https://resources.lora-alliance.org/technical-specifications/ts006-1-0-0-firmware-management-protocol
   ******************************************************************************
   * @attention
   *

@@ -66,32 +66,29 @@ extern "C"
  */
 #define SE_EUI_SIZE             8
 
-/* ST_WORKAROUND_BEGIN: Dynamic number of keys definition */
+/*!
+ * Secure-element NVM EUI size in bytes (size of SecureElementNvmDevJoinAddrKey_t)
+ */
+#define SE_NVM_EUI_SIZE         24
+
 /*!
  * Number of supported crypto keys for the soft-se
  */
-#if ( USE_LRWAN_1_1_X_CRYPTO == 1 )
-#if ( LORAMAC_MAX_MC_CTX > 3 )
-#define NUM_OF_KEYS             23UL
-#elif ( LORAMAC_MAX_MC_CTX > 2 )
-#define NUM_OF_KEYS             20UL
-#elif ( LORAMAC_MAX_MC_CTX > 1 )
-#define NUM_OF_KEYS             17UL
-#else /* LORAMAC_MAX_MC_CTX == 0 */
-#define NUM_OF_KEYS             14UL
-#endif /* LORAMAC_MAX_MC_CTX */
-#else /* USE_LRWAN_1_1_X_CRYPTO == 0 */
-#if ( LORAMAC_MAX_MC_CTX > 3 )
-#define NUM_OF_KEYS             19UL
-#elif ( LORAMAC_MAX_MC_CTX > 2 )
-#define NUM_OF_KEYS             16UL
-#elif ( LORAMAC_MAX_MC_CTX > 1 )
-#define NUM_OF_KEYS             13UL
-#else /* LORAMAC_MAX_MC_CTX == 0 */
-#define NUM_OF_KEYS             10UL
-#endif /* LORAMAC_MAX_MC_CTX */
-#endif /* USE_LRWAN_1_1_X_CRYPTO */
-/* ST_WORKAROUND_END */
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01010100 ))
+#define NUM_SESSION_KEY         7
+#else /* LORAMAC_VERSION */
+#define NUM_SESSION_KEY         3
+#endif /* LORAMAC_VERSION */
+
+#define NUM_MC_KEYS             (3 * LORAMAC_MAX_MC_CTX)
+
+#if (!defined (LORAWAN_KMS) || (LORAWAN_KMS == 0))
+#define NUM_ID_KEY              0
+#else /* LORAWAN_KMS == 1 */
+#define NUM_ID_KEY              1
+#endif /* LORAWAN_KMS */
+
+#define NUM_OF_KEYS             (5 + NUM_SESSION_KEY + NUM_MC_KEYS + NUM_ID_KEY)
 
 /*!
  * Key structure definition for the soft-se
@@ -115,8 +112,12 @@ typedef struct sKey
 #endif /* LORAWAN_KMS */
 } Key_t;
 
-typedef struct sSecureElementNvCtx
+/*!
+ * Identifiers structure definition for the soft-se
+ */
+typedef struct SecureElementNvmDevJoinAddrKey
 {
+    /** OTAA */
     /*!
      * DevEUI storage
      */
@@ -126,10 +127,34 @@ typedef struct sSecureElementNvCtx
      */
     uint8_t JoinEui[SE_EUI_SIZE];
     /*!
+     * DevAddr storage for OTA Activation
+     */
+    uint32_t DevAddrOTAA;
+    /** ABP */
+    /*!
+     * DevAddr storage for ABP Activation
+     */
+    uint32_t DevAddrABP;
+} SecureElementNvmDevJoinAddrKey_t;
+
+/*!
+ * Key/Identifiers data which must be stored in the NVM.
+ */
+typedef struct sSecureElementNvCtx
+{
+#if (!defined (LORAWAN_KMS) || (LORAWAN_KMS == 0))
+    /*!
+     * The ID list for the soft-se
+     */
+    SecureElementNvmDevJoinAddrKey_t SeNvmDevJoinKey;
+    /*!
      * The key list is required for the soft-se only. All other secure-elements
      * handle the storage on their own.
      */
     Key_t KeyList[NUM_OF_KEYS];
+#else
+    uint32_t reserved;
+#endif /* LORAWAN_KMS */
     /*!
      * CRC32 value of the SecureElement data structure.
      */

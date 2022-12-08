@@ -38,7 +38,6 @@
 /* USER CODE END EV */
 
 /* Private typedef -----------------------------------------------------------*/
-
 /* USER CODE BEGIN PTD */
 typedef enum
 {
@@ -48,6 +47,7 @@ typedef enum
   TX,
   TX_TIMEOUT,
 } States_t;
+
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -72,6 +72,7 @@ typedef enum
 #define FSK_AFC_BANDWIDTH             83333
 /* LED blink Period*/
 #define LED_PERIOD_MS                 200
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -82,8 +83,8 @@ typedef enum
 /* Private variables ---------------------------------------------------------*/
 /* Radio events function pointer */
 static RadioEvents_t RadioEvents;
-/* USER CODE BEGIN PV */
 
+/* USER CODE BEGIN PV */
 /*Ping Pong FSM states */
 static States_t State = RX;
 /* App Rx Buffer*/
@@ -104,6 +105,7 @@ bool isMaster = true;
 /* the closest the random delays are, the longer it will
    take for the devices to sync when started simultaneously*/
 static int32_t random_delay;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -147,6 +149,7 @@ static void OnledEvent(void *context);
   * @brief PingPong state machine implementation
   */
 static void PingPong_Process(void);
+
 /* USER CODE END PFP */
 
 /* Exported functions ---------------------------------------------------------*/
@@ -284,7 +287,7 @@ static void OnRxDone(uint8_t *payload, uint16_t size, int16_t rssi, int8_t LoraS
   RssiValue = rssi;
   /* Record payload content*/
   APP_LOG(TS_ON, VLEVEL_H, "payload. size=%d \n\r", size);
-  for (int i = 0; i < PAYLOAD_LEN; i++)
+  for (int32_t i = 0; i < PAYLOAD_LEN; i++)
   {
     APP_LOG(TS_OFF, VLEVEL_H, "%02X", BufferRx[i]);
     if (i % 16 == 15)

@@ -68,7 +68,7 @@ extern "C" {
 /* AES-CBC encryption (or no encryption) and SHA256 for FW tag */
 #define SE_IV_LEN               (16U)  /*!< Secure Engine IV Length (Bytes): same size as an AES block*/
 #define SE_TAG_LEN              (32U)  /*!< Secure Engine Tag Length (Bytes): SHA-256 for the FW tag */
-#define SE_HEADER_SIGN_LEN      (64U)  /*!< Firmware Header signarure LEN*/
+#define SE_HEADER_SIGN_LEN      (64U)  /*!< Firmware Header signature LEN*/
 #define SE_ASYM_PUBKEY_LEN      (64U)  /*!< SE Asymmetric Public Key length (bytes)*/
 #else
 #error "The current example does not support the selected crypto scheme."
@@ -115,17 +115,17 @@ typedef enum
   * @note This structure MUST be called SE_FwRawHeaderTypeDef
   * @note This structure MUST contain a field named 'FwVersion'
   * @note This structure MUST contain a field named 'FwSize'
-  * @note This structure MUST contain a field named 'FwTag' (to control intergrity of full FW)
+  * @note This structure MUST contain a field named 'FwTag' (to control integrity of full FW)
   * @note This structure MUST contain a field named 'PartialFwOffset'
   * @note This structure MUST contain a field named 'PartialFwSize'
-  * @note This structure MUST contain a field named 'PartialFwTag' (to control intergrity of partial FW)
+  * @note This structure MUST contain a field named 'PartialFwTag' (to control integrity of partial FW)
   * @note This structure MUST contain a field named 'HeaderSignature' (to control authentication of the header)
-  * @note This structure MUST contain a field named 'FwImageState' (not part of the authentified header)
-  * @note This structure MUST contain a field named 'PrevHeaderFingerprint' (not part of the authentified header)
+  * @note This structure MUST contain a field named 'FwImageState' (not part of the authenticated header)
+  * @note This structure MUST contain a field named 'PrevHeaderFingerprint' (not part of the authenticated header)
   * @note In this example, the header size is always a multiple of 32 to match the FLASH constraint on STM32H7.
   *       We keep this alignment for all platforms (even when the FLASH alignment constraint is another value) to have
   *       one unique header size per crypto scheme.
-  * @note In this example, the authentified header size + the header signature is always 192 bytes (for all crypto
+  * @note In this example, the authenticated header size + the header signature is always 192 bytes (for all crypto
   *       schemes).
   */
 #if (SECBOOT_CRYPTO_SCHEME == SECBOOT_AES128_GCM_AES128_GCM_AES128_GCM)

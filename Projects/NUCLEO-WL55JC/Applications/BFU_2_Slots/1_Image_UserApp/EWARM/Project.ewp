@@ -1098,6 +1098,9 @@
         <name>$PROJ_DIR$\..\Src\tkms_app_find.c</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\Src\tkms_app_secure_counter.c</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\Src\tkms_app_sign_verify.c</name>
       </file>
     </group>

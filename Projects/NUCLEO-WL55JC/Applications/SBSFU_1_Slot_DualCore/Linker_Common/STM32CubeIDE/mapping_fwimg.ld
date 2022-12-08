@@ -4,10 +4,10 @@
 
 /* Slots must be aligned on sector size */
 
-/* Active slot #1 (60 kbytes) */
+/* Active slot #1 (58 kbytes) */
 SLOT_Active_1_header  = 0x0803F800;
 SLOT_Active_1_start   = 0x0801C000;
-SLOT_Active_1_end     = 0x0802AFFF;
+SLOT_Active_1_end     = 0x0802A7FF;
 
 /* Active slot #2 (100 kbytes) */
 SLOT_Active_2_header  = 0x0803F000;

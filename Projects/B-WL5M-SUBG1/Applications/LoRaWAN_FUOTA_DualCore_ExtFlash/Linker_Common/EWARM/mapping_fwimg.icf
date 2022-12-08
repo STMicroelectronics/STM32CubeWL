@@ -1,0 +1,37 @@
+/*###ICF### Set of symbols used in SE and SB_SFU projects ****/
+
+/* Slots  must be aligned on 2048 bytes (0x800) */
+
+/* swap (4 kbytes) */
+define exported symbol  __ICFEDIT_SWAP_start__  = 0x00000000;
+define exported symbol  __ICFEDIT_SWAP_end__    = 0x00000000;
+
+/* Dwl slot #2   (2 kbytes) */
+define exported symbol  __ICFEDIT_SLOT_Dwl_2_start__       = 0x08006800;
+define exported symbol  __ICFEDIT_SLOT_Dwl_2_end__         = 0x08006FFF;
+
+/* Active slot #2 (52 kbytes) */
+define exported symbol  __ICFEDIT_SLOT_Active_2_header__   = 0x0803F000;
+define exported symbol  __ICFEDIT_SLOT_Active_2_start__    = 0x08007000;
+define exported symbol  __ICFEDIT_SLOT_Active_2_end__      = 0x08013FFF;
+
+/***** NVM FLASH Data *****/
+/* WARNING: Symbols not used. The NVMS address is defined in lora_app.c */
+define exported symbol __ICFEDIT_region_LW_NVM_ROM_start__ = 0x08014000;
+define exported symbol __ICFEDIT_region_LW_NWM_ROM_end__   = 0x08014FFF;
+
+/* Active slot #1 (82 kbytes) */
+define exported symbol  __ICFEDIT_SLOT_Active_1_header__   = 0x0803F800;
+define exported symbol  __ICFEDIT_SLOT_Active_1_start__    = 0x08015000;
+define exported symbol  __ICFEDIT_SLOT_Active_1_end__      = 0x080297FF;
+
+/* Dwl slot #1 (84 kbytes) */
+define exported symbol  __ICFEDIT_SLOT_Dwl_1_start__       = 0x90000000;
+define exported symbol  __ICFEDIT_SLOT_Dwl_1_end__         = 0x90014FFF;
+
+/* Slots not configured */
+define exported symbol  __ICFEDIT_SLOT_Active_3_header__   = 0x00000000;
+define exported symbol  __ICFEDIT_SLOT_Active_3_start__    = 0x00000000;
+define exported symbol  __ICFEDIT_SLOT_Active_3_end__      = 0x00000000;
+define exported symbol  __ICFEDIT_SLOT_Dwl_3_start__       = 0x00000000;
+define exported symbol  __ICFEDIT_SLOT_Dwl_3_end__         = 0x00000000;

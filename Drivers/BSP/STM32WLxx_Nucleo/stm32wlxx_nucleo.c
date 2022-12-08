@@ -21,6 +21,10 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32wlxx_nucleo.h"
 
+#if defined(__ICCARM__)
+#include <LowLevelIOInterface.h>
+#endif /* __ICCARM__ */
+
 /** @addtogroup BSP
   * @{
   */
@@ -50,6 +54,23 @@ UART_HandleTypeDef hcom_uart[COMn];
 /** @defgroup STM32WLXX_NUCLEO_LOW_LEVEL_Private_Defines LOW LEVEL Private Defines
   * @{
   */
+#if (USE_COM_LOG == 1)
+/**
+  * @brief  Redirect console output to COM
+  */
+#if defined(__ICCARM__)
+/* New definition from EWARM V9, compatible with EWARM8 */
+int iar_fputc(int ch);
+#define PUTCHAR_PROTOTYPE int iar_fputc(int ch)
+#elif defined (__CC_ARM) || defined(__ARMCC_VERSION)
+/* ARM Compiler 5/6 */
+#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#elif defined(__GNUC__)
+#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#endif /* __ICCARM__ */
+
+#endif /* USE_COM_LOG */
+
 /**
   * @}
   */
@@ -547,14 +568,32 @@ int32_t BSP_COM_SelectLogPort(COM_TypeDef COM)
   return BSP_ERROR_NONE;
 }
 
+#if defined(__ICCARM__)
+/**
+  * @brief  Retargets the C library __write function to the IAR function iar_fputc.
+  * @param  file: file descriptor.
+  * @param  ptr: pointer to the buffer where the data is stored.
+  * @param  len: length of the data to write in bytes.
+  * @retval length of the written data in bytes.
+  */
+size_t __write(int file, unsigned char const *ptr, size_t len)
+{
+  size_t idx;
+  unsigned char const *pdata = ptr;
+
+  for (idx = 0; idx < len; idx++)
+  {
+    iar_fputc((int)*pdata);
+    pdata++;
+  }
+  return len;
+}
+#endif /* __ICCARM__ */
+
 /**
   * @brief  Redirect console output to COM
   */
-#ifdef __GNUC__
-int __io_putchar (int ch)
-#else
-int fputc (int ch, FILE *f)
-#endif /* __GNUC__ */
+PUTCHAR_PROTOTYPE
 {
   (void) HAL_UART_Transmit(&hcom_uart [COM_ActiveLogPort], (uint8_t *) &ch, 1, COM_POLL_TIMEOUT);
   return ch;

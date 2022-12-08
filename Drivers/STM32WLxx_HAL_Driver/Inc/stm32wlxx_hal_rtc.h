@@ -710,6 +710,13 @@ typedef  void (*pRTC_CallbackTypeDef)(RTC_HandleTypeDef *hrtc);  /*!< pointer to
 #define __HAL_RTC_ALARM_CLEAR_FLAG(__HANDLE__, __FLAG__)   (((__FLAG__) == RTC_FLAG_ALRAF) ? ((RTC->SCR = (RTC_CLEAR_ALRAF))) : \
                                                            (RTC->SCR = (RTC_CLEAR_ALRBF)))
 
+/**
+  * @brief  Check whether if the RTC Calendar is initialized.
+  * @param  __HANDLE__ specifies the RTC handle.
+  * @retval None
+  */
+#define __HAL_RTC_IS_CALENDAR_INITIALIZED(__HANDLE__)  ((((RTC->ICSR) & (RTC_ICSR_INITS)) == RTC_ICSR_INITS) ? 1U : 0U)
+
 #if defined(CORE_CM0PLUS)
 #define __HAL_RTC_ALARM_EXTI_ENABLE_IT()            (EXTI->C2IMR1 |= RTC_EXTI_LINE_ALARM_EVENT)
 #define __HAL_RTC_ALARM_EXTI_DISABLE_IT()           (EXTI->C2IMR1 &= ~(RTC_EXTI_LINE_ALARM_EVENT))

@@ -24,7 +24,7 @@
 #include "features_info.h"
 #include "sigfox_info.h"
 #include "sigfox_version.h"
-#include "sgfx_app_version.h"
+#include "app_version.h"
 #include "subghz_phy_version.h"
 #include "stm32_mem.h"
 

@@ -239,7 +239,7 @@ void SFU_BOOT_ForceReboot(void)
 
   /*
    * This is the last operation executed. Force a System Reset.
-   * The check below is needed in case we reboot before setting the Unpriviledged mode.
+   * The check below is needed in case we reboot before setting the Unprivileged mode.
    * This can happen in a factory reset use-case typically.
    */
   if (0U != SFU_MPU_IsUnprivileged())
@@ -460,7 +460,7 @@ static void SFU_BOOT_SM_CheckStatusOnReset(void)
   /* Check the wakeup sources */
   SFU_BOOT_ManageResetSources();
 
-  /* RCC access done to identify the wakeup sources, we can switch to unpriviledged */
+  /* RCC access done to identify the wakeup sources, we can switch to Unprivileged */
   SFU_MPU_EnterUnprivilegedMode();
 #ifdef SFU_TEST_PROTECTION
   /*
@@ -906,7 +906,7 @@ static void SFU_BOOT_SM_CheckUserFwStatus(void)
   */
 static void SFU_BOOT_SM_DownloadNewUserFw(void)
 {
-  uint32_t *pSbsfuFlag = (uint32_t *)CM4_SBFU_BOOT_FLAG_ADDRESS;
+  __IO uint32_t *pSbsfuFlag = (__IO uint32_t *)CM4_SBFU_BOOT_FLAG_ADDRESS;
 
   TRACE("\r\n= [SBOOT] STATE: DOWNLOAD NEW USER FIRMWARE");
 

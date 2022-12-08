@@ -76,9 +76,9 @@ Applications, SubGHz_Phy, LoRaWAN, AT_Slave, DualCore
   - LoRaWAN_AT_Slave_DualCore/CM0PLUS/Core/Inc/utilities_def.h                  Definitions for modules requiring utilities
   - LoRaWAN_AT_Slave_DualCore/CM0PLUS/KMS/App/app_kms.h                         !!! No description found !!!
   - LoRaWAN_AT_Slave_DualCore/CM0PLUS/LoRaWAN/App/app_lorawan.h                 Header of application of the LRWAN Middleware
+  - LoRaWAN_AT_Slave_DualCore/CM0PLUS/LoRaWAN/App/app_version.h                 Definition the version of the CM0PLUS application
   - LoRaWAN_AT_Slave_DualCore/CM0PLUS/LoRaWAN/App/Commissioning.h               End-device commissioning parameters
   - LoRaWAN_AT_Slave_DualCore/CM0PLUS/LoRaWAN/App/lora_app.h                    Header of application of the LRWAN Middleware
-  - LoRaWAN_AT_Slave_DualCore/CM0PLUS/LoRaWAN/App/lora_app_version.h            Definition the version of the CM0PLUS application
   - LoRaWAN_AT_Slave_DualCore/CM0PLUS/LoRaWAN/App/se-identity.h                 Secure Element identity and keys
   - LoRaWAN_AT_Slave_DualCore/CM0PLUS/LoRaWAN/Target/lorawan_conf.h             Header for LoRaWAN middleware instances
   - LoRaWAN_AT_Slave_DualCore/CM0PLUS/LoRaWAN/Target/mw_log_conf.h              Configure (enable/disable) traces for CM0
@@ -121,8 +121,8 @@ Applications, SubGHz_Phy, LoRaWAN, AT_Slave, DualCore
   - LoRaWAN_AT_Slave_DualCore/CM4/Core/Inc/utilities_conf.h                     Header for configuration file to utilities
   - LoRaWAN_AT_Slave_DualCore/CM4/Core/Inc/utilities_def.h                      Definitions for modules requiring utilities
   - LoRaWAN_AT_Slave_DualCore/CM4/LoRaWAN/App/app_lorawan.h                     Header of application of the LRWAN Middleware
+  - LoRaWAN_AT_Slave_DualCore/CM4/LoRaWAN/App/app_version.h                     Definition the version of the CM4 application
   - LoRaWAN_AT_Slave_DualCore/CM4/LoRaWAN/App/lora_app.h                        Header of application of the LRWAN Middleware
-  - LoRaWAN_AT_Slave_DualCore/CM4/LoRaWAN/App/lora_app_version.h                Definition the version of the CM4 application
   - LoRaWAN_AT_Slave_DualCore/CM4/LoRaWAN/App/lora_at.h                         Header for driver at.c module
   - LoRaWAN_AT_Slave_DualCore/CM4/LoRaWAN/App/lora_command.h                    Header for driver command.c module
   - LoRaWAN_AT_Slave_DualCore/CM4/LoRaWAN/App/test_rf.h                         Header for test_rf.c
@@ -227,7 +227,7 @@ Applications, SubGHz_Phy, LoRaWAN, AT_Slave, DualCore
 
 @par Hardware and Software environment
 
-  - This example runs on the STM32WLxx Nucleo board.
+  - This example runs on the STM32WLxx Nucleo boards. Both NUCLEO-WL55JC1 (HIGH-BAND) and NUCLEO-WL55JC2 (LOW-BAND) are suitable.
 
   - STM32WLxx Nucleo board Set-up
     - Connect the Nucleo board to your PC with a USB cable type A to micro-B
@@ -286,11 +286,11 @@ In order to make the program work, you must do the following :
 @par How to use MX to modify some RF middleware and application settings
   This example is compatible (with some problems/limitations) with STM32CubeMX 
   and the RF application and middleware configuration can be modified via GUI. Few warnings and guidelines:
-  - ioc file is provided in the project directory and can be opened with STM32CubeMX v6.5.0 or higher.
+  - ioc file is provided in the project directory and can be opened with STM32CubeMX v6.7.0 or higher.
   - warning: when regenerating with the provided ioc file, 
     the IDE projects are regenerated and paths to HAL and MWs files from STM32Cube/Repository location are erroneously added; to avoid that, 
     user shall uncheck the "Use Default Firmware Location" in the GUI "Project-Manager" panel
-    and shall replace "Firmware Relative Path" with the root directory of the STM32CubeWL firmware package  (e.g. C:\myDir\STM32Cube_FW_WL_V1.2.0\);
+    and shall replace "Firmware Relative Path" with the root directory of the STM32CubeWL firmware package  (e.g. C:\myDir\STM32Cube_FW_WL_V1.3.0\);
     problem will be fixed in next STM32CubeMX version.
   - .extSettings file allows to add to the generated IDE projects additional files not generated natively by MX (e.g. BSP files).
   - when regenerating on existing code and existing linker files:

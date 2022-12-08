@@ -154,7 +154,22 @@ Several steps to run SBSFU application :
    - Stop = 1 bit
    - Flow control = none
 
-4. Load CM4 SB image and CM0+ SBSFU image into target memory with your preferred toolchain or STM32CubeProgammer.
+4. Load successively CM4 SB image and CM0+ SBSFU image into target memory with your preferred toolchain or STM32CubeProgammer:
+   - STM32CubeProgrammer with IAR SBSFU files:
+       - EWARM\CM0PLUS\Exe\Project.out
+       - EWARM\CM4\Exe\Project.out
+   - STM32CubeProgrammer with STM32CubeIDE files:
+       - STM32CubeIDE\CM0PLUS\Debug\SBSFU.elf
+       - STM32CubeIDE\CM4\Debug\SB.elf
+   - STM32CubeProgrammer with Keil files:
+       - MDK-ARM\.._CM0PLUS\Exe\SBSFU.axf
+       - MDK-ARM\.._CM4\Exe\SB.axf
+   - IAR with .out files : From CM4 project (SB or M4 UserApp):
+       - Project > Download > Download file... > CM0+ Project.out
+       - Project > Download > Download file... > CM4 Project.out 
+	   refer to AN5556 Getting started with STM32WL5x MCUs using IAR Embedded Workbench® and MDK-ARM
+	- STM32CubeIDE : CM4 debug configuration is responsible for loading both SB and SBSFU projects
+	   refer to AN5564 Getting started with projects based on dual-core STM32WL microcontrollers in STM32CubeIDE
 
 5. Once the SB_SFU software is downloaded, power cycle the board (unplug/plug USB cable) : the SBSFU application starts
    and configures the security mechanisms.

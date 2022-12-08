@@ -37,16 +37,21 @@
 #ifndef __NVMDATAMGMT_H__
 #define __NVMDATAMGMT_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 typedef enum NvmDataErrorStatus_e
 {
-  NVM_DATA_ERROR = -1,
-  NVM_DATA_NO_UPDATED_DATA = -2,
-  NVM_DATA_NOT_AVAILABLE = -3,
-  NVM_DATA_INCONSISTENT = -4,
-  NVM_DATA_DISABLED = -5,
-  NVM_DATA_OK = 0
+    NVM_DATA_ERROR = -1,
+    NVM_DATA_NO_UPDATED_DATA = -2,
+    NVM_DATA_NOT_AVAILABLE = -3,
+    NVM_DATA_INCONSISTENT = -4,
+    NVM_DATA_DISABLED = -5,
+    NVM_DATA_OK = 0
 
-}NvmDataErrorStatus_t;
+} NvmDataErrorStatus_t;
 
 /*!
  * \brief NVM Management event.
@@ -72,4 +77,8 @@ int32_t NvmDataMgmtStoreEnd( void );
 
 /*! \} defgroup NVMDATAMGMT */
 
-#endif // __NVMDATAMGMT_H__
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __NVMDATAMGMT_H__ */

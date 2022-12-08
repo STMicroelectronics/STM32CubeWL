@@ -269,6 +269,7 @@ static void MX_ADC_Init(void)
    uint32_t Timeout ; /* Variable used for Timeout management */
    #endif /* USE_TIMEOUT */
 
+  LL_ADC_SetCommonPathInternalCh(__LL_ADC_COMMON_INSTANCE(ADC), LL_ADC_PATH_INTERNAL_TEMPSENSOR);
   ADC_InitStruct.Clock = LL_ADC_CLOCK_SYNC_PCLK_DIV4;
   ADC_InitStruct.Resolution = LL_ADC_RESOLUTION_12B;
   ADC_InitStruct.DataAlignment = LL_ADC_DATA_ALIGN_RIGHT;
@@ -347,7 +348,7 @@ static void MX_ADC_Init(void)
    /* Clear flag ADC channel configuration ready */
    LL_ADC_ClearFlag_CCRDY(ADC);
   LL_ADC_SetChannelSamplingTime(ADC, LL_ADC_CHANNEL_TEMPSENSOR, LL_ADC_SAMPLINGTIME_COMMON_1);
-  LL_ADC_SetCommonPathInternalCh(__LL_ADC_COMMON_INSTANCE(ADC), LL_ADC_PATH_INTERNAL_TEMPSENSOR);
+
   /* USER CODE BEGIN ADC_Init 2 */
 
   /* USER CODE END ADC_Init 2 */

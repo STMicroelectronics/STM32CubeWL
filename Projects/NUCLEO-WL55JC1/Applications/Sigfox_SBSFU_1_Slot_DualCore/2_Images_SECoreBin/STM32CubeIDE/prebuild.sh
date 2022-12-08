@@ -70,6 +70,26 @@ if [ $ret -eq 0 ]; then
   fi
 fi    
 
+# Provide data for the blob encryption feature
+if [ $ret -eq 0 ]; then
+  kmsblob_aeskey=$SBSFUBootLoader"/2_Images_KMS_Blob/Binary/AES_DATA_STORAGE_key.bin"
+  command="cat "$kms_config
+  $command > $kms_tmp
+  command=$cmd" "$prepareimage" inject -k "$kmsblob_aeskey" -f "$kms_tmp" -p @AES_DATA_STORAGE_KEY@ "$kms_config
+  echo $command
+  $command
+  ret=$?
+  if [ $ret -eq 0 ]; then
+    kmsblob_aesdata=$SBSFUBootLoader"/2_Images_KMS_Blob/Binary/AES_DATA_STORAGE_data.bin"
+    command="cat "$kms_config
+    $command > $kms_tmp
+    command=$cmd" "$prepareimage" inject -k "$kmsblob_aesdata" -f "$kms_tmp" -p @AES_DATA_STORAGE_DATA@ "$kms_config
+    echo $command
+    $command
+    ret=$?
+  fi
+fi
+
 # Patch AES keys part
 if [ $ret -eq 0 ]; then
   type="vide"

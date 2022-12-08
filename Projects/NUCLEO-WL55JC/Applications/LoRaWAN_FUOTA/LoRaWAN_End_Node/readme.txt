@@ -69,16 +69,16 @@ Applications, SubGHz_Phy, LoRaWAN, End_Node, SingleCore, FUOTA, BFU, KMS
   - LoRaWAN_End_Node/Core/Inc/utilities_def.h                                   Definitions for modules requiring utilities
   - LoRaWAN_End_Node/KMS/App/app_kms.h                                          !!! No description found !!!
   - LoRaWAN_End_Node/LoRaWAN/App/app_lorawan.h                                  Header of application of the LRWAN Middleware
+  - LoRaWAN_End_Node/LoRaWAN/App/app_version.h                                  Definition the version of the application
   - LoRaWAN_End_Node/LoRaWAN/App/CayenneLpp.h                                   Implements the Cayenne Low Power Protocol
   - LoRaWAN_End_Node/LoRaWAN/App/Commissioning.h                                End-device commissioning parameters
   - LoRaWAN_End_Node/LoRaWAN/App/fw_update_agent.h                              This file provides set of functions to manage Firmware Update functionalities.
   - LoRaWAN_End_Node/LoRaWAN/App/lora_app.h                                     Header of application of the LRWAN Middleware
-  - LoRaWAN_End_Node/LoRaWAN/App/lora_app_version.h                             Definition the version of the application
   - LoRaWAN_End_Node/LoRaWAN/App/lora_info.h                                    To give info to the application about LoRaWAN configuration
   - LoRaWAN_End_Node/LoRaWAN/App/se-identity.h                                  Secure Element identity and keys
   - LoRaWAN_End_Node/LoRaWAN/Target/frag_decoder_if.h                           Applicative interfaces of LoRa-Alliance fragmentation decoder
   - LoRaWAN_End_Node/LoRaWAN/Target/lorawan_conf.h                              Header for LoRaWAN middleware instances
-  - LoRaWAN_End_Node/LoRaWAN/Target/mw_log_conf.h                               Configure (enable/disable) traces for CM0
+  - LoRaWAN_End_Node/LoRaWAN/Target/mw_log_conf.h                               Configure (enable/disable) traces
   - LoRaWAN_End_Node/LoRaWAN/Target/radio_board_if.h                            Header for Radio interface configuration
   - LoRaWAN_End_Node/LoRaWAN/Target/radio_conf.h                                Header of Radio configuration
   - LoRaWAN_End_Node/LoRaWAN/Target/systime.h                                   Map middleware systime
@@ -124,7 +124,7 @@ Applications, SubGHz_Phy, LoRaWAN, End_Node, SingleCore, FUOTA, BFU, KMS
 
 @par Hardware and Software environment
 
-  - This example runs on the STM32WLxx Nucleo board.
+  - This example runs on the STM32WLxx Nucleo boards. Both NUCLEO-WL55JC1 (HIGH-BAND) and NUCLEO-WL55JC2 (LOW-BAND) are suitable.
 
   - STM32WLxx Nucleo board Set-up
     - Connect the Nucleo board to your PC with a USB cable type A to micro-B

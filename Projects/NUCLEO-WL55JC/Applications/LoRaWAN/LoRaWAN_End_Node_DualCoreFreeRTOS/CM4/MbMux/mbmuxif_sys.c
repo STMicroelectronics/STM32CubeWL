@@ -157,7 +157,8 @@ int8_t MBMUXIF_SystemInit(void)
 
   if (OptionsBytesStruct.IPCCdataBufAddr != (uint32_t) pMb_RefTable)
   {
-    APP_PPRINTF("There is a difference between the MAPPING_TABLE placement in memory: 0x%X \r\n", (uint32_t) pMb_RefTable);
+    APP_PPRINTF("There is a difference between the MAPPING_TABLE placement in memory: 0x%X \r\n",
+                (uint32_t) pMb_RefTable);
     APP_PPRINTF("and the address calculated according to the IPCCDBA option byte: 0x%X \r\n",
                 OptionsBytesStruct.IPCCdataBufAddr);
     APP_PPRINTF("IPCCDBA is automatically updated\n\rSystem restarting...\r\n\r\n");
@@ -238,12 +239,16 @@ int8_t MBMUXIF_SystemInit(void)
     /* Init MailBoxMultiplexer */
     MBMUX_Init(pMb_RefTable);
 
-    ret = MBMUX_RegisterFeature(FEAT_INFO_SYSTEM_ID, MBMUX_CMD_RESP, MBMUXIF_IsrSystemRespRcvCb, aSystemCmdRespBuff, sizeof(aSystemCmdRespBuff));
+    ret = MBMUX_RegisterFeature(FEAT_INFO_SYSTEM_ID, MBMUX_CMD_RESP,
+                                MBMUXIF_IsrSystemRespRcvCb,
+                                aSystemCmdRespBuff, sizeof(aSystemCmdRespBuff));
   }
 
   if (ret >= 0)
   {
-    ret = MBMUX_RegisterFeature(FEAT_INFO_SYSTEM_ID, MBMUX_NOTIF_ACK, MBMUXIF_IsrSystemNotifRcvCb, aSystemNotifAckBuff, sizeof(aSystemNotifAckBuff));
+    ret = MBMUX_RegisterFeature(FEAT_INFO_SYSTEM_ID, MBMUX_NOTIF_ACK,
+                                MBMUXIF_IsrSystemNotifRcvCb,
+                                aSystemNotifAckBuff, sizeof(aSystemNotifAckBuff));
   }
 
   if (ret >= 0)
@@ -277,22 +282,30 @@ int8_t MBMUXIF_SystemPrio_Add(FEAT_INFO_IdTypeDef SystemPrioFeat)
   {
     case FEAT_INFO_SYSTEM_CMD_PRIO_A_ID:
     {
-      ret = MBMUX_RegisterFeature(SystemPrioFeat, MBMUX_CMD_RESP, MBMUXIF_IsrSystemPrioARespRcvCb, aSystemPrioACmdRespBuff, sizeof(aSystemPrioACmdRespBuff));
+      ret = MBMUX_RegisterFeature(SystemPrioFeat, MBMUX_CMD_RESP,
+                                  MBMUXIF_IsrSystemPrioARespRcvCb,
+                                  aSystemPrioACmdRespBuff, sizeof(aSystemPrioACmdRespBuff));
       break;
     }
     case FEAT_INFO_SYSTEM_NOTIF_PRIO_A_ID:
     {
-      ret = MBMUX_RegisterFeature(SystemPrioFeat, MBMUX_NOTIF_ACK, MBMUXIF_IsrSystemPrioANotifRcvCb, aSystemPrioANotifAckBuff, sizeof(aSystemPrioANotifAckBuff));
+      ret = MBMUX_RegisterFeature(SystemPrioFeat, MBMUX_NOTIF_ACK,
+                                  MBMUXIF_IsrSystemPrioANotifRcvCb,
+                                  aSystemPrioANotifAckBuff, sizeof(aSystemPrioANotifAckBuff));
       break;
     }
     case FEAT_INFO_SYSTEM_CMD_PRIO_B_ID:
     {
-      ret = MBMUX_RegisterFeature(SystemPrioFeat, MBMUX_CMD_RESP, MBMUXIF_IsrSystemPrioBRespRcvCb, aSystemPrioBCmdRespBuff, sizeof(aSystemPrioBCmdRespBuff));
+      ret = MBMUX_RegisterFeature(SystemPrioFeat, MBMUX_CMD_RESP,
+                                  MBMUXIF_IsrSystemPrioBRespRcvCb,
+                                  aSystemPrioBCmdRespBuff, sizeof(aSystemPrioBCmdRespBuff));
       break;
     }
     case FEAT_INFO_SYSTEM_NOTIF_PRIO_B_ID:
     {
-      ret = MBMUX_RegisterFeature(SystemPrioFeat, MBMUX_NOTIF_ACK, MBMUXIF_IsrSystemPrioBNotifRcvCb, aSystemPrioBNotifAckBuff, sizeof(aSystemPrioBNotifAckBuff));
+      ret = MBMUX_RegisterFeature(SystemPrioFeat, MBMUX_NOTIF_ACK,
+                                  MBMUXIF_IsrSystemPrioBNotifRcvCb,
+                                  aSystemPrioBNotifAckBuff, sizeof(aSystemPrioBNotifAckBuff));
       break;
     }
     default:

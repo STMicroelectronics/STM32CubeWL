@@ -48,6 +48,7 @@ void RTC_LSECSS_IRQHandler(void);
 void TZIC_ILA_IRQHandler(void);
 void BUTTON_IRQHANDLER(void);
 
+
 /**
   * @}
   */

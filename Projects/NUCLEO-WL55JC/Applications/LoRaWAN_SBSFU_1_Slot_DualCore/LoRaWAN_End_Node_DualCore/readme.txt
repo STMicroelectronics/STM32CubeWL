@@ -62,9 +62,9 @@ Applications, SubGHz_Phy, LoRaWAN, End_Node, DualCore, SBSFU, KMS
   - LoRaWAN_End_Node_DualCore/CM0PLUS/Core/Inc/utilities_def.h                  Definitions for modules requiring utilities
   - LoRaWAN_End_Node_DualCore/CM0PLUS/KMS/App/app_kms.h                         !!! No description found !!!
   - LoRaWAN_End_Node_DualCore/CM0PLUS/LoRaWAN/App/app_lorawan.h                 Header of application of the LRWAN Middleware
+  - LoRaWAN_End_Node_DualCore/CM0PLUS/LoRaWAN/App/app_version.h                 Definition the version of the CM0PLUS application
   - LoRaWAN_End_Node_DualCore/CM0PLUS/LoRaWAN/App/Commissioning.h               End-device commissioning parameters
   - LoRaWAN_End_Node_DualCore/CM0PLUS/LoRaWAN/App/lora_app.h                    Header of application of the LRWAN Middleware
-  - LoRaWAN_End_Node_DualCore/CM0PLUS/LoRaWAN/App/lora_app_version.h            Definition the version of the CM0PLUS application
   - LoRaWAN_End_Node_DualCore/CM0PLUS/LoRaWAN/App/se-identity.h                 Secure Element identity and keys
   - LoRaWAN_End_Node_DualCore/CM0PLUS/LoRaWAN/Target/lorawan_conf.h             Header for LoRaWAN middleware instances
   - LoRaWAN_End_Node_DualCore/CM0PLUS/LoRaWAN/Target/mw_log_conf.h              Configure (enable/disable) traces for CM0
@@ -108,9 +108,9 @@ Applications, SubGHz_Phy, LoRaWAN, End_Node, DualCore, SBSFU, KMS
   - LoRaWAN_End_Node_DualCore/CM4/Core/Inc/utilities_conf.h                     Header for configuration file to utilities
   - LoRaWAN_End_Node_DualCore/CM4/Core/Inc/utilities_def.h                      Definitions for modules requiring utilities
   - LoRaWAN_End_Node_DualCore/CM4/LoRaWAN/App/app_lorawan.h                     Header of application of the LRWAN Middleware
+  - LoRaWAN_End_Node_DualCore/CM4/LoRaWAN/App/app_version.h                     Definition the version of the CM4 application
   - LoRaWAN_End_Node_DualCore/CM4/LoRaWAN/App/CayenneLpp.h                      Implements the Cayenne Low Power Protocol
   - LoRaWAN_End_Node_DualCore/CM4/LoRaWAN/App/lora_app.h                        Header of application of the LRWAN Middleware
-  - LoRaWAN_End_Node_DualCore/CM4/LoRaWAN/App/lora_app_version.h                Definition the version of the CM4 application
   - LoRaWAN_End_Node_DualCore/CM4/LoRaWAN/Target/lorawan_conf.h                 Header for LoRaWAN middleware instances
   - LoRaWAN_End_Node_DualCore/CM4/LoRaWAN/Target/systime.h                      Map middleware systime
   - LoRaWAN_End_Node_DualCore/CM4/LoRaWAN/Target/timer.h                        Wrapper to timer server
@@ -208,7 +208,7 @@ Applications, SubGHz_Phy, LoRaWAN, End_Node, DualCore, SBSFU, KMS
 
 @par Hardware and Software environment
 
-  - This example runs on the STM32WLxx Nucleo board.
+  - This example runs on the STM32WLxx Nucleo boards. Both NUCLEO-WL55JC1 (HIGH-BAND) and NUCLEO-WL55JC2 (LOW-BAND) are suitable.
 
   - STM32WLxx Nucleo board Set-up
     - Connect the Nucleo board to your PC with a USB cable type A to micro-B

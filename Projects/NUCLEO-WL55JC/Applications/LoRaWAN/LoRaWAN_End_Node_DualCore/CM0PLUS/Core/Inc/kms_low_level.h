@@ -63,11 +63,19 @@
 /** @addtogroup KMS_LL_Exported_Functions Exported Functions
   * @{
   */
+CK_RV KMS_LL_Initialize(void);
+CK_RV KMS_LL_Finalize(void);
+
 CK_RV KMS_LL_FLASH_Read(void *pDestination, const void *pSource, uint32_t Length);
 
 #ifdef KMS_SE_CHECK_PARAMS
 void KMS_LL_IsBufferInSecureEnclave(void *pBuffer, uint32_t Size);
 #endif /* KMS_SE_CHECK_PARAMS */
+
+#if defined(KMS_ENCRYPT_DECRYPT_BLOB)
+CK_RV KMS_LL_DataStorageKey_Init(void);
+CK_RV KMS_LL_GetRandomData(uint32_t *pRandomData);
+#endif /* KMS_ENCRYPT_DECRYPT_BLOB */
 
 void KMS_LL_ReportError(uint32_t Error);
 

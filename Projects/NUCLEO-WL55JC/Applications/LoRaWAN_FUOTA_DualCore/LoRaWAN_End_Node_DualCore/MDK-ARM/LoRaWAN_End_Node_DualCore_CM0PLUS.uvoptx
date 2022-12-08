@@ -10,7 +10,7 @@
     <aExt>*.s*; *.src; *.a*</aExt>
     <oExt>*.obj; *.o</oExt>
     <lExt>*.lib</lExt>
-    <tExt>*.txt; *.h; *.inc</tExt>
+    <tExt>*.txt; *.h; *.inc; *.md</tExt>
     <pExt>*.plm</pExt>
     <CppX>*.cpp</CppX>
     <nMigrate>0</nMigrate>
@@ -219,7 +219,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\svc_handler.s</PathWithFileName>
+      <PathWithFileName>./svc_handler.s</PathWithFileName>
       <FilenameWithoutPath>svc_handler.s</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -239,7 +239,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM0PLUS\LoRaWAN\App\app_lorawan.c</PathWithFileName>
+      <PathWithFileName>../CM0PLUS/LoRaWAN/App/app_lorawan.c</PathWithFileName>
       <FilenameWithoutPath>app_lorawan.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -251,7 +251,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM0PLUS\LoRaWAN\App\lora_app.c</PathWithFileName>
+      <PathWithFileName>../CM0PLUS/LoRaWAN/App/lora_app.c</PathWithFileName>
       <FilenameWithoutPath>lora_app.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -263,7 +263,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM0PLUS\LoRaWAN\App\fw_update_agent.c</PathWithFileName>
+      <PathWithFileName>../CM0PLUS/LoRaWAN/App/fw_update_agent.c</PathWithFileName>
       <FilenameWithoutPath>fw_update_agent.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -283,7 +283,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM0PLUS\LoRaWAN\Target\radio_board_if.c</PathWithFileName>
+      <PathWithFileName>../CM0PLUS/LoRaWAN/Target/radio_board_if.c</PathWithFileName>
       <FilenameWithoutPath>radio_board_if.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -295,7 +295,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM0PLUS\LoRaWAN\Target\frag_decoder_if.c</PathWithFileName>
+      <PathWithFileName>../CM0PLUS/LoRaWAN/Target/frag_decoder_if.c</PathWithFileName>
       <FilenameWithoutPath>frag_decoder_if.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -315,7 +315,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM0PLUS\KMS\App\app_kms.c</PathWithFileName>
+      <PathWithFileName>../CM0PLUS/KMS/App/app_kms.c</PathWithFileName>
       <FilenameWithoutPath>app_kms.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -335,7 +335,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM0PLUS\Core\Src\main.c</PathWithFileName>
+      <PathWithFileName>../CM0PLUS/Core/Src/main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -347,7 +347,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM0PLUS\Core\Src\gpio.c</PathWithFileName>
+      <PathWithFileName>../CM0PLUS/Core/Src/gpio.c</PathWithFileName>
       <FilenameWithoutPath>gpio.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -359,7 +359,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM0PLUS\Core\Src\ipcc.c</PathWithFileName>
+      <PathWithFileName>../CM0PLUS/Core/Src/ipcc.c</PathWithFileName>
       <FilenameWithoutPath>ipcc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -371,7 +371,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM0PLUS\Core\Src\ipcc_if.c</PathWithFileName>
+      <PathWithFileName>../CM0PLUS/Core/Src/ipcc_if.c</PathWithFileName>
       <FilenameWithoutPath>ipcc_if.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -383,7 +383,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM0PLUS\Core\Src\stm32_lpm_if.c</PathWithFileName>
+      <PathWithFileName>../CM0PLUS/Core/Src/stm32_lpm_if.c</PathWithFileName>
       <FilenameWithoutPath>stm32_lpm_if.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -395,7 +395,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM0PLUS\Core\Src\sys_app.c</PathWithFileName>
+      <PathWithFileName>../CM0PLUS/Core/Src/sys_app.c</PathWithFileName>
       <FilenameWithoutPath>sys_app.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -407,7 +407,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM0PLUS\Core\Src\timer_if.c</PathWithFileName>
+      <PathWithFileName>../CM0PLUS/Core/Src/timer_if.c</PathWithFileName>
       <FilenameWithoutPath>timer_if.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -419,7 +419,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM0PLUS\Core\Src\rtc.c</PathWithFileName>
+      <PathWithFileName>../CM0PLUS/Core/Src/rtc.c</PathWithFileName>
       <FilenameWithoutPath>rtc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -431,7 +431,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM0PLUS\Core\Src\subghz.c</PathWithFileName>
+      <PathWithFileName>../CM0PLUS/Core/Src/subghz.c</PathWithFileName>
       <FilenameWithoutPath>subghz.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -443,7 +443,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM0PLUS\Core\Src\stm32wlxx_it.c</PathWithFileName>
+      <PathWithFileName>../CM0PLUS/Core/Src/stm32wlxx_it.c</PathWithFileName>
       <FilenameWithoutPath>stm32wlxx_it.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -455,7 +455,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM0PLUS\Core\Src\stm32wlxx_hal_msp.c</PathWithFileName>
+      <PathWithFileName>../CM0PLUS/Core/Src/stm32wlxx_hal_msp.c</PathWithFileName>
       <FilenameWithoutPath>stm32wlxx_hal_msp.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -467,8 +467,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM0PLUS\Core\Src\flash_if.c</PathWithFileName>
-      <FilenameWithoutPath>flash_if.c</FilenameWithoutPath>
+      <PathWithFileName>../CM0PLUS/Core/Src/sys_privileged_services.c</PathWithFileName>
+      <FilenameWithoutPath>sys_privileged_services.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -479,19 +479,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM0PLUS\Core\Src\sys_privileged_services.c</PathWithFileName>
-      <FilenameWithoutPath>sys_privileged_services.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>5</GroupNumber>
-      <FileNumber>22</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>..\CM0PLUS\Core\Src\sys_privileged_wrap.c</PathWithFileName>
+      <PathWithFileName>../CM0PLUS/Core/Src/sys_privileged_wrap.c</PathWithFileName>
       <FilenameWithoutPath>sys_privileged_wrap.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -506,13 +494,25 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>6</GroupNumber>
+      <FileNumber>22</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>../CM0PLUS/MbMux/features_info.c</PathWithFileName>
+      <FilenameWithoutPath>features_info.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>6</GroupNumber>
       <FileNumber>23</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM0PLUS\MbMux\features_info.c</PathWithFileName>
-      <FilenameWithoutPath>features_info.c</FilenameWithoutPath>
+      <PathWithFileName>../CM0PLUS/MbMux/lora_info.c</PathWithFileName>
+      <FilenameWithoutPath>lora_info.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -523,8 +523,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM0PLUS\MbMux\lora_info.c</PathWithFileName>
-      <FilenameWithoutPath>lora_info.c</FilenameWithoutPath>
+      <PathWithFileName>../CM0PLUS/MbMux/LmHandler_mbwrapper.c</PathWithFileName>
+      <FilenameWithoutPath>LmHandler_mbwrapper.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -535,8 +535,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM0PLUS\MbMux\LmHandler_mbwrapper.c</PathWithFileName>
-      <FilenameWithoutPath>LmHandler_mbwrapper.c</FilenameWithoutPath>
+      <PathWithFileName>../CM0PLUS/MbMux/mbmux.c</PathWithFileName>
+      <FilenameWithoutPath>mbmux.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -547,8 +547,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM0PLUS\MbMux\mbmux.c</PathWithFileName>
-      <FilenameWithoutPath>mbmux.c</FilenameWithoutPath>
+      <PathWithFileName>..\CM0PLUS\MbMux\mbmuxif_flash.c</PathWithFileName>
+      <FilenameWithoutPath>mbmuxif_flash.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -559,7 +559,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM0PLUS\MbMux\mbmuxif_lora.c</PathWithFileName>
+      <PathWithFileName>../CM0PLUS/MbMux/mbmuxif_lora.c</PathWithFileName>
       <FilenameWithoutPath>mbmuxif_lora.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -571,7 +571,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM0PLUS\MbMux\mbmuxif_radio.c</PathWithFileName>
+      <PathWithFileName>../CM0PLUS/MbMux/mbmuxif_radio.c</PathWithFileName>
       <FilenameWithoutPath>mbmuxif_radio.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -583,7 +583,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM0PLUS\MbMux\mbmuxif_sys.c</PathWithFileName>
+      <PathWithFileName>../CM0PLUS/MbMux/mbmuxif_sys.c</PathWithFileName>
       <FilenameWithoutPath>mbmuxif_sys.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -595,7 +595,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM0PLUS\MbMux\mbmuxif_trace.c</PathWithFileName>
+      <PathWithFileName>../CM0PLUS/MbMux/mbmuxif_trace.c</PathWithFileName>
       <FilenameWithoutPath>mbmuxif_trace.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -607,7 +607,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM0PLUS\MbMux\radio_mbwrapper.c</PathWithFileName>
+      <PathWithFileName>../CM0PLUS/MbMux/radio_mbwrapper.c</PathWithFileName>
       <FilenameWithoutPath>radio_mbwrapper.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -627,7 +627,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\Common\System\sys_debug.c</PathWithFileName>
+      <PathWithFileName>../Common/System/sys_debug.c</PathWithFileName>
       <FilenameWithoutPath>sys_debug.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -843,7 +843,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_ipcc.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_ipcc.c</PathWithFileName>
       <FilenameWithoutPath>stm32wlxx_hal_ipcc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -855,7 +855,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_rtc.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_rtc.c</PathWithFileName>
       <FilenameWithoutPath>stm32wlxx_hal_rtc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -867,7 +867,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_rtc_ex.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_rtc_ex.c</PathWithFileName>
       <FilenameWithoutPath>stm32wlxx_hal_rtc_ex.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -879,7 +879,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_subghz.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_subghz.c</PathWithFileName>
       <FilenameWithoutPath>stm32wlxx_hal_subghz.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -891,7 +891,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_cryp.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_cryp.c</PathWithFileName>
       <FilenameWithoutPath>stm32wlxx_hal_cryp.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -903,7 +903,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_cryp_ex.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_cryp_ex.c</PathWithFileName>
       <FilenameWithoutPath>stm32wlxx_hal_cryp_ex.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -915,7 +915,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_gtzc.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_gtzc.c</PathWithFileName>
       <FilenameWithoutPath>stm32wlxx_hal_gtzc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -955,7 +955,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\2_Images_SBSFU\MDK-ARM\STM32WL55JC_Nucleo_CM0PLUS\Exe\se_interface_appli.txt</PathWithFileName>
+      <PathWithFileName>../../2_Images_SBSFU/MDK-ARM/STM32WL55JC_Nucleo_CM0PLUS/Exe/se_interface_appli.txt</PathWithFileName>
       <FilenameWithoutPath>se_interface_appli.txt</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -975,7 +975,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\LmHandler\LmHandler.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/LmHandler/LmHandler.c</PathWithFileName>
       <FilenameWithoutPath>LmHandler.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -987,7 +987,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\LmHandler\NvmDataMgmt.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/LmHandler/NvmDataMgmt.c</PathWithFileName>
       <FilenameWithoutPath>NvmDataMgmt.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -999,7 +999,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\LmHandler\Packages\LmhpCompliance.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/LmHandler/Packages/LmhpCompliance.c</PathWithFileName>
       <FilenameWithoutPath>LmhpCompliance.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1011,7 +1011,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\LmHandler\Packages\FragDecoder.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/LmHandler/Packages/FragDecoder.c</PathWithFileName>
       <FilenameWithoutPath>FragDecoder.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1023,7 +1023,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\LmHandler\Packages\LmhpPackagesRegistration.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/LmHandler/Packages/LmhpPackagesRegistration.c</PathWithFileName>
       <FilenameWithoutPath>LmhpPackagesRegistration.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1035,7 +1035,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\LmHandler\Packages\LmhpClockSync.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/LmHandler/Packages/LmhpClockSync.c</PathWithFileName>
       <FilenameWithoutPath>LmhpClockSync.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1047,7 +1047,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\LmHandler\Packages\LmhpFirmwareManagement.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/LmHandler/Packages/LmhpFirmwareManagement.c</PathWithFileName>
       <FilenameWithoutPath>LmhpFirmwareManagement.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1059,7 +1059,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\LmHandler\Packages\LmhpFragmentation.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/LmHandler/Packages/LmhpFragmentation.c</PathWithFileName>
       <FilenameWithoutPath>LmhpFragmentation.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1071,7 +1071,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\LmHandler\Packages\LmhpRemoteMcastSetup.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/LmHandler/Packages/LmhpRemoteMcastSetup.c</PathWithFileName>
       <FilenameWithoutPath>LmhpRemoteMcastSetup.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1083,7 +1083,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Crypto\cmac.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/Crypto/cmac.c</PathWithFileName>
       <FilenameWithoutPath>cmac.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1095,7 +1095,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Crypto\lorawan_aes.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/Crypto/lorawan_aes.c</PathWithFileName>
       <FilenameWithoutPath>lorawan_aes.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1107,7 +1107,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Crypto\soft-se.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/Crypto/soft-se.c</PathWithFileName>
       <FilenameWithoutPath>soft-se.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1119,7 +1119,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\Region.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/Mac/Region/Region.c</PathWithFileName>
       <FilenameWithoutPath>Region.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1131,7 +1131,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionAS923.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionAS923.c</PathWithFileName>
       <FilenameWithoutPath>RegionAS923.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1143,7 +1143,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionAU915.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionAU915.c</PathWithFileName>
       <FilenameWithoutPath>RegionAU915.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1155,8 +1155,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCN470.c</PathWithFileName>
-      <FilenameWithoutPath>RegionCN470.c</FilenameWithoutPath>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionBaseUS.c</PathWithFileName>
+      <FilenameWithoutPath>RegionBaseUS.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1167,8 +1167,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCN470A20.c</PathWithFileName>
-      <FilenameWithoutPath>RegionCN470A20.c</FilenameWithoutPath>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCN470.c</PathWithFileName>
+      <FilenameWithoutPath>RegionCN470.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1179,8 +1179,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCN470A26.c</PathWithFileName>
-      <FilenameWithoutPath>RegionCN470A26.c</FilenameWithoutPath>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCN470A20.c</PathWithFileName>
+      <FilenameWithoutPath>RegionCN470A20.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1191,8 +1191,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCN470B20.c</PathWithFileName>
-      <FilenameWithoutPath>RegionCN470B20.c</FilenameWithoutPath>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCN470A26.c</PathWithFileName>
+      <FilenameWithoutPath>RegionCN470A26.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1203,8 +1203,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCN470B26.c</PathWithFileName>
-      <FilenameWithoutPath>RegionCN470B26.c</FilenameWithoutPath>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCN470B20.c</PathWithFileName>
+      <FilenameWithoutPath>RegionCN470B20.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1215,8 +1215,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCN779.c</PathWithFileName>
-      <FilenameWithoutPath>RegionCN779.c</FilenameWithoutPath>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCN470B26.c</PathWithFileName>
+      <FilenameWithoutPath>RegionCN470B26.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1227,8 +1227,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionCommon.c</PathWithFileName>
-      <FilenameWithoutPath>RegionCommon.c</FilenameWithoutPath>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCN779.c</PathWithFileName>
+      <FilenameWithoutPath>RegionCN779.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1239,8 +1239,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionEU433.c</PathWithFileName>
-      <FilenameWithoutPath>RegionEU433.c</FilenameWithoutPath>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCommon.c</PathWithFileName>
+      <FilenameWithoutPath>RegionCommon.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1251,8 +1251,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionEU868.c</PathWithFileName>
-      <FilenameWithoutPath>RegionEU868.c</FilenameWithoutPath>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionEU433.c</PathWithFileName>
+      <FilenameWithoutPath>RegionEU433.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1263,8 +1263,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionIN865.c</PathWithFileName>
-      <FilenameWithoutPath>RegionIN865.c</FilenameWithoutPath>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionEU868.c</PathWithFileName>
+      <FilenameWithoutPath>RegionEU868.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1275,8 +1275,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionKR920.c</PathWithFileName>
-      <FilenameWithoutPath>RegionKR920.c</FilenameWithoutPath>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionIN865.c</PathWithFileName>
+      <FilenameWithoutPath>RegionIN865.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1287,8 +1287,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionRU864.c</PathWithFileName>
-      <FilenameWithoutPath>RegionRU864.c</FilenameWithoutPath>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionKR920.c</PathWithFileName>
+      <FilenameWithoutPath>RegionKR920.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1299,8 +1299,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionUS915.c</PathWithFileName>
-      <FilenameWithoutPath>RegionUS915.c</FilenameWithoutPath>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionRU864.c</PathWithFileName>
+      <FilenameWithoutPath>RegionRU864.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1311,8 +1311,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\LoRaMac.c</PathWithFileName>
-      <FilenameWithoutPath>LoRaMac.c</FilenameWithoutPath>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionUS915.c</PathWithFileName>
+      <FilenameWithoutPath>RegionUS915.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1323,8 +1323,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\LoRaMacAdr.c</PathWithFileName>
-      <FilenameWithoutPath>LoRaMacAdr.c</FilenameWithoutPath>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMac.c</PathWithFileName>
+      <FilenameWithoutPath>LoRaMac.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1335,8 +1335,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\LoRaMacClassB.c</PathWithFileName>
-      <FilenameWithoutPath>LoRaMacClassB.c</FilenameWithoutPath>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacAdr.c</PathWithFileName>
+      <FilenameWithoutPath>LoRaMacAdr.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1347,8 +1347,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\LoRaMacCommands.c</PathWithFileName>
-      <FilenameWithoutPath>LoRaMacCommands.c</FilenameWithoutPath>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacClassB.c</PathWithFileName>
+      <FilenameWithoutPath>LoRaMacClassB.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1359,8 +1359,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\LoRaMacConfirmQueue.c</PathWithFileName>
-      <FilenameWithoutPath>LoRaMacConfirmQueue.c</FilenameWithoutPath>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacCommands.c</PathWithFileName>
+      <FilenameWithoutPath>LoRaMacCommands.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1371,8 +1371,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\LoRaMacCrypto.c</PathWithFileName>
-      <FilenameWithoutPath>LoRaMacCrypto.c</FilenameWithoutPath>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacConfirmQueue.c</PathWithFileName>
+      <FilenameWithoutPath>LoRaMacConfirmQueue.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1383,8 +1383,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\LoRaMacParser.c</PathWithFileName>
-      <FilenameWithoutPath>LoRaMacParser.c</FilenameWithoutPath>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacCrypto.c</PathWithFileName>
+      <FilenameWithoutPath>LoRaMacCrypto.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1395,8 +1395,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\LoRaMacSerializer.c</PathWithFileName>
-      <FilenameWithoutPath>LoRaMacSerializer.c</FilenameWithoutPath>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacParser.c</PathWithFileName>
+      <FilenameWithoutPath>LoRaMacParser.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1407,8 +1407,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Utilities\utilities.c</PathWithFileName>
-      <FilenameWithoutPath>utilities.c</FilenameWithoutPath>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacSerializer.c</PathWithFileName>
+      <FilenameWithoutPath>LoRaMacSerializer.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1419,8 +1419,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\LoRaWAN\Mac\Region\RegionBaseUS.c</PathWithFileName>
-      <FilenameWithoutPath>RegionBaseUS.c</FilenameWithoutPath>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/LoRaWAN/Utilities/utilities.c</PathWithFileName>
+      <FilenameWithoutPath>utilities.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1439,8 +1439,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\SubGHz_Phy\stm32_radio_driver\radio_driver.c</PathWithFileName>
-      <FilenameWithoutPath>radio_driver.c</FilenameWithoutPath>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio.c</PathWithFileName>
+      <FilenameWithoutPath>radio.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1451,8 +1451,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\SubGHz_Phy\stm32_radio_driver\radio_fw.c</PathWithFileName>
-      <FilenameWithoutPath>radio_fw.c</FilenameWithoutPath>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_driver.c</PathWithFileName>
+      <FilenameWithoutPath>radio_driver.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1463,8 +1463,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Middlewares\Third_Party\SubGHz_Phy\stm32_radio_driver\radio.c</PathWithFileName>
-      <FilenameWithoutPath>radio.c</FilenameWithoutPath>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c</PathWithFileName>
+      <FilenameWithoutPath>radio_fw.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1483,7 +1483,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Utilities\trace\adv_trace\stm32_adv_trace.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Utilities/trace/adv_trace/stm32_adv_trace.c</PathWithFileName>
       <FilenameWithoutPath>stm32_adv_trace.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1495,7 +1495,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Utilities\misc\stm32_mem.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Utilities/misc/stm32_mem.c</PathWithFileName>
       <FilenameWithoutPath>stm32_mem.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1507,7 +1507,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Utilities\misc\stm32_systime.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Utilities/misc/stm32_systime.c</PathWithFileName>
       <FilenameWithoutPath>stm32_systime.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1519,7 +1519,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Utilities\misc\stm32_tiny_sscanf.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Utilities/misc/stm32_tiny_sscanf.c</PathWithFileName>
       <FilenameWithoutPath>stm32_tiny_sscanf.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1531,7 +1531,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Utilities\misc\stm32_tiny_vsnprintf.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Utilities/misc/stm32_tiny_vsnprintf.c</PathWithFileName>
       <FilenameWithoutPath>stm32_tiny_vsnprintf.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1543,7 +1543,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Utilities\sequencer\stm32_seq.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Utilities/sequencer/stm32_seq.c</PathWithFileName>
       <FilenameWithoutPath>stm32_seq.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1555,7 +1555,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Utilities\timer\stm32_timer.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Utilities/timer/stm32_timer.c</PathWithFileName>
       <FilenameWithoutPath>stm32_timer.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -1567,7 +1567,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Utilities\lpm\tiny_lpm\stm32_lpm.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Utilities/lpm/tiny_lpm/stm32_lpm.c</PathWithFileName>
       <FilenameWithoutPath>stm32_lpm.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>

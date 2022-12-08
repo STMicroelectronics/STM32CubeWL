@@ -2,7 +2,8 @@
  * \file      LmhpClockSync.h
  *
  * \brief     Implements the LoRa-Alliance clock synchronization package
- *            Specification: https://lora-alliance.org/sites/default/files/2018-09/application_layer_clock_synchronization_v1.0.0.pdf
+ *            Specification V1.0.0: https://resources.lora-alliance.org/technical-specifications/lorawan-application-layer-clock-synchronization-specification-v1-0-0
+ *            Specification V2.0.0: https://resources.lora-alliance.org/technical-specifications/ts003-2-0-0-application-layer-clock-synchronization
  *
  * \copyright Revised BSD License, see section \ref LICENSE.
  *
@@ -22,6 +23,11 @@
 #ifndef __LMHP_CLOCK_SYNC_H__
 #define __LMHP_CLOCK_SYNC_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "LmhPackage.h"
 
 /*!
@@ -31,17 +37,12 @@
  */
 #define PACKAGE_ID_CLOCK_SYNC                       1
 
-/*!
- * Clock sync package parameters
- *
- * This package doesn't require parameters
- */
-//typedef struct LmhpClockSyncParams_s
-//{
-//}LmhpClockSyncParams_t;
-
 LmhPackage_t *LmhpClockSyncPackageFactory( void );
 
 LmHandlerErrorStatus_t LmhpClockSyncAppTimeReq( void );
 
-#endif // __LMHP_CLOCK_SYNC_H__
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __LMHP_CLOCK_SYNC_H__ */

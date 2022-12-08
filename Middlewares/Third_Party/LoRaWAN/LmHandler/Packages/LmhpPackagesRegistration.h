@@ -32,9 +32,9 @@ extern "C" {
 /* External variables --------------------------------------------------------*/
 /* Exported macros -----------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
-LmHandlerErrorStatus_t LmhpPackagesRegistrationInit(void);
+LmHandlerErrorStatus_t LmhpPackagesRegistrationInit( Version_t *fwVersion );
 
-LmHandlerErrorStatus_t LmhpPackagesRegister(uint8_t id, LmhPackage_t **package);
+LmHandlerErrorStatus_t LmhpPackagesRegister( uint8_t id, LmhPackage_t **package );
 
 #ifdef __cplusplus
 }

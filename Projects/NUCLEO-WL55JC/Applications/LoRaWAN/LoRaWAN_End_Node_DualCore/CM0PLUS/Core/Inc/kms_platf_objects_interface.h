@@ -30,9 +30,10 @@ extern "C" {
 #define KMS_ZERO_KEY_OBJECT_HANDLE                    ((CK_OBJECT_HANDLE)1)
 #define KMS_APP_KEY_OBJECT_HANDLE                     ((CK_OBJECT_HANDLE)2)
 #define KMS_NWK_KEY_OBJECT_HANDLE                     ((CK_OBJECT_HANDLE)3)
-#define KMS_NWK_S_KEY_OBJECT_HANDLE                   ((CK_OBJECT_HANDLE)4)
-#define KMS_APP_S_KEY_OBJECT_HANDLE                   ((CK_OBJECT_HANDLE)5)
-#define LAST_KMS_KEY_OBJECT_HANDLE                    ((CK_OBJECT_HANDLE)6)
+#define KMS_DEVJOINEUIADDR_KEY_OBJECT_HANDLE          ((CK_OBJECT_HANDLE)4)
+#define KMS_NWK_S_KEY_OBJECT_HANDLE                   ((CK_OBJECT_HANDLE)5)
+#define KMS_APP_S_KEY_OBJECT_HANDLE                   ((CK_OBJECT_HANDLE)6)
+#define LAST_KMS_KEY_OBJECT_HANDLE                    ((CK_OBJECT_HANDLE)7)
 /* USER CODE END KMS_PLATF_OBJECTS_INTERFACE_H */
 
 #ifdef __cplusplus

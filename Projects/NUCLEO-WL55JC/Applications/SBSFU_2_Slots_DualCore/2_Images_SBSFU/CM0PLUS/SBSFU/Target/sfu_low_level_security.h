@@ -107,6 +107,22 @@ extern "C" {
 #define SFU_PROTECT_MPU_FLASHEXE_C     MPU_ACCESS_NOT_CACHEABLE
 
 /**
+  * @brief Region 5 - Enable the execution for SB/SFU Full area (SBSFU + SE + Keys) in unprivileged mode.
+  *                   Read only capability configured
+  *                   Inner region inside the Region 0
+  *                   From 0x0802B800 ==> 0x0802BFFF
+  */
+#define SFU_PROTECT_MPU_FLASHEXE_ADJUST_RGNV  MPU_REGION_NUMBER5
+#define SFU_PROTECT_MPU_FLASHEXE_ADJUST_START (uint32_t)SE_IF_REGION_ROM_START
+#define SFU_PROTECT_MPU_FLASHEXE_ADJUST_SIZE  MPU_REGION_SIZE_2KB
+#define SFU_PROTECT_MPU_FLASHEXE_ADJUST_SREG  0x00U               /*!< All subregions activated */
+#define SFU_PROTECT_MPU_FLASHEXE_ADJUST_PERM  MPU_REGION_PRIV_RO_URO
+#define SFU_PROTECT_MPU_FLASHEXE_ADJUST_EXECV MPU_INSTRUCTION_ACCESS_ENABLE
+#define SFU_PROTECT_MPU_FLASHEXE_ADJUST_TEXV  MPU_TEX_LEVEL0
+#define SFU_PROTECT_MPU_FLASHEXE_ADJUST_B     MPU_ACCESS_BUFFERABLE
+#define SFU_PROTECT_MPU_FLASHEXE_ADJUST_C     MPU_ACCESS_NOT_CACHEABLE
+
+/**
   * @brief Region 3 - Enable the read/write operation in privileged mode for Header of active slots
   *                   Execution capability disabled
   *                   Inner region inside the Region 0
@@ -127,9 +143,9 @@ extern "C" {
   *                   Inner region inside the Region 0
   */
 #define SFU_PROTECT_MPU_KMS_RGNV  MPU_REGION_NUMBER4
-#define SFU_PROTECT_MPU_KMS_START (uint32_t)KMS_DATASTORAGE_START
-#define SFU_PROTECT_MPU_KMS_SREG  0x00U               /*!< All subregions activated */
-#define SFU_PROTECT_MPU_KMS_SIZE  MPU_REGION_SIZE_8KB
+#define SFU_PROTECT_MPU_KMS_START 0x08028000UL
+#define SFU_PROTECT_MPU_KMS_SREG  0x87U               /*!< 16 Kbytes / 8 * 4 ==> 8 Kbytes */
+#define SFU_PROTECT_MPU_KMS_SIZE  MPU_REGION_SIZE_16KB
 #define SFU_PROTECT_MPU_KMS_PERM  MPU_REGION_PRIV_RW
 #define SFU_PROTECT_MPU_KMS_EXECV MPU_INSTRUCTION_ACCESS_DISABLE
 #define SFU_PROTECT_MPU_KMS_TEXV  MPU_TEX_LEVEL0
@@ -166,12 +182,12 @@ extern "C" {
   *                   Read only capability configured
   *                   Execution capability enabled
   *                   Execution capability restricted by other regions (MPU and secure)
-  *                   From 0x08015000 ==> 0x08017FFF (12 kbytes)
+  *                   From 0x08014800 ==> 0x08017FFF (14 kbytes)
   */
 #define APP_PROTECT_MPU_FLASHEXE_1_RGNV  MPU_REGION_NUMBER2
 #define APP_PROTECT_MPU_FLASHEXE_1_START 0x08014000UL
 #define APP_PROTECT_MPU_FLASHEXE_1_SIZE  MPU_REGION_SIZE_16KB
-#define APP_PROTECT_MPU_FLASHEXE_1_SREG  0x03U               /*!< 16 Kbytes / 8 * 6 ==> 12 Kbytes */
+#define APP_PROTECT_MPU_FLASHEXE_1_SREG  0x01U               /*!< 16 Kbytes / 8 * 7 ==> 14 Kbytes */
 #define APP_PROTECT_MPU_FLASHEXE_1_PERM  MPU_REGION_PRIV_RO_URO
 #define APP_PROTECT_MPU_FLASHEXE_1_EXECV MPU_INSTRUCTION_ACCESS_ENABLE
 #define APP_PROTECT_MPU_FLASHEXE_1_TEXV  MPU_TEX_LEVEL0

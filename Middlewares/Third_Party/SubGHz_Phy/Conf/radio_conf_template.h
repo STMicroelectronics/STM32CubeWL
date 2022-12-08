@@ -30,9 +30,9 @@ extern "C" {
 #include "platform.h"
 #include "subghz.h"
 #include "stm32_mem.h"       /* RADIO_MEMSET8 def in this file */
-#include "mw_log_conf.h"     /* mw trace conf */
-#include "radio_board_if.h"  /* low layer api (bsp) */
-#include "utilities_def.h"  /* low layer api (bsp) */
+#include "mw_log_conf.h"     /* mw trace configuration */
+#include "radio_board_if.h"  /* interface layer between MW and Radio Board/Module */
+#include "utilities_def.h"   /* Definitions for modules requiring utilities */
 #include "sys_debug.h"
 /* USER CODE BEGIN include */
 

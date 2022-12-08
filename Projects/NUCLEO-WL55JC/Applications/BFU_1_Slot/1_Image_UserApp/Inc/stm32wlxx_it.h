@@ -51,6 +51,7 @@ void FLASH_IRQHandler(void);
 void TAMP_STAMP_LSECSS_SSRU_IRQHandler(void);
 void BUTTON_IRQHANDLER(void);
 
+
 /**
   * @}
   */

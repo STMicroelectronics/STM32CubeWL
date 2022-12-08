@@ -39,6 +39,12 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 #define configTICK_RATE_HZ_1MS                 1000
+
+#define portNVIC_SYSTICK_CTRL_REG               ( * ( ( volatile uint32_t * ) 0xe000e010 ) )
+#define portNVIC_SYSTICK_LOAD_REG               ( * ( ( volatile uint32_t * ) 0xe000e014 ) )
+#define portNVIC_SYSTICK_CURRENT_VALUE_REG      ( * ( ( volatile uint32_t * ) 0xe000e018 ) )
+#define portNVIC_SYSTICK_ENABLE_BIT             ( 1UL << 0UL )
+#define CORE_TICK_RATE                          (( configCPU_CLOCK_HZ ) / ( configTICK_RATE_HZ ))
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -49,7 +55,7 @@
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
 static UTIL_TIMER_Object_t WakeUpTimer;
-static uint32_t Time_BeforeSleep;
+static volatile uint32_t Time_BeforeSleep;
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
@@ -100,13 +106,15 @@ void PreSleepProcessing(uint32_t *ulExpectedIdleTime)
 
   uint32_t WakeUpTimer_timeOut_ms = app_freertos_tick_to_ms(*ulExpectedIdleTime);
 
-  UTIL_TIMER_Create(&WakeUpTimer, WakeUpTimer_timeOut_ms, UTIL_TIMER_ONESHOT, WakeUpTimer_Cb, NULL);
+  UTIL_TIMER_SetPeriod(&WakeUpTimer, WakeUpTimer_timeOut_ms);
   UTIL_TIMER_Start(&WakeUpTimer);
   Time_BeforeSleep = UTIL_TIMER_GetCurrentTime();
 
-  /*Enter to sleep Mode using the HAL function HAL_PWR_EnterSLEEPMode with WFI instruction*/
-  //HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);
+  /*Stop the systick here so that it stops even in sleep mode*/
+  portNVIC_SYSTICK_CTRL_REG &= ~portNVIC_SYSTICK_ENABLE_BIT;
+
   UTIL_LPM_EnterLowPower();
+
   /*
     (*ulExpectedIdleTime) is set to 0 to indicate that PreSleepProcessing contains
     its own wait for interrupt or wait for event instruction and so the kernel vPortSuppressTicksAndSleep
@@ -122,8 +130,26 @@ void PostSleepProcessing(uint32_t *ulExpectedIdleTime)
   uint32_t SleepDuration = UTIL_TIMER_GetElapsedTime(Time_BeforeSleep);
 
   /* Avoid compiler warnings about the unused parameter. */
+  UNUSED(ulExpectedIdleTime);
+
   UTIL_TIMER_Stop(&WakeUpTimer);
-  *ulExpectedIdleTime = app_freertos_ms_to_tick(SleepDuration);
+
+  /* Set the new reload value. */
+  if (portNVIC_SYSTICK_CURRENT_VALUE_REG > (SleepDuration * CORE_TICK_RATE))
+  {
+    /*what remains to sleep*/
+    portNVIC_SYSTICK_LOAD_REG = portNVIC_SYSTICK_CURRENT_VALUE_REG - (app_freertos_ms_to_tick(SleepDuration) * CORE_TICK_RATE);
+  }
+  else
+  {
+    portNVIC_SYSTICK_LOAD_REG = CORE_TICK_RATE;
+  }
+
+  /* Clear the SysTick count flag and set the count value back to zero. */
+  portNVIC_SYSTICK_CURRENT_VALUE_REG = 0UL;
+
+  /* Restart SysTick. */
+  portNVIC_SYSTICK_CTRL_REG |= portNVIC_SYSTICK_ENABLE_BIT;
 }
 /* USER CODE END PREPOSTSLEEP */
 
@@ -134,6 +160,7 @@ void PostSleepProcessing(uint32_t *ulExpectedIdleTime)
   */
 void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN Init */
+  UTIL_TIMER_Create(&WakeUpTimer, 0, UTIL_TIMER_ONESHOT, WakeUpTimer_Cb, NULL);
 
   /* USER CODE END Init */
 
@@ -189,9 +216,10 @@ void StartDefaultTask(void *argument)
 
 /* Private application code --------------------------------------------------*/
 /* USER CODE BEGIN Application */
-static void  WakeUpTimer_Cb(void *context)
+static void WakeUpTimer_Cb(void *context)
 {
   /*Nothing to do*/
+  UNUSED(context);
 }
 
 static uint32_t app_freertos_ms_to_tick(uint32_t ms)

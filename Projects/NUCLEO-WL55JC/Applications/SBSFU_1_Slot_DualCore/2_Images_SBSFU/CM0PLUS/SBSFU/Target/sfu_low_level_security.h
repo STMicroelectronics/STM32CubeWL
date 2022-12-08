@@ -126,21 +126,36 @@ extern "C" {
   *                   Execution capability disabled
   *                   Inner region inside the Region 0
   */
-#define SFU_PROTECT_MPU_KMS_RGNV  MPU_REGION_NUMBER4
-#define SFU_PROTECT_MPU_KMS_START 0x08028000UL
-#define SFU_PROTECT_MPU_KMS_SREG  0xE7U               /*!< 32 Kbytes / 8 * 2 ==> 8 Kbytes */
-#define SFU_PROTECT_MPU_KMS_SIZE  MPU_REGION_SIZE_32KB
-#define SFU_PROTECT_MPU_KMS_PERM  MPU_REGION_PRIV_RW
-#define SFU_PROTECT_MPU_KMS_EXECV MPU_INSTRUCTION_ACCESS_DISABLE
-#define SFU_PROTECT_MPU_KMS_TEXV  MPU_TEX_LEVEL0
-#define SFU_PROTECT_MPU_KMS_B     MPU_ACCESS_NOT_BUFFERABLE
-#define SFU_PROTECT_MPU_KMS_C     MPU_ACCESS_CACHEABLE
+#define SFU_PROTECT_MPU_KMS_1_RGNV  MPU_REGION_NUMBER4
+#define SFU_PROTECT_MPU_KMS_1_START 0x0802A000UL
+#define SFU_PROTECT_MPU_KMS_1_SREG  0x03U               /*!< 8 Kbytes / 8 * 6 ==> 6 Kbytes */
+#define SFU_PROTECT_MPU_KMS_1_SIZE  MPU_REGION_SIZE_8KB
+#define SFU_PROTECT_MPU_KMS_1_PERM  MPU_REGION_PRIV_RW
+#define SFU_PROTECT_MPU_KMS_1_EXECV MPU_INSTRUCTION_ACCESS_DISABLE
+#define SFU_PROTECT_MPU_KMS_1_TEXV  MPU_TEX_LEVEL0
+#define SFU_PROTECT_MPU_KMS_1_B     MPU_ACCESS_NOT_BUFFERABLE
+#define SFU_PROTECT_MPU_KMS_1_C     MPU_ACCESS_CACHEABLE
 
 /**
-  * @brief Region 6 - Forbid all access to the DMA IPs
+  * @brief Region 5 - Enable the read/write operation in privileged mode for KMS_DataStorage
+  *                   Execution capability disabled
   *                   Inner region inside the Region 0
   */
-#define SFU_PROTECT_MPU_DMA_RGNV  MPU_REGION_NUMBER6
+#define SFU_PROTECT_MPU_KMS_2_RGNV  MPU_REGION_NUMBER5
+#define SFU_PROTECT_MPU_KMS_2_START 0x0802C000UL
+#define SFU_PROTECT_MPU_KMS_2_SREG  0xFCU               /*!< 8 Kbytes / 8 * 2 ==> 2 Kbytes */
+#define SFU_PROTECT_MPU_KMS_2_SIZE  MPU_REGION_SIZE_8KB
+#define SFU_PROTECT_MPU_KMS_2_PERM  MPU_REGION_PRIV_RW
+#define SFU_PROTECT_MPU_KMS_2_EXECV MPU_INSTRUCTION_ACCESS_DISABLE
+#define SFU_PROTECT_MPU_KMS_2_TEXV  MPU_TEX_LEVEL0
+#define SFU_PROTECT_MPU_KMS_2_B     MPU_ACCESS_NOT_BUFFERABLE
+#define SFU_PROTECT_MPU_KMS_2_C     MPU_ACCESS_CACHEABLE
+
+/**
+  * @brief Region 7 - Forbid all access to the DMA IPs
+  *                   Inner region inside the Region 0
+  */
+#define SFU_PROTECT_MPU_DMA_RGNV  MPU_REGION_NUMBER7
 #define SFU_PROTECT_MPU_DMA_START 0x40020000UL
 #define SFU_PROTECT_MPU_DMA_SREG  0xC0U               /*!< 4 Kbytes / 8 * 6 ==> 3 Kbytes */
 #define SFU_PROTECT_MPU_DMA_SIZE  MPU_REGION_SIZE_4KB
@@ -195,10 +210,10 @@ extern "C" {
 #define APP_PROTECT_MPU_BLOB_DWL_C     MPU_ACCESS_NOT_CACHEABLE
 
 /**
-  * @brief Region 5 - Enable the read operation for SBSFU synchronization flag.
+  * @brief Region 6 - Enable the read operation for SBSFU synchronization flag.
   *                   Execution capability disabled
   */
-#define APP_PROTECT_MPU_SRAM_FLAG_RGNV  MPU_REGION_NUMBER5
+#define APP_PROTECT_MPU_SRAM_FLAG_RGNV  MPU_REGION_NUMBER6
 #define APP_PROTECT_MPU_SRAM_FLAG_START 0x20000C00UL
 #define APP_PROTECT_MPU_SRAM_FLAG_SIZE  MPU_REGION_SIZE_256B
 #define APP_PROTECT_MPU_SRAM_FLAG_SREG  0x7FU                /*!< 256 bytes / 8 * 1 ==> 32 bytes */

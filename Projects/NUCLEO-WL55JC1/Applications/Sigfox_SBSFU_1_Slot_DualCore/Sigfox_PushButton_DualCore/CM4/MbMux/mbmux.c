@@ -148,7 +148,8 @@ void MBMUX_SetCm0plusFeatureListPtr(FEAT_INFO_List_t *pCM0PLUS_FeatureList)
   /* USER CODE END MBMUX_SetCm0plusFeatureListPtr_Last */
 }
 
-int8_t MBMUX_RegisterFeature(FEAT_INFO_IdTypeDef e_featID, MBMUX_ComType_t ComType, void (*MsgCb)(void *ComObj), uint32_t *const ComBuffer, uint16_t ComBufSize)
+int8_t MBMUX_RegisterFeature(FEAT_INFO_IdTypeDef e_featID, MBMUX_ComType_t ComType,
+                             void (*MsgCb)(void *ComObj), uint32_t *const ComBuffer, uint16_t ComBufSize)
 {
   int8_t check_if_feature_provided_by_cm0plus = 0;
   uint8_t channel_idx = MB_CHANNEL_NOT_REGISTERED;

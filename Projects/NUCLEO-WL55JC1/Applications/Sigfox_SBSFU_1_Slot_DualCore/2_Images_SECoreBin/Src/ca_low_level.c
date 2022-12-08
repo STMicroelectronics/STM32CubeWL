@@ -42,6 +42,8 @@ static RNG_HandleTypeDef handle;
 static uint8_t users = 0;
 #endif /* CA_USES_PSA_CRYPTO && HAL_RNG_MODULE_ENABLED */
 #endif /* CA_MBED_CRYPTOLIB_SUPP */
+uint32_t AesCbcInUseCounter = 0;
+uint32_t AesGcmInUseCounter = 0;
 /* Private function prototypes -----------------------------------------------*/
 #if defined(CA_MBED_CRYPTOLIB_SUPP)
 #if defined(CA_USES_PSA_CRYPTO) && defined(HAL_RNG_MODULE_ENABLED)
@@ -72,6 +74,19 @@ void HAL_CRYP_MspInit(CRYP_HandleTypeDef *hcryp)
 {
   if (hcryp->Instance == CA_AES_INSTANCE)
   {
+    /* Increment the counter "AesXxxInUseCounter" */
+    if (hcryp->Init.Algorithm == CRYP_AES_CBC)
+    {
+      AesCbcInUseCounter = 1;
+    }
+    else if (hcryp->Init.Algorithm == CRYP_AES_GCM_GMAC)
+    {
+      AesGcmInUseCounter = 1;
+    }
+    else
+    {
+      /* Do nothing */
+    }
     /* Release AES/CRYP from reset state */
     __HAL_RCC_AES_RELEASE_RESET();
     /* Peripheral clock enable */
@@ -89,10 +104,26 @@ void HAL_CRYP_MspDeInit(CRYP_HandleTypeDef *hcryp)
 {
   if (hcryp->Instance == CA_AES_INSTANCE)
   {
-    /* Peripheral clock disable */
-    __HAL_RCC_AES_CLK_DISABLE();
-    /* Force AES/CRYP into reset state */
-    __HAL_RCC_AES_FORCE_RESET();
+    /* Decrement the counter "AesXxxInUseCounter" */
+    if (hcryp->Init.Algorithm == CRYP_AES_CBC)
+    {
+      AesCbcInUseCounter--;
+    }
+    else if (hcryp->Init.Algorithm == CRYP_AES_GCM_GMAC)
+    {
+      AesGcmInUseCounter--;
+    }
+    else
+    {
+      /* Do nothing */
+    }
+    if ((AesCbcInUseCounter == 0) && (AesGcmInUseCounter == 0))
+    {
+      /* Peripheral clock disable */
+      __HAL_RCC_AES_CLK_DISABLE();
+      /* Force AES/CRYP into reset state */
+      __HAL_RCC_AES_FORCE_RESET();
+    }
   }
 }
 #endif /* CA_ROUTE_AES_CBC || CA_ROUTE_AES_CCM || CA_ROUTE_AES_CMAC \
@@ -136,6 +167,56 @@ void HAL_PKA_MspDeInit(PKA_HandleTypeDef *hpka)
 #endif /* CA_ROUTE_ECC_ECDSA || CA_ROUTE_RSA => CA_ROUTE_HAL */
 
 #endif /* CA_HAL_CRYPTOLIB_SUPP */
+
+#if defined(HAL_RNG_MODULE_ENABLED)
+/**
+* @brief RNG MSP Initialization
+* This function configures the hardware resources used in this example
+* @param hrng: RNG handle pointer
+* @retval None
+*/
+void HAL_RNG_MspInit(RNG_HandleTypeDef* hrng)
+{
+  if(hrng->Instance==RNG)
+  {
+    /* RNG clock source configuration */
+    __HAL_RCC_RNG_CONFIG(RCC_RNGCLKSOURCE_PLL);
+
+    /* Enable RCC_PLL_RNGCLK output */
+    __HAL_RCC_PLLCLKOUT_ENABLE(RCC_PLL_RNGCLK);
+
+    /* Peripheral clock enable */
+    __HAL_RCC_RNG_CLK_ENABLE();
+
+    /* Enable RNG reset state */
+    __HAL_RCC_RNG_FORCE_RESET();
+
+    /* Release RNG from reset state */
+    __HAL_RCC_RNG_RELEASE_RESET();
+  }
+}
+
+/**
+* @brief RNG MSP De-Initialization
+* This function freeze the hardware resources used in this example
+* @param hrng: RNG handle pointer
+* @retval None
+*/
+void HAL_RNG_MspDeInit(RNG_HandleTypeDef* hrng)
+{
+  if(hrng->Instance==RNG)
+  {
+    /* Peripheral clock disable */
+    __HAL_RCC_RNG_CLK_DISABLE();
+
+    /* Enable RNG reset state */
+    __HAL_RCC_RNG_FORCE_RESET();
+
+    /* Release RNG from reset state */
+    __HAL_RCC_RNG_RELEASE_RESET();
+  }
+}
+#endif /* HAL_RNG_MODULE_ENABLED */
 
 #if defined(CA_MBED_CRYPTOLIB_SUPP)
 #if defined(CA_USES_PSA_CRYPTO) && defined(HAL_RNG_MODULE_ENABLED)

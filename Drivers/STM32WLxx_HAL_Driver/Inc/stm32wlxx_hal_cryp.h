@@ -196,6 +196,29 @@ typedef struct
 
 } CRYP_HandleTypeDef;
 
+/**
+  * @brief CRYP Context Structure definition
+  */
+
+typedef struct
+{
+  uint32_t DataType;                   /*!< This parameter can be a value of @ref CRYP_Data_Type */
+  uint32_t KeySize;                    /*!< This parameter can be a value of @ref CRYP_Key_Size */
+  uint32_t *pKey;                      /*!< The key used for encryption/decryption */
+  uint32_t *pInitVect;                 /*!< The initialization vector, counter with CBC and CTR Algorithm */
+  uint32_t Algorithm;                  /*!< This parameter can be a value of @ref CRYP_Algorithm_Mode */
+  uint32_t DataWidthUnit;              /*!< This parameter can be value of @ref CRYP_Data_Width_Unit */
+  uint32_t KeyIVConfigSkip;            /*!< This parameter can be a value of @ref CRYP_Configuration_Skip */
+  uint32_t Phase;                      /*!< CRYP peripheral phase */
+  uint32_t KeyIVConfig;                /*!< CRYP peripheral Key and IV configuration flag */
+  uint32_t CR_Reg;                     /*!< CRYP CR register */
+  uint32_t IVR0_Reg;                   /*!< CRYP IVR0 register */
+  uint32_t IVR1_Reg;                   /*!< CRYP IVR1 register */
+  uint32_t IVR2_Reg;                   /*!< CRYP IVR2 register */
+  uint32_t IVR3_Reg;                   /*!< CRYP IVR3 register */
+
+} CRYP_ContextTypeDef;
+
 #if (USE_HAL_CRYP_REGISTER_CALLBACKS == 1U)
 /** @defgroup HAL_CRYP_Callback_ID_enumeration_definition HAL CRYP Callback ID enumeration definition
   * @brief  HAL CRYP Callback ID enumeration definition
@@ -351,6 +374,7 @@ typedef  void (*pCRYP_CallbackTypeDef)(CRYP_HandleTypeDef *hcryp);    /*!< point
 
 #define CRYP_KEYIVCONFIG_ALWAYS        0x00000000U            /*!< Peripheral Key and IV configuration to do systematically */
 #define CRYP_KEYIVCONFIG_ONCE          0x00000001U            /*!< Peripheral Key and IV configuration to do only once      */
+#define CRYP_IVCONFIG_ONCE             0x00000004U            /*!< Peripheral IV configuration do once for interleave mode */
 
 /**
   * @}
@@ -511,6 +535,9 @@ void HAL_CRYP_ProcessSuspend(CRYP_HandleTypeDef *hcryp);
 HAL_StatusTypeDef HAL_CRYP_Suspend(CRYP_HandleTypeDef *hcryp);
 HAL_StatusTypeDef HAL_CRYP_Resume(CRYP_HandleTypeDef *hcryp);
 #endif /* defined (USE_HAL_CRYP_SUSPEND_RESUME) */
+HAL_StatusTypeDef  HAL_CRYP_SaveContext(CRYP_HandleTypeDef *hcryp, CRYP_ContextTypeDef *pcont);
+HAL_StatusTypeDef HAL_CRYP_RestoreContext(CRYP_HandleTypeDef *hcryp, CRYP_ContextTypeDef *pcont);
+
 /**
   * @}
   */
@@ -576,7 +603,8 @@ uint32_t HAL_CRYP_GetError(CRYP_HandleTypeDef *hcryp);
                                    ((DATATYPE) == CRYP_DATATYPE_1B))
 
 #define IS_CRYP_INIT(CONFIG)(((CONFIG) == CRYP_KEYIVCONFIG_ALWAYS) || \
-                             ((CONFIG) == CRYP_KEYIVCONFIG_ONCE))
+                             ((CONFIG) == CRYP_KEYIVCONFIG_ONCE)   || \
+                             ((CONFIG) == CRYP_IVCONFIG_ONCE))
 
 #define IS_CRYP_BUFFERSIZE(ALGO, DATAWIDTH, SIZE)                                             \
        (((((ALGO) == CRYP_AES_CTR)) &&                                             \

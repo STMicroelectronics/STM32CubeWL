@@ -53,26 +53,49 @@ extern "C" {
 
 /*!
  * @brief LoRaWAN version definition
- * @note  possible values: 0x01000300 or 0x01000400
+ * @note  possible values:
+ *        - 0x01000300: Link Layer(L2) v1.0.3 + Regional Parameters(RP) v1.0.3
+ *        - 0x01000400: Link Layer TS001-1.0.4 + Regional Parameters RP002-1.0.1
+ *        - 0x01010100: soon available ...
  */
 #define LORAMAC_SPECIFICATION_VERSION                   0x01000400
 
-/* To enable the KMS Middleware with LoRaWAN, you must update these files from the DualCore example project:
-   - CM0PLUS/Core/Inc/kms_platf_objects_config.h : Add all LoRaWAN keys as kms_object_keyhead_32_t structures.
-   - CM0PLUS/Core/Inc/kms_platf_objects_interface.h : Add all LoRaWAN key indexes
-   - CM0PLUS/Core/Inc/nvms_low_level.h : Enable the NVMS (Non Volatile Memory) to store the session keys
-   - CM0PLUS/Core/Src/nvms_low_level.c : Implement the Flash read/write functions to manage the NVMS items
-   And finally, change the LORAWAN_KMS define to 1
-*/
-/* USER CODE BEGIN LORAWAN_KMS */
-#define LORAWAN_KMS 1
-/* USER CODE END LORAWAN_KMS */
+/*!
+ * @brief LoRaWAN Keys integrated in KMS Middleware
+ * @note  To configure LoRaWAN to use the KMS Middleware, following files in the DualCore example project must be completed:
+ *  - CM0PLUS/Core/Inc/kms_platf_objects_config.h : Add all LoRaWAN keys as kms_object_keyhead_32_t structures.
+ *  - CM0PLUS/Core/Inc/kms_platf_objects_interface.h : Add all LoRaWAN key indexes
+ *  - CM0PLUS/Core/Inc/nvms_low_level.h : Enable the NVMS (Non Volatile Memory) to store the session keys
+ *  - CM0PLUS/Core/Src/nvms_low_level.c : Implement the Flash read/write functions to manage the NVMS items
+ *  Then LORAWAN_KMS flag can be set to 1
+ */
+#define LORAWAN_KMS                                     1
 
-#if (!defined (LORAWAN_KMS) || (LORAWAN_KMS == 0))
-#else /* LORAWAN_KMS == 1 */
-#define OVER_THE_AIR_ACTIVATION 1
-#define ACTIVATION_BY_PERSONALIZATION 1
-#endif /* LORAWAN_KMS */
+/*!
+ * @brief Enable the additional LoRaWAN packages
+ * @note  LoRaWAN Packages available when enabled:
+ *  - Application Layer Clock Synchronization (Package ID: 1, Default Port: 202)
+ *  - Remote Multicast Setup (Package ID: 2, Default Port: 200)
+ *  - Fragmented Data Block Transport (Package ID: 3, Default Port: 201)
+ *  - Firmware Management Protocol (Package ID: 4, Default Port: 203)
+ *  The Certification Protocol is also defined as a mandatory package (Package ID: 0, Default Port: 224)
+ */
+#define LORAWAN_DATA_DISTRIB_MGT                        0
+
+/*!
+ * @brief LoRaWAN packages version
+ * @note  When LORAWAN_DATA_DISTRIB_MGT is enabled, 2 possibles values:
+ *        - 1: v1.0.0 packages including:
+ *             - Application Layer Clock Synchronization v1.0.0
+ *             - Remote Multicast Setup v1.0.0
+ *             - Fragmented Data Block Transport v1.0.0
+ *        - 2: v2.0.0 packages including:
+ *             - Application Layer Clock Synchronization v2.0.0
+ *             - Remote Multicast Setup v2.0.0
+ *             - Fragmented Data Block Transport v2.0.0
+ *             - Firmware Management Protocol v1.0.0
+ */
+#define LORAWAN_PACKAGES_VERSION                        1
 
 /* Region ------------------------------------*/
 /* the region listed here will be linked in the CM0 MW code */
@@ -88,59 +111,73 @@ extern "C" {
 #define REGION_US915
 /*#define REGION_RU864*/
 
-/**
-  * \brief Limits the number usable channels by default for AU915, CN470 and US915 regions
-  * \note the default channel mask with this option activates the first 8 channels. \
-  *       this default mask can be modified in the RegionXXXXXInitDefaults function associated with the active region.
-  */
+/*!
+ * @brief Default channel plan for region AS923
+ * @note  Possible selections:
+ *        - CHANNEL_PLAN_GROUP_AS923_1    (Default configuration. Freq offset = 0.0 MHz / Freq range = 915-928MHz)
+ *        - CHANNEL_PLAN_GROUP_AS923_2    (Freq offset = -1.80 MHz / Freq range = 915-928MHz)
+ *        - CHANNEL_PLAN_GROUP_AS923_3    (Freq offset = -6.60 MHz / Freq range = 915-928MHz)
+ *        - CHANNEL_PLAN_GROUP_AS923_4    (Freq offset = -5.90 MHz / Freq range = 917-920MHz)
+ *        - CHANNEL_PLAN_GROUP_AS923_1_JP (Freq offset = 0.0 MHz   / Freq range = 920.6-923.4MHz)
+ */
+#define REGION_AS923_DEFAULT_CHANNEL_PLAN              CHANNEL_PLAN_GROUP_AS923_1
+
+/*!
+ * @brief Limits the number usable channels by default for AU915, CN470 and US915 regions
+ * @note  the default channel mask with this option activates the first 8 channels. \
+ *        this default mask can be modified in the RegionXXXXXInitDefaults function associated with the active region.
+ */
 #define HYBRID_ENABLED                                  0
 
-/**
-  * \brief Define the read access of the keys in memory
-  * \note this value should be disabled after the development process
-  */
+/*!
+ * @brief Define the read access of the keys in memory
+ * @note  this value should be disabled after the development process
+ */
 #define KEY_EXTRACTABLE                                 1
 
 /*!
- * Enables/Disables the context storage management storage.
- * Must be enabled for LoRaWAN 1.0.4 or later.
+ * @brief Enables/Disables the context storage management storage
+ * @note  Must be enabled for LoRaWAN 1.0.4 or later.
  */
 #define CONTEXT_MANAGEMENT_ENABLED                      1
 
 /* Class B ------------------------------------*/
+/*!
+ * @brief Enables/Disables the LoRaWAN Class B (Periodic ping downlink slots + Beacon for synchronization)
+ */
 #define LORAMAC_CLASSB_ENABLED                          0
 
 #if ( LORAMAC_CLASSB_ENABLED == 1 )
 /* CLASS B LSE crystal calibration*/
-/**
-  * \brief Temperature coefficient of the clock source
-  */
+/*!
+ * @brief Temperature coefficient of the clock source
+ */
 #define RTC_TEMP_COEFFICIENT                            ( -0.035 )
 
-/**
-  * \brief Temperature coefficient deviation of the clock source
-  */
+/*!
+ * @brief Temperature coefficient deviation of the clock source
+ */
 #define RTC_TEMP_DEV_COEFFICIENT                        ( 0.0035 )
 
-/**
-  * \brief Turnover temperature of the clock source
-  */
+/*!
+ * @brief Turnover temperature of the clock source
+ */
 #define RTC_TEMP_TURNOVER                               ( 25.0 )
 
-/**
-  * \brief Turnover temperature deviation of the clock source
-  */
+/*!
+ * @brief Turnover temperature deviation of the clock source
+ */
 #define RTC_TEMP_DEV_TURNOVER                           ( 5.0 )
 #endif /* LORAMAC_CLASSB_ENABLED == 1 */
 
-/**
-  * \brief Disable the ClassA receive windows after Tx (after the Join Accept if OTAA mode defined)
-  * \note  Behavior to reduce power consumption but not compliant with LoRa Alliance recommendations.
-  *        All device parameters (Spreading Factor, channels selection, Tx Power, ...) should be fixed
-  *        and the adaptive datarate should be disabled.
-  * /warning This limitation may have consequences for the proper functioning of the device,
-             if the LoRaMac ever generates MAC commands that require a response.
-  */
+/*!
+ * @brief Disable the ClassA receive windows after Tx (after the Join Accept if OTAA mode defined)
+ * @note  Behavior to reduce power consumption but not compliant with LoRa Alliance recommendations.
+ *        All device parameters (Spreading Factor, channels selection, Tx Power, ...) should be fixed
+ *        and the adaptive datarate should be disabled.
+ * @warning This limitation may have consequences for the proper functioning of the device,
+ *          if the LoRaMac ever generates MAC commands that require a response.
+ */
 #define DISABLE_LORAWAN_RX_WINDOW                       0
 
 /* USER CODE BEGIN EC */

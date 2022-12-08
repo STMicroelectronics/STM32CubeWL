@@ -108,6 +108,11 @@
 			<locationURI>PARENT-1-PROJECT_LOC/Src/tkms_app_find.c</locationURI>
 		</link>
 		<link>
+			<name>Application/User/tkms_app_secure_counter.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Src/tkms_app_secure_counter.c</locationURI>
+		</link>
+		<link>
 			<name>Application/User/tkms_app_sign_verify.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Src/tkms_app_sign_verify.c</locationURI>

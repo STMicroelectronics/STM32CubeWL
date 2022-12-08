@@ -322,7 +322,7 @@ COM_StatusTypeDef Ymodem_Receive(uint32_t *puSize, uint32_t uFlashDestination, Y
                   {
                     Serial_PutByte(ACK);
                     file_done = 1;           /* file reception ended */
-                    session_done = 1;        /* sesion ended */
+                    session_done = 1;        /* session  ended */
                     break;
                   }
                 }

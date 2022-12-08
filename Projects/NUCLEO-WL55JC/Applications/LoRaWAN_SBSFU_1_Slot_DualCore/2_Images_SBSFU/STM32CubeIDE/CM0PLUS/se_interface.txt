@@ -38,3 +38,5 @@ SE_KMS_Verify
 SE_KMS_DeriveKey
 SE_KMS_GenerateKeyPair
 SE_KMS_GenerateRandom
+SE_KMS_CounterGetValue
+SE_KMS_CounterIncrement

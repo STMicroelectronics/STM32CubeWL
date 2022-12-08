@@ -29,14 +29,6 @@
 #if (SECBOOT_LOADER == SECBOOT_USE_LOCAL_LOADER) || defined(SFU_TEST_PROTECTION)
 
 /* Private defines -----------------------------------------------------------*/
-#if defined(__ICCARM__)
-#define PUTCHAR_PROTOTYPE int putchar(int ch)
-#elif defined(__ARMCC_VERSION)
-#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
-#elif defined(__GNUC__)
-#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
-#endif /* __ICCARM__ */
-
 #define SFU_COM_LOADER_TIME_OUT            ((uint32_t )0x800U)   /*!< COM Transmit and Receive Timeout*/
 #define SFU_COM_LOADER_SERIAL_TIME_OUT       ((uint32_t )100U)   /*!< Serial PutByte and PutString Timeout*/
 

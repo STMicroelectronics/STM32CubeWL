@@ -258,7 +258,7 @@ static uint32_t RadioGetTimeOnAir(RadioModems_t modem, uint32_t bandwidth,
  * \param[in] buffer     Buffer pointer
  * \param[in] size       Buffer size
  */
-static void RadioSend(uint8_t *buffer, uint8_t size);
+static radio_status_t RadioSend(uint8_t *buffer, uint8_t size);
 
 /*!
  * \brief Sets the radio in sleep mode
@@ -874,11 +874,12 @@ static uint32_t RadioGetTimeOnAir(RadioModems_t modem, uint32_t bandwidth,
   /* USER CODE END RadioGetTimeOnAir_2 */
 }
 
-static void RadioSend(uint8_t *buffer, uint8_t size)
+static radio_status_t RadioSend(uint8_t *buffer, uint8_t size)
 {
   /* USER CODE BEGIN RadioSend_1 */
 
   /* USER CODE END RadioSend_1 */
+  uint32_t ret = RADIO_STATUS_OK;
   MBMUX_ComParam_t *com_obj;
   uint32_t *com_buffer;
   uint16_t i = 0;
@@ -896,7 +897,8 @@ static void RadioSend(uint8_t *buffer, uint8_t size)
   MBMUXIF_RadioSendCmd();
   /* waiting for event */
   /* once event is received and semaphore released: */
-  return;
+  ret = com_obj->ReturnVal;
+  return (radio_status_t) ret;
   /* USER CODE BEGIN RadioSend_2 */
 
   /* USER CODE END RadioSend_2 */

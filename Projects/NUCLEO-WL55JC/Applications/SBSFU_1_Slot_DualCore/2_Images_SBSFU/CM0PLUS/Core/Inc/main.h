@@ -25,5 +25,4 @@
 #include "stm32wlxx_nucleo.h"
 #include "app_sfu.h"
 #include "app_hw.h"
-
 #endif /* MAIN_H */

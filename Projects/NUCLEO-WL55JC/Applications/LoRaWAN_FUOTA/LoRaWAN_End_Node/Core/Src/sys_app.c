@@ -235,24 +235,21 @@ void GetUniqueId(uint8_t *id)
   /* USER CODE END GetUniqueId_2 */
 }
 
-uint32_t GetDevAddr(void)
+void GetDevAddr(uint32_t *devAddr)
 {
-  uint32_t val = 0;
   /* USER CODE BEGIN GetDevAddr_1 */
 
   /* USER CODE END GetDevAddr_1 */
 
-  val = LL_FLASH_GetUDN();
-  if (val == 0xFFFFFFFF)
+  *devAddr = LL_FLASH_GetUDN();
+  if (*devAddr == 0xFFFFFFFF)
   {
-    val = ((HAL_GetUIDw0()) ^ (HAL_GetUIDw1()) ^ (HAL_GetUIDw2()));
+    *devAddr = ((HAL_GetUIDw0()) ^ (HAL_GetUIDw1()) ^ (HAL_GetUIDw2()));
   }
 
   /* USER CODE BEGIN GetDevAddr_2 */
 
   /* USER CODE END GetDevAddr_2 */
-  return val;
-
 }
 
 /* USER CODE BEGIN EF */

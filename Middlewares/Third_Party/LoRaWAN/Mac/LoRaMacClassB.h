@@ -176,7 +176,7 @@ typedef struct sBeaconContext
      */
     TimerTime_t BeaconTimingDelay;
     TimerTime_t TimeStamp;
-#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+#if (defined( LORAMAC_VERSION ) && (( LORAMAC_VERSION == 0x01000400 ) || ( LORAMAC_VERSION == 0x01010100 )))
     /*!
      * Beacons transmit time precision determined using
      * param field of beacon frame format.
@@ -190,14 +190,12 @@ typedef struct sBeaconContext
  */
 typedef struct sLoRaMacClassBCallback
 {
-    /* ST_WORKAROUND_BEGIN: Return temperature into int16_t instead float */
     /*!
      * \brief   Measures the temperature level
      *
      * \retval  Temperature level
      */
     int16_t ( *GetTemperatureLevel )( void );
-    /* ST_WORKAROUND_END */
     /*!
      *\brief    Will be called each time a Radio IRQ is handled by the MAC
      *          layer.
@@ -244,7 +242,7 @@ typedef struct sLoRaMacClassBParams
      * Pointer to the multicast channel list
      */
     MulticastCtx_t *MulticastChannels;
-#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+#if (defined( LORAMAC_VERSION ) && (( LORAMAC_VERSION == 0x01000400 ) || ( LORAMAC_VERSION == 0x01010100 )))
     /*!
      * Pointer to the activation type
      */
@@ -297,17 +295,17 @@ void LoRaMacClassBSetMulticastSlotState( PingSlotState_t multicastSlotState );
 bool LoRaMacClassBIsAcquisitionInProgress( void );
 
 /*!
- * \brief State machine of the Class B for beaconing
+ * \brief Asks to the application cb to schedule the state machine of the Class B for beaconing
  */
 void LoRaMacClassBBeaconTimerEvent( void* context );
 
 /*!
- * \brief State machine of the Class B for ping slots
+ * \brief Asks to the application cb to schedule the state machine of the Class B for ping slots
  */
 void LoRaMacClassBPingSlotTimerEvent( void* context );
 
 /*!
- * \brief State machine of the Class B for multicast slots
+ * \brief Asks to the application cb to schedule the state machine of the Class B for multicast slots
  */
 void LoRaMacClassBMulticastSlotTimerEvent( void* context );
 
@@ -482,7 +480,7 @@ void LoRaMacClassBStartRxSlots( void );
  */
 void LoRaMacClassBSetMulticastPeriodicity( MulticastCtx_t* multicastChannel );
 
-#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+#if (defined( LORAMAC_VERSION ) && (( LORAMAC_VERSION == 0x01000400 ) || ( LORAMAC_VERSION == 0x01010100 )))
 /*!
  * \brief Sets the FPending bit status of the related downlink slot
  *

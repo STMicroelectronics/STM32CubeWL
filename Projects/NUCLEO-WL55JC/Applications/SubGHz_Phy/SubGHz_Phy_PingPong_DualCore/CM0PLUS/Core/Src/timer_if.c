@@ -23,7 +23,6 @@
 #include "timer_if.h"
 #include "main.h" /*for STM32CubeMX generated RTC_N_PREDIV_S and RTC_N_PREDIV_A*/
 #include "rtc.h"
-#include "stm32_lpm.h"
 #include "utilities_def.h"
 #include "stm32wlxx_ll_rtc.h"
 #include "msg_id.h"
@@ -255,7 +254,7 @@ UTIL_TIMER_Status_t TIMER_IF_StopTimer(void)
   /* USER CODE END TIMER_IF_StopTimer */
   /* Clear RTC Alarm Flag */
   __HAL_RTC_ALARM_CLEAR_FLAG(&hrtc, RTC_FLAG_ALRBF);
-  /* Disable the Alarm A interrupt */
+  /* Disable the Alarm B interrupt */
   HAL_RTC_DeactivateAlarm(&hrtc, RTC_ALARM_B);
   /*overload RTC feature enable*/
   hrtc.IsEnabled.RtcFeatures = UINT32_MAX;

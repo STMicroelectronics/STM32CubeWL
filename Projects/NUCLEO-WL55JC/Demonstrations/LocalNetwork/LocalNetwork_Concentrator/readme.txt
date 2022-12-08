@@ -115,7 +115,7 @@ Demonstrations, SubGHz_Phy, LocalNetwork, Concentrator
 
 @par Hardware and Software environment
 
-  - This example runs on the STM32WLxx Nucleo board.
+  - This example runs on the STM32WLxx Nucleo boards. Both NUCLEO-WL55JC1 (HIGH-BAND) and NUCLEO-WL55JC2 (LOW-BAND) are suitable.
 
   - STM32WLxx Nucleo board Set-up
     - Connect the Nucleo board to your PC with a USB cable type A to micro-B

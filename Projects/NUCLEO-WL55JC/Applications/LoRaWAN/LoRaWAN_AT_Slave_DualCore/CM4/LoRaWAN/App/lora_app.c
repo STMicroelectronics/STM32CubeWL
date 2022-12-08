@@ -25,7 +25,7 @@
 #include "stm32_seq.h"
 #include "stm32_timer.h"
 #include "utilities_def.h"
-#include "lora_app_version.h"
+#include "app_version.h"
 #include "LmHandler.h"
 #include "lora_command.h"
 #include "lora_at.h"
@@ -87,6 +87,11 @@ static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params);
   * @param params status of Last Beacon
   */
 static void OnBeaconStatusChange(LmHandlerBeaconParams_t *params);
+
+/**
+  * @brief callback when system time has been updated
+  */
+static void OnSysTimeUpdate(void);
 
 /**
   * @brief callback when LoRaWAN application Class is changed
@@ -191,6 +196,7 @@ static LmHandlerCallbacks_t LmHandlerCallbacks =
   .OnTxData =                     OnTxData,
   .OnRxData =                     OnRxData,
   .OnBeaconStatusChange =         OnBeaconStatusChange,
+  .OnSysTimeUpdate =              OnSysTimeUpdate,
   .OnClassChange =                OnClassChange,
   .OnTxPeriodicityChanged =       OnTxPeriodicityChanged,
   .OnTxFrameCtrlChanged =         OnTxFrameCtrlChanged,
@@ -207,6 +213,7 @@ static LmHandlerParams_t LmHandlerParams =
   .DefaultClass =             CLASS_A,
   .AdrEnable =                LORAWAN_ADR_STATE,
   .TxDatarate =               LORAWAN_DEFAULT_DATA_RATE,
+  .TxPower =                  LORAWAN_DEFAULT_TX_POWER,
   .PingSlotPeriodicity =      LORAWAN_DEFAULT_PING_SLOT_PERIODICITY,
   .RxBCTimeout =              LORAWAN_DEFAULT_CLASS_B_C_RESP_TIMEOUT
 };
@@ -293,6 +300,11 @@ void LoRaWAN_Init(void)
   UTIL_TIMER_Create(&TxLedTimer, LED_PERIOD_TIME, UTIL_TIMER_ONESHOT, OnTxTimerLedEvent, NULL);
   UTIL_TIMER_Create(&RxLedTimer, LED_PERIOD_TIME, UTIL_TIMER_ONESHOT, OnRxTimerLedEvent, NULL);
   UTIL_TIMER_Create(&JoinLedTimer, LED_PERIOD_TIME, UTIL_TIMER_PERIODIC, OnJoinTimerLedEvent, NULL);
+
+  if (FLASH_IF_Init(NULL) != FLASH_IF_OK)
+  {
+    Error_Handler();
+  }
 
   /* USER CODE END LoRaWAN_Init_1 */
 
@@ -393,6 +405,13 @@ static void OnBeaconStatusChange(LmHandlerBeaconParams_t *params)
     AT_event_Beacon(params);
   }
   /* USER CODE END OnBeaconStatusChange_1 */
+}
+
+static void OnSysTimeUpdate(void)
+{
+  /* USER CODE BEGIN OnSysTimeUpdate_1 */
+
+  /* USER CODE END OnSysTimeUpdate_1 */
 }
 
 static void OnClassChange(DeviceClass_t deviceClass)

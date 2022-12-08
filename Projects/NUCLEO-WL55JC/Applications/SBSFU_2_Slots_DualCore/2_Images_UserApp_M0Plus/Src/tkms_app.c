@@ -38,6 +38,8 @@ static void tkms_app_print_menu(void)
   (void)printf("  TKMS - Tests RSA Static key (*)                   --------------------- 4\r\n\n");
   (void)printf("  TKMS - Tests Derive Static key (*)                --------------------- 5\r\n\n");
   (void)printf("  TKMS - Tests key finding                          --------------------- 6\r\n\n");
+  (void)printf("  TKMS - Tests static secure counter                --------------------- 7\r\n\n");
+  (void)printf("  TKMS - Tests dynamic secure counters              --------------------- 8\r\n\n");
   (void)printf("  Exit tKMS Examples Menu                           --------------------- x\r\n\n");
 }
 
@@ -111,6 +113,16 @@ void tkms_app_menu(void)
           tests_executed++;
           tests_success += (ret_status == CKR_OK) ? 1U : 0U;
           INVOKE_SCHEDULE_NEEDS();
+          ret_status = tkms_app_static_secure_counter();
+          (void)printf("Test static secure counter %s\r\n", (ret_status == CKR_OK) ? "SUCCESSFUL" : "FAILED");
+          tests_executed++;
+          tests_success += (ret_status == CKR_OK) ? 1U : 0U;
+          INVOKE_SCHEDULE_NEEDS();
+          ret_status = tkms_app_dynamic_secure_counters();
+          (void)printf("Test dynamic secure counters %s\r\n", (ret_status == CKR_OK) ? "SUCCESSFUL" : "FAILED");
+          tests_executed++;
+          tests_success += (ret_status == CKR_OK) ? 1U : 0U;
+          INVOKE_SCHEDULE_NEEDS();
           /* Report final status */
           if (tests_success == tests_executed)
           {
@@ -162,6 +174,20 @@ void tkms_app_menu(void)
           INVOKE_SCHEDULE_NEEDS();
           ret_status = tkms_app_find();
           (void)printf("Find key test %s\r\n", (ret_status == CKR_OK) ? "SUCCESSFUL" : "FAILED");
+          tkms_app_print_menu();
+          break;
+        /* 7 = Tests static secure counter */
+        case '7':
+          INVOKE_SCHEDULE_NEEDS();
+          ret_status = tkms_app_static_secure_counter();
+          (void)printf("Test static secure counter %s\r\n", (ret_status == CKR_OK) ? "SUCCESSFUL" : "FAILED");
+          tkms_app_print_menu();
+          break;
+        /* 8 = Tests dynamic secure counters */
+        case '8':
+          INVOKE_SCHEDULE_NEEDS();
+          ret_status = tkms_app_dynamic_secure_counters();
+          (void)printf("Test dynamic secure counters %s\r\n", (ret_status == CKR_OK) ? "SUCCESSFUL" : "FAILED");
           tkms_app_print_menu();
           break;
         case 'x':

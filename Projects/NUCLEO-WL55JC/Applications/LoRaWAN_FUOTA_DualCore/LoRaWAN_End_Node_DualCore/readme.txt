@@ -65,10 +65,10 @@ Applications, SubGHz_Phy, LoRaWAN, End_Node, DualCore, FUOTA, SBSFU, KMS
   - LoRaWAN_End_Node_DualCore/CM0PLUS/Core/Inc/utilities_def.h                  Definitions for modules requiring utilities
   - LoRaWAN_End_Node_DualCore/CM0PLUS/KMS/App/app_kms.h                         !!! No description found !!!
   - LoRaWAN_End_Node_DualCore/CM0PLUS/LoRaWAN/App/app_lorawan.h                 Header of application of the LRWAN Middleware
+  - LoRaWAN_End_Node_DualCore/CM0PLUS/LoRaWAN/App/app_version.h                 Definition the version of the CM0PLUS application
   - LoRaWAN_End_Node_DualCore/CM0PLUS/LoRaWAN/App/Commissioning.h               End-device commissioning parameters
   - LoRaWAN_End_Node_DualCore/CM0PLUS/LoRaWAN/App/fw_update_agent.h             This file provides set of functions to manage Firmware Update functionalities.
   - LoRaWAN_End_Node_DualCore/CM0PLUS/LoRaWAN/App/lora_app.h                    Header of application of the LRWAN Middleware
-  - LoRaWAN_End_Node_DualCore/CM0PLUS/LoRaWAN/App/lora_app_version.h            Definition the version of the CM0PLUS application
   - LoRaWAN_End_Node_DualCore/CM0PLUS/LoRaWAN/App/se-identity.h                 Secure Element identity and keys
   - LoRaWAN_End_Node_DualCore/CM0PLUS/LoRaWAN/Target/frag_decoder_if.h          Applicative interfaces of LoRa-Alliance fragmentation decoder
   - LoRaWAN_End_Node_DualCore/CM0PLUS/LoRaWAN/Target/lorawan_conf.h             Header for LoRaWAN middleware instances
@@ -80,6 +80,7 @@ Applications, SubGHz_Phy, LoRaWAN, End_Node, DualCore, FUOTA, SBSFU, KMS
   - LoRaWAN_End_Node_DualCore/CM0PLUS/MbMux/LmHandler_mbwrapper.h               This file implements the CM0PLUS side wrapper of the LmHandler
                                                                                 interface shared between M0 and M4.
   - LoRaWAN_End_Node_DualCore/CM0PLUS/MbMux/mbmux.h                             API which interfaces CM0PLUS to IPCC
+  - LoRaWAN_End_Node_DualCore/CM0PLUS/MbMux/mbmuxif_flash.h                     API for CM0PLUS application to register and handle FLASH via MBMUX
   - LoRaWAN_End_Node_DualCore/CM0PLUS/MbMux/mbmuxif_lora.h                      API provided to CM0PLUS application to register and handle LoraWAN via MBMUX
   - LoRaWAN_End_Node_DualCore/CM0PLUS/MbMux/mbmuxif_radio.h                     API for CM0PLUS application to register and handle RADIO driver via MBMUX
   - LoRaWAN_End_Node_DualCore/CM0PLUS/MbMux/mbmuxif_sys.h                       API for CM0PLUS application to handle the SYSTEM MBMUX channel
@@ -113,15 +114,16 @@ Applications, SubGHz_Phy, LoRaWAN, End_Node, DualCore, FUOTA, SBSFU, KMS
   - LoRaWAN_End_Node_DualCore/CM4/Core/Inc/utilities_conf.h                     Header for configuration file to utilities
   - LoRaWAN_End_Node_DualCore/CM4/Core/Inc/utilities_def.h                      Definitions for modules requiring utilities
   - LoRaWAN_End_Node_DualCore/CM4/LoRaWAN/App/app_lorawan.h                     Header of application of the LRWAN Middleware
+  - LoRaWAN_End_Node_DualCore/CM4/LoRaWAN/App/app_version.h                     Definition the version of the CM4 application
   - LoRaWAN_End_Node_DualCore/CM4/LoRaWAN/App/CayenneLpp.h                      Implements the Cayenne Low Power Protocol
   - LoRaWAN_End_Node_DualCore/CM4/LoRaWAN/App/lora_app.h                        Header of application of the LRWAN Middleware
-  - LoRaWAN_End_Node_DualCore/CM4/LoRaWAN/App/lora_app_version.h                Definition the version of the CM4 application
   - LoRaWAN_End_Node_DualCore/CM4/LoRaWAN/Target/lorawan_conf.h                 Header for LoRaWAN middleware instances
   - LoRaWAN_End_Node_DualCore/CM4/LoRaWAN/Target/systime.h                      Map middleware systime
   - LoRaWAN_End_Node_DualCore/CM4/LoRaWAN/Target/timer.h                        Wrapper to timer server
   - LoRaWAN_End_Node_DualCore/CM4/MbMux/LmHandler_mbwrapper.h                   This file implements the CM4 side wrapper of the LmHandler
                                                                                 interface shared between M0 and M4.
   - LoRaWAN_End_Node_DualCore/CM4/MbMux/mbmux.h                                 API which interfaces CM4 to IPCC
+  - LoRaWAN_End_Node_DualCore/CM4/MbMux/mbmuxif_flash.h                         API for CM4 application to register and handle FLASH via MBMUX
   - LoRaWAN_End_Node_DualCore/CM4/MbMux/mbmuxif_lora.h                          API provided to CM4 application to register and handle LoraWAN via MBMUX
   - LoRaWAN_End_Node_DualCore/CM4/MbMux/mbmuxif_radio.h                         API for CM4 application to register and handle RADIO driver via MBMUX
   - LoRaWAN_End_Node_DualCore/CM4/MbMux/mbmuxif_sys.h                           API for CM4 application to handle the SYSTEM MBMUX channel
@@ -135,8 +137,6 @@ Applications, SubGHz_Phy, LoRaWAN, End_Node, DualCore, FUOTA, SBSFU, KMS
   - LoRaWAN_End_Node_DualCore/Common/MbMux/msg_id.h                             MBMUX message ID enumeration
   - LoRaWAN_End_Node_DualCore/Common/System/sys_debug.h                         Configuration of the debug.c instances
 
-  - LoRaWAN_End_Node_DualCore/CM0PLUS/Core/Src/flash_if.c                       This file provides set of firmware functions to manage Flash
-                                                                                Interface functionalities.
   - LoRaWAN_End_Node_DualCore/CM0PLUS/Core/Src/gpio.c                           This file provides code for the configuration
                                                                                 of all used GPIO pins.
   - LoRaWAN_End_Node_DualCore/CM0PLUS/Core/Src/ipcc.c                           This file provides code for the configuration
@@ -166,6 +166,7 @@ Applications, SubGHz_Phy, LoRaWAN, End_Node, DualCore, FUOTA, SBSFU, KMS
                                                                                 shared between M0 and M4.
   - LoRaWAN_End_Node_DualCore/CM0PLUS/MbMux/lora_info.c                         To give info to the application about LoRaWAN configuration
   - LoRaWAN_End_Node_DualCore/CM0PLUS/MbMux/mbmux.c                             Interface CPU2 to IPCC: multiplexer to map features to IPCC channels
+  - LoRaWAN_End_Node_DualCore/CM0PLUS/MbMux/mbmuxif_flash.c                     Interface layer CM0PLUS Flash to MBMUX (Mailbox Multiplexer)
   - LoRaWAN_End_Node_DualCore/CM0PLUS/MbMux/mbmuxif_lora.c                      allows CM0 application to register and handle LoraWAN to MBMUX
   - LoRaWAN_End_Node_DualCore/CM0PLUS/MbMux/mbmuxif_radio.c                     allows CM0PLUS application to register and handle RADIO driver via MBMUX
   - LoRaWAN_End_Node_DualCore/CM0PLUS/MbMux/mbmuxif_sys.c                       allows CM0 application to handle the SYSTEM MBMUX channel
@@ -201,6 +202,7 @@ Applications, SubGHz_Phy, LoRaWAN, End_Node, DualCore, FUOTA, SBSFU, KMS
   - LoRaWAN_End_Node_DualCore/CM4/MbMux/LmHandler_mbwrapper.c                   This file implements the CM4 side wrapper of the LoraMac interface
                                                                                 shared between M0 and M4.
   - LoRaWAN_End_Node_DualCore/CM4/MbMux/mbmux.c                                 CM4 side multiplexer to map features to IPCC channels
+  - LoRaWAN_End_Node_DualCore/CM4/MbMux/mbmuxif_flash.c                         allows CM4 application to register and handle FLASH via MBMUX
   - LoRaWAN_End_Node_DualCore/CM4/MbMux/mbmuxif_lora.c                          allows CM4 application to register and handle LoraWAN via MBMUX
   - LoRaWAN_End_Node_DualCore/CM4/MbMux/mbmuxif_radio.c                         allows CM4 application to register and handle RADIO driver via MBMUX
   - LoRaWAN_End_Node_DualCore/CM4/MbMux/mbmuxif_sys.c                           allows CM4 application to handle the SYSTEM MBMUX channel.
@@ -217,7 +219,7 @@ Applications, SubGHz_Phy, LoRaWAN, End_Node, DualCore, FUOTA, SBSFU, KMS
 
 @par Hardware and Software environment
 
-  - This example runs on the STM32WLxx Nucleo board.
+  - This example runs on the STM32WLxx Nucleo boards. Both NUCLEO-WL55JC1 (HIGH-BAND) and NUCLEO-WL55JC2 (LOW-BAND) are suitable.
 
   - STM32WLxx Nucleo board Set-up
     - Connect the Nucleo board to your PC with a USB cable type A to micro-B

@@ -8,17 +8,22 @@
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: 1;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
     .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
   <link rel="stylesheet" href="_htmresc/mini-st_2020.css" />
+  <link rel="icon" type="image/x-icon" href="_htmresc/favicon.png" />
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
-  <link rel="icon" type="image/x-icon" href="_htmresc/favicon.png" />
 </head>
 <body>
 <div class="row">
@@ -44,9 +49,40 @@
 <section id="update-history" class="col-sm-12 col-lg-8">
 <h1>Update History</h1>
 <div class="collapse">
-<input type="checkbox" id="collapse-section22" checked aria-hidden="true"> <label for="collapse-section22" aria-hidden="true"><strong>V2.4.0 / 14-Dec-2021</strong></label>
+<input type="checkbox" id="collapse-section23" checked aria-hidden="true"> <label for="collapse-section23" aria-hidden="true"><strong>V2.5.0 / 21-Oct-2022</strong></label>
 <div>
 <h2 id="main-changes">Main Changes</h2>
+<ul>
+<li>Feature: Integration of LoRaWAN Link Layer v1.0.4 + Regional Parameters RP002-1.0.1 from LoRa Mac Semtech/StackForce master branch:<br>
+<ul>
+<li>Semtech release <a href="https://github.com/Lora-net/LoRaMac-node/releases/tag/v4.6.0">v4.6.0</a> integration (latest commit [fe8247e] 11-Jan-2022)</li>
+<li>fix some issues from latest master commits (latest change integrated: commit [55f83f9] 13-Oct-2022)</li>
+</ul></li>
+<li>Feature: Support of RU864-870 16 channels from Regional Parameters RP002-1.0.2</li>
+<li>Feature: Support of AS923-4 from Regional Parameters RP002-1.0.3</li>
+<li>Feature: LoRaWAN FUOTA packages v2.0.0 integration
+<ul>
+<li>TS003-2.0.0_LoRaWAN_Application_Layer_Clock_Synchronization</li>
+<li>TS004-2.0.0_LoRaWAN_Fragmented_Data_Block_Transport</li>
+<li>TS005-2.0.0_LoRaWAN_Remote_Multicast_Setup</li>
+<li>TS006-1.0.0_LoRaWAN_Firmware_Management_Protocol</li>
+</ul></li>
+<li>Feature: LoRaWAN Key Provisioning: Join EUI/Dev EUI/Dev Address with KMS</li>
+<li>Feature: Set Tx power before join overridden by Mac</li>
+<li>Fix: EIRP default configuration(AS923-JP channel plan) needs to be corrected, 13.0 -&gt; 16.0</li>
+<li>Release Notes update</li>
+</ul>
+<h2 id="known-limitations">Known limitations:</h2>
+<ul>
+<li>The feature Class B Remote multicast setup implemented is not fully operational when more than one context defined (context priority management)</li>
+<li>The Data Block Integrity Check required by TS004-2.0.0_LoRaWAN_Fragmented_Data_Block_Transport is not compliant with the current ComputeCmac method implementation</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section22" aria-hidden="true"> <label for="collapse-section22" aria-hidden="true"><strong>V2.4.0 / 14-Dec-2021</strong></label>
+<div>
+<h2 id="main-changes-1">Main Changes</h2>
 <ul>
 <li>Feature: Integration of LoRaWAN v1.0.4 from LoRa Mac Semtech/StackForce develop branch (31-May-2021 commits, version 4.5.2)</li>
 <li>Feature: NVM Context store/restore implementation with Flash usage and SRAM2 retention (required by Certification code)</li>
@@ -57,14 +93,14 @@
 <li>Licensing update: New way to declare licenses</li>
 <li>Release Notes update</li>
 </ul>
-<h2 id="known-limitations">Known limitations:</h2>
+<h2 id="known-limitations-1">Known limitations:</h2>
 <p>None</p>
 </div>
 </div>
 <div class="collapse">
 <input type="checkbox" id="collapse-section21" aria-hidden="true"> <label for="collapse-section21" aria-hidden="true"><strong>V2.3.0 / 8-May-2021</strong></label>
 <div>
-<h2 id="main-changes-1">Main Changes</h2>
+<h2 id="main-changes-2">Main Changes</h2>
 <ul>
 <li>Implements LoRa Mac from Semtech/StackForce develop branch (18-Jan-2021 commits, version 4.4.7)</li>
 <li>SecureElementDeleteDerivedKeys dynamic implementation in using KMS APIs</li>
@@ -76,14 +112,14 @@
 <li>Fragmentation processing move to application layer</li>
 <li>Release Notes update</li>
 </ul>
-<h2 id="known-limitations-1">Known limitations:</h2>
+<h2 id="known-limitations-2">Known limitations:</h2>
 <p>None</p>
 </div>
 </div>
 <div class="collapse">
 <input type="checkbox" id="collapse-section20" aria-hidden="true"> <label for="collapse-section20" aria-hidden="true"><strong>V2.2.1 / 2-Oct-2020</strong></label>
 <div>
-<h2 id="main-changes-2">Main Changes</h2>
+<h2 id="main-changes-3">Main Changes</h2>
 <ul>
 <li>Multiple tools write to the same file’ if AES + LoRaWAN + option .c/.h</li>
 <li>Update file-license</li>
@@ -91,14 +127,14 @@
 <li>Update Key List usage with a reworked init part: set a static const + memcpy to prevent a Stop/Restart of LoRaMAC</li>
 <li>Release Notes update</li>
 </ul>
-<h2 id="known-limitations-2">Known limitations:</h2>
+<h2 id="known-limitations-3">Known limitations:</h2>
 <p>None</p>
 </div>
 </div>
 <div class="collapse">
 <input type="checkbox" id="collapse-section19" aria-hidden="true"> <label for="collapse-section19" aria-hidden="true"><strong>V2.2.0 / 4-Sept-2020</strong></label>
 <div>
-<h2 id="main-changes-3">Main Changes</h2>
+<h2 id="main-changes-4">Main Changes</h2>
 <ul>
 <li>Implements LoRa Mac from Semtech/StackForce develop branch (26-May-2020 commits, version 4.4.4)</li>
 <li>Fixed SetLoRaSymbNumTimeout. RX Continuous bug on ClassC</li>
@@ -108,14 +144,14 @@
 <li>RepeaterSupport feature set back</li>
 <li>LmHandlerSend error codes implementation</li>
 </ul>
-<h2 id="known-limitations-3">Known limitations:</h2>
+<h2 id="known-limitations-4">Known limitations:</h2>
 <p>None</p>
 </div>
 </div>
 <div class="collapse">
 <input type="checkbox" id="collapse-section18" aria-hidden="true"> <label for="collapse-section18" aria-hidden="true"><strong>V2.1.0 / 29-June-2020</strong></label>
 <div>
-<h2 id="main-changes-4">Main Changes</h2>
+<h2 id="main-changes-5">Main Changes</h2>
 <ul>
 <li>Moves the contents of folder Patterns/Advanced/ to LmHandler/</li>
 <li>Imports some features from Semtech/StackForce develop branch:
@@ -130,7 +166,7 @@
 <li>Fix some Keil-related issues</li>
 <li>Update files license and copyright year</li>
 </ul>
-<h2 id="known-limitations-4">Known limitations:</h2>
+<h2 id="known-limitations-5">Known limitations:</h2>
 <ul>
 <li>IN865 ClassB beacon reception</li>
 </ul>
@@ -139,18 +175,18 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section17" aria-hidden="true"> <label for="collapse-section17" aria-hidden="true"><strong>V2.0.1 / 02-April-2020</strong></label>
 <div>
-<h2 id="main-changes-5">Main Changes</h2>
+<h2 id="main-changes-6">Main Changes</h2>
 <ul>
 <li>readme.md update to version 4.4.3</li>
 </ul>
-<h2 id="known-limitations-5">Known limitations:</h2>
+<h2 id="known-limitations-6">Known limitations:</h2>
 <p>None</p>
 </div>
 </div>
 <div class="collapse">
 <input type="checkbox" id="collapse-section16" aria-hidden="true"> <label for="collapse-section16" aria-hidden="true"><strong>V2.0.0 / 06-March-2020</strong></label>
 <div>
-<h2 id="main-changes-6">Main Changes</h2>
+<h2 id="main-changes-7">Main Changes</h2>
 <ul>
 <li>Implements LoRa Mac from Semtech/StackForce develop branch (17-Dec-2019 commits, version 4.4.3)</li>
 <li>Patterns:
@@ -162,7 +198,7 @@
 </ul></li>
 <li>KMS integration done in Crypto &amp; LmHandler folders (mbed-crypto called)</li>
 </ul>
-<h2 id="known-limitations-6">Known limitations:</h2>
+<h2 id="known-limitations-7">Known limitations:</h2>
 <ul>
 <li>IN865 ClassB beacon reception</li>
 </ul>
@@ -171,7 +207,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section15" aria-hidden="true"> <label for="collapse-section15" aria-hidden="true"><strong>V1.2.4 / 28-Nov-2019</strong></label>
 <div>
-<h2 id="main-changes-7">Main Changes</h2>
+<h2 id="main-changes-8">Main Changes</h2>
 <ul>
 <li>Implements LoRa Mac from Semtech/StackForce develop branch (31-Oct-2019 commits, version 4.4.2)</li>
 <li>Patterns/basic and Patterns/modem directory structure change</li>
@@ -185,51 +221,51 @@
 <li>US915</li>
 </ul></li>
 </ul>
-<h2 id="known-limitations-7">Known limitations:</h2>
+<h2 id="known-limitations-8">Known limitations:</h2>
 <p>None</p>
 </div>
 </div>
 <div class="collapse">
 <input type="checkbox" id="collapse-section14" aria-hidden="true"> <label for="collapse-section14" aria-hidden="true"><strong>V1.2.3 / 20-Sept-2019</strong></label>
 <div>
-<h2 id="main-changes-8">Main Changes</h2>
+<h2 id="main-changes-9">Main Changes</h2>
 <ul>
 <li>Implements LoRa Mac from Semtech/StackForce develop branch (17-Jun-2019 commits, 4.4.2 release candidate) <a href="https://github.com/Lora-net/LoRaMac-node/tree/6231a5d65806142a6f887e6183227b8da9e49238">https://github.com/Lora-net/LoRaMac-node/tree/6231a5d65806142a6f887e6183227b8da9e49238</a></li>
 <li>Various bug fixes and enhancements</li>
 <li>Removed inclusions of radio.h, utilities.h, etc. from loraMac.h API</li>
 <li>Lora.c/h and lora-test.c/h moved from Certifications/ to Patterns/Basic</li>
 </ul>
-<h2 id="known-limitations-8">Known limitations:</h2>
+<h2 id="known-limitations-9">Known limitations:</h2>
 <p>None</p>
 </div>
 </div>
 <div class="collapse">
 <input type="checkbox" id="collapse-section13" aria-hidden="true"> <label for="collapse-section13" aria-hidden="true"><strong>V1.2.2 / 17-June-2019</strong></label>
 <div>
-<h2 id="main-changes-9">Main Changes</h2>
+<h2 id="main-changes-10">Main Changes</h2>
 <ul>
 <li>Trace logging &amp; LoRa Mac version display updates</li>
 <li>Some function prototypes added</li>
-</ul>
-<h2 id="known-limitations-9">Known limitations:</h2>
-<p>None</p>
-</div>
-</div>
-<div class="collapse">
-<input type="checkbox" id="collapse-section12" aria-hidden="true"> <label for="collapse-section12" aria-hidden="true"><strong>V1.2.1 / 13-December-2018</strong></label>
-<div>
-<h2 id="main-changes-10">Main Changes</h2>
-<ul>
-<li>implements LoRa Mac 4.4.2-rc.5 from Semtech/StackForce develop branch</li>
 </ul>
 <h2 id="known-limitations-10">Known limitations:</h2>
 <p>None</p>
 </div>
 </div>
 <div class="collapse">
-<input type="checkbox" id="collapse-section11" aria-hidden="true"> <label for="collapse-section11" aria-hidden="true"><strong>V1.2.0 / 10-July-2018</strong></label>
+<input type="checkbox" id="collapse-section12" aria-hidden="true"> <label for="collapse-section12" aria-hidden="true"><strong>V1.2.1 / 13-December-2018</strong></label>
 <div>
 <h2 id="main-changes-11">Main Changes</h2>
+<ul>
+<li>implements LoRa Mac 4.4.2-rc.5 from Semtech/StackForce develop branch</li>
+</ul>
+<h2 id="known-limitations-11">Known limitations:</h2>
+<p>None</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section11" aria-hidden="true"> <label for="collapse-section11" aria-hidden="true"><strong>V1.2.0 / 10-July-2018</strong></label>
+<div>
+<h2 id="main-changes-12">Main Changes</h2>
 <ul>
 <li>Implements LoRa Mac 4.4.2-rc.1 from Semtech/StackForce develop branch</li>
 <li>Supports Class B</li>
@@ -237,48 +273,48 @@
 <li>Added RU864 region</li>
 <li>Removed US915-Hybrid</li>
 </ul>
-<h2 id="known-limitations-11">Known limitations:</h2>
+<h2 id="known-limitations-12">Known limitations:</h2>
 <p>None</p>
 </div>
 </div>
 <div class="collapse">
 <input type="checkbox" id="collapse-section10" aria-hidden="true"> <label for="collapse-section10" aria-hidden="true"><strong>V1.1.5 / 30-March-2018</strong></label>
 <div>
-<h2 id="main-changes-12">Main Changes</h2>
-<ul>
-<li>Implements LoRa Mac 4.4.1 from Semtech/StackForce</li>
-</ul>
-<h2 id="known-limitations-12">Known limitations:</h2>
-<p>None</p>
-</div>
-</div>
-<div class="collapse">
-<input type="checkbox" id="collapse-section9" aria-hidden="true"> <label for="collapse-section9" aria-hidden="true"><strong>V1.1.4 / 08-January-2018</strong></label>
-<div>
 <h2 id="main-changes-13">Main Changes</h2>
 <ul>
-<li>Bug fix in McpsIndication related to downlink Application data buffer</li>
+<li>Implements LoRa Mac 4.4.1 from Semtech/StackForce</li>
 </ul>
 <h2 id="known-limitations-13">Known limitations:</h2>
 <p>None</p>
 </div>
 </div>
 <div class="collapse">
-<input type="checkbox" id="collapse-section8" aria-hidden="true"> <label for="collapse-section8" aria-hidden="true"><strong>V1.1.3 / 20-December-2017</strong></label>
+<input type="checkbox" id="collapse-section9" aria-hidden="true"> <label for="collapse-section9" aria-hidden="true"><strong>V1.1.4 / 08-January-2018</strong></label>
 <div>
 <h2 id="main-changes-14">Main Changes</h2>
 <ul>
-<li>Implements LoRa Mac from Semtech/StackForce develop branch (10-Oct-2017 commits, 4.4.1 release candidate) <a href="https://github.com/Lora-net/LoRaMac-node/tree/ae0c9cc5d53ebbc11437dfe9711a1c3a1114dc5f">https://github.com/Lora-net/LoRaMac-node/tree/ae0c9cc5d53ebbc11437dfe9711a1c3a1114dc5f</a></li>
-<li>Merge pull request #302 from nestorayuso/patch-3</li>
+<li>Bug fix in McpsIndication related to downlink Application data buffer</li>
 </ul>
 <h2 id="known-limitations-14">Known limitations:</h2>
 <p>None</p>
 </div>
 </div>
 <div class="collapse">
-<input type="checkbox" id="collapse-section7" aria-hidden="true"> <label for="collapse-section7" aria-hidden="true"><strong>V1.1.2 / 08-September-2017</strong></label>
+<input type="checkbox" id="collapse-section8" aria-hidden="true"> <label for="collapse-section8" aria-hidden="true"><strong>V1.1.3 / 20-December-2017</strong></label>
 <div>
 <h2 id="main-changes-15">Main Changes</h2>
+<ul>
+<li>Implements LoRa Mac from Semtech/StackForce develop branch (10-Oct-2017 commits, 4.4.1 release candidate) <a href="https://github.com/Lora-net/LoRaMac-node/tree/ae0c9cc5d53ebbc11437dfe9711a1c3a1114dc5f">https://github.com/Lora-net/LoRaMac-node/tree/ae0c9cc5d53ebbc11437dfe9711a1c3a1114dc5f</a></li>
+<li>Merge pull request #302 from nestorayuso/patch-3</li>
+</ul>
+<h2 id="known-limitations-15">Known limitations:</h2>
+<p>None</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section7" aria-hidden="true"> <label for="collapse-section7" aria-hidden="true"><strong>V1.1.2 / 08-September-2017</strong></label>
+<div>
+<h2 id="main-changes-16">Main Changes</h2>
 <ul>
 <li>Implements LoRa Mac 4.4.0 release from Semtech/StackForce <a href="https://github.com/Lora-net/LoRaMac-node/tree/f42be67be402a40b3586724800771bfe13fb18e6">https://github.com/Lora-net/LoRaMac-node/tree/f42be67be402a40b3586724800771bfe13fb18e6</a></li>
 <li>AckTimeoutRetriesCounter must be reset every time a new request (unconfirmed or confirmed) is performed.</li>
@@ -303,11 +339,11 @@
 <li>Rename data structure LinkAdrParams_t</li>
 <li>Issue(#238): Apply missing variable in sSetBandTxDoneParams</li>
 <li>Bug fix in processing MAC commands for case SRV_MAC_TX_PARAM_SETUP_REQ.</li>
-<li>Isse(#238): Apply missing variable in struct sBand</li>
+<li>Issue(#238): Apply missing variable in struct sBand</li>
 <li>Update the MAC to enable the server to control the Channels Mask and the number of transmissions even ADR is off</li>
 <li>Issue(#238): Update the backoff procedure for all regions. Move code parts into the common section</li>
 <li>Update implementation to allow automatic MAC answers on port 0</li>
-<li>Issue(#253): Delete all preconfigured channels when performing a join request</li>
+<li>Issue(#253): Delete all pre-configured channels when performing a join request</li>
 <li>Initialize variable phyParam in functions RegionXXGetPhyParam</li>
 <li>Remove assert_param from the radio drivers</li>
 <li>Synchronize function RegionXXTxConfig</li>
@@ -320,14 +356,14 @@
 <li>AU915: update Downstream datarate table according to LoRaWan 1.0.2rB</li>
 <li>Merge pull request #225 from OpenChirp/patch_1</li>
 </ul>
-<h2 id="known-limitations-15">Known limitations:</h2>
+<h2 id="known-limitations-16">Known limitations:</h2>
 <p>None</p>
 </div>
 </div>
 <div class="collapse">
 <input type="checkbox" id="collapse-section6" aria-hidden="true"> <label for="collapse-section6" aria-hidden="true"><strong>V1.1.1 / 01-June-2017</strong></label>
 <div>
-<h2 id="main-changes-16">Main Changes</h2>
+<h2 id="main-changes-17">Main Changes</h2>
 <ul>
 <li>Implements LoRa Mac from Semtech/StackForce develop branch (30-May-2017 commits, 4.4.0 release candidate) <a href="https://github.com/Lora-net/LoRaMac-node/tree/e2f35db75c1b449379d3b520c2d4e5922a9f5c81">https://github.com/Lora-net/LoRaMac-node/tree/e2f35db75c1b449379d3b520c2d4e5922a9f5c81</a></li>
 <li>Issue(235): Update functions RegionXXNextChannel.</li>
@@ -339,7 +375,7 @@
 <li>Bug fix in function RegionCN470Verify.</li>
 <li>Bug fix in function RegionAU915Verify.</li>
 <li>Issue(229): Fix issue when receiving frames in second RX2 in Class C.</li>
-<li>Add a ommand to get the next lower datarate.</li>
+<li>Add a command to get the next lower datarate.</li>
 <li>Group initializations</li>
 <li>Update regional definitions of KR920.</li>
 <li>Update regional definitions of EU868.</li>
@@ -369,59 +405,59 @@
 <li>MAC layer indications handling simplification.</li>
 <li>Relocate parameter settings from ResetMacParameters to the initialization.</li>
 </ul>
-<h2 id="known-limitations-16">Known limitations:</h2>
+<h2 id="known-limitations-17">Known limitations:</h2>
 <p>None</p>
 </div>
 </div>
 <div class="collapse">
 <input type="checkbox" id="collapse-section5" aria-hidden="true"> <label for="collapse-section5" aria-hidden="true"><strong>V1.1.0 / 27-February-2017</strong></label>
 <div>
-<h2 id="main-changes-17">Main Changes</h2>
-<ul>
-<li>Implements LoRa Mac 4.4.0 from Semtech/StackForce from the develop branchr</li>
-</ul>
-<h2 id="known-limitations-17">Known limitations:</h2>
-<p>None</p>
-</div>
-</div>
-<div class="collapse">
-<input type="checkbox" id="collapse-section4" aria-hidden="true"> <label for="collapse-section4" aria-hidden="true"><strong>V1.0.3 / 01-January-2017</strong></label>
-<div>
 <h2 id="main-changes-18">Main Changes</h2>
 <ul>
-<li>Read date between 2 successive read time to make sure date is ok</li>
+<li>Implements LoRa Mac 4.4.0 from Semtech/StackForce from the develop branch</li>
 </ul>
 <h2 id="known-limitations-18">Known limitations:</h2>
 <p>None</p>
 </div>
 </div>
 <div class="collapse">
-<input type="checkbox" id="collapse-section3" aria-hidden="true"> <label for="collapse-section3" aria-hidden="true"><strong>V1.0.2 / 15-November-2016</strong></label>
+<input type="checkbox" id="collapse-section4" aria-hidden="true"> <label for="collapse-section4" aria-hidden="true"><strong>V1.0.3 / 01-January-2017</strong></label>
 <div>
 <h2 id="main-changes-19">Main Changes</h2>
 <ul>
-<li>Corrected 1 bug in LoRaMac-board.h: RX_WND_2_CHANNEL for EU is now back at DR_0</li>
-<li>Corrected 1 bug in LoRaMac.c for dataRate adaptation</li>
+<li>Read date between 2 successive read time to make sure date is ok</li>
 </ul>
 <h2 id="known-limitations-19">Known limitations:</h2>
 <p>None</p>
 </div>
 </div>
 <div class="collapse">
-<input type="checkbox" id="collapse-section2" aria-hidden="true"> <label for="collapse-section2" aria-hidden="true"><strong>V1.0.1 / 15-September-2016</strong></label>
+<input type="checkbox" id="collapse-section3" aria-hidden="true"> <label for="collapse-section3" aria-hidden="true"><strong>V1.0.2 / 15-November-2016</strong></label>
 <div>
 <h2 id="main-changes-20">Main Changes</h2>
 <ul>
-<li>Implements LoRa Mac 4.3.0 from Semtech/StackForce</li>
+<li>Corrected 1 bug in LoRaMac-board.h: RX_WND_2_CHANNEL for EU is now back at DR_0</li>
+<li>Corrected 1 bug in LoRaMac.c for dataRate adaptation</li>
 </ul>
 <h2 id="known-limitations-20">Known limitations:</h2>
 <p>None</p>
 </div>
 </div>
 <div class="collapse">
-<input type="checkbox" id="collapse-section1" aria-hidden="true"> <label for="collapse-section1" aria-hidden="true"><strong>V1.0.0 / 01-July-2016</strong></label>
+<input type="checkbox" id="collapse-section2" aria-hidden="true"> <label for="collapse-section2" aria-hidden="true"><strong>V1.0.1 / 15-September-2016</strong></label>
 <div>
 <h2 id="main-changes-21">Main Changes</h2>
+<ul>
+<li>Implements LoRa Mac 4.3.0 from Semtech/StackForce</li>
+</ul>
+<h2 id="known-limitations-21">Known limitations:</h2>
+<p>None</p>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section1" aria-hidden="true"> <label for="collapse-section1" aria-hidden="true"><strong>V1.0.0 / 01-July-2016</strong></label>
+<div>
+<h2 id="main-changes-22">Main Changes</h2>
 <ul>
 <li>First V1.0.0 customized version for STM32Cube solution.</li>
 <li>Commissioning_template.h in /Conf contains all Lora Ids to connect on LoRa network
@@ -442,7 +478,7 @@
 <li>new low layer interfacing Cube HAL (hw_rtc.c, hw_gpio.c and hw_spi.c)</li>
 <li>added lora.c as an interface layer to ease product integration</li>
 </ul>
-<h2 id="known-limitations-21">Known limitations:</h2>
+<h2 id="known-limitations-22">Known limitations:</h2>
 <p>None</p>
 </div>
 </div>

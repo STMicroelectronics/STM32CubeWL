@@ -80,7 +80,6 @@ extern "C" {
 #if defined(SFU_TEST_PROTECTION)
 #undef SFU_DEBUG_MODE                 /*!< Remove definition to optimize memory footprint (debug mode removed) */
 #endif /* SFU_TEST_PROTECTION */
-
 /**
   * SB_SFU status LED.
   * The constants below define the LED to be used and the LED blinking frequency to identify some situations.
@@ -93,7 +92,6 @@ extern "C" {
 #define SFU_STOP_NO_FW_BLINK_DELAY     (100U) /*!< Blinks every 100ms when no valid firmware is available and the local
                                                    loader feature is disabled - see @ref SECBOOT_USE_LOCAL_LOADER */
 #define SFU_INCORRECT_OB_BLINK_DELAY   (250U) /*!< Blinks every 250ms when an Option Bytes issue is detected */
-
 
 /**
   * Optional Features Software Configuration

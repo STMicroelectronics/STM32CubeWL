@@ -24,6 +24,13 @@
 /* Includes ------------------------------------------------------------------*/
 #include "kms_platf_objects_interface.h"
 #include "app_sfu.h"
+#ifdef KMS_ENCRYPT_DECRYPT_BLOB
+#if defined(__ARMCC_VERSION)
+#include "mapping_sbsfu.h"
+#elif defined (__ICCARM__) || defined(__GNUC__)
+#include "mapping_export.h"
+#endif /* __ARMCC_VERSION */
+#endif /* KMS_ENCRYPT_DECRYPT_BLOB */
 
 #ifdef __cplusplus
 extern "C" {
@@ -70,6 +77,46 @@ extern "C" {
 /**
   * @}
   */
+
+/*
+ * Blob decrypt encrypt key
+ *
+ */
+#ifdef KMS_LOW_LEVEL_C
+#if defined(KMS_ENCRYPT_DECRYPT_BLOB)
+
+/* Place code in a specific section */
+#if defined(__ICCARM__)
+#pragma default_variable_attributes = @ ".SE_embedded_Keys"
+#elif defined(__CC_ARM)
+#pragma arm section rodata = ".SE_embedded_Keys"
+#endif /* __ICCARM__ */
+
+/* KMS attribute format is used for the key and the data */
+#if defined(__GNUC__)
+__attribute__((section(".SE_embedded_Keys")))
+#endif
+static const uint32_t KMS_Data_Storage_AES128_Encrypt_Key[]  =
+{
+  CKA_VALUE, @AES_DATA_STORAGE_KEY@
+};
+/* The three last uint32_t should be set to zero (not used in this configuration) */
+#if defined(__GNUC__)
+__attribute__((section(".SE_embedded_Keys")))
+#endif
+static const uint32_t KMS_Data_Storage_AES128_Encrypt_Data[] =
+{
+  CKA_VALUE, @AES_DATA_STORAGE_DATA@
+};
+
+/* Stop placing data in specified section*/
+#if defined(__ICCARM__)
+#pragma default_variable_attributes =
+#elif defined(__CC_ARM)
+#pragma arm section code
+#endif /* __ICCARM__ */
+#endif  /* KMS_ENCRYPT_DECRYPT_BLOB */
+#endif /* KMS_LOW_LEVEL_C */
 
 /*
  * Embedded objects definition
@@ -275,7 +322,7 @@ static const kms_obj_keyhead_24_t   Test_Key_AES128 =
 {
   KMS_ABI_VERSION_CK_2_40,         /*  uint32_t version; */
   KMS_ABI_CONFIG_KEYHEAD,          /*  uint32_t configuration; */
-  68,                              /*  uint32_t blobs_size; */
+  96,                              /*  uint32_t blobs_size; */
   4,                               /*  uint32_t blobs_count; */
   13,                              /*  uint32_t object_id; */
   {
@@ -291,8 +338,8 @@ static const kms_obj_keyhead_24_t   Test_Key_AES256 =
 {
   KMS_ABI_VERSION_CK_2_40,         /* uint32_t version;  */
   KMS_ABI_CONFIG_KEYHEAD,          /* uint32_t configuration; */
-  84,                              /* uint32_t blobs_size; */
-  9,                               /* uint32_t blobs_count; */
+  96,                              /* uint32_t blobs_size; */
+  4,                               /* uint32_t blobs_count; */
   14,                              /* uint32_t object_id; */
   {
     CKA_CLASS,        sizeof(CK_OBJECT_CLASS), CKO_SECRET_KEY,

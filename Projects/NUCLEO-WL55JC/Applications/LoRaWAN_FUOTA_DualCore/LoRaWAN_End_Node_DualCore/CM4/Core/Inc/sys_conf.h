@@ -59,9 +59,9 @@ extern "C" {
   */
 #define DEBUG_SUBGHZSPI_MONITORING_ENABLED   0
 
-#define DEBUG_RF_NRESET_ENABLED_ENABLED      0
+#define DEBUG_RF_NRESET_ENABLED              0
 
-#define DEBUG_RF_HSE32RDY_ENABLED_ENABLED    0
+#define DEBUG_RF_HSE32RDY_ENABLED            0
 
 #define DEBUG_RF_SMPSRDY_ENABLED             0
 

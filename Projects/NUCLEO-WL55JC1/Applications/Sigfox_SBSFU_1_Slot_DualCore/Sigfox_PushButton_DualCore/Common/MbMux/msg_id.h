@@ -123,11 +123,11 @@ typedef enum
   RADIO_RX_ERROR_CB_ID,
   RADIO_FHSS_CHANGE_CHANNEL_CB_ID,
   RADIO_CAD_DONE_CB_ID,
-  /* USER CODE BEGIN RADIO_MsgIdTypeDef */
+  /* USER CODE BEGIN Radio_MsgIdTypeDef */
 
-  /* USER CODE END RADIO_MsgIdTypeDef */
+  /* USER CODE END Radio_MsgIdTypeDef */
   RADIO_MSGID_LAST
-} RADIO_MsgIdTypeDef;
+} Radio_MsgIdTypeDef;
 
 typedef enum
 {
@@ -149,8 +149,8 @@ typedef enum
 typedef enum
 {
   /* CmdResp */
-  TRACE_SEND_MSG_ID = 0,
   /* NotifAck */
+  TRACE_SEND_MSG_ID = 0,
   /* USER CODE BEGIN Trace_MsgIdTypeDef */
 
   /* USER CODE END Trace_MsgIdTypeDef */

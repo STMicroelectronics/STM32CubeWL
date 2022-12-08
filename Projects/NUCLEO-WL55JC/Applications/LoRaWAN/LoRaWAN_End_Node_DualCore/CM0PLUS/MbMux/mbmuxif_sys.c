@@ -354,19 +354,23 @@ static int8_t MBMUXIF_FeatureCm0plusRegistrationCmd(uint32_t *pBuf)
   switch (pBuf[0])
   {
     case FEAT_INFO_SYSTEM_CMD_PRIO_A_ID:
-      ret = MBMUX_RegisterFeatureCallback(FEAT_INFO_SYSTEM_CMD_PRIO_A_ID, MBMUX_CMD_RESP, MBMUXIF_IsrSystemPrioACmdRcvCb);
+      ret = MBMUX_RegisterFeatureCallback(FEAT_INFO_SYSTEM_CMD_PRIO_A_ID, MBMUX_CMD_RESP,
+                                          MBMUXIF_IsrSystemPrioACmdRcvCb);
       break;
 
     case FEAT_INFO_SYSTEM_NOTIF_PRIO_A_ID:
-      ret = MBMUX_RegisterFeatureCallback(FEAT_INFO_SYSTEM_NOTIF_PRIO_A_ID, MBMUX_NOTIF_ACK, MBMUXIF_IsrSystemPrioAAckRcvCb);
+      ret = MBMUX_RegisterFeatureCallback(FEAT_INFO_SYSTEM_NOTIF_PRIO_A_ID, MBMUX_NOTIF_ACK,
+                                          MBMUXIF_IsrSystemPrioAAckRcvCb);
       break;
 
     case FEAT_INFO_SYSTEM_CMD_PRIO_B_ID:
-      ret = MBMUX_RegisterFeatureCallback(FEAT_INFO_SYSTEM_CMD_PRIO_B_ID, MBMUX_CMD_RESP, MBMUXIF_IsrSystemPrioBCmdRcvCb);
+      ret = MBMUX_RegisterFeatureCallback(FEAT_INFO_SYSTEM_CMD_PRIO_B_ID, MBMUX_CMD_RESP,
+                                          MBMUXIF_IsrSystemPrioBCmdRcvCb);
       break;
 
     case FEAT_INFO_SYSTEM_NOTIF_PRIO_B_ID:
-      ret = MBMUX_RegisterFeatureCallback(FEAT_INFO_SYSTEM_NOTIF_PRIO_B_ID, MBMUX_NOTIF_ACK, MBMUXIF_IsrSystemPrioBAckRcvCb);
+      ret = MBMUX_RegisterFeatureCallback(FEAT_INFO_SYSTEM_NOTIF_PRIO_B_ID, MBMUX_NOTIF_ACK,
+                                          MBMUXIF_IsrSystemPrioBAckRcvCb);
       break;
 
     case FEAT_INFO_KMS_ID:

@@ -51,13 +51,13 @@ extern "C" {
 
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
-
+void   MX_DMA_Init(void);
 /* USER CODE BEGIN EFP */
 
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-void   MX_DMA_Init(void);
+
 /* USER CODE BEGIN Private defines */
 #define BUFFER_SIZE 32
 /* USER CODE END Private defines */

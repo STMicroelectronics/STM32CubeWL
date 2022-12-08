@@ -71,7 +71,7 @@ extern "C" {
   * Maximum number of fragment that can be handled.
   *
   * \remark This parameter has an impact on the memory footprint.
-  * \note FRAG_MAX_NB = (SLOT_DWL_1_END - SLOT_DWL_1_START) / FRAG_MAX_SIZE
+  * \note FRAG_MAX_NB = (FRAG_DECODER_DWL_REGION_SIZE) / FRAG_MAX_SIZE
   */
 #define FRAG_MAX_NB                                 2151
 
@@ -181,8 +181,9 @@ void FRAG_DECODER_IF_OnProgress(uint16_t fragCounter, uint16_t fragNb, uint8_t f
   *                                                  FRAG_SESSION_FINISHED or
   *                                                  FragDecoder.Status.FragNbLost]
   * \param [IN] size   Received file size
+  * \param [out] addr  Pointer address of the unfragmented datablock
   */
-void FRAG_DECODER_IF_OnDone(int32_t status, uint32_t size);
+void FRAG_DECODER_IF_OnDone(int32_t status, uint32_t size, uint32_t *addr);
 
 #ifdef __cplusplus
 }

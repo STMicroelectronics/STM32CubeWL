@@ -101,10 +101,15 @@ M0PLUS_SHARED_region_RAM_end   = 0x20008FFF;
 
 /* SBSFU RAM region */
 SB_region_RAM_start            = M0PLUS_SHARED_region_RAM_end + 0x1;
-SB_region_RAM_end              = 0x2000CBFF;
+SB_region_RAM_end              = 0x2000C3FF;
+
+/* KMS Data Storage (VMS) region */
+/* WARNING: Symbols not used */
+VM_KMS_DataStorage_RAM_start   = 0x2000C400;
+VM_KMS_DataStorage_RAM_end     = 0x2000CBFF;
 
 /* SE RAM region protected area with 1 kBytes alignment constraint (TZIC) ==> 0x2000CC00 */
-SE_region_RAM_start            = SB_region_RAM_end + 0x1;
+SE_region_RAM_start            = VM_KMS_DataStorage_RAM_end + 0x1;
 SE_region_RAM_stack_top        = SE_region_RAM_start + 0xC00;                /* Secure Engine's private stack */
 SE_region_RAM_end              = 0x2000FFFF;
 
@@ -114,6 +119,7 @@ M4_APP_region_RAM_size         = M4_APP_region_RAM_end - M4_APP_region_RAM_start
 M4_SHARED_region_RAM_size      = M4_SHARED_region_RAM_end - M4_SHARED_region_RAM_start + 0x1;
 M0PLUS_SHARED_region_RAM_size  = M0PLUS_SHARED_region_RAM_end - M0PLUS_SHARED_region_RAM_start + 0x1;
 SB_region_RAM_size             = SB_region_RAM_end - SB_region_RAM_start + 0x1;
+VM_KMS_DataStorage_RAM_size    = VM_KMS_DataStorage_RAM_end - VM_KMS_DataStorage_RAM_start + 0x1;
 SE_region_RAM_size             = SE_region_RAM_end - SE_region_RAM_stack_top + 0x1;
 
 /******************************************************************************/
@@ -136,5 +142,6 @@ MEMORY
  SE_Key_region_ROM (rx)           : ORIGIN = SE_Key_region_ROM_start, LENGTH = SE_Key_region_ROM_size
  M4_SB_RAM_region (xrw)           : ORIGIN = M4_SB_region_RAM_start, LENGTH = M4_SB_region_RAM_size
  SB_RAM_region (xrw)              : ORIGIN = SB_region_RAM_start, LENGTH = SB_region_RAM_size
+ VM_KMS_DataStorage_RAM_region (xrw) : ORIGIN = VM_KMS_DataStorage_RAM_start, LENGTH = VM_KMS_DataStorage_RAM_size
  SE_RAM_region (xrw)              : ORIGIN = SE_region_RAM_stack_top, LENGTH = SE_region_RAM_size
 }

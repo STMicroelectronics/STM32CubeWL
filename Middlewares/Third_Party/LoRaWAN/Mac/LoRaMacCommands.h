@@ -74,6 +74,10 @@ struct sMacCommand
      * Indicates if it's a sticky MAC command
      */
     bool IsSticky;
+    /*!
+     * The command requires an explicit confirmation
+     */
+    bool IsConfirmationRequired;
 };
 
 /*!
@@ -183,15 +187,6 @@ LoRaMacCommandStatus_t LoRaMacCommandsGetSizeSerializedCmds( size_t* size );
  * \retval                     - Status of the operation
  */
 LoRaMacCommandStatus_t LoRaMacCommandsSerializeCmds( size_t availableSize, size_t* effectiveSize,  uint8_t* buffer );
-
-/*!
- * \brief Determines if there are sticky MAC commands pending.
- *
- * \param [in]  cmdsPending    - Indicates if there are sticky MAC commands in the queue.
- *
- * \retval                     - Status of the operation
- */
-LoRaMacCommandStatus_t LoRaMacCommandsStickyCmdsPending( bool* cmdsPending );
 
 /*!
  * \brief Get the MAC command size with corresponding CID.

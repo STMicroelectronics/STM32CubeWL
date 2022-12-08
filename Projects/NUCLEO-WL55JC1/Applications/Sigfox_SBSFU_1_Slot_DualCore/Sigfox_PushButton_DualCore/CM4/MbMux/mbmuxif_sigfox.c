@@ -26,7 +26,7 @@
 #include "stm32_mem.h"
 #include "stm32_seq.h"
 #include "sigfox_mbwrapper.h"
-#include "sgfx_app_version.h"
+#include "app_version.h"
 #include "utilities_def.h"
 /* USER CODE BEGIN Includes */
 
@@ -104,11 +104,15 @@ int8_t MBMUXIF_SigfoxInit(void)
   }
   if (ret >= 0)
   {
-    ret = MBMUX_RegisterFeature(FEAT_INFO_SIGFOX_ID, MBMUX_CMD_RESP, MBMUXIF_IsrSigfoxRespRcvCb, aSigfoxCmdRespBuff, sizeof(aSigfoxCmdRespBuff));
+    ret = MBMUX_RegisterFeature(FEAT_INFO_SIGFOX_ID, MBMUX_CMD_RESP,
+                                MBMUXIF_IsrSigfoxRespRcvCb,
+                                aSigfoxCmdRespBuff, sizeof(aSigfoxCmdRespBuff));
   }
   if (ret >= 0)
   {
-    ret = MBMUX_RegisterFeature(FEAT_INFO_SIGFOX_ID, MBMUX_NOTIF_ACK, MBMUXIF_IsrSigfoxNotifRcvCb, aSigfoxNotifAckBuff, sizeof(aSigfoxNotifAckBuff));
+    ret = MBMUX_RegisterFeature(FEAT_INFO_SIGFOX_ID, MBMUX_NOTIF_ACK,
+                                MBMUXIF_IsrSigfoxNotifRcvCb,
+                                aSigfoxNotifAckBuff, sizeof(aSigfoxNotifAckBuff));
   }
   if (ret >= 0)
   {

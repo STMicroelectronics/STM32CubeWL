@@ -6,7 +6,7 @@
 
 <body style="font-size: 10pt; font-family: Verdana;">
 
-<h3 style="color: blue; text-decoration: underline;">STM32CubeWL Firmware Package v1.2.0 / 04-February-2022</h3>
+<h3 style="color: blue; text-decoration: underline;">STM32CubeWL Firmware Package v1.3.0 / 09-November-2022</h3>
 
 <div style="margin-left: 18pt;">
 <p>
@@ -24,46 +24,59 @@
 <b>LoRaWAN Middleware updates:</b>
 </p>
 <p>
-- Feature: Integration of LoRaWAN v1.0.4 from LoRa Mac Semtech/StackForce develop branch (31-May-2021 commits, version 4.5.2)
+- Feature: Integration of LoRaWAN Link Layer v1.0.4 + Regional Parameters RP002-1.0.1 from LoRa Mac Semtech/StackForce master branch (11-Jan-2022 commits from tag v4.6.0 + some fixes from latest master commits )
 </p>
 <p>
-- Feature: NVM Context store/restore implementation with Flash usage and SRAM2 retention (required by Certification code)
+- Support of AS923-4 from RP002-1.0.3
 </p>
 <p>
-- Feature: US915/CN470/AU915 HYBRID Frequency sub-band can be overloaded in lorawan_conf.h
+- Feature: Support of RU864-870 16 channels from Regional Parameters RP002-1.0.2
 </p>
 <p>
-- Fix: Negative sensor Temperature
+- Feature: LoRaWAN FUOTA packages v2.0.0 integration
 </p>
 <p>
-- Fix: LmHandlerSend function returns an error when the App data is not sent because piggyback FOpts MAC commands is set as priority in the uplink payload
+- Feature: LoRaWAN Key Provisioning: Join EUI/Dev EUI/Dev Address with KMS
 </p>
 <p>
-- Fix: FragDecoder fragment max size update to support upper DRs
+- Feature: Set Tx power before join overridden by Mac
+</p>
+<p>
+- Fix: EIRP default configuration(AS923 JP channel plan) needs to be corrected, 13.0 -> 16.0
 </p>
 
 <p>
-<b>Sigfox Middleware updates:</b>
+<b>LoRaWAN SubGHz Physical Layer Middleware updates:</b>
 </p>
 <p>
-- Crypto : V1.0.0
+- Feature: 169MHz validation support
 </p>
 <p>
-- Monarch: V2.0.1 (STMicroelectronics Patent)
+- Feature: Add LoRa-E support (LR-FHSS)
 </p>
 <p>
-- SigfoxLib: V2.10.0
+- Feature: RF output optimization
 </p>
 <p>
-- SigfoxLibTest: V0.8.0
+- Chore: Sync Word register addresses not matching Semtech SX1261/2 datasheet
+</p>
+<p>
+- Fix: SUBGHz GCFO registers not in line with the RM
+</p>
+<p>
+- Fix: AGC of radio stuck when jammed
 </p>
 
 <p>
-<b>Utilities updates:</b>
+<b>Security Middleware updates:</b>
 </p>
 <p>
-- Maintenance to include latest corrections
+- KMS: Secure counters
 </p>
+<p>
+- KMS: Give possibility to encrypt the blob objects in NVM
+</p>
+
 
 </div>
 </body>

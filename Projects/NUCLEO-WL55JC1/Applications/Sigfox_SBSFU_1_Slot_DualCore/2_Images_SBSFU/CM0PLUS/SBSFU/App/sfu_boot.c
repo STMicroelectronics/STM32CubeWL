@@ -102,7 +102,7 @@ static __IO SFU_BOOT_StateMachineContextTypeDef m_StateMachineContext = {SFU_STA
                                                                          SFU_STATE_INITIAL
                                                                         };
 
-/*!< Static member variables identifyng the slots to be processed by secure firmware update . */
+/*!< Static member variables identifying the slots to be processed by secure firmware update . */
 #if   (SECBOOT_LOADER == SECBOOT_USE_STANDALONE_LOADER)
 static uint32_t m_DwlSlotToInstall = SLOT_INACTIVE;
 #endif /* SECBOOT_LOADER == SECBOOT_USE_STANDALONE_LOADER */
@@ -248,7 +248,7 @@ void SFU_BOOT_ForceReboot(void)
 
   /*
    * This is the last operation executed. Force a System Reset.
-   * The check below is needed in case we reboot before setting the Unpriviledged mode.
+   * The check below is needed in case we reboot before setting the Unprivileged mode.
    * This can happen in a factory reset use-case typically.
    */
   if (0U != SFU_MPU_IsUnprivileged())
@@ -466,7 +466,7 @@ static void SFU_BOOT_SM_CheckStatusOnReset(void)
   /* Check the wakeup sources */
   SFU_BOOT_ManageResetSources();
 
-  /* RCC access done to identify the wakeup sources, we can switch to unpriviledged */
+  /* RCC access done to identify the wakeup sources, we can switch to unprivileged */
   SFU_MPU_EnterUnprivilegedMode();
 #ifdef SFU_TEST_PROTECTION
   /*

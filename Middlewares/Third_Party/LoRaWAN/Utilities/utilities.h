@@ -79,7 +79,6 @@ typedef enum LmnStatus_e
 #define MAX( a, b ) ( ( ( a ) > ( b ) ) ? ( a ) : ( b ) )
 #endif
 
-/* ST_WORKAROUND_BEGIN: Add global ceiling div macro */
 /**
   * \brief Calculates ceiling( X / N )
   *
@@ -90,7 +89,6 @@ typedef enum LmnStatus_e
 #ifndef DIVC
 #define DIVC( X, N )                ( ( ( X ) + ( N ) - 1 ) / ( N ) )
 #endif
-/* ST_WORKAROUND_END */
 
 /*!
  * \brief Returns 2 raised to the power of n
@@ -208,7 +206,6 @@ uint32_t Crc32Update( uint32_t crcInit, uint8_t *buffer, uint16_t length );
  */
 uint32_t Crc32Finalize( uint32_t crc );
 
-/* ST_WORKAROUND: Moved CRITICAL_SECTION_ macro from utilities to *_conf.h header files */
 #ifdef __cplusplus
 }
 #endif

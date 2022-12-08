@@ -49,28 +49,31 @@ extern "C"
 #include "LoRaMacVersion.h"
 
 /*!
- * Indicates if LoRaWAN 1.1.x crypto scheme is enabled
- */
-#define USE_LRWAN_1_1_X_CRYPTO                      0
-
-/*!
  * Indicates if a random devnonce must be used or not
  */
 #if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000300 ))
 #define USE_RANDOM_DEV_NONCE                        1
-#elif (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+#elif (defined( LORAMAC_VERSION ) && (( LORAMAC_VERSION == 0x01000400 ) || ( LORAMAC_VERSION == 0x01010100 )))
 #define USE_RANDOM_DEV_NONCE                        0
 #endif /* LORAMAC_VERSION */
 
 /*!
- * Indicates if JoinNonce is counter based and requires to be checked
+ * Indicates if JoinNonce is counter based and requires to be checked on 1.0.x devices
+ * \remark Only applies to LoRaWAN 1.0.x when following recommendations provided
+ *         by "Technical Recommendations for Preventing State Synchronization
+ *         Issues around LoRaWAN 1.0.x Join Procedure
+ *         https://lora-alliance.org/wp-content/uploads/2020/11/lorawan-1.0.x-join-synch-issues-remedies-v1.0.0.pdf
  */
-#define USE_JOIN_NONCE_COUNTER_CHECK                0
+#if (defined( LORAMAC_VERSION ) && (( LORAMAC_VERSION == 0x01000300 ) || ( LORAMAC_VERSION == 0x01000400 )))
+#define USE_10X_JOIN_NONCE_COUNTER_CHECK            1
+#elif (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01010100 ))
+#define USE_10X_JOIN_NONCE_COUNTER_CHECK            0
+#endif /* LORAMAC_VERSION */
 
 /*!
  * Initial value of the frame counters
  */
-#define FCNT_DOWN_INITAL_VALUE          0xFFFFFFFF
+#define FCNT_DOWN_INITIAL_VALUE          0xFFFFFFFF
 
 /*!
  * LoRaMac Crypto Status
@@ -201,7 +204,7 @@ LoRaMacCryptoStatus_t LoRaMacCryptoSetLrWanVersion( Version_t version );
  * \retval                       - Status of the operation
  */
 LoRaMacCryptoStatus_t LoRaMacCryptoGetFCntDown( FCntIdentifier_t fCntID, uint16_t maxFCntGap, uint32_t frameFcnt, uint32_t* currentDown );
-#elif (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+#elif (defined( LORAMAC_VERSION ) && (( LORAMAC_VERSION == 0x01000400 ) || ( LORAMAC_VERSION == 0x01010100 )))
 /*!
  * Returns updated fCntID downlink counter value.
  *
@@ -220,6 +223,16 @@ LoRaMacCryptoStatus_t LoRaMacCryptoGetFCntDown( FCntIdentifier_t fCntID, uint32_
  * \retval                       - Status of the operation
  */
 LoRaMacCryptoStatus_t LoRaMacCryptoGetFCntUp( uint32_t* currentUp );
+
+/*!
+ * Computes next RJcount0 or RJcount1 counter value.
+ *
+ * \param[IN]     fCntID          - Frame counter identifier
+ * \param[OUT]    rJcount         - RJcount value
+ *
+ * \retval                        - Status of the operation
+ */
+LoRaMacCryptoStatus_t LoRaMacCryptoGetRJcount( FCntIdentifier_t fCntID, uint16_t* rJcount );
 
 /*!
  * Provides multicast context.
@@ -300,30 +313,24 @@ LoRaMacCryptoStatus_t LoRaMacCryptoSecureMessage( uint32_t fCntUp, uint8_t txDr,
  */
 LoRaMacCryptoStatus_t LoRaMacCryptoUnsecureMessage( AddressIdentifier_t addrID, uint32_t address, FCntIdentifier_t fCntID, uint32_t fCntDown, LoRaMacMessageData_t* macMsg );
 
+LoRaMacCryptoStatus_t LoRaMacCryptoComputeDataBlock( uint8_t *buffer, uint32_t size, uint16_t sessionCnt, uint8_t fragIndex, uint32_t descriptor, uint32_t *cmac );
+   
 /*!
- * Derives the McRootKey from the AppKey.
+ * Derives the LifeTime keys
  *
- * 1.0.x
- * McRootKey = aes128_encrypt(AppKey, 0x00 | pad16)
+ * McRootKey
+ * 1.0.x: aes128_encrypt(AppKey, 0x00 | pad16)
+ * 1.1.x: aes128_encrypt(AppKey, 0x20 | pad16)
  *
- * 1.1.x
- * McRootKey = aes128_encrypt(AppKey, 0x20 | pad16)
+ * McKEKey = aes128_encrypt(McRootKey , 0x00 | pad16)
  *
- * \param [in]    versionMinor    - LoRaWAN specification minor version to be used.
- * \param [in]    keyID           - Key identifier of the root key to use to perform the derivation ( AppKey )
+ * DataBlockIntKey = aes128_encrypt(AppKey , 0x30 | pad16)
+ *
+ * \param [in]    versionMinor    - LoRaWAN specification minor version to be used (only used for McRootKey)
+ * \param [in]    keyID           - Key identifier
  * \retval                        - Status of the operation
  */
-LoRaMacCryptoStatus_t LoRaMacCryptoDeriveMcRootKey( uint8_t versionMinor, KeyIdentifier_t keyID );
-
-/*!
- * Derives the McKEKey from the McRootKey.
- *
- * McKEKey = aes128_encrypt(McRootKey , 0x00  | pad16)
- *
- * \param [in]    keyID           - Key identifier of the root key to use to perform the derivation ( McRootKey )
- * \retval                        - Status of the operation
- */
-LoRaMacCryptoStatus_t LoRaMacCryptoDeriveMcKEKey( KeyIdentifier_t keyID );
+LoRaMacCryptoStatus_t LoRaMacCryptoDeriveLifeTimeKey( uint8_t versionMinor, KeyIdentifier_t keyID );
 
 /*!
  * Derives a Multicast group key pair ( McAppSKey, McNwkSKey ) from McKey

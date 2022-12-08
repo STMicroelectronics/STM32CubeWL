@@ -694,7 +694,7 @@
       <archiveVersion>1</archiveVersion>
       <data>
         <prebuild></prebuild>
-        <postbuild>$TOOLKIT_DIR$\bin\isymexport.exe --edit "$PROJ_DIR$\steering_file.txt" "$TARGET_PATH$" "$PROJ_DIR$\se_interface_appli.o"</postbuild>
+        <postbuild>"$TOOLKIT_DIR$\bin\isymexport.exe" --edit "$PROJ_DIR$\steering_file.txt" "$TARGET_PATH$" "$PROJ_DIR$\se_interface_appli.o"</postbuild>
       </data>
     </settings>
     <settings>

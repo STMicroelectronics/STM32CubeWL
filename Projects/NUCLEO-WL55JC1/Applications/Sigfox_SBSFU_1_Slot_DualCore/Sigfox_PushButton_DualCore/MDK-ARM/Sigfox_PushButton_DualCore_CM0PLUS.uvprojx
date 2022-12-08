@@ -10,13 +10,13 @@
       <TargetName>Sigfox_PushButton_DualCore_CM0PLUS</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>6140000::V6.14::ARMCLANG</pCCUsed>
+      <pCCUsed>6160000::V6.16::ARMCLANG</pCCUsed>
       <uAC6>1</uAC6>
       <TargetOption>
         <TargetCommonOption>
           <Device>STM32WL55JCIx:CM0P</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32WLxx_DFP.1.1.0</PackID>
+          <PackID>Keil.STM32WLxx_DFP.1.1.1</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20004000-0x20007FFF) IRAM2(0x2000C000-0x2000FFFF) IROM(0x8020000-0x803FFFF) CLOCK(12000000) CPUTYPE("Cortex-M0+") TZ</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -339,7 +339,7 @@
               <MiscControls>-fshort-enums</MiscControls>
               <Define>CORE_CM0PLUS,KMS_ENABLED,USE_HAL_DRIVER,STM32WL55xx,DISABLE_IMAGE_STATE_HANDLING,CMSIS_NVIC_VIRTUAL</Define>
               <Undefine></Undefine>
-              <IncludePath>../CM0PLUS/Core/Inc;../CM0PLUS/KMS/App;../CM0PLUS/Sigfox/App;../CM0PLUS/Sigfox/Target;../CM0PLUS/MbMux;../Common/Board;../Common/System;../Common/MbMux;../../../../../../Utilities/trace/adv_trace;../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc;../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc/Legacy;../../../../../../Utilities/misc;../../../../../../Utilities/sequencer;../../../../../../Utilities/timer;../../../../../../Utilities/lpm/tiny_lpm;../../../../../../Middlewares/Third_Party/Sigfox/Crypto;../../../../../../Middlewares/Third_Party/SubGHz_Phy;../../../../../../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver;../../../../../../Drivers/CMSIS/Device/ST/STM32WLxx/Include;../../../../../../Middlewares/ST/STM32_Key_Management_Services/Core;../../../../../../Middlewares/ST/STM32_Key_Management_Services/iKMS;../../../../../../Middlewares/ST/STM32_Secure_Engine/Core;../../../../../../Middlewares/Third_Party/mbed-crypto/include;../../../../../../Middlewares/Third_Party/mbed-crypto/include/mbedtls;../../../../../../Middlewares/Third_Party/mbed-crypto/include/psa;../../../../../../Middlewares/Third_Party/Sigfox/Monarch;../../../../../../Middlewares/Third_Party/Sigfox/SigfoxLib;../../../../../../Middlewares/Third_Party/Sigfox/SigfoxLibTest;../../../../../../Drivers/CMSIS/Include;../../../../../../Drivers/BSP/STM32WLxx_Nucleo;../../Linker_Common/MDK-ARM;../../2_Images_SECoreBin/Inc;../../2_Images_SBSFU/Common;../../2_Images_SBSFU/CM0PLUS/SBSFU/App</IncludePath>
+              <IncludePath>../CM0PLUS/Core/Inc;../CM0PLUS/KMS/App;../CM0PLUS/Sigfox/App;../CM0PLUS/Sigfox/Target;../CM0PLUS/MbMux;../Common/Board;../Common/System;../Common/MbMux;../../../../../../Utilities/trace/adv_trace;../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc;../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc/Legacy;../../../../../../Utilities/misc;../../../../../../Utilities/sequencer;../../../../../../Utilities/timer;../../../../../../Utilities/lpm/tiny_lpm;../../../../../../Middlewares/Third_Party/Sigfox/Crypto;../../../../../../Drivers/CMSIS/Device/ST/STM32WLxx/Include;../../../../../../Middlewares/ST/STM32_Key_Management_Services/Core;../../../../../../Middlewares/ST/STM32_Key_Management_Services/iKMS;../../../../../../Middlewares/ST/STM32_Secure_Engine/Core;../../../../../../Middlewares/Third_Party/mbed-crypto/include;../../../../../../Middlewares/Third_Party/mbed-crypto/include/mbedtls;../../../../../../Middlewares/Third_Party/mbed-crypto/include/psa;../../../../../../Middlewares/Third_Party/Sigfox/Monarch;../../../../../../Middlewares/Third_Party/Sigfox/SigfoxLib;../../../../../../Middlewares/Third_Party/Sigfox/SigfoxLibTest;../../../../../../Middlewares/Third_Party/SubGHz_Phy;../../../../../../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver;../../../../../../Drivers/CMSIS/Include;../../../../../../Drivers/BSP/STM32WLxx_Nucleo;../../Linker_Common/MDK-ARM;../../2_Images_SECoreBin/Inc;../../2_Images_SBSFU/Common;../../2_Images_SBSFU/CM0PLUS/SBSFU/App</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -804,14 +804,14 @@
               <FilePath>../../../../../../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio.c</FilePath>
             </File>
             <File>
-              <FileName>radio_fw.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../../../../../../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c</FilePath>
-            </File>
-            <File>
               <FileName>radio_driver.c</FileName>
               <FileType>1</FileType>
               <FilePath>../../../../../../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_driver.c</FilePath>
+            </File>
+            <File>
+              <FileName>radio_fw.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../../../../../../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -884,11 +884,6 @@
     <Layers>
       <Layer>
         <LayName>&lt;Project Info&gt;</LayName>
-        <LayDesc></LayDesc>
-        <LayUrl></LayUrl>
-        <LayKeys></LayKeys>
-        <LayCat></LayCat>
-        <LayLic></LayLic>
         <LayTarg>0</LayTarg>
         <LayPrjMark>1</LayPrjMark>
       </Layer>

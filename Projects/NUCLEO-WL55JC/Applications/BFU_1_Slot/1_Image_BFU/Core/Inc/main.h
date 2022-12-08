@@ -26,5 +26,4 @@
 #include "stm32wlxx_ll_utils.h"
 #include "app_sfu.h"
 #include "app_hw.h"
-
 #endif /* MAIN_H */

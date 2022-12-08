@@ -204,7 +204,7 @@ static void MX_TIM1_Init(void)
 
   /* USER CODE END TIM1_Init 1 */
   TIM_InitStruct.Prescaler = Prescaler;
-  TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_CENTER_UP;
+  TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_CENTER_DOWN;
   TIM_InitStruct.Autoreload = Period;
   TIM_InitStruct.ClockDivision = LL_TIM_CLOCKDIVISION_DIV1;
   TIM_InitStruct.RepetitionCounter = 0;

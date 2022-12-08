@@ -44,7 +44,7 @@ static uint32_t m_uDwlAreaSize = 0U;                             /*!< Size of do
 static uint32_t m_uFileSizeYmodem = 0U;                          /*!< Ymodem file size being received */
 static uint32_t m_uNbrBlocksYmodem = 0U;                         /*!< Number of blocks being received via Ymodem*/
 static uint32_t m_uPacketsReceived = 0U;                         /*!< Number of packets received via Ymodem*/
-static uint32_t m_uDwlSlot = SLOT_INACTIVE;                      /*!< Dwl slot identification : to be intialialized after header check */
+static uint32_t m_uDwlSlot = SLOT_INACTIVE;                      /*!< Dwl slot identification : to be initialized after header check */
 static SFU_LOADER_StatusTypeDef m_LoaderStatus;                  /*!< Status of the loader */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -328,7 +328,7 @@ SFU_ErrorStatus SFU_COM_YMODEM_DataPktRxCpltCallback(uint8_t *pData, uint32_t uS
         p_data += rx_size;
         rx_size = 0U;
       }
-      /* part of the data is inside SFU_IMG_IMAGE_OFFSET ==> remaining bytes to be deccrypted */
+      /* part of the data is inside SFU_IMG_IMAGE_OFFSET ==> remaining bytes to be decrypted */
       else
       {
         rx_size -= (m_uDwlAreaStart + SFU_IMG_IMAGE_OFFSET - m_uDwlAreaAddress);

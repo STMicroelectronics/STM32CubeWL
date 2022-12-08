@@ -55,6 +55,11 @@ extern uint32_t __ICFEDIT_SE_region_RAM_start__;
 #define SE_REGION_RAM_START ((uint32_t)& __ICFEDIT_SE_region_RAM_start__)
 extern uint32_t __ICFEDIT_SE_region_RAM_end__ ;
 #define SE_REGION_RAM_END ((uint32_t)& __ICFEDIT_SE_region_RAM_end__)
+/* The derived key used to encrypt KMS data storage is located in RAM. */
+extern uint32_t __ICFEDIT_region_KMS_DataStorageKey_start__ ;
+#define KMS_DATASTORAGE_KEY_START ((uint32_t)& __ICFEDIT_region_KMS_DataStorageKey_start__)
+extern uint32_t __ICFEDIT_region_KMS_DataStorageKey_end__ ;
+#define KMS_DATASTORAGE_KEY_END ((uint32_t)& __ICFEDIT_region_KMS_DataStorageKey_end__)
 extern uint32_t __ICFEDIT_SB_region_RAM_start__ ;
 #define SB_REGION_RAM_START ((uint32_t)& __ICFEDIT_SB_region_RAM_start__)
 extern uint32_t __ICFEDIT_SB_region_RAM_end__ ;

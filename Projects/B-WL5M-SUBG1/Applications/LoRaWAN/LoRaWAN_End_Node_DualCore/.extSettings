@@ -1,0 +1,7 @@
+[CortexM4:ProjectFiles]
+HeaderPath=..\..\..\..\..\..\Drivers\BSP\B-WL5M-SUBG;..\..\..\..\..\..\Drivers\BSP\Components\Common;..\..\..\..\..\..\Drivers\BSP\Components\stts22h;..\..\..\..\..\..\Drivers\BSP\Components\ilps22qs
+[Others]
+[CortexM4:Groups]
+Drivers/BSP/B-WL5M-SUBG=../../../../../../Drivers/BSP/B-WL5M-SUBG/b_wl5m_subg_env_sensors.c;../../../../../../Drivers/BSP/B-WL5M-SUBG/b_wl5m_subg_bus.c;../../../../../../Drivers/BSP/Components/stts22h/stts22h.c;../../../../../../Drivers/BSP/Components/stts22h/stts22h_reg.c;../../../../../../Drivers/BSP/Components/ilps22qs/ilps22qs.c;../../../../../../Drivers/BSP/Components/ilps22qs/ilps22qs_reg.c
+[Groups]
+Doc=../readme.txt;

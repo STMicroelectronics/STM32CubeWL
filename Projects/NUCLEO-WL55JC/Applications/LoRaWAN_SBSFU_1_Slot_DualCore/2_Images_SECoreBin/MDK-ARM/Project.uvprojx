@@ -10,13 +10,13 @@
       <TargetName>STM32WL55JC_Nucleo_2_Images_SECoreBin</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>6140000::V6.14::ARMCLANG</pCCUsed>
+      <pCCUsed>6160000::V6.16::ARMCLANG</pCCUsed>
       <uAC6>1</uAC6>
       <TargetOption>
         <TargetCommonOption>
           <Device>STM32WL55JCIx:CM0P</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32WLxx_DFP.1.1.0</PackID>
+          <PackID>Keil.STM32WLxx_DFP.1.1.1</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20000000,0x10000) IROM(0x08000000,0x40000) CPUTYPE("Cortex-M0+") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -470,6 +470,16 @@
               <FileType>1</FileType>
               <FilePath>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_pka.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32wlxx_hal_rng.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_rng.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32wlxx_hal_rng_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_rng_ex.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -519,6 +529,11 @@
               <FileName>kms_der_x962.c</FileName>
               <FileType>1</FileType>
               <FilePath>../../../../../../Middlewares/ST/STM32_Key_Management_Services/Core/kms_der_x962.c</FilePath>
+            </File>
+            <File>
+              <FileName>kms_counter.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../../../../../../Middlewares/ST/STM32_Key_Management_Services/Modules/kms_counter.c</FilePath>
             </File>
             <File>
               <FileName>kms_digest.c</FileName>
@@ -621,11 +636,6 @@
     <Layers>
       <Layer>
         <LayName>&lt;Project Info&gt;</LayName>
-        <LayDesc></LayDesc>
-        <LayUrl></LayUrl>
-        <LayKeys></LayKeys>
-        <LayCat></LayCat>
-        <LayLic></LayLic>
         <LayTarg>0</LayTarg>
         <LayPrjMark>1</LayPrjMark>
       </Layer>

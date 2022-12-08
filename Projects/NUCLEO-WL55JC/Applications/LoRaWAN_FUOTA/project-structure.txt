@@ -1,0 +1,3 @@
+mainProject = LoRaWAN_End_Node
+compilingOrder = 1_Image_KMS_Blob, 1_Image_SECoreBin, 1_Image_BFU, LoRaWAN_End_Node
+toCopyToUserSpace = Linker_Common, Scripts

@@ -275,7 +275,7 @@ static const kms_obj_keyhead_24_t   Test_Key_AES128 =
 {
   KMS_ABI_VERSION_CK_2_40,         /*  uint32_t version; */
   KMS_ABI_CONFIG_KEYHEAD,          /*  uint32_t configuration; */
-  68,                              /*  uint32_t blobs_size; */
+  96,                              /*  uint32_t blobs_size; */
   4,                               /*  uint32_t blobs_count; */
   13,                              /*  uint32_t object_id; */
   {
@@ -291,8 +291,8 @@ static const kms_obj_keyhead_24_t   Test_Key_AES256 =
 {
   KMS_ABI_VERSION_CK_2_40,         /* uint32_t version;  */
   KMS_ABI_CONFIG_KEYHEAD,          /* uint32_t configuration; */
-  84,                              /* uint32_t blobs_size; */
-  9,                               /* uint32_t blobs_count; */
+  96,                              /* uint32_t blobs_size; */
+  4,                               /* uint32_t blobs_count; */
   14,                              /* uint32_t object_id; */
   {
     CKA_CLASS,        sizeof(CK_OBJECT_CLASS), CKO_SECRET_KEY,

@@ -181,7 +181,6 @@ extern "C"
 #define AU915_BEACON_NB_CHANNELS                    8
 
 #if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
-/* ST_WORKAROUND_BEGIN: Regional Parameters 1.0.3.revA ERRATA not yet available */
 /*!
  * Payload size of a beacon frame
  */
@@ -199,7 +198,6 @@ extern "C"
  */
 #define AU915_RFU2_SIZE                             1
 /* #define AU915_RFU2_SIZE                             3 */
-/* ST_WORKAROUND_END */
 #elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
 /*!
  * Payload size of a beacon frame
@@ -281,7 +279,6 @@ static const int8_t DatarateOffsetsAU915[7][6] =
     { DR_13, DR_13, DR_12, DR_11, DR_10, DR_9  }, // DR_6
 };
 
-/* ST_WORKAROUND_BEGIN: Keep repeater feature */
 /*!
  * Maximum payload with respect to the datarate index. Cannot operate with repeater.
  * The table is valid for the dwell time configuration of 0 for uplinks.
@@ -311,7 +308,6 @@ static const uint8_t MaxPayloadOfDatarateRepeaterDwell1AU915[] = { 0, 0, 11, 53,
 #elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
 static const uint8_t MaxPayloadOfDatarateRepeaterDwell1AU915[] = { 0, 0, 11, 53, 125, 222, 222, 0, 33, 109, 222, 222, 222, 222 };
 #endif /* REGION_VERSION */
-/* ST_WORKAROUND_END */
 
 /*!
  * \brief The function gets a value of a specific phy attribute.

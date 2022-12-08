@@ -25,6 +25,9 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
+#include "radio_def.h"
+#include "radio_ex.h"
+
 /* Exported types ------------------------------------------------------------*/
 
 /*reserved for SubGHz_Phy internal MW communication*/
@@ -32,12 +35,13 @@ typedef enum
 {
     CONFIG_RX = 0,
     CONFIG_TX,
-}ConfigGenericRTx_t;
+} ConfigGenericRTx_t;
 
-typedef struct{
-  TxConfigGeneric_t* TxConfig;
-  RxConfigGeneric_t* RxConfig;
-  ConfigGenericRTx_t rtx;
+typedef struct
+{
+    TxConfigGeneric_t *TxConfig;
+    RxConfigGeneric_t *RxConfig;
+    ConfigGenericRTx_t rtx;
 } ConfigGeneric_t;
 
 /* Exported constants --------------------------------------------------------*/
@@ -46,47 +50,47 @@ typedef struct{
 /* Exported functions prototypes ---------------------------------------------*/
 
 /*!
- * @brief Initialise the RFW module and enables custom  whithing, optionally long packet feature
+ * @brief Initialise the RFW module and enables custom  whitening, optionally long packet feature
  *
  * @param [in] config             rx or tx config from the application
  * @param [in] RadioEvents        from the radio
  * @param [in] TimeoutTimerEvent  Timer for Rx or Tx timeout event
  * @return 0 when no parameters error, -1 otherwise
  */
-int32_t RFW_Init( ConfigGeneric_t* config, RadioEvents_t* RadioEvents, TimerEvent_t* TimeoutTimerEvent);
+int32_t RFW_Init( ConfigGeneric_t *config, RadioEvents_t *RadioEvents, TimerEvent_t *TimeoutTimerEvent );
 
 /*!
  * @brief Return whether the RFW module is enabled
  *
  * @return 0 when not initialised, -1 otherwise
  */
-uint8_t RFW_Is_Init( void);
+uint8_t RFW_Is_Init( void );
 
 /*!
  * @brief Return whether the RFW module long packet is enabled
  *
  * @return 0 when not initialised, -1 otherwise
  */
-uint8_t RFW_Is_LongPacketModeEnabled( void);
+uint8_t RFW_Is_LongPacketModeEnabled( void );
 
 /*!
  * @brief Return whether the RFW module long packet is enabled
  *
  * @param [in] Modem set in the radio
  */
-void RFW_SetRadioModem(RadioModems_t Modem);
+void RFW_SetRadioModem( RadioModems_t Modem );
 
 /*!
- * @brief DeInitialise the RFW module and enable custom  whithing and optionally long packet feature
+ * @brief DeInitialise the RFW module and enable custom  whitening and optionally long packet feature
  *
  */
-void RFW_DeInit( void);
+void RFW_DeInit( void );
 
 /*!
  * @brief DeInitialise the TxLongPacket
  *
  */
-void RFW_DeInit_TxLongPacket(void);
+void RFW_DeInit_TxLongPacket( void );
 
 /*!
  * @brief Set antenna switch output to be used in Tx
@@ -94,7 +98,7 @@ void RFW_DeInit_TxLongPacket(void);
  * @param [in] AntSwitch  RFO_LP or FRO_HP
  *
  */
-void RFW_SetAntSwitch( uint8_t AntSwitch);
+void RFW_SetAntSwitch( uint8_t AntSwitch );
 
 /*!
  * @brief Initialise reception for IBM whitening case
@@ -111,13 +115,13 @@ int32_t RFW_ReceiveInit( void );
  * @param [out]    outSize output buffer size
  *
  */
-int32_t RFW_TransmitInit(uint8_t* inOutBuffer, uint8_t size, uint8_t* outSize);
+int32_t RFW_TransmitInit( uint8_t *inOutBuffer, uint8_t size, uint8_t *outSize );
 
 /*!
  * @brief Starts receiving payload. Called at Rx Sync IRQ
  *
  */
-void RFW_ReceivePayload(void );
+void RFW_ReceivePayload( void );
 
 /*!
  * @brief Starts transmitting long Packet, note packet length may be on 1 bytes depending on config
@@ -129,7 +133,7 @@ void RFW_ReceivePayload(void );
  *                                  size: size in bytes to feed. User to implement the offset based on previous chunk request
  * @return 0 when no parameters error, -1 otherwise
  */
-int32_t RFW_TransmitLongPacket( uint16_t payload_size, uint32_t timeout, void (*TxLongPacketGetNextChunkCb) (uint8_t** buffer, uint8_t buffer_size) );
+int32_t RFW_TransmitLongPacket( uint16_t payload_size, uint32_t timeout, void ( *TxLongPacketGetNextChunkCb )( uint8_t **buffer, uint8_t buffer_size ) );
 
 /*!
  * @brief Starts receiving long Packet, packet maybe short
@@ -141,7 +145,7 @@ int32_t RFW_TransmitLongPacket( uint16_t payload_size, uint32_t timeout, void (*
  *                                  size: size in bytes to record
  * @return 0 when no parameters error, -1 otherwise
  */
-int32_t RFW_ReceiveLongPacket( uint8_t boosted_mode, uint32_t timeout, void (*RxLongStorePacketChunkCb) (uint8_t* buffer, uint8_t chunk_size) );
+int32_t RFW_ReceiveLongPacket( uint8_t boosted_mode, uint32_t timeout, void ( *RxLongStorePacketChunkCb )( uint8_t *buffer, uint8_t chunk_size ) );
 
 #ifdef __cplusplus
 }

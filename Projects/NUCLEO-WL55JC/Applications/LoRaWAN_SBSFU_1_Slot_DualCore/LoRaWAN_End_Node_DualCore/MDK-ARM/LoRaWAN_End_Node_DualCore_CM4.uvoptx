@@ -10,7 +10,7 @@
     <aExt>*.s*; *.src; *.a*</aExt>
     <oExt>*.obj; *.o</oExt>
     <lExt>*.lib</lExt>
-    <tExt>*.txt; *.h; *.inc</tExt>
+    <tExt>*.txt; *.h; *.inc; *.md</tExt>
     <pExt>*.plm</pExt>
     <CppX>*.cpp</CppX>
     <nMigrate>0</nMigrate>
@@ -227,7 +227,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\Common\System\sys_debug.c</PathWithFileName>
+      <PathWithFileName>../Common/System/sys_debug.c</PathWithFileName>
       <FilenameWithoutPath>sys_debug.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -247,7 +247,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM4\LoRaWAN\App\app_lorawan.c</PathWithFileName>
+      <PathWithFileName>../CM4/LoRaWAN/App/app_lorawan.c</PathWithFileName>
       <FilenameWithoutPath>app_lorawan.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -259,7 +259,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM4\LoRaWAN\App\CayenneLpp.c</PathWithFileName>
+      <PathWithFileName>../CM4/LoRaWAN/App/CayenneLpp.c</PathWithFileName>
       <FilenameWithoutPath>CayenneLpp.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -271,7 +271,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM4\LoRaWAN\App\lora_app.c</PathWithFileName>
+      <PathWithFileName>../CM4/LoRaWAN/App/lora_app.c</PathWithFileName>
       <FilenameWithoutPath>lora_app.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -291,7 +291,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM4\Core\Src\main.c</PathWithFileName>
+      <PathWithFileName>../CM4/Core/Src/main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -303,7 +303,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM4\Core\Src\adc.c</PathWithFileName>
+      <PathWithFileName>../CM4/Core/Src/adc.c</PathWithFileName>
       <FilenameWithoutPath>adc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -315,7 +315,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM4\Core\Src\dma.c</PathWithFileName>
+      <PathWithFileName>../CM4/Core/Src/dma.c</PathWithFileName>
       <FilenameWithoutPath>dma.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -327,7 +327,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM4\Core\Src\gpio.c</PathWithFileName>
+      <PathWithFileName>../CM4/Core/Src/gpio.c</PathWithFileName>
       <FilenameWithoutPath>gpio.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -339,7 +339,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM4\Core\Src\ipcc.c</PathWithFileName>
+      <PathWithFileName>../CM4/Core/Src/ipcc.c</PathWithFileName>
       <FilenameWithoutPath>ipcc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -351,7 +351,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM4\Core\Src\ipcc_if.c</PathWithFileName>
+      <PathWithFileName>../CM4/Core/Src/ipcc_if.c</PathWithFileName>
       <FilenameWithoutPath>ipcc_if.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -363,7 +363,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM4\Core\Src\stm32_lpm_if.c</PathWithFileName>
+      <PathWithFileName>../CM4/Core/Src/stm32_lpm_if.c</PathWithFileName>
       <FilenameWithoutPath>stm32_lpm_if.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -375,7 +375,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM4\Core\Src\sys_app.c</PathWithFileName>
+      <PathWithFileName>../CM4/Core/Src/sys_app.c</PathWithFileName>
       <FilenameWithoutPath>sys_app.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -387,7 +387,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM4\Core\Src\sys_sensors.c</PathWithFileName>
+      <PathWithFileName>../CM4/Core/Src/sys_sensors.c</PathWithFileName>
       <FilenameWithoutPath>sys_sensors.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -399,7 +399,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM4\Core\Src\adc_if.c</PathWithFileName>
+      <PathWithFileName>../CM4/Core/Src/adc_if.c</PathWithFileName>
       <FilenameWithoutPath>adc_if.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -411,7 +411,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM4\Core\Src\timer_if.c</PathWithFileName>
+      <PathWithFileName>../CM4/Core/Src/timer_if.c</PathWithFileName>
       <FilenameWithoutPath>timer_if.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -423,7 +423,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM4\Core\Src\usart_if.c</PathWithFileName>
+      <PathWithFileName>../CM4/Core/Src/usart_if.c</PathWithFileName>
       <FilenameWithoutPath>usart_if.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -435,7 +435,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM4\Core\Src\usart.c</PathWithFileName>
+      <PathWithFileName>../CM4/Core/Src/usart.c</PathWithFileName>
       <FilenameWithoutPath>usart.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -447,7 +447,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM4\Core\Src\stm32wlxx_it.c</PathWithFileName>
+      <PathWithFileName>../CM4/Core/Src/stm32wlxx_it.c</PathWithFileName>
       <FilenameWithoutPath>stm32wlxx_it.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -459,7 +459,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM4\Core\Src\stm32wlxx_hal_msp.c</PathWithFileName>
+      <PathWithFileName>../CM4/Core/Src/stm32wlxx_hal_msp.c</PathWithFileName>
       <FilenameWithoutPath>stm32wlxx_hal_msp.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -471,7 +471,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM4\Core\Src\flash_if.c</PathWithFileName>
+      <PathWithFileName>../CM4/Core/Src/flash_if.c</PathWithFileName>
       <FilenameWithoutPath>flash_if.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -491,7 +491,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM4\MbMux\LmHandler_mbwrapper.c</PathWithFileName>
+      <PathWithFileName>../CM4/MbMux/LmHandler_mbwrapper.c</PathWithFileName>
       <FilenameWithoutPath>LmHandler_mbwrapper.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -503,7 +503,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM4\MbMux\mbmux.c</PathWithFileName>
+      <PathWithFileName>../CM4/MbMux/mbmux.c</PathWithFileName>
       <FilenameWithoutPath>mbmux.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -515,7 +515,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM4\MbMux\mbmuxif_lora.c</PathWithFileName>
+      <PathWithFileName>../CM4/MbMux/mbmuxif_lora.c</PathWithFileName>
       <FilenameWithoutPath>mbmuxif_lora.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -527,7 +527,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM4\MbMux\mbmuxif_radio.c</PathWithFileName>
+      <PathWithFileName>../CM4/MbMux/mbmuxif_radio.c</PathWithFileName>
       <FilenameWithoutPath>mbmuxif_radio.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -539,7 +539,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM4\MbMux\mbmuxif_sys.c</PathWithFileName>
+      <PathWithFileName>../CM4/MbMux/mbmuxif_sys.c</PathWithFileName>
       <FilenameWithoutPath>mbmuxif_sys.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -551,7 +551,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM4\MbMux\mbmuxif_trace.c</PathWithFileName>
+      <PathWithFileName>../CM4/MbMux/mbmuxif_trace.c</PathWithFileName>
       <FilenameWithoutPath>mbmuxif_trace.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -563,7 +563,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\CM4\MbMux\radio_mbwrapper.c</PathWithFileName>
+      <PathWithFileName>../CM4/MbMux/radio_mbwrapper.c</PathWithFileName>
       <FilenameWithoutPath>radio_mbwrapper.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -623,7 +623,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_adc.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_adc.c</PathWithFileName>
       <FilenameWithoutPath>stm32wlxx_hal_adc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -635,7 +635,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_adc_ex.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_adc_ex.c</PathWithFileName>
       <FilenameWithoutPath>stm32wlxx_hal_adc_ex.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -647,7 +647,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_ll_adc.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_ll_adc.c</PathWithFileName>
       <FilenameWithoutPath>stm32wlxx_ll_adc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -803,7 +803,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_ipcc.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_ipcc.c</PathWithFileName>
       <FilenameWithoutPath>stm32wlxx_hal_ipcc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -815,7 +815,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_rtc.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_rtc.c</PathWithFileName>
       <FilenameWithoutPath>stm32wlxx_hal_rtc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -827,7 +827,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_rtc_ex.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_rtc_ex.c</PathWithFileName>
       <FilenameWithoutPath>stm32wlxx_hal_rtc_ex.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -839,7 +839,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_uart.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_uart.c</PathWithFileName>
       <FilenameWithoutPath>stm32wlxx_hal_uart.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -851,7 +851,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_uart_ex.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_uart_ex.c</PathWithFileName>
       <FilenameWithoutPath>stm32wlxx_hal_uart_ex.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -891,7 +891,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Utilities\trace\adv_trace\stm32_adv_trace.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Utilities/trace/adv_trace/stm32_adv_trace.c</PathWithFileName>
       <FilenameWithoutPath>stm32_adv_trace.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -903,7 +903,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Utilities\misc\stm32_mem.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Utilities/misc/stm32_mem.c</PathWithFileName>
       <FilenameWithoutPath>stm32_mem.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -915,7 +915,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Utilities\misc\stm32_systime.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Utilities/misc/stm32_systime.c</PathWithFileName>
       <FilenameWithoutPath>stm32_systime.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -927,7 +927,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Utilities\misc\stm32_tiny_sscanf.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Utilities/misc/stm32_tiny_sscanf.c</PathWithFileName>
       <FilenameWithoutPath>stm32_tiny_sscanf.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -939,7 +939,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Utilities\misc\stm32_tiny_vsnprintf.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Utilities/misc/stm32_tiny_vsnprintf.c</PathWithFileName>
       <FilenameWithoutPath>stm32_tiny_vsnprintf.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -951,7 +951,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Utilities\sequencer\stm32_seq.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Utilities/sequencer/stm32_seq.c</PathWithFileName>
       <FilenameWithoutPath>stm32_seq.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -963,7 +963,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Utilities\timer\stm32_timer.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Utilities/timer/stm32_timer.c</PathWithFileName>
       <FilenameWithoutPath>stm32_timer.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -975,7 +975,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\..\Utilities\lpm\tiny_lpm\stm32_lpm.c</PathWithFileName>
+      <PathWithFileName>../../../../../../Utilities/lpm/tiny_lpm/stm32_lpm.c</PathWithFileName>
       <FilenameWithoutPath>stm32_lpm.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>

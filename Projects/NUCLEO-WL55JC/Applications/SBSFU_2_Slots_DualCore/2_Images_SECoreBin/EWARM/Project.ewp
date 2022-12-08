@@ -1098,6 +1098,12 @@
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_pka.c</name>
       </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_rng.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\..\Drivers\STM32WLxx_HAL_Driver\Src\stm32wlxx_hal_rng_ex.c</name>
+      </file>
     </group>
   </group>
   <group>
@@ -1145,6 +1151,9 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\ST\STM32_Key_Management_Services\Core\kms_platf_objects.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\ST\STM32_Key_Management_Services\Modules\kms_counter.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\ST\STM32_Key_Management_Services\Modules\kms_digest.c</name>

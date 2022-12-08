@@ -44,7 +44,7 @@ extern uint8_t initialDeviceStatusCheck; /* used also in sfu_fwimg_swap.c */
 /* Exported macros -----------------------------------------------------------*/
 #ifdef SFU_DEBUG_MODE
 #define TRACE_IRQ(pbuffer) (void) SFU_COM_Serial_PutString(pbuffer); /* Printf is not used inside interrupt to avoid
-                                                                        faults. printf is not rieentrant */
+                                                                        faults. printf is not reentrant */
 #define TRACE   (void) printf
 #else
 #define TRACE(...)

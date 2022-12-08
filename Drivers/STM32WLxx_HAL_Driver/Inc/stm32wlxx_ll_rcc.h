@@ -345,8 +345,8 @@ typedef struct
 /** @defgroup RCC_LL_EC_PERIPH_FREQUENCY Peripheral clock frequency
   * @{
   */
-#define LL_RCC_PERIPH_FREQUENCY_NO         0x00000000U                 /*!< No clock enabled for the peripheral            */
-#define LL_RCC_PERIPH_FREQUENCY_NA         0xFFFFFFFFU                 /*!< Frequency cannot be provided as external clock */
+#define LL_RCC_PERIPH_FREQUENCY_NO         0x00000000U            /*!< No clock enabled for the peripheral            */
+#define LL_RCC_PERIPH_FREQUENCY_NA         0xFFFFFFFFU            /*!< Frequency cannot be provided as external clock */
 /**
   * @}
   */
@@ -427,10 +427,10 @@ typedef struct
 /** @defgroup RCC_LL_EC_ADC_CLKSRC ADC CLKSRC
   * @{
   */
-#define LL_RCC_ADC_CLKSOURCE_NONE             0x00000000U        /*!< no Clock used as ADC clock*/
-#define LL_RCC_ADC_CLKSOURCE_HSI              RCC_CCIPR_ADCSEL_0 /*!< HSI selected as ADC clock*/
-#define LL_RCC_ADC_CLKSOURCE_PLL              RCC_CCIPR_ADCSEL_1 /*!< PLL selected as ADC clock*/
-#define LL_RCC_ADC_CLKSOURCE_SYSCLK           RCC_CCIPR_ADCSEL   /*!< SYSCLK selected as ADC clock*/
+#define LL_RCC_ADC_CLKSOURCE_NONE           0x00000000U        /*!< no Clock used as ADC clock   */
+#define LL_RCC_ADC_CLKSOURCE_HSI            RCC_CCIPR_ADCSEL_0 /*!< HSI selected as ADC clock    */
+#define LL_RCC_ADC_CLKSOURCE_PLL            RCC_CCIPR_ADCSEL_1 /*!< PLL selected as ADC clock    */
+#define LL_RCC_ADC_CLKSOURCE_SYSCLK         RCC_CCIPR_ADCSEL   /*!< SYSCLK selected as ADC clock */
 /**
   * @}
   */
@@ -438,10 +438,10 @@ typedef struct
 /** @defgroup RCC_LL_EC_RNG_CLKSRC RNG CLKSRC
   * @{
   */
-#define LL_RCC_RNG_CLKSOURCE_PLL              0x00000000U        /*!< PLL selected as RNG Clock */
-#define LL_RCC_RNG_CLKSOURCE_LSI              RCC_CCIPR_RNGSEL_0 /*!< LSI selected as RNG clock*/
-#define LL_RCC_RNG_CLKSOURCE_LSE              RCC_CCIPR_RNGSEL_1 /*!< LSE selected as RNG clock*/
-#define LL_RCC_RNG_CLKSOURCE_MSI              (RCC_CCIPR_RNGSEL_1 | RCC_CCIPR_RNGSEL_0)  /*!< MSI selected as RNG clock*/
+#define LL_RCC_RNG_CLKSOURCE_PLL            0x00000000U        /*!< PLL selected as RNG Clock */
+#define LL_RCC_RNG_CLKSOURCE_LSI            RCC_CCIPR_RNGSEL_0 /*!< LSI selected as RNG clock */
+#define LL_RCC_RNG_CLKSOURCE_LSE            RCC_CCIPR_RNGSEL_1 /*!< LSE selected as RNG clock */
+#define LL_RCC_RNG_CLKSOURCE_MSI            (RCC_CCIPR_RNGSEL_1 | RCC_CCIPR_RNGSEL_0)  /*!< MSI selected as RNG clock */
 /**
   * @}
   */
@@ -524,7 +524,7 @@ typedef struct
 /** @defgroup RCC_LL_EC_PLLSOURCE  PLL entry clock source
   * @{
   */
-#define LL_RCC_PLLSOURCE_NONE              0x00000000U             /*!< No clock */
+#define LL_RCC_PLLSOURCE_NONE              0x00000000U           /*!< No clock */
 #define LL_RCC_PLLSOURCE_MSI               RCC_PLLCFGR_PLLSRC_0  /*!< MSI clock selected as PLL entry clock source */
 #define LL_RCC_PLLSOURCE_HSI               RCC_PLLCFGR_PLLSRC_1  /*!< HSI clock selected as PLL entry clock source */
 #define LL_RCC_PLLSOURCE_HSE               (RCC_PLLCFGR_PLLSRC_1 | RCC_PLLCFGR_PLLSRC_0)  /*!< HSE clock selected as PLL entry clock source */
@@ -617,7 +617,7 @@ typedef struct
   * @{
   */
 #define LL_RCC_MSIRANGESEL_STANDBY         0U                  /*!< MSI Range is provided by MSISRANGE */
-#define LL_RCC_MSIRANGESEL_RUN             1U                  /*!< MSI Range is provided by MSIRANGE */
+#define LL_RCC_MSIRANGESEL_RUN             1U                  /*!< MSI Range is provided by MSIRANGE  */
 /**
   * @}
   */

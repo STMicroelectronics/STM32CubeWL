@@ -1,0 +1,3 @@
+mainProject = Sigfox_PushButton_DualCore
+compilingOrder = 2_Images_KMS_Blob, 2_Images_SECoreBin, 2_Images_SBSFU, Sigfox_PushButton_DualCore
+toCopyToUserSpace = Linker_Common, Scripts

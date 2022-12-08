@@ -17,16 +17,16 @@ define region M4_SB_ROM_region           = mem:[from __ICFEDIT_M4_SB_region_ROM_
 
 /* KMS Data Storage (NVMS) region protected area */
 /* KMS Data Storage need for 2 images : 4 kbytes * 2 ==> 8 kbytes */
-define exported symbol __ICFEDIT_KMS_DataStorage_start__           = 0x0802B000;
-define exported symbol __ICFEDIT_KMS_DataStorage_end__             = 0x0802CFFF;
+define exported symbol __ICFEDIT_KMS_DataStorage_start__           = 0x0802A800;
+define exported symbol __ICFEDIT_KMS_DataStorage_end__             = 0x0802C7FF;
 
 /* SE IF ROM: used to locate Secure Engine interface code out of MPU isolation */
 define exported symbol __ICFEDIT_SE_IF_region_ROM_start__          = __ICFEDIT_KMS_DataStorage_end__ + 1;
-define exported symbol __ICFEDIT_SE_IF_region_ROM_end__            = __ICFEDIT_SE_IF_region_ROM_start__ + 0x13FF;
+define exported symbol __ICFEDIT_SE_IF_region_ROM_end__            = __ICFEDIT_SE_IF_region_ROM_start__ + 0x12FF;
 
 /* SBSFU Code region */
 define exported symbol __ICFEDIT_SB_region_ROM_start__             = __ICFEDIT_SE_IF_region_ROM_end__ + 1;
-define exported symbol __ICFEDIT_SB_region_ROM_end__               = 0x080367FF;
+define exported symbol __ICFEDIT_SB_region_ROM_end__               = 0x08035FFF;
 
 /* M0 Vector table with alignment constraint on VECTOR_SIZE */
 define exported symbol __ICFEDIT_intvec_start__                    = __ICFEDIT_SB_region_ROM_end__ + 1;
@@ -91,15 +91,18 @@ define exported symbol __ICFEDIT_LW_NVM_region_SRAM_end__          = __ICFEDIT_L
 
 /* SBSFU RAM region */
 define exported symbol __ICFEDIT_SB_region_RAM_start__             = __ICFEDIT_LW_NVM_region_SRAM_end__ + 1;
-define exported symbol __ICFEDIT_SB_region_RAM_end__               = 0x2000D3FF;
+define exported symbol __ICFEDIT_SB_region_RAM_end__               = 0x2000CBFF;
 
-/* SE RAM region protected area with 1 kBytes alignment constraint (TZIC) ==> 0x2000D400 */
+/* SE RAM region protected area with 1 kBytes alignment constraint (TZIC) ==> 0x2000CC00 */
 define exported symbol __ICFEDIT_SE_region_RAM_start__             = __ICFEDIT_SB_region_RAM_end__ + 1;
-define exported symbol __ICFEDIT_SE_region_RAM_stack_top__         = 0x2000DB00; /* Secure Engine's private stack */
-define exported symbol __ICFEDIT_SE_region_RAM_end__               = 0x2000FFFF;
+define exported symbol __ICFEDIT_SE_region_RAM_stack_top__         = 0x2000D300; /* Secure Engine's private stack */
+define exported symbol __ICFEDIT_SE_region_RAM_no_key_end__        = 0x2000FFEF;
+define exported symbol __ICFEDIT_region_KMS_DataStorageKey_start__ = 0x2000FFF0;
+define exported symbol __ICFEDIT_region_KMS_DataStorageKey_end__   = 0x2000FFFF;
+define exported symbol __ICFEDIT_SE_region_RAM_end__               = __ICFEDIT_region_KMS_DataStorageKey_end__;
 
 /* RAM regions definition */
 define region M4_SB_RAM_region           = mem:[from __ICFEDIT_M4_SB_region_RAM_start__ to __ICFEDIT_M4_SB_region_RAM_end__];
 define region M4_APP_RAM_region          = mem:[from __ICFEDIT_M4_APP_region_RAM_start__ to __ICFEDIT_M4_APP_region_RAM_end__];
-define region SE_RAM_region              = mem:[from __ICFEDIT_SE_region_RAM_stack_top__ to __ICFEDIT_SE_region_RAM_end__];
+define region SE_RAM_region              = mem:[from __ICFEDIT_SE_region_RAM_stack_top__ to __ICFEDIT_SE_region_RAM_no_key_end__];
 define region SB_RAM_region              = mem:[from __ICFEDIT_SB_region_RAM_start__ to __ICFEDIT_SB_region_RAM_end__];

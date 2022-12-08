@@ -37,16 +37,15 @@ extern "C" {
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
-/* To enable the KMS Middleware with Sigfox, you must update these files from the DualCore example project:
+
+/* To configure Sigfox to use the KMS Middleware, following files in the DualCore example project must be completed:
    - CM0PLUS/Core/Inc/kms_platf_objects_config.h : Add all Sigfox keys as kms_object_keyhead_32_t structures.
    - CM0PLUS/Core/Inc/kms_platf_objects_interface.h : Add all Sigfox key indexes
    - CM0PLUS/Core/Inc/nvms_low_level.h : Enable the NVMS (Non Volatile Memory) to store the session keys
    - CM0PLUS/Core/Src/nvms_low_level.c : Implement the Flash read/write functions to manage the NVMS items
-   And finally, change the SIGFOX_KMS define to 1
-*/
-/* USER CODE BEGIN SIGFOX_KMS */
+   Then SIGFOX_KMS flag can be set to 1 */
 #define SIGFOX_KMS 1
-/* USER CODE END SIGFOX_KMS */
+
 /* USER CODE BEGIN EC */
 
 /* USER CODE END EC */

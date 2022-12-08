@@ -46,12 +46,6 @@ enum
 
 enum
 {
-  EE_CLEAN_MODE_POLLING = 0,
-  EE_CLEAN_MODE_IT = 1
-};
-
-enum
-{
   NO_FORMAT =         0,
   FORMAT =            1
 };
@@ -101,8 +95,6 @@ void E2P_Init(void)
   /* USER CODE BEGIN E2P_Init_1 */
 
   /* USER CODE END E2P_Init_1 */
-  HAL_FLASH_Unlock();
-
   if (EE_Init(NO_FORMAT, EE_BASE_ADRESS) != EE_OK)
   {
     if (EE_Init(FORMAT, EE_BASE_ADRESS) == EE_OK)
@@ -114,7 +106,6 @@ void E2P_Init(void)
       Error_Handler();
     }
   }
-  HAL_FLASH_Lock();
   /* USER CODE BEGIN E2P_Init_2 */
 
   /* USER CODE END E2P_Init_2 */
@@ -128,7 +119,6 @@ void E2P_RestoreFs(void)
   uint32_t rc3a_config[] = RC3A_CONFIG;
   uint32_t rc3c_config[] = RC3C_CONFIG;
   uint32_t rc5_config[] = RC5_CONFIG;
-  HAL_FLASH_Unlock();
 
   E2P_Write(EE_RSSI_CAL_ID, 0);
   E2P_Write(EE_AT_ECHO_ID, 1);   /* AtEcho  =  Set */
@@ -168,8 +158,6 @@ void E2P_RestoreFs(void)
   E2P_Write(EE_MCU_NVM_3_ID, 0);
   E2P_Write(EE_SGFX_ENCRYPTIONFLAG_ID, 0);
   E2P_Write(EE_SGFX_VERBOSELEVEL_ID, VERBOSE_LEVEL);
-
-  HAL_FLASH_Lock();
   /* USER CODE BEGIN E2P_RestoreFs_2 */
 
   /* USER CODE END E2P_RestoreFs_2 */
@@ -221,8 +209,6 @@ void E2P_Write_Power(sfx_rc_enum_t SgfxRc, int8_t power)
   /* USER CODE BEGIN E2P_Write_Power_1 */
 
   /* USER CODE END E2P_Write_Power_1 */
-  HAL_FLASH_Unlock();
-
   switch (SgfxRc)
   {
     case SFX_RC1:
@@ -252,8 +238,6 @@ void E2P_Write_Power(sfx_rc_enum_t SgfxRc, int8_t power)
     default:
       break;
   }
-
-  HAL_FLASH_Lock();
   /* USER CODE BEGIN E2P_Write_Power_2 */
 
   /* USER CODE END E2P_Write_Power_2 */
@@ -277,11 +261,7 @@ void E2P_Write_Rc(sfx_rc_enum_t SgfxRc)
   /* USER CODE BEGIN E2P_Write_Rc_1 */
 
   /* USER CODE END E2P_Write_Rc_1 */
-  HAL_FLASH_Unlock();
-
   E2P_Write(EE_SGFX_RC_ID, (uint32_t) SgfxRc);
-
-  HAL_FLASH_Lock();
   /* USER CODE BEGIN E2P_Write_Rc_2 */
 
   /* USER CODE END E2P_Write_Rc_2 */
@@ -305,11 +285,7 @@ void E2P_Write_RssiCal(int16_t rssi_cal)
   /* USER CODE BEGIN E2P_Write_RssiCal_1 */
 
   /* USER CODE END E2P_Write_RssiCal_1 */
-  HAL_FLASH_Unlock();
-
   E2P_Write(EE_RSSI_CAL_ID, (uint32_t) rssi_cal);
-
-  HAL_FLASH_Lock();
   /* USER CODE BEGIN E2P_Write_RssiCal_2 */
 
   /* USER CODE END E2P_Write_RssiCal_2 */
@@ -333,11 +309,7 @@ void E2P_Write_AtEcho(uint32_t at_echo)
   /* USER CODE BEGIN E2P_Write_AtEcho_1 */
 
   /* USER CODE END E2P_Write_AtEcho_1 */
-  HAL_FLASH_Unlock();
-
   E2P_Write(EE_AT_ECHO_ID, (uint32_t) at_echo);
-
-  HAL_FLASH_Lock();
   /* USER CODE BEGIN E2P_Write_AtEcho_2 */
 
   /* USER CODE END E2P_Write_AtEcho_2 */
@@ -361,11 +333,7 @@ void E2P_Write_KeyType(sfx_key_type_t key_type)
   /* USER CODE BEGIN E2P_Write_KeyType_1 */
 
   /* USER CODE END E2P_Write_KeyType_1 */
-  HAL_FLASH_Unlock();
-
   E2P_Write(EE_SGFX_KEYTYPE_ID, (uint32_t) key_type);
-
-  HAL_FLASH_Lock();
   /* USER CODE BEGIN E2P_Write_KeyType_2 */
 
   /* USER CODE END E2P_Write_KeyType_2 */
@@ -389,11 +357,7 @@ void E2P_Write_EncryptionFlag(sfx_u8 encryption_flag)
   /* USER CODE BEGIN E2P_Write_EncryptionFlag_1 */
 
   /* USER CODE END E2P_Write_EncryptionFlag_1 */
-  HAL_FLASH_Unlock();
-
   E2P_Write(EE_SGFX_ENCRYPTIONFLAG_ID, (uint32_t) encryption_flag);
-
-  HAL_FLASH_Lock();
   /* USER CODE BEGIN E2P_Write_EncryptionFlag_2 */
 
   /* USER CODE END E2P_Write_EncryptionFlag_2 */
@@ -417,11 +381,7 @@ void E2P_Write_VerboseLevel(uint8_t verboselevel)
   /* USER CODE BEGIN E2P_Write_VerboseLevel_1 */
 
   /* USER CODE END E2P_Write_VerboseLevel_1 */
-  HAL_FLASH_Unlock();
-
   E2P_Write(EE_SGFX_VERBOSELEVEL_ID, (uint32_t) verboselevel);
-
-  HAL_FLASH_Lock();
   /* USER CODE BEGIN E2P_Write_VerboseLevel_2 */
 
   /* USER CODE END E2P_Write_VerboseLevel_2 */
@@ -498,8 +458,6 @@ void E2P_Write_ConfigWords(sfx_rc_enum_t sfx_rc, sfx_u32 config_words[3])
   /* USER CODE BEGIN E2P_Write_ConfigWords_1 */
 
   /* USER CODE END E2P_Write_ConfigWords_1 */
-  HAL_FLASH_Unlock();
-
   switch (sfx_rc)
   {
     case SFX_RC1:
@@ -555,8 +513,6 @@ void E2P_Write_ConfigWords(sfx_rc_enum_t sfx_rc, sfx_u32 config_words[3])
     default:
       break;
   }
-
-  HAL_FLASH_Lock();
   /* USER CODE BEGIN E2P_Write_ConfigWords_2 */
 
   /* USER CODE END E2P_Write_ConfigWords_2 */
@@ -600,15 +556,11 @@ E2P_ErrorStatus_t E2P_Write_SeNvm(sfx_u8 *data_to_write,  uint32_t len)
   E2P_ErrorStatus_t error = E2P_OK;
   int32_t i = 0;
 
-  HAL_FLASH_Unlock();
-
   E2P_Write(EE_SE_NVM_0_ID, (uint32_t) data_to_write[i++]);
   E2P_Write(EE_SE_NVM_1_ID, (uint32_t) data_to_write[i++]);
   E2P_Write(EE_SE_NVM_2_ID, (uint32_t) data_to_write[i++]);
   E2P_Write(EE_SE_NVM_3_ID, (uint32_t) data_to_write[i++]);
   E2P_Write(EE_SE_NVM_4_ID, (uint32_t) data_to_write[i++]);
-
-  HAL_FLASH_Lock();
 
   if (i != len)
   {
@@ -654,14 +606,10 @@ E2P_ErrorStatus_t E2P_Write_McuNvm(sfx_u8 *data_to_write, uint32_t len)
   E2P_ErrorStatus_t error = E2P_OK;
   int32_t i = 0;
 
-  HAL_FLASH_Unlock();
-
   E2P_Write(EE_MCU_NVM_0_ID, (uint32_t) data_to_write[i++]);
   E2P_Write(EE_MCU_NVM_1_ID, (uint32_t) data_to_write[i++]);
   E2P_Write(EE_MCU_NVM_2_ID, (uint32_t) data_to_write[i++]);
   E2P_Write(EE_MCU_NVM_3_ID, (uint32_t) data_to_write[i++]);
-
-  HAL_FLASH_Lock();
 
   if (i != len)
   {
@@ -709,15 +657,11 @@ int32_t EE_WriteValue(e_EE_ID EEsgfxID,  uint32_t data)
   }
   else
   {
-    HAL_FLASH_Unlock();
-
     status = EE_Write(EE_BANK_0, EEsgfxID, data);
     if (status  == EE_CLEAN_NEEDED)
     {
-      EE_Clean(EE_BANK_0, EE_CLEAN_MODE_POLLING);
+      EE_Clean(EE_BANK_0);
     }
-
-    HAL_FLASH_Lock();
   }
 
   return status;
@@ -738,7 +682,7 @@ static void E2P_Write(e_EE_ID addr, uint32_t data)
   /* USER CODE END E2P_Write_1 */
   if (EE_Write(EE_BANK_0, (uint16_t) addr, data) == EE_CLEAN_NEEDED)
   {
-    EE_Clean(EE_BANK_0, EE_CLEAN_MODE_POLLING);
+    EE_Clean(EE_BANK_0);
   }
   /* USER CODE BEGIN E2P_Write_2 */
 

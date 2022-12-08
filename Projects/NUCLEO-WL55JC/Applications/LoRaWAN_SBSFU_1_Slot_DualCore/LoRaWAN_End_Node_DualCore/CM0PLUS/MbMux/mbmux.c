@@ -132,7 +132,8 @@ void MBMUX_Init(MBMUX_ComTable_t *const pMBMUX_ComTable)
   /* USER CODE END MBMUX_Init_Last */
 }
 
-int8_t MBMUX_RegisterFeatureCallback(FEAT_INFO_IdTypeDef e_featID, MBMUX_ComType_t ComType, void (*MsgCb)(void *ComObj))
+int8_t MBMUX_RegisterFeatureCallback(FEAT_INFO_IdTypeDef e_featID, MBMUX_ComType_t ComType,
+                                     void (*MsgCb)(void *ComObj))
 {
   uint8_t channel_idx;
   int8_t ret = -1;

@@ -178,7 +178,7 @@ typedef struct
 #define  MPU_TEX_LEVEL0              ((uint8_t)0x00)
 #define  MPU_TEX_LEVEL1              ((uint8_t)0x01)
 #define  MPU_TEX_LEVEL2              ((uint8_t)0x02)
-#define  MPU_TEX_LEVEL4              ((uint8_t)0x04)
+
 /**
   * @}
   */
@@ -362,8 +362,7 @@ void HAL_MPU_ConfigRegion(MPU_Region_InitTypeDef *MPU_Init);
 
 #define IS_MPU_TEX_LEVEL(TYPE) (((TYPE) == MPU_TEX_LEVEL0)  || \
                                 ((TYPE) == MPU_TEX_LEVEL1)  || \
-                                ((TYPE) == MPU_TEX_LEVEL2)  || \
-                                ((TYPE) == MPU_TEX_LEVEL4))
+                                ((TYPE) == MPU_TEX_LEVEL2))
 
 #define IS_MPU_REGION_PERMISSION_ATTRIBUTE(TYPE) (((TYPE) == MPU_REGION_NO_ACCESS)   || \
                                                   ((TYPE) == MPU_REGION_PRIV_RW)     || \

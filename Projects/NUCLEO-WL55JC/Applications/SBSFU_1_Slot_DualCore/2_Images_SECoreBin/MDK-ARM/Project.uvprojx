@@ -469,6 +469,16 @@
               <FileType>1</FileType>
               <FilePath>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_pka.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32wlxx_hal_rng.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_rng.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32wlxx_hal_rng_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../../../../../../Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_rng_ex.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -518,6 +528,11 @@
               <FileName>kms_der_x962.c</FileName>
               <FileType>1</FileType>
               <FilePath>../../../../../../Middlewares/ST/STM32_Key_Management_Services/Core/kms_der_x962.c</FilePath>
+            </File>
+            <File>
+              <FileName>kms_counter.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../../../../../../Middlewares/ST/STM32_Key_Management_Services/Modules/kms_counter.c</FilePath>
             </File>
             <File>
               <FileName>kms_digest.c</FileName>

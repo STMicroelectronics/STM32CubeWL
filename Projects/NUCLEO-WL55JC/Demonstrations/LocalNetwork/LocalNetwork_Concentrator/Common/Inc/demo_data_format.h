@@ -94,8 +94,8 @@ typedef __PACKED_STRUCT
 #define DEMO_DATA_1_1_ERROR_PITCH             (-512)
 #define DEMO_DATA_1_1_ERROR_ROLL              (-512)
 #define DEMO_DATA_1_1_ERROR_HUMIDITY          UINT8_MAX /*127.5 %*/
-#define DEMO_DATA_1_1_ERROR_ACTIVITY          UINT8_MAX /*Not in enum*/
-#define DEMO_DATA_1_1_ERROR_DISTANCE          UINT16_MAX /*65 m*/
+#define DEMO_DATA_1_1_ERROR_ACTIVITY          (0xFU) /*Not in enum*/
+#define DEMO_DATA_1_1_ERROR_DISTANCE          (0xFFFU) /* 65 m*/
 #define DEMO_DATA_1_1_ERROR_ACCELERATION      UINT16_MAX /*65 g*/
 #define DEMO_DATA_1_1_ERROR_VOLTAGE           DEMO_DATA_1_0_ERROR_VOLTAGE
 

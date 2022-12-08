@@ -520,6 +520,11 @@
               <FilePath>../../../../../../Middlewares/ST/STM32_Key_Management_Services/Core/kms_der_x962.c</FilePath>
             </File>
             <File>
+              <FileName>kms_counter.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../../../../../../Middlewares/ST/STM32_Key_Management_Services/Modules/kms_counter.c</FilePath>
+            </File>
+            <File>
               <FileName>kms_digest.c</FileName>
               <FileType>1</FileType>
               <FilePath>../../../../../../Middlewares/ST/STM32_Key_Management_Services/Modules/kms_digest.c</FilePath>

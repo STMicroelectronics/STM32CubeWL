@@ -11,6 +11,12 @@ call %current_dir%..\setenv.bat
 set compile_all_projects=1
 set rebuild=1
 
+if not exist !EWARM_EXE! (
+  echo Error: the command line !EWARM_EXE! doesn't exist.
+  echo        Check the setenv.bat content and your installation path
+  exit /B 1
+)
+
 REM Get Arguments
 :continue
 if not "%1"=="" (

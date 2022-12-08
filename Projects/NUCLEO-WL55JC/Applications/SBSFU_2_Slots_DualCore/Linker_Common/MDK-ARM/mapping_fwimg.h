@@ -28,13 +28,13 @@
 
 /* Active slot #1  (56 kbytes) */
 #define SLOT_ACTIVE_1_HEADER         0x0803F800
-#define SLOT_ACTIVE_1_START          0x0801C000
-#define SLOT_ACTIVE_1_END            0x08029FFF
+#define SLOT_ACTIVE_1_START          0x0801B800
+#define SLOT_ACTIVE_1_END            0x080297FF
 
 /* Active slot #2  (28 kbytes) */
 #define SLOT_ACTIVE_2_HEADER         0x0803F000
-#define SLOT_ACTIVE_2_START          0x08015000
-#define SLOT_ACTIVE_2_END            0x0801BFFF
+#define SLOT_ACTIVE_2_START          0x08014800
+#define SLOT_ACTIVE_2_END            0x0801B7FF
 
 /* Dwl slot #1  (56 kbytes) */
 #define SLOT_DWL_1_START             0x08006800

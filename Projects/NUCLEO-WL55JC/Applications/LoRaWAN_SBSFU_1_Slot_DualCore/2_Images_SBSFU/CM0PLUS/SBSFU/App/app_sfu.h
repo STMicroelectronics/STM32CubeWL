@@ -181,7 +181,7 @@ extern "C" {
 #define SFU_FW_VERSION_START_NUM (1U)    /*!< The very first version number a Firmware can have
                                               You can also define an upper bound here if you plan to use it */
 
-#define SFU_FW_VERSION_INIT_NUM (1U)     /*!< The version number accepted when the header is not valid (either because 
+#define SFU_FW_VERSION_INIT_NUM (1U)     /*!< The version number accepted when the header is not valid (either because
                                               no FW installed or due to an attack attempt). Could be different from
                                               SFU_FW_VERSION_START_NUM */
 

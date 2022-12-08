@@ -183,6 +183,11 @@
 			<locationURI>PARENT-6-PROJECT_LOC/Drivers/STM32WLxx_HAL_Driver/Src/stm32wlxx_hal_uart_ex.c</locationURI>
 		</link>
 		<link>
+			<name>Middlewares/SubGHz_Phy/lr_fhss_mac.c</name>
+			<type>1</type>
+			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/lr_fhss_mac.c</locationURI>
+		</link>
+		<link>
 			<name>Middlewares/SubGHz_Phy/radio.c</name>
 			<type>1</type>
 			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio.c</locationURI>
@@ -196,6 +201,11 @@
 			<name>Middlewares/SubGHz_Phy/radio_fw.c</name>
 			<type>1</type>
 			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/SubGHz_Phy/wl_lr_fhss.c</name>
+			<type>1</type>
+			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/wl_lr_fhss.c</locationURI>
 		</link>
 		<link>
 			<name>Application/User/Core/dma.c</name>

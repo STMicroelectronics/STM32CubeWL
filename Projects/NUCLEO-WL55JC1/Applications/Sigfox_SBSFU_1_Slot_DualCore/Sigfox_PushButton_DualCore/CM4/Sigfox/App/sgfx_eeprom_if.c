@@ -47,12 +47,6 @@ enum
 
 enum
 {
-  EE_CLEAN_MODE_POLLING = 0,
-  EE_CLEAN_MODE_IT = 1
-};
-
-enum
-{
   NO_FORMAT =         0,
   FORMAT =            1
 };
@@ -145,7 +139,6 @@ void E2P_RestoreFs(void)
   E2P_Write(EE_MCU_NVM_3_ID, 0);
   E2P_Write(EE_SGFX_ENCRYPTIONFLAG_ID, 0);
   E2P_Write(EE_SGFX_VERBOSELEVEL_ID, VERBOSE_LEVEL);
-
   /* USER CODE BEGIN E2P_RestoreFs_2 */
 
   /* USER CODE END E2P_RestoreFs_2 */
@@ -197,7 +190,6 @@ void E2P_Write_Power(sfx_rc_enum_t SgfxRc, int8_t power)
   /* USER CODE BEGIN E2P_Write_Power_1 */
 
   /* USER CODE END E2P_Write_Power_1 */
-
   switch (SgfxRc)
   {
     case SFX_RC1:
@@ -227,7 +219,6 @@ void E2P_Write_Power(sfx_rc_enum_t SgfxRc, int8_t power)
     default:
       break;
   }
-
   /* USER CODE BEGIN E2P_Write_Power_2 */
 
   /* USER CODE END E2P_Write_Power_2 */
@@ -251,9 +242,7 @@ void E2P_Write_Rc(sfx_rc_enum_t SgfxRc)
   /* USER CODE BEGIN E2P_Write_Rc_1 */
 
   /* USER CODE END E2P_Write_Rc_1 */
-
   E2P_Write(EE_SGFX_RC_ID, (uint32_t) SgfxRc);
-
   /* USER CODE BEGIN E2P_Write_Rc_2 */
 
   /* USER CODE END E2P_Write_Rc_2 */
@@ -277,9 +266,7 @@ void E2P_Write_RssiCal(int16_t rssi_cal)
   /* USER CODE BEGIN E2P_Write_RssiCal_1 */
 
   /* USER CODE END E2P_Write_RssiCal_1 */
-
   E2P_Write(EE_RSSI_CAL_ID, (uint32_t) rssi_cal);
-
   /* USER CODE BEGIN E2P_Write_RssiCal_2 */
 
   /* USER CODE END E2P_Write_RssiCal_2 */
@@ -303,9 +290,7 @@ void E2P_Write_AtEcho(uint32_t at_echo)
   /* USER CODE BEGIN E2P_Write_AtEcho_1 */
 
   /* USER CODE END E2P_Write_AtEcho_1 */
-
   E2P_Write(EE_AT_ECHO_ID, (uint32_t) at_echo);
-
   /* USER CODE BEGIN E2P_Write_AtEcho_2 */
 
   /* USER CODE END E2P_Write_AtEcho_2 */
@@ -329,9 +314,7 @@ void E2P_Write_KeyType(sfx_key_type_t key_type)
   /* USER CODE BEGIN E2P_Write_KeyType_1 */
 
   /* USER CODE END E2P_Write_KeyType_1 */
-
   E2P_Write(EE_SGFX_KEYTYPE_ID, (uint32_t) key_type);
-
   /* USER CODE BEGIN E2P_Write_KeyType_2 */
 
   /* USER CODE END E2P_Write_KeyType_2 */
@@ -355,9 +338,7 @@ void E2P_Write_EncryptionFlag(sfx_u8 encryption_flag)
   /* USER CODE BEGIN E2P_Write_EncryptionFlag_1 */
 
   /* USER CODE END E2P_Write_EncryptionFlag_1 */
-
   E2P_Write(EE_SGFX_ENCRYPTIONFLAG_ID, (uint32_t) encryption_flag);
-
   /* USER CODE BEGIN E2P_Write_EncryptionFlag_2 */
 
   /* USER CODE END E2P_Write_EncryptionFlag_2 */
@@ -381,9 +362,7 @@ void E2P_Write_VerboseLevel(uint8_t verboselevel)
   /* USER CODE BEGIN E2P_Write_VerboseLevel_1 */
 
   /* USER CODE END E2P_Write_VerboseLevel_1 */
-
   E2P_Write(EE_SGFX_VERBOSELEVEL_ID, (uint32_t) verboselevel);
-
   /* USER CODE BEGIN E2P_Write_VerboseLevel_2 */
 
   /* USER CODE END E2P_Write_VerboseLevel_2 */
@@ -460,7 +439,6 @@ void E2P_Write_ConfigWords(sfx_rc_enum_t sfx_rc, sfx_u32 config_words[3])
   /* USER CODE BEGIN E2P_Write_ConfigWords_1 */
 
   /* USER CODE END E2P_Write_ConfigWords_1 */
-
   switch (sfx_rc)
   {
     case SFX_RC1:
@@ -516,7 +494,6 @@ void E2P_Write_ConfigWords(sfx_rc_enum_t sfx_rc, sfx_u32 config_words[3])
     default:
       break;
   }
-
   /* USER CODE BEGIN E2P_Write_ConfigWords_2 */
 
   /* USER CODE END E2P_Write_ConfigWords_2 */

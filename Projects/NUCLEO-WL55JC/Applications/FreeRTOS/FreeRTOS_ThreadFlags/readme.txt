@@ -60,7 +60,7 @@ on STM32Cube with RTOS".
 
 @par Keywords
 
-RTOS, FreeRTOS, Thread, ThreadFlags
+RTOS, FreeRTOS, Threading, ThreadFlags
 
 @par Directory contents
     - FreeRTOS/FreeRTOS_ThreadFlags/Src/app_freertos.c               FreeRTOS application file

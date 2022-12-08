@@ -88,9 +88,9 @@ void GetUniqueId(uint8_t *id);
 
 /**
   * @brief  callback to get the board 32 bits unique ID (LSB)
-  * @retval devAddr Device Address
+  * @param  devAddr Device Address
   */
-uint32_t GetDevAddr(void);
+void GetDevAddr(uint32_t *devAddr);
 
 /**
   * @brief Returns sec and msec based on the systime in use

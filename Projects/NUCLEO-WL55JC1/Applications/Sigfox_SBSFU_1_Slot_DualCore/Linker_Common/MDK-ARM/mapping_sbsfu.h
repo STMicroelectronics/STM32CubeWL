@@ -111,10 +111,16 @@
 
 /* SBSFU RAM region */
 #define SB_REGION_RAM_START             (M0PLUS_SHARED_REGION_RAM_END + 0x1)
-#define SB_REGION_RAM_END               0x2000D3FF
+#define SB_REGION_RAM_END               0x2000C3FF
+
+/* KMS Data Storage (VMS) region */
+/* WARNING: Symbols not used */
+/* The VMS address is defined in vms_low_level.h: VMS_KMS_DATA_STORAGE_START */
+#define VM_KMS_DATASTORAGE_RAM_START    0x2000C400
+#define VM_KMS_DATASTORAGE_RAM_END      0x2000CBFF
 
 /* SE RAM region protected area with 1 kBytes alignment constraint (TZIC) ==> 0x2000D400 */
-#define SE_REGION_RAM_START             (SB_REGION_RAM_END +0x1)
+#define SE_REGION_RAM_START             (VM_KMS_DATASTORAGE_RAM_END +0x1)
 #define SE_REGION_RAM_STACK_TOP         0x2000DB00                /* Secure Engine's private stack */
 #define SE_REGION_RAM_END               0x2000FFFF
 
@@ -124,6 +130,7 @@
 #define M4_SHARED_RAM_REGION_SIZE       (M4_SHARED_REGION_RAM_END - M4_SHARED_REGION_RAM_START + 0x1)
 #define M0PLUS_SHARED_RAM_REGION_SIZE   (M0PLUS_SHARED_REGION_RAM_END - M0PLUS_SHARED_REGION_RAM_START + 0x1)
 #define SB_RAM_REGION_SIZE              (SB_REGION_RAM_END - SB_REGION_RAM_START + 0x1)
+#define VM_KMS_DATASTORAGE_RAM_REGION_SIZE  (VM_KMS_DATASTORAGE_RAM_END - VM_KMS_DATASTORAGE_RAM_START + 0x1)
 #define SE_RAM_REGION_SIZE              (SE_REGION_RAM_END - SE_REGION_RAM_STACK_TOP + 0x1)
 
 #endif

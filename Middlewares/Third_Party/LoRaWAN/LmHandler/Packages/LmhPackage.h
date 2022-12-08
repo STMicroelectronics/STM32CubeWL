@@ -31,6 +31,11 @@
 #ifndef __LMH_PACKAGE_H__
 #define __LMH_PACKAGE_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "LmHandlerTypes.h"
 #include "LoRaMacVersion.h"
 
@@ -71,7 +76,7 @@ typedef struct LmhPackage_s
      *                [true: Running, false: Not running]
      */
     bool ( *IsRunning )( void );
-#elif (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+#endif /* LORAMAC_VERSION */
     /*!
      * Returns if a package transmission is pending or not.
      *
@@ -79,7 +84,6 @@ typedef struct LmhPackage_s
      *                [true: pending, false: Not pending]
      */
     bool ( *IsTxPending )( void );
-#endif /* LORAMAC_VERSION */
     /*!
      * Processes the internal package events.
      */
@@ -116,7 +120,7 @@ typedef struct LmhPackage_s
     /*
      *=========================================================================
      * Below callbacks must be initialized in LmHandler initialization with
-     * provideded LmHandlerSend and OnMacRequest functions
+     * provided LmHandlerSend and OnMacRequest functions
      *=========================================================================
      */
 
@@ -151,12 +155,16 @@ typedef struct LmhPackage_s
      * Notifies the upper layer that the system time has been updated.
      */
     void ( *OnSysTimeUpdate )( void );
-#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+#if (defined( LORAMAC_VERSION ) && (( LORAMAC_VERSION == 0x01000400 ) || ( LORAMAC_VERSION == 0x01010100 )))
     /*!
      * Request an NVIC Reset
      */
     void ( *OnSystemReset )( void );
 #endif /* LORAMAC_VERSION */
-}LmhPackage_t;
+} LmhPackage_t;
 
-#endif // __LMH_PACKAGE_H__
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __LMH_PACKAGE_H__ */

@@ -338,6 +338,7 @@ int32_t TST_TX_Start(int32_t nb_packet)
         TxConfig.lora.CrcMode = RADIO_LORA_CRC_ON;
         TxConfig.lora.IqInverted = RADIO_LORA_IQ_NORMAL;
         Radio.RadioSetTxGenericConfig(GENERIC_LORA, &TxConfig, testParam.power, TX_TIMEOUT_VALUE);
+        Radio.SetPublicNetwork(false); /*set private syncword*/
       }
       else if (testParam.modulation == TEST_BPSK)
       {
@@ -449,6 +450,7 @@ int32_t TST_RX_Start(int32_t nb_packet)
         RxConfig.lora.CrcMode = RADIO_LORA_CRC_ON;
         RxConfig.lora.IqInverted = RADIO_LORA_IQ_NORMAL;
         Radio.RadioSetRxGenericConfig(GENERIC_LORA, &RxConfig, RX_CONTINUOUS_ON, LORA_SYMBOL_TIMEOUT);
+        Radio.SetPublicNetwork(false); /*set private syncword*/
       }
       else
       {

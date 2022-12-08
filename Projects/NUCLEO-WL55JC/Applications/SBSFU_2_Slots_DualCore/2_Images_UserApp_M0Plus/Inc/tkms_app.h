@@ -52,6 +52,8 @@ CK_RV tkms_app_encrypt_decrypt_aes_cbc(uint32_t length, uint8_t *pClearMessage);
 CK_RV tkms_app_sign_verify_rsa(uint32_t length, uint8_t *pMessage);
 CK_RV tkms_app_derive_key(uint32_t length, uint8_t *pMessage);
 CK_RV tkms_app_find(void);
+CK_RV tkms_app_static_secure_counter(void);
+CK_RV tkms_app_dynamic_secure_counters(void);
 
 #ifdef __cplusplus
 }

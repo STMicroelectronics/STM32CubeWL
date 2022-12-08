@@ -50,6 +50,16 @@
  */
 #define KR920_LBT_RX_BANDWIDTH            200000
 
+/*!
+ * RSSI threshold for a free channel [dBm]
+ */
+#define KR920_RSSI_FREE_TH                          -65
+
+/*!
+ * Specifies the time the node performs a carrier sense
+ */
+#define KR920_CARRIER_SENSE_TIME                    6
+
 #if defined( REGION_KR920 )
 /*
  * Non-volatile module context.
@@ -168,13 +178,11 @@ PhyParam_t RegionKR920GetPhyParam( GetPhyParams_t* getPhy )
             phyParam.Value = MaxPayloadOfDatarateKR920[getPhy->Datarate];
             break;
         }
-        /* ST_WORKAROUND_BEGIN: Keep repeater feature */
         case PHY_MAX_PAYLOAD_REPEATER:
         {
             phyParam.Value = MaxPayloadOfDatarateRepeaterKR920[getPhy->Datarate];
             break;
         }
-        /* ST_WORKAROUND_END */
         case PHY_DUTY_CYCLE:
         {
             phyParam.Value = KR920_DUTY_CYCLE_ENABLED;
@@ -383,6 +391,9 @@ void RegionKR920InitDefaults( InitDefaultsParams_t* params )
 
             // Update the channels mask
             RegionCommonChanMaskCopy( RegionNvmGroup2->ChannelsMask, RegionNvmGroup2->ChannelsDefaultMask, CHANNELS_MASK_SIZE );
+
+            RegionNvmGroup2->RssiFreeThreshold = KR920_RSSI_FREE_TH;
+            RegionNvmGroup2->CarrierSenseTime = KR920_CARRIER_SENSE_TIME;
             break;
         }
         case INIT_TYPE_RESET_TO_DEFAULT_CHANNELS:
@@ -580,7 +591,6 @@ bool RegionKR920RxConfig( RxConfigParams_t* rxConfig, int8_t* datarate )
     // Radio configuration
     Radio.SetRxConfig( MODEM_LORA, rxConfig->Bandwidth, phyDr, 1, 0, 8, rxConfig->WindowTimeout, false, 0, false, 0, 0, true, rxConfig->RxContinuous );
 
-    /* ST_WORKAROUND_BEGIN: Keep repeater feature */
     if( rxConfig->RepeaterSupport == true )
     {
         maxPayload = MaxPayloadOfDatarateRepeaterKR920[dr];
@@ -591,11 +601,8 @@ bool RegionKR920RxConfig( RxConfigParams_t* rxConfig, int8_t* datarate )
     }
 
     Radio.SetMaxPayloadLength( MODEM_LORA, maxPayload + LORAMAC_FRAME_PAYLOAD_OVERHEAD_SIZE );
-    /* ST_WORKAROUND_END */
 
-    /* ST_WORKAROUND_BEGIN: Print Rx config */
     RegionCommonRxConfigPrint(rxConfig->RxSlot, frequency, dr);
-    /* ST_WORKAROUND_END */
 
     *datarate = (uint8_t) dr;
     return true;
@@ -628,9 +635,7 @@ bool RegionKR920TxConfig( TxConfigParams_t* txConfig, int8_t* txPower, TimerTime
     Radio.SetChannel( RegionNvmGroup2->Channels[txConfig->Channel].Frequency );
 
     Radio.SetTxConfig( MODEM_LORA, phyTxPower, 0, bandwidth, phyDr, 1, 8, false, true, 0, 0, false, 4000 );
-    /* ST_WORKAROUND_BEGIN: Print Tx config */
     RegionCommonTxConfigPrint(RegionNvmGroup2->Channels[txConfig->Channel].Frequency, txConfig->Datarate);
-    /* ST_WORKAROUND_END */
 
     // Setup maximum payload length of the radio driver
     Radio.SetMaxPayloadLength( MODEM_LORA, txConfig->PktLen );
@@ -840,7 +845,12 @@ int8_t RegionKR920TxParamSetupReq( TxParamSetupReqParams_t* txParamSetupReq )
 int8_t RegionKR920DlChannelReq( DlChannelReqParams_t* dlChannelReq )
 {
     uint8_t status = 0x03;
+
 #if defined( REGION_KR920 )
+    if( dlChannelReq->ChannelId >= ( CHANNELS_MASK_SIZE * 16 ) )
+    {
+        return 0;
+    }
 
     // Verify if the frequency is supported
     if( VerifyRfFreq( dlChannelReq->Rx1Frequency ) == false )
@@ -926,7 +936,7 @@ LoRaMacStatus_t RegionKR920NextChannel( NextChanParams_t* nextChanParams, uint8_
 
             // Perform carrier sense for KR920_CARRIER_SENSE_TIME
             // If the channel is free, we can stop the LBT mechanism
-            if( Radio.IsChannelFree( RegionNvmGroup2->Channels[channelNext].Frequency, KR920_LBT_RX_BANDWIDTH, KR920_RSSI_FREE_TH, KR920_CARRIER_SENSE_TIME ) == true )
+            if( Radio.IsChannelFree( RegionNvmGroup2->Channels[channelNext].Frequency, KR920_LBT_RX_BANDWIDTH, RegionNvmGroup2->RssiFreeThreshold, RegionNvmGroup2->CarrierSenseTime ) == true )
             {
                 // Free channel found
                 *channel = channelNext;

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Release Notes for MotionAR Library</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <link rel="stylesheet" href="_htmresc/mini-st_2020.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <link rel="icon" type="image/x-icon" href="_htmresc/favicon.png" />
+</head>
+<body>
+<div class="row">
+<div class="col-sm-12 col-lg-4">
+<center>
+<h1 id="release-notes-for-motionar-activity-recognition-library">Release Notes for MotionAR Activity Recognition Library</h1>
+<p>Copyright © 2022 STMicroelectronics<br />
+</p>
+<a href="https://www.st.com" class="logo"><img src="_htmresc/st_logo_2020.png" alt="ST logo" /></a>
+</center>
+<h1 id="purpose">Purpose</h1>
+<p><strong>What is MotionAR?</strong></p>
+<ul>
+<li>The MotionAR provides real-time information on the type of activity performed by the user.</li>
+<li>The library acquires data from the accelerometer and provides information on the type of activity performed by the user. It is able to distinguish the following activities: stationary, walking, fast walking, jogging, biking, driving.</li>
+</ul>
+<p>The library is generated for each ARM Cortex-M core with EABI compiler thus the library might be used with any other compiler which supports ARM EABI specification.</p>
+<p>The library is available for two different wchar variable lengths - 16 bit (wc16) and 32bit (wc32).</p>
+<p>By default the libraries are compiled with option -mfloat-abi=softfp which allows use of floating-point instructions but maintains compatibility with the soft-float ABI. The libraries ending with suffix hard are compiled with option -mfloat-abi=hard and uses floating-point instructions and the floating-point ABI.</p>
+<p>Here is the list of references to the user documents:</p>
+<ul>
+<li><a href="https://www.st.com/resource/en/user_manual/dm00383387-getting-started-with-motionar-activity-recognition-library-in-xcubemems1-expansion-for-stm32cube-stmicroelectronics.pdf">Getting started with MotionAR activity recognition library in X-CUBE-MEMS1 expansion for STM32Cube</a></li>
+<li><a href="https://www.st.com/resource/en/user_manual/dm00157069-getting-started-with-the-xcubemems1-motion-mems-and-environmental-sensor-software-expansion-for-stm32cube-stmicroelectronics.pdf">Getting started with the X-CUBE-MEMS1 motion MEMS and environmental sensor software expansion for STM32Cube</a></li>
+</ul>
+</div>
+<div class="col-sm-12 col-lg-8">
+<h1 id="update-history">Update history</h1>
+<div class="collapse">
+<input type="checkbox" id="collapse-section12" checked aria-hidden="true"> <label for="collapse-section12" aria-hidden="true">V3.2.1 / 24-August-2021</label>
+<div>
+<h2 id="main-changes">Main changes</h2>
+<h3 id="patch-release">Patch release</h3>
+<ul>
+<li>Changed F767 CPU to F722 in order to switch FPU DP to SP for CM7</li>
+</ul>
+<h2 id="development-toolchains-and-compilers">Development toolchains and compilers</h2>
+<ul>
+<li>IAR Embedded Workbench for ARM (EWARM) toolchain V8.50.9</li>
+<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.32.0</li>
+<li>STM32CubeIDE V1.7.0</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section11" aria-hidden="true"> <label for="collapse-section11" aria-hidden="true">V3.2.0 / 28-April-2021</label>
+<div>
+<h2 id="main-changes-1">Main changes</h2>
+<h3 id="maintenance-release">Maintenance release</h3>
+<ul>
+<li>Added CM33F support</li>
+<li>Updated Release Notes to new format</li>
+</ul>
+<h2 id="development-toolchains-and-compilers-1">Development toolchains and compilers</h2>
+<ul>
+<li>IAR Embedded Workbench for ARM (EWARM) toolchain V8.50.9</li>
+<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.32.0</li>
+<li>STM32CubeIDE V1.6.1</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section10" aria-hidden="true"> <label for="collapse-section10" aria-hidden="true">V3.1.0 / 13-November-2020</label>
+<div>
+<h2 id="main-changes-2">Main changes</h2>
+<h3 id="maintenance-release-1">Maintenance release</h3>
+<ul>
+<li>Library compiled in STM32CubeIDE</li>
+<li>Add hard FP option for some of library binaries</li>
+<li>Add Cortex-M7 support</li>
+</ul>
+<h2 id="development-toolchains-and-compilers-2">Development toolchains and compilers</h2>
+<ul>
+<li>STM32CubeIDE V1.3.1</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section9" aria-hidden="true"> <label for="collapse-section9" aria-hidden="true">V3.0.2 / 11-June-2019</label>
+<div>
+<h2 id="main-changes-3">Main changes</h2>
+<h3 id="patch-release-1">Patch release</h3>
+<ul>
+<li>Fixed the issue of interpolation scale when timestamp exceed 28 bit value</li>
+<li>Replaced long int with int64_t</li>
+</ul>
+<h2 id="development-toolchains-and-compilers-3">Development toolchains and compilers</h2>
+<ul>
+<li>System Workbench for STM32 V2.7.0</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section8" aria-hidden="true"> <label for="collapse-section8" aria-hidden="true">V3.0.1 / 15-February-2019</label>
+<div>
+<h2 id="main-changes-4">Main changes</h2>
+<h3 id="patch-release-2">Patch release</h3>
+<ul>
+<li>Unification of the libraries to single EABI library per Cortex core and wchar size</li>
+</ul>
+<h2 id="development-toolchains-and-compilers-4">Development toolchains and compilers</h2>
+<ul>
+<li>System Workbench for STM32 V2.6.0</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section7" aria-hidden="true"> <label for="collapse-section7" aria-hidden="true">V3.0.0 / 01-September-2018</label>
+<div>
+<h2 id="main-changes-5">Main changes</h2>
+<h3 id="product-update">Product update</h3>
+<ul>
+<li>Improved library performance</li>
+</ul>
+<h2 id="development-toolchains-and-compilers-5">Development toolchains and compilers</h2>
+<ul>
+<li>IAR Embedded Workbench for ARM (EWARM) toolchain V7.80.4</li>
+<li>IAR Embedded Workbench for ARM (EWARM) toolchain V8.20.2</li>
+<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.24.0</li>
+<li>System Workbench for STM32 V2.6.0</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section6" aria-hidden="true"> <label for="collapse-section6" aria-hidden="true">V2.0.1 / 01-September-2017</label>
+<div>
+<h2 id="main-changes-6">Main changes</h2>
+<h3 id="patch-release-3">Patch release</h3>
+<ul>
+<li>Add library for EWARM 8 IDE. Due to the changes in EWARM 8 dedicated library for this environment must be used</li>
+<li>The name of the library for EWARM 8 ends by _IAR8_ot</li>
+</ul>
+<h2 id="development-toolchains-and-compilers-6">Development toolchains and compilers</h2>
+<ul>
+<li>IAR Embedded Workbench for ARM (EWARM) toolchain V7.80.4</li>
+<li>IAR Embedded Workbench for ARM (EWARM) toolchain V8.11.2</li>
+<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.22.0</li>
+<li>System Workbench for STM32 V1.13.1</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section5" aria-hidden="true"> <label for="collapse-section5" aria-hidden="true">V2.0.0 / 01-May-2017</label>
+<div>
+<h2 id="main-changes-7">Main changes</h2>
+<h3 id="product-update-1">Product update</h3>
+<ul>
+<li>First version of the library published under the ODE initiative</li>
+<li>Previously released as part of OSX framework</li>
+</ul>
+<h2 id="development-toolchains-and-compilers-7">Development toolchains and compilers</h2>
+<ul>
+<li>IAR Embedded Workbench for ARM (EWARM) toolchain V7.80.4</li>
+<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.22.0</li>
+<li>System Workbench for STM32 V1.13.1</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section4" aria-hidden="true"> <label for="collapse-section4" aria-hidden="true">V1.2.0 / 04-April-2016</label>
+<div>
+<h2 id="main-changes-8">Main changes</h2>
+<h3 id="maintenance-release-2">Maintenance release</h3>
+<ul>
+<li>Improved performances in case of biking and driving activities</li>
+</ul>
+<h2 id="development-toolchains-and-compilers-8">Development toolchains and compilers</h2>
+<ul>
+<li>IAR Embedded Workbench for ARM (EWARM) toolchain V7.80.4</li>
+<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.22.0</li>
+<li>System Workbench for STM32 V1.13.1</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section3" aria-hidden="true"> <label for="collapse-section3" aria-hidden="true">V1.1.0 / 15-December-2015</label>
+<div>
+<h2 id="main-changes-9">Main changes</h2>
+<h3 id="maintenance-release-3">Maintenance release</h3>
+<ul>
+<li>Initialize function return value</li>
+</ul>
+<h2 id="development-toolchains-and-compilers-9">Development toolchains and compilers</h2>
+<ul>
+<li>IAR Embedded Workbench for ARM (EWARM) toolchain V7.80.4</li>
+<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.22.0</li>
+<li>System Workbench for STM32 V1.13.1</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section2" aria-hidden="true"> <label for="collapse-section2" aria-hidden="true">V1.0.1 / 15-September-2015</label>
+<div>
+<h2 id="main-changes-10">Main changes</h2>
+<h3 id="patch-release-4">Patch release</h3>
+<ul>
+<li>Production License supported</li>
+</ul>
+<h2 id="development-toolchains-and-compilers-10">Development toolchains and compilers</h2>
+<ul>
+<li>IAR Embedded Workbench for ARM (EWARM) toolchain V7.80.4</li>
+<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.22.0</li>
+<li>System Workbench for STM32 V1.13.1</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section1" aria-hidden="true"> <label for="collapse-section1" aria-hidden="true">V1.0.0 / 08-June-2015</label>
+<div>
+<h2 id="main-changes-11">Main changes</h2>
+<h3 id="first-release">First release</h3>
+<ul>
+<li>First official release</li>
+</ul>
+<h2 id="development-toolchains-and-compilers-11">Development toolchains and compilers</h2>
+<ul>
+<li>IAR Embedded Workbench for ARM (EWARM) toolchain V7.30.0</li>
+<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.14.0</li>
+<li>System Workbench for STM32 V1.1.0</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<footer class="sticky">
+<div class="columns">
+<div class="column" style="width:95%;">
+<p>For complete documentation on <strong>MotionAR</strong> , visit: <a href="https://www.st.com/en/embedded-software/x-cube-mems1.html">X-CUBE-MEMS1</a></p>
+</div><div class="column" style="width:5%;">
+<p><abbr title="Based on template cx566953 version 2.0">Info</abbr></p>
+</div>
+</div>
+</footer>
+</body>
+</html>

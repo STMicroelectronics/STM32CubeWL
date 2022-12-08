@@ -56,6 +56,12 @@ extern "C"
 #include "LoRaMacCrypto.h"
 #include "secure-element-nvm.h"
 #include "LoRaMacVersion.h"
+#include "LoRaMacInterfaces.h"
+
+/*
+ * CMAC/AES Message Integrity Code (MIC) Block B0 size
+ */
+#define MIC_BLOCK_BX_SIZE               16
 
 /*!
  * Return values.
@@ -96,24 +102,36 @@ typedef enum eSecureElementStatus
     SECURE_ELEMENT_FAIL_ENCRYPT,
 }SecureElementStatus_t;
 
-/* ST_WORKAROUND_BEGIN: Add unique ID callback as input parameter */
 /*!
  * \brief   get the board 64 bits unique ID
  *
  * \param   [out] id unique
  */
-typedef void ( *SecureElementGetUniqueId )(uint8_t *id);
+typedef void ( *SecureElementGetUniqueId_t )(uint8_t *id);
+/*!
+ * \brief   get device address (random generation)
+ *
+ * \param   [out] address unique
+ */
+typedef void ( *SecureElementGetDevAddr_t )(uint32_t *devaddr);
 
 /*!
  * Initialization of Secure Element driver
  *
  * \param [in]    nvm              - Pointer to the non-volatile memory data
  *                                   structure.
- * \param [in]    seGetUniqueId    - Get unique ID callback
  * \retval                         - Status of the operation
  */
-SecureElementStatus_t SecureElementInit( SecureElementNvmData_t* nvm, SecureElementGetUniqueId seGetUniqueId );
-/* ST_WORKAROUND_END */
+SecureElementStatus_t SecureElementInit( SecureElementNvmData_t* nvm );
+
+/*!
+ * Initialize Secure Element parameters with a value provided by MCU platform if current value equal 00..
+ *
+ * \param [in]    seGetUniqueId    - Get unique ID callback
+ * \param [in]    seGetDevAddr     - Get DevAddress callback
+ * \retval                         - Status of the operation
+ */
+SecureElementStatus_t SecureElementInitMcuID( SecureElementGetUniqueId_t seGetUniqueId, SecureElementGetDevAddr_t seGetDevAddr );
 
 /*!
  * Print Root and Session keys if available
@@ -127,9 +145,8 @@ SecureElementStatus_t SecureElementPrintKeys( void );
  *
  * \retval                         - Status of the operation
  */
-SecureElementStatus_t SecureElementPrintSessionKeys( void );
+SecureElementStatus_t SecureElementPrintSessionKeys( ActivationType_t );
 
-/* ST_WORKAROUND_BEGIN: Add KMS specific functions */
 #if (!defined (LORAWAN_KMS) || (LORAWAN_KMS == 0))
 /*!
  * Gets key item from key list.
@@ -138,6 +155,7 @@ SecureElementStatus_t SecureElementPrintSessionKeys( void );
  * \param [out] keyItem       - Key item reference
  * \retval                    - Status of the operation
  */
+SecureElementStatus_t SecureElementGetKeyByID( KeyIdentifier_t keyID, Key_t **keyItem );
 #else
 /*!
  * Gets key item from key list.
@@ -146,21 +164,17 @@ SecureElementStatus_t SecureElementPrintSessionKeys( void );
  * \param [out] extractable_key - Key item pointer
  * \retval                    - Status of the operation
  */
-#endif /* LORAWAN_KMS */
-#if (!defined (LORAWAN_KMS) || (LORAWAN_KMS == 0))
-SecureElementStatus_t SecureElementGetKeyByID( KeyIdentifier_t keyID, Key_t **keyItem);
-#else
 SecureElementStatus_t SecureElementGetKeyByID( KeyIdentifier_t keyID, uint8_t* extractable_key );
 #endif /* LORAWAN_KMS */
 
 /*!
- * Remove previously generated dynamic keys with "label" from memory
+ * Remove previously generated dynamic key with "label" from memory
  *
  * \param [in]    keyID               - Key identifier
  * \param [out]   key_label           - string of char to identifying targetKeyID label
  * \retval                            - Status of the operation
  */
-SecureElementStatus_t SecureElementDeleteDynamicKeys( KeyIdentifier_t keyID, uint32_t *key_label );
+SecureElementStatus_t SecureElementDeleteDynamicKey( KeyIdentifier_t keyID, uint32_t *key_label );
 
 /*!
  * Sets a the KMS object handler for a given keyID (reserved to Kms)
@@ -170,7 +184,6 @@ SecureElementStatus_t SecureElementDeleteDynamicKeys( KeyIdentifier_t keyID, uin
  * \retval                    - Status of the operation
  */
 SecureElementStatus_t SecureElementSetObjHandler( KeyIdentifier_t keyID, uint32_t keyIndex );
-/* ST_WORKAROUND_END */
 
 /*!
  * Sets a key
@@ -182,6 +195,14 @@ SecureElementStatus_t SecureElementSetObjHandler( KeyIdentifier_t keyID, uint32_
 SecureElementStatus_t SecureElementSetKey( KeyIdentifier_t keyID, uint8_t* key );
 
 /*!
+ * Sets a key
+ *
+ * \param [in] KMSKeyBlob     - Identifiers structure definition
+ * \retval                    - Status of the operation
+ */
+SecureElementStatus_t SecureElementSetID( SecureElementNvmDevJoinAddrKey_t *KMSKeyBlob );
+
+/*!
  * Computes a CMAC of a message using provided initial Bx block
  *
  * \param [in] micBxBuffer    - Buffer containing the initial Bx block
@@ -191,7 +212,7 @@ SecureElementStatus_t SecureElementSetKey( KeyIdentifier_t keyID, uint8_t* key )
  * \param [out] cmac          - Computed cmac
  * \retval                    - Status of the operation
  */
-SecureElementStatus_t SecureElementComputeAesCmac( uint8_t* micBxBuffer, uint8_t* buffer, uint16_t size, KeyIdentifier_t keyID, uint32_t* cmac );
+SecureElementStatus_t SecureElementComputeAesCmac( uint8_t* micBxBuffer, uint8_t* buffer, uint32_t size, KeyIdentifier_t keyID, uint32_t* cmac );
 
 /*!
  * Verifies a CMAC (computes and compare with expected cmac)
@@ -202,7 +223,7 @@ SecureElementStatus_t SecureElementComputeAesCmac( uint8_t* micBxBuffer, uint8_t
  * \param [in] keyID          - Key identifier to determine the AES key to be used
  * \retval                    - Status of the operation
  */
-SecureElementStatus_t SecureElementVerifyAesCmac( uint8_t* buffer, uint16_t size, uint32_t expectedCmac, KeyIdentifier_t keyID );
+SecureElementStatus_t SecureElementVerifyAesCmac( uint8_t* buffer, uint32_t size, uint32_t expectedCmac, KeyIdentifier_t keyID );
 
 /*!
  * Encrypt a buffer
@@ -213,7 +234,7 @@ SecureElementStatus_t SecureElementVerifyAesCmac( uint8_t* buffer, uint16_t size
  * \param [out] encBuffer     - Encrypted buffer
  * \retval                    - Status of the operation
  */
-SecureElementStatus_t SecureElementAesEncrypt( uint8_t* buffer, uint16_t size, KeyIdentifier_t keyID, uint8_t* encBuffer );
+SecureElementStatus_t SecureElementAesEncrypt( uint8_t* buffer, uint32_t size, KeyIdentifier_t keyID, uint8_t* encBuffer );
 
 /*!
  * Derives and store a key
@@ -248,7 +269,7 @@ SecureElementStatus_t SecureElementProcessJoinAccept( JoinReqIdentifier_t joinRe
 /*!
  * Generates a random number
  *
- * \param[OUT] randomNum      - 32 bit random number
+ * \param [out] randomNum     - 32 bit random number
  * \retval                    - Status of the operation
  */
 SecureElementStatus_t SecureElementRandomNumber( uint32_t* randomNum );
@@ -265,9 +286,10 @@ SecureElementStatus_t SecureElementSetDevEui( uint8_t* devEui );
 /*!
  * Gets the DevEUI
  *
- * \retval                    - Pointer to the 8-byte devEUI
+ * \param [out] devEui        - Pointer to the 8-byte devEUI
+ * \retval                    - Status of the operation
  */
-uint8_t* SecureElementGetDevEui( void );
+SecureElementStatus_t SecureElementGetDevEui( uint8_t* devEui );
 
 /*!
  * Sets the JoinEUI
@@ -280,10 +302,28 @@ SecureElementStatus_t SecureElementSetJoinEui( uint8_t* joinEui );
 /*!
  * Gets the DevEUI
  *
- * \retval                    - Pointer to the 8-byte joinEui
+ * \param [out] joinEui       - Pointer to the 8-byte joinEui
+ * \retval                    - Status of the operation
  */
-uint8_t* SecureElementGetJoinEui( void );
+SecureElementStatus_t SecureElementGetJoinEui( uint8_t* joinEui );
 
+/*!
+ * Sets the devAddress
+ *
+ * \param [in] mode           - Activation mode (OTAA, ABP)
+ * \param [in] devAddr        - 32-byte devAddress
+ * \retval                    - Status of the operation
+ */
+SecureElementStatus_t SecureElementSetDevAddr ( ActivationType_t mode, uint32_t devAddr );
+
+/*!
+ * Gets the devAddress
+ *
+ * \param [in] mode           - Activation mode (OTAA, ABP)
+ * \param [out] devAddr       - Pointer to the 32-byte devAddress
+ * \retval                    - Status of the operation
+ */
+SecureElementStatus_t SecureElementGetDevAddr ( ActivationType_t mode, uint32_t* devAddr );
 /*!
  * Sets the pin
  *

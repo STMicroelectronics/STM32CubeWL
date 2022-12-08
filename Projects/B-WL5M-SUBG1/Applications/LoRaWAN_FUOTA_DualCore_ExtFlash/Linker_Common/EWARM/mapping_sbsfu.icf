@@ -1,0 +1,108 @@
+/*###ICF### Set of symbols used in SE and SB_SFU projects ****/
+
+/******************************************************************************/
+/*                               M4 ROM section                               */
+/******************************************************************************/
+
+/* M4 SB Code region */
+define exported symbol __ICFEDIT_M4_SB_region_ROM_start__          = 0x08000000;
+define exported symbol __ICFEDIT_M4_SB_region_ROM_end__            = 0x080067FF;
+
+/* ROM regions definition */
+define region M4_SB_ROM_region           = mem:[from __ICFEDIT_M4_SB_region_ROM_start__   to __ICFEDIT_M4_SB_region_ROM_end__];
+
+/******************************************************************************/
+/*                               M0+ ROM section                              */
+/******************************************************************************/
+
+/* KMS Data Storage (NVMS) region protected area */
+/* KMS Data Storage need for 2 images : 4 kbytes * 2 ==> 8 kbytes */
+define exported symbol __ICFEDIT_KMS_DataStorage_start__           = 0x08029800;
+define exported symbol __ICFEDIT_KMS_DataStorage_end__             = 0x0802B7FF;
+
+/* SE IF ROM: used to locate Secure Engine interface code out of MPU isolation */
+define exported symbol __ICFEDIT_SE_IF_region_ROM_start__          = __ICFEDIT_KMS_DataStorage_end__ + 1;
+define exported symbol __ICFEDIT_SE_IF_region_ROM_end__            = __ICFEDIT_SE_IF_region_ROM_start__ + 0x13FF;
+
+/* SBSFU Code region */
+define exported symbol __ICFEDIT_SB_region_ROM_start__             = __ICFEDIT_SE_IF_region_ROM_end__ + 1;
+define exported symbol __ICFEDIT_SB_region_ROM_end__               = 0x08035FFF;
+
+/* M0 Vector table with alignment constraint on VECTOR_SIZE */
+define exported symbol __ICFEDIT_intvec_start__                    = __ICFEDIT_SB_region_ROM_end__ + 1;
+define exported symbol __ICFEDIT_Vector_size__                     = 0x200;
+
+/* SE Code region protected by MPU isolation */
+define exported symbol __ICFEDIT_SE_Code_region_ROM_start__        = __ICFEDIT_intvec_start__ + __ICFEDIT_Vector_size__;
+define exported symbol __ICFEDIT_SE_CallGate_region_ROM_start__    = __ICFEDIT_SE_Code_region_ROM_start__ + 4;
+define exported symbol __ICFEDIT_SE_CallGate_Region_ROM_End__      = __ICFEDIT_SE_Code_region_ROM_start__ + 0x1FF;
+
+/* SE Startup */
+define exported symbol __ICFEDIT_SE_Startup_region_ROM_start__     = __ICFEDIT_SE_CallGate_Region_ROM_End__ + 1;
+define exported symbol __ICFEDIT_SE_Code_nokey_region_ROM_start__  = __ICFEDIT_SE_Startup_region_ROM_start__ + 0x100;
+
+/* User Embedded Keys */
+define exported symbol __ICFEDIT_User_Key_region_ROM_start__      = 0x0803E500;
+define exported symbol __ICFEDIT_User_Key_region_ROM_end__        = 0x0803E7FF;
+
+/* SE Embedded Keys */
+define exported symbol __ICFEDIT_SE_Key_region_ROM_start__         = 0x0803E800;
+define exported symbol __ICFEDIT_SE_Key_region_ROM_end__           = 0x0803EFFF;
+define exported symbol __ICFEDIT_SE_Code_region_ROM_end__          = __ICFEDIT_SE_Key_region_ROM_end__;
+
+/* ROM regions definition */
+define region KMS_DataStorage            = mem:[from __ICFEDIT_KMS_DataStorage_start__ to __ICFEDIT_KMS_DataStorage_end__];
+define region SE_IF_ROM_region           = mem:[from __ICFEDIT_SE_IF_region_ROM_start__ to __ICFEDIT_SE_IF_region_ROM_end__];
+define region SB_ROM_region              = mem:[from __ICFEDIT_SB_region_ROM_start__ to __ICFEDIT_SB_region_ROM_end__];
+define region SE_CALLGATE_ROM_Region     = mem:[from __ICFEDIT_SE_CallGate_region_ROM_start__ to __ICFEDIT_SE_CallGate_Region_ROM_End__];
+define region SE_CODE_NOKEY_ROM_region   = mem:[from __ICFEDIT_SE_Code_nokey_region_ROM_start__ to __ICFEDIT_SE_Key_region_ROM_start__ - 1];
+define region User_Key_ROM_region        = mem:[from __ICFEDIT_User_Key_region_ROM_start__ to __ICFEDIT_User_Key_region_ROM_end__];
+define region SE_Key_ROM_region          = mem:[from __ICFEDIT_SE_Key_region_ROM_start__ to __ICFEDIT_SE_Key_region_ROM_end__];
+define region SE_ROM_region              = mem:[from __ICFEDIT_SE_Code_region_ROM_start__ to __ICFEDIT_SE_Code_region_ROM_end__];
+
+/******************************************************************************/
+/*                              RAM section                                   */
+/*                                                                            */
+/******************************************************************************/
+
+/* M4 SB */
+define symbol __ICFEDIT_M4_SB_region_RAM_start__                   = 0x20000000;
+define symbol __ICFEDIT_M4_SB_region_RAM_end__                     = __ICFEDIT_M4_SB_region_RAM_start__ + 0xCDF;
+
+/* M0+/M4 Synchronization flag */
+define exported symbol __ICFEDIT_M4_M0PLUS_FLAG_region_RAM_start__ = __ICFEDIT_M4_SB_region_RAM_end__ + 1;
+define exported symbol __ICFEDIT_M4_M0PLUS_FLAG_region_RAM_end__   = __ICFEDIT_M4_M0PLUS_FLAG_region_RAM_start__ + 0x1F;
+
+/* M4 UserApp */
+define symbol __ICFEDIT_M4_APP_region_RAM_start__                  = __ICFEDIT_M4_M0PLUS_FLAG_region_RAM_end__ + 1;
+define symbol __ICFEDIT_M4_APP_region_RAM_end__                    = __ICFEDIT_M4_APP_region_RAM_start__ + 0x62FF;
+
+/* M4 UserApp shared area */
+define exported symbol __ICFEDIT_M4_SHARED_region_SRAM_start__     = __ICFEDIT_M4_APP_region_RAM_end__ + 1;
+define exported symbol __ICFEDIT_M4_SHARED_region_SRAM_end__       = __ICFEDIT_M4_SHARED_region_SRAM_start__ + 0x3FF;
+
+/* M0PLUS UserApp shared area */
+define exported symbol __ICFEDIT_M0PLUS_SHARED_region_SRAM_start__ = __ICFEDIT_M4_SHARED_region_SRAM_end__ + 1;
+define exported symbol __ICFEDIT_M0PLUS_SHARED_region_SRAM_end__   = __ICFEDIT_M0PLUS_SHARED_region_SRAM_start__ + 0xBFF;
+
+/***** NVM RAM Data region *****/
+define exported symbol __ICFEDIT_LW_NVM_region_SRAM_start__        = __ICFEDIT_M0PLUS_SHARED_region_SRAM_end__ + 1;
+define exported symbol __ICFEDIT_LW_NVM_region_SRAM_end__          = __ICFEDIT_LW_NVM_region_SRAM_start__ + 0xFFF;
+
+/* SBSFU RAM region */
+define exported symbol __ICFEDIT_SB_region_RAM_start__             = __ICFEDIT_LW_NVM_region_SRAM_end__ + 1;
+define exported symbol __ICFEDIT_SB_region_RAM_end__               = 0x2000C7FF;
+
+/* SE RAM region protected area with 1 kBytes alignment constraint (TZIC) ==> 0x2000C800 */
+define exported symbol __ICFEDIT_SE_region_RAM_start__             = __ICFEDIT_SB_region_RAM_end__ + 1;
+define exported symbol __ICFEDIT_SE_region_RAM_stack_top__         = 0x2000D300; /* Secure Engine's private stack */
+define exported symbol __ICFEDIT_SE_region_RAM_no_key_end__        = 0x2000FFEF;
+define exported symbol __ICFEDIT_region_KMS_DataStorageKey_start__ = 0x2000FFF0;
+define exported symbol __ICFEDIT_region_KMS_DataStorageKey_end__   = 0x2000FFFF;
+define exported symbol __ICFEDIT_SE_region_RAM_end__               = __ICFEDIT_region_KMS_DataStorageKey_end__;
+
+/* RAM regions definition */
+define region M4_SB_RAM_region           = mem:[from __ICFEDIT_M4_SB_region_RAM_start__ to __ICFEDIT_M4_SB_region_RAM_end__];
+define region M4_APP_RAM_region          = mem:[from __ICFEDIT_M4_APP_region_RAM_start__ to __ICFEDIT_M4_APP_region_RAM_end__];
+define region SE_RAM_region              = mem:[from __ICFEDIT_SE_region_RAM_stack_top__ to __ICFEDIT_SE_region_RAM_no_key_end__];
+define region SB_RAM_region              = mem:[from __ICFEDIT_SB_region_RAM_start__ to __ICFEDIT_SB_region_RAM_end__];

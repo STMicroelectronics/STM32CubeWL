@@ -245,16 +245,6 @@ extern "C"
 #define KR920_JOIN_CHANNELS                         ( uint16_t )( LC( 1 ) | LC( 2 ) | LC( 3 ) )
 
 /*!
- * RSSI threshold for a free channel [dBm]
- */
-#define KR920_RSSI_FREE_TH                          -65
-
-/*!
- * Specifies the time the node performs a carrier sense
- */
-#define KR920_CARRIER_SENSE_TIME                    6
-
-/*!
  * Data rates table definition
  */
 static const uint8_t DataratesKR920[]  = { 12, 11, 10,  9,  8,  7 };
@@ -264,7 +254,6 @@ static const uint8_t DataratesKR920[]  = { 12, 11, 10,  9,  8,  7 };
  */
 static const uint32_t BandwidthsKR920[] = { 125000, 125000, 125000, 125000, 125000, 125000 };
 
-/* ST_WORKAROUND_BEGIN: Keep repeater feature */
 /*!
  * Maximum payload with respect to the datarate index. Can operate with and without a repeater.
  */
@@ -274,7 +263,6 @@ static const uint8_t MaxPayloadOfDatarateKR920[] = { 51, 51, 51, 115, 242, 242 }
  * Maximum payload with respect to the datarate index. Can operate with repeater.
  */
 static const uint8_t MaxPayloadOfDatarateRepeaterKR920[] = { 51, 51, 51, 115, 222, 222 };
-/* ST_WORKAROUND_END */
 
 /*!
  * \brief The function gets a value of a specific phy attribute.

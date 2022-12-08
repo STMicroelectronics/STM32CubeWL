@@ -1,38 +1,69 @@
 /*
-** LinkerScript
-** Note: For specific memory allocation, linker and startup files must be customized.
-**       Refer to STM32CubeIDE user guide (UM2609), chapter "Modify the linker script".
+******************************************************************************
+**
+**  File        : LinkerScript.ld
+**
+**  Author      : STM32CubeIDE
+**
+**  Abstract    : Linker script for STM32WL55xC Device
+**                      256Kbytes FLASH
+**                      64Kbytes RAM
+**
+**                Set heap size, stack size and stack location according
+**                to application requirements.
+**
+**                Set memory bank area and size if external memory is used.
+**
+**  Target      : STMicroelectronics STM32
+**
+**  Distribution: The file is distributed as is without any warranty
+**                of any kind.
+**
+**  Note        : For specific memory allocation, linker and startup files must be customized.
+**                Refer to STM32CubeIDE user guide (UM2609), chapter "Modify the linker script".
+**
+*****************************************************************************
+** @attention
+**
+** Copyright (c) 2021 STMicroelectronics.
+** All rights reserved.
+**
+** This software is licensed under terms that can be found in the LICENSE file
+** in the root directory of this software component.
+** If no LICENSE file comes with this software, it is provided AS-IS.
+**
+*****************************************************************************
 */
 
 /* Entry Point */
 ENTRY(Reset_Handler)
 
 /* Highest address of the user mode stack */
-_estack = ORIGIN(RAM1) + LENGTH(RAM1); /* end of "SRAM1" Ram type memory */
+_estack = ORIGIN(RAM1) + LENGTH(RAM1); /* end of "RAM1" Ram type memory */
 
-_Min_Heap_Size  = 0x200; /* required amount of heap  */
+_Min_Heap_Size = 0x200; /* required amount of heap  */
 _Min_Stack_Size = 0x800; /* required amount of stack */
 
 /* Memories definition */
 MEMORY
 {
-  ROM    (rx)    : ORIGIN = 0x08000000, LENGTH = 128K   /* Flash memory dedicated to CM4 */
-  RAM1   (xrw)   : ORIGIN = 0x20000000, LENGTH = 32K    /* Non-backup SRAM1 dedicated to CM4 */
+  RAM1   (xrw)   : ORIGIN = 0x20000000, LENGTH = 32K
   RAM_SHARED (rw): ORIGIN = 0x20008000, LENGTH = 4K
+  FLASH   (rx)   : ORIGIN = 0x08000000, LENGTH = 128K
 }
 
 /* Sections */
 SECTIONS
 {
-  /* The startup code into "ROM" Rom type memory */
+  /* The startup code into "FLASH" Rom type memory */
   .isr_vector :
   {
     . = ALIGN(8);
     KEEP(*(.isr_vector)) /* Startup code */
     . = ALIGN(8);
-  } >ROM
+  } >FLASH
 
-  /* The program code and other data into "ROM" Rom type memory */
+  /* The program code and other data into "FLASH" Rom type memory */
   .text :
   {
     . = ALIGN(8);
@@ -47,30 +78,30 @@ SECTIONS
 
     . = ALIGN(8);
     _etext = .;        /* define a global symbols at end of code */
-  } >ROM
+  } >FLASH
 
-  /* Constant data into "ROM" Rom type memory */
+  /* Constant data into "FLASH" Rom type memory */
   .rodata :
   {
     . = ALIGN(8);
     *(.rodata)         /* .rodata sections (constants, strings, etc.) */
     *(.rodata*)        /* .rodata* sections (constants, strings, etc.) */
     . = ALIGN(8);
-  } >ROM
+  } >FLASH
 
-  .ARM.extab   : { 
+  .ARM.extab   : {
     . = ALIGN(8);
     *(.ARM.extab* .gnu.linkonce.armextab.*)
     . = ALIGN(8);
-  } >ROM
-  
+  } >FLASH
+
   .ARM : {
     . = ALIGN(8);
     __exidx_start = .;
     *(.ARM.exidx*)
     __exidx_end = .;
     . = ALIGN(8);
-  } >ROM
+  } >FLASH
 
   .preinit_array     :
   {
@@ -79,8 +110,8 @@ SECTIONS
     KEEP (*(.preinit_array*))
     PROVIDE_HIDDEN (__preinit_array_end = .);
     . = ALIGN(8);
-  } >ROM
-  
+  } >FLASH
+
   .init_array :
   {
     . = ALIGN(8);
@@ -89,8 +120,8 @@ SECTIONS
     KEEP (*(.init_array*))
     PROVIDE_HIDDEN (__init_array_end = .);
     . = ALIGN(8);
-  } >ROM
-  
+  } >FLASH
+
   .fini_array :
   {
     . = ALIGN(8);
@@ -99,13 +130,13 @@ SECTIONS
     KEEP (*(.fini_array*))
     PROVIDE_HIDDEN (__fini_array_end = .);
     . = ALIGN(8);
-  } >ROM
+  } >FLASH
 
   /* Used by the startup to initialize data */
   _sidata = LOADADDR(.data);
 
-  /* Initialized data sections into "SRAM1" Ram type memory */
-  .data : 
+  /* Initialized data sections into "RAM" Ram type memory */
+  .data :
   {
     . = ALIGN(8);
     _sdata = .;        /* create a global symbol at data start */
@@ -116,8 +147,8 @@ SECTIONS
 
     . = ALIGN(8);
     _edata = .;        /* define a global symbol at data end */
-    
-  } >RAM1 AT> ROM
+
+  } >RAM1 AT> FLASH
 
   /* Uninitialized data section into "MAPPING_TABLE" Ram type memory */
   MAPPING_TABLE (NOLOAD) :
@@ -141,7 +172,7 @@ SECTIONS
     _eMB_MEM1 = .;
   } >RAM_SHARED
 
-  /* Uninitialized data section into "SRAM1" Ram type memory */
+  /* Uninitialized data section into "RAM1" Ram type memory */
   . = ALIGN(8);
   .bss :
   {
@@ -157,7 +188,7 @@ SECTIONS
     __bss_end__ = _ebss;
   } >RAM1
 
-  /* Data section into "SRAM1" Ram type memory: Non-backup SRAM1 dedicated to CM4 */
+  /* Data section into "RAM1" Ram type memory: Non-backup RAM1 dedicated to CM4 */
   . = ALIGN(8);
   RAM1_region :
   {
@@ -168,7 +199,7 @@ SECTIONS
     _eRAM1_region = .;         /* define a global symbol at section end */
   } >RAM1
 
-  /* User_heap_stack section, used to check that there is enough "SRAM1" Ram  type memory left */
+  /* User_heap_stack section, used to check that there is enough "RAM1" Ram  type memory left */
   ._user_heap_stack :
   {
     . = ALIGN(8);

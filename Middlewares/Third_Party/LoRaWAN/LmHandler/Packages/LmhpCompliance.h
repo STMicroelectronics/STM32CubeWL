@@ -21,6 +21,11 @@
 #ifndef __LMHP_COMPLIANCE__
 #define __LMHP_COMPLIANCE__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "LmhPackage.h"
 #include "LoRaMacVersion.h"
 
@@ -61,8 +66,8 @@ typedef struct LmhpComplianceParams_s
      *         reduce the power consumption.
      */
     void ( *StartPeripherals )( void );
-}LmhpComplianceParams_t;
-#elif (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+} LmhpComplianceParams_t;
+#elif (defined( LORAMAC_VERSION ) && (( LORAMAC_VERSION == 0x01000400 ) || ( LORAMAC_VERSION == 0x01010100 )))
 /*!
  * Compliance test protocol handler parameters
  */
@@ -84,9 +89,13 @@ typedef struct LmhpComplianceParams_s
      *
      */
     void ( *OnPingSlotPeriodicityChanged )( uint8_t pingSlotPeriodicity );
-}LmhpComplianceParams_t;
+} LmhpComplianceParams_t;
 #endif /* LORAMAC_VERSION */
 
 LmhPackage_t *LmhpCompliancePackageFactory( void );
 
-#endif // __LMHP_COMPLIANCE__
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __LMHP_COMPLIANCE__ */

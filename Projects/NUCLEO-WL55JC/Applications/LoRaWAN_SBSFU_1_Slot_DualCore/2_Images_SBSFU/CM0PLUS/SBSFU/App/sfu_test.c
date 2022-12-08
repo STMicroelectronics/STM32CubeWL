@@ -170,7 +170,7 @@ static void SFU_TEST_Protection(void)
     printf("\r\n= [TEST] %s @ %s %08x", aTestOperation[aProtectTests[test_idx].type], aProtectTests[test_idx].msg,
            aProtectTests[test_idx].address);
 
-    /* Remove test for slots not configured (taking into accounbt SFU_IMG_IMAGE_OFFSET) */
+    /* Remove test for slots not configured (taking into account SFU_IMG_IMAGE_OFFSET) */
     if ((aProtectTests[test_idx].address != 0U) && (aProtectTests[test_idx].address < 0xFFFFFF00U)
         && (aProtectTests[test_idx].address > 0x00000FFFU))
     {
@@ -239,7 +239,7 @@ static void SFU_TEST_Protection(void)
           status = TEST_ERROR;
           break;
 
-          /* Tryning to execute code : reset generated if under FWALL or MPU protection */
+          /* Trying to execute code : reset generated if under FWALL or MPU protection */
         case TEST_EXECUTE :
           func = (void(*)(void))(aProtectTests[test_idx].address);
           func();

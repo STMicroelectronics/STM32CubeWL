@@ -38,8 +38,8 @@
 /* USER CODE END EV */
 
 /* Private typedef -----------------------------------------------------------*/
-
 /* USER CODE BEGIN PTD */
+
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -59,11 +59,21 @@
 /*if TEST_MODE is RADIO_RX, board will receive packet indefinitely*/
 #define TEST_MODE                     RADIO_TX
 
+#if (( USE_MODEM_LORA == 1 ) && ( USE_MODEM_FSK == 0 ))
+/* 0: Tx Long packet shall be disable when USE_MODEM_LORA*/
+#define APP_LONG_PACKET              0
+/* Application buffer 255 max when USE_MODEM_LORA */
+#define MAX_APP_BUFFER_SIZE              255
+#elif (( USE_MODEM_LORA == 0 ) && ( USE_MODEM_FSK == 1 ))
 /* 0: Tx Long packet disable*/
 /* 1: Tx Long packet enable(payload can be greater than 255bytes. Available on stm32wl revision Y)*/
 #define APP_LONG_PACKET               0
 /* Application buffer, can be increased further*/
-#define MAX_APP_BUFFER_SIZE 1000
+#define MAX_APP_BUFFER_SIZE           1000
+#else
+#error "Please define a modem in the compiler subghz_phy_app.h."
+#endif /* USE_MODEM_LORA | USE_MODEM_FSK */
+
 #if (PAYLOAD_LEN>MAX_APP_BUFFER_SIZE)
 #error increase MAX_APP_BUFFER_SIZE
 #endif /* (PAYLOAD_LEN>MAX_APP_BUFFER_SIZE) */
@@ -71,6 +81,7 @@
 #if ((APP_LONG_PACKET==0) && PAYLOAD_LEN>255)
 #error in case PAYLOAD_LEN>255, APP_LONG_PACKET shall be defined to 1
 #endif /* ((APP_LONG_PACKET==0) && PAYLOAD_LEN>255) */
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -81,8 +92,8 @@
 /* Private variables ---------------------------------------------------------*/
 /* Radio events function pointer */
 static RadioEvents_t RadioEvents;
-/* USER CODE BEGIN PV */
 
+/* USER CODE BEGIN PV */
 static __IO uint32_t RadioTxDone_flag = 0;
 static __IO uint32_t RadioTxTimeout_flag = 0;
 static __IO uint32_t RadioRxDone_flag = 0;
@@ -95,19 +106,25 @@ uint8_t data_buffer[MAX_APP_BUFFER_SIZE] UTIL_MEM_ALIGN(4);
 uint16_t data_offset = 0;
 
 static __IO uint16_t payloadLen = PAYLOAD_LEN;
+#if (TEST_MODE == RADIO_TX)
+static uint16_t payloadLenMax = MAX_APP_BUFFER_SIZE;
+#endif /* TEST_MODE == RADIO_TX */
 
+#if (( USE_MODEM_LORA == 0 ) && ( USE_MODEM_FSK == 1 ))
 static uint8_t syncword[] = { 0xC1, 0x94, 0xC1};
+#endif /* USE_MODEM_FSK */
 
 uint32_t count_RxOk = 0;
 uint32_t count_RxKo = 0;
 uint32_t PER = 0;
 
-static int packetCnt = 0;
+static int32_t packetCnt = 0;
 
 /* TxPayloadMode
  * 0: byte Inc e.g payload=0x00, 0x01, ..,payloadLen-1
  * 1: prbs9  */
 static __IO uint8_t TxPayloadMode = 0;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -146,14 +163,6 @@ static void OnRxError(void);
   */
 static void Per_Process(void);
 
-#if (TEST_MODE == RADIO_TX)
-/**
-  * @brief Generates a PRBS9 sequence
-  * @retval 0
-  */
-static int32_t tx_payload_generator(void);
-#endif /* TEST_MODE == RADIO_TX */
-
 #if (APP_LONG_PACKET != 0)
 /**
   * @brief Process next Tx chunk of payload
@@ -169,6 +178,16 @@ void TxLongPacketGetNextChunk(uint8_t **buffer, uint8_t buffer_size);
   */
 void RxLongPacketChunk(uint8_t *buffer, uint8_t chunk_size);
 #endif /* APP_LONG_PACKET != 0 */
+
+#if (TEST_MODE == RADIO_TX)
+/**
+  * @brief Generates a PRBS9 sequence
+  * @retval 0
+  */
+static int32_t tx_payload_generator(void);
+
+#endif /* TEST_MODE == RADIO_TX */
+
 /* USER CODE END PFP */
 
 /* Exported functions ---------------------------------------------------------*/
@@ -176,9 +195,9 @@ void SubghzApp_Init(void)
 {
   /* USER CODE BEGIN SubghzApp_Init_1 */
 
-#if (TEST_MODE == RADIO_RX)
+#if  (( USE_MODEM_LORA == 0 ) && ( USE_MODEM_FSK == 1 ) && (TEST_MODE == RADIO_RX))
   RxConfigGeneric_t RxConfig = {0};
-#elif (TEST_MODE == RADIO_TX)
+#elif (( USE_MODEM_LORA == 0 ) && ( USE_MODEM_FSK == 1 ) && (TEST_MODE == RADIO_TX))
   TxConfigGeneric_t TxConfig;
 #else
 #endif /* TEST_MODE */
@@ -195,6 +214,10 @@ void SubghzApp_Init(void)
           (uint8_t)(SUBGHZ_PHY_VERSION_SUB2));
 
   APP_LOG(TS_OFF, VLEVEL_M, "---------------\n\r");
+#if (( USE_MODEM_LORA == 1 ) && ( USE_MODEM_FSK == 0 ))
+  APP_LOG(TS_OFF, VLEVEL_M, "LORA_MODULATION\n\r");
+  APP_LOG(TS_OFF, VLEVEL_M, "LORA_BW=%d Hz\n\r", 125000);
+#elif (( USE_MODEM_LORA == 0 ) && ( USE_MODEM_FSK == 1 ))
   APP_LOG(TS_OFF, VLEVEL_M, "FSK_MODULATION\n\r");
   APP_LOG(TS_OFF, VLEVEL_M, "FSK_BW=%d Hz\n\r", FSK_BANDWIDTH);
   APP_LOG(TS_OFF, VLEVEL_M, "FSK_DR=%d bits/s\n\r", FSK_DATARATE);
@@ -203,6 +226,9 @@ void SubghzApp_Init(void)
 #elif (TEST_MODE == RADIO_TX)
   APP_LOG(TS_OFF, VLEVEL_M, "Tx Mode\n\r", FSK_DATARATE);
 #endif /* TEST_MODE */
+#else
+#error "Please define a modem in the compiler subghz_phy_app.h."
+#endif /* USE_MODEM_LORA | USE_MODEM_FSK */
   /* USER CODE END SubghzApp_Init_1 */
 
   /* Radio initialization */
@@ -220,6 +246,16 @@ void SubghzApp_Init(void)
 
   data_offset = 0;
 #if (TEST_MODE == RADIO_RX)
+#if (( USE_MODEM_LORA == 1 ) && ( USE_MODEM_FSK == 0 ))
+  APP_TPRINTF("Rx LORA Test\r\n");
+  /* RX Continuous */
+  Radio.SetRxConfig(MODEM_LORA, LORA_BANDWIDTH, LORA_SPREADING_FACTOR,
+                    LORA_CODINGRATE, 0, LORA_PREAMBLE_LENGTH,
+                    LORA_SYMBOL_TIMEOUT, LORA_FIX_LENGTH_PAYLOAD_ON,
+                    0, true, 0, 0, LORA_IQ_INVERSION_ON, true);
+
+  Radio.SetMaxPayloadLength(MODEM_LORA, MAX_APP_BUFFER_SIZE);
+#elif (( USE_MODEM_LORA == 0 ) && ( USE_MODEM_FSK == 1 ))
   APP_TPRINTF("Rx FSK Test\r\n");
   /* RX Continuous */
   RxConfig.fsk.ModulationShaping = RADIO_FSK_MOD_SHAPING_G_BT_05;
@@ -246,6 +282,10 @@ void SubghzApp_Init(void)
   {
     while (1);
   }
+#else
+#error "Please define a modem in the compiler subghz_phy_app.h."
+#endif /* USE_MODEM_LORA | USE_MODEM_FSK */
+
 #if (APP_LONG_PACKET==0)
   Radio.Rx(RX_TIMEOUT_VALUE);
 #else
@@ -255,6 +295,15 @@ void SubghzApp_Init(void)
 #elif (TEST_MODE == RADIO_TX)
   tx_payload_generator();
 
+#if (( USE_MODEM_LORA == 1 ) && ( USE_MODEM_FSK == 0 ))
+  /*lora modulation*/
+  Radio.SetTxConfig(MODEM_LORA, TX_OUTPUT_POWER, 0, LORA_BANDWIDTH,
+                    LORA_SPREADING_FACTOR, LORA_CODINGRATE,
+                    LORA_PREAMBLE_LENGTH, LORA_FIX_LENGTH_PAYLOAD_ON,
+                    true, 0, 0, LORA_IQ_INVERSION_ON, TX_TIMEOUT_VALUE);
+
+  Radio.SetMaxPayloadLength(MODEM_LORA, MAX_APP_BUFFER_SIZE);
+#elif (( USE_MODEM_LORA == 0 ) && ( USE_MODEM_FSK == 1 ))
   /*fsk modulation*/
   TxConfig.fsk.ModulationShaping = RADIO_FSK_MOD_SHAPING_G_BT_05;
   TxConfig.fsk.FrequencyDeviation = FSK_FDEV;
@@ -276,6 +325,10 @@ void SubghzApp_Init(void)
   {
     while (1);
   }
+#else
+#error "Please define a modem in the compiler subghz_phy_app.h."
+#endif /* USE_MODEM_LORA | USE_MODEM_FSK */
+
 #if (APP_LONG_PACKET==0)
   Radio.Send(data_buffer, payloadLen);
 #else
@@ -288,6 +341,7 @@ void SubghzApp_Init(void)
 #error should be either Tx or Rx
 #endif /* TEST_MODE */
 
+  /*register task to to be run in while(1) after Radio IT*/
   UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_SubGHz_Phy_App_Process), UTIL_SEQ_RFU, Per_Process);
   /* USER CODE END SubghzApp_Init_2 */
 }
@@ -330,7 +384,7 @@ static void OnTxTimeout(void)
 {
   /* USER CODE BEGIN OnTxTimeout */
   RadioTxTimeout_flag = 1;
-  /* Run Per process in background*/
+  /* Run process in background*/
   UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_SubGHz_Phy_App_Process), CFG_SEQ_Prio_0);
   /* USER CODE END OnTxTimeout */
 }
@@ -365,7 +419,7 @@ void RxLongPacketChunk(uint8_t *buffer, uint8_t chunk_size)
     __NOP();
     return;
   }
-  for (int i = 0; i < chunk_size; i++)
+  for (int32_t i = 0; i < chunk_size; i++)
   {
     *rxdata++ = *rxbuffer++;
   }
@@ -396,7 +450,7 @@ static void Per_Process(void)
 #if 0
     /* warning, delay between 2 consecutive Tx may be increased to allow DMA to empty printf queue*/
     APP_PPRINTF("data=0x \n\r");
-    for (int i = 0; i < payloadLen; i++)
+    for (int32_t i = 0; i < payloadLen; i++)
     {
       APP_PRINTF("%02X ", data_buffer[i]);
       if ((i % 16) == 15)
@@ -463,7 +517,7 @@ static void Per_Process(void)
   {
     APP_TPRINTF("OnRxError\r\n");
   }
-  /* this delay is only to give enough time to allow DMA to empty printf queue*/
+  /* This delay is only to give enough time to allow DMA to empty printf queue*/
   HAL_Delay(500);
   /* Reset TX Done or timeout flags */
   RadioTxDone_flag = 0;
@@ -490,20 +544,18 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   switch (GPIO_Pin)
   {
     case  BUT1_Pin:
-      /* Note: when "EventType == TX_ON_TIMER" this GPIO is not initialized */
-      /*increment by 16*/
+      /* Increment by 16*/
       payloadLen += 16;
-      if (payloadLen > MAX_APP_BUFFER_SIZE)
+      if (payloadLen > payloadLenMax)
       {
-        payloadLen = 1;
+        payloadLen = 16;
       }
       APP_TPRINTF("New Tx Payload Length= %d\r\n", payloadLen);
-
       break;
     case  BUT2_Pin:
-      /*increment by 1*/
+      /* Increment by 1*/
       payloadLen += 1;
-      if (payloadLen > MAX_APP_BUFFER_SIZE)
+      if (payloadLen > payloadLenMax)
       {
         payloadLen = 1;
       }
@@ -511,6 +563,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
       break;
     case  BUT3_Pin:
+      /* Toggle TxPayloadMode*/
       TxPayloadMode = (TxPayloadMode + 1) % 2;
       if (TxPayloadMode == 1)
       {

@@ -10,13 +10,13 @@ SWAP_end             = 0x080067FF;
 
 /* Active slot #1 (56 kbytes) */
 SLOT_Active_1_header = 0x0803F800;
-SLOT_Active_1_start  = 0x0801C000;  
-SLOT_Active_1_end    = 0x08029FFF;
+SLOT_Active_1_start  = 0x0801B800;
+SLOT_Active_1_end    = 0x080297FF;
 
 /* Active slot #2 (28 kbytes) */
 SLOT_Active_2_header = 0x0803F000;
-SLOT_Active_2_start  = 0x08015000;  
-SLOT_Active_2_end    = 0x0801BFFF;
+SLOT_Active_2_start  = 0x08014800;
+SLOT_Active_2_end    = 0x0801B7FF;
 
 /* Dwl slot #1 : (56 kbytes) */
 SLOT_Dwl_1_start     = 0x08006800;  

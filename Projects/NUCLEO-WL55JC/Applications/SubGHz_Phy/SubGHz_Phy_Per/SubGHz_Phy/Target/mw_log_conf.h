@@ -3,7 +3,7 @@
   ******************************************************************************
   * @file    mw_log_conf.h
   * @author  MCD Application Team
-  * @brief   Configure (enable/disable) traces for CM0
+  * @brief   Configure (enable/disable) traces
   *******************************************************************************
   * @attention
   *

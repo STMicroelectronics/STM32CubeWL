@@ -50,6 +50,7 @@ extern "C" {
 /* KMS exported Object handles for tKMS test application */
 #define KMS_KEY_RSA2048_OBJECT_HANDLE                 ((CK_OBJECT_HANDLE)21)
 #define KMS_KEY_AES128_DERIVABLE_OBJECT_HANDLE        ((CK_OBJECT_HANDLE)22)
+#define KMS_COUNTER_OBJECT_HANDLE                     ((CK_OBJECT_HANDLE)23)
 
 /*  Object handles for user application */
 #define KMS_SGFX_DATA_KEY_OBJECT_HANDLE            ((CK_OBJECT_HANDLE)13)

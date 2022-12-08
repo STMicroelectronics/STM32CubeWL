@@ -28,7 +28,7 @@
 #include "LoRaMac.h"
 #include "LmHandler_mbwrapper.h"
 #include "utilities_def.h"
-#include "lora_app_version.h"
+#include "app_version.h"
 
 /* USER CODE BEGIN Includes */
 
@@ -129,11 +129,15 @@ int8_t MBMUXIF_LoraInit(void)
   }
   if (ret >= 0)
   {
-    ret = MBMUX_RegisterFeature(FEAT_INFO_LORAWAN_ID, MBMUX_CMD_RESP, MBMUXIF_IsrLoraRespRcvCb, aLoraCmdRespBuff, sizeof(aLoraCmdRespBuff));
+    ret = MBMUX_RegisterFeature(FEAT_INFO_LORAWAN_ID, MBMUX_CMD_RESP,
+                                MBMUXIF_IsrLoraRespRcvCb,
+                                aLoraCmdRespBuff, sizeof(aLoraCmdRespBuff));
   }
   if (ret >= 0)
   {
-    ret = MBMUX_RegisterFeature(FEAT_INFO_LORAWAN_ID, MBMUX_NOTIF_ACK, MBMUXIF_IsrLoraNotifRcvCb, aLoraNotifAckBuff, sizeof(aLoraNotifAckBuff));
+    ret = MBMUX_RegisterFeature(FEAT_INFO_LORAWAN_ID, MBMUX_NOTIF_ACK,
+                                MBMUXIF_IsrLoraNotifRcvCb,
+                                aLoraNotifAckBuff, sizeof(aLoraNotifAckBuff));
   }
 
   if (ret >= 0)

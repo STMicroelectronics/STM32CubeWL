@@ -39,7 +39,7 @@
  */
 #if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000300 ))
 #define NUM_OF_MAC_COMMANDS 15
-#elif (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+#elif (defined( LORAMAC_VERSION ) && (( LORAMAC_VERSION == 0x01000400 ) || ( LORAMAC_VERSION == 0x01010100 )))
 #define NUM_OF_MAC_COMMANDS 32
 #endif /* LORAMAC_VERSION */
 #endif
@@ -281,7 +281,7 @@ static bool LinkedListRemove( MacCommandsList_t* list, MacCommand_t* element )
 /*
  * \brief Determines if a MAC command is sticky or not
  *
- * \param [in]  cid                - MAC command identifier
+ * \param[IN]   cid            - MAC command identifier
  *
  * \retval                     - Status of the operation
  */
@@ -289,14 +289,41 @@ static bool IsSticky( uint8_t cid )
 {
     switch( cid )
     {
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01010100 ))
+        case MOTE_MAC_RESET_IND:
+        case MOTE_MAC_REKEY_IND:
+        case MOTE_MAC_DEVICE_MODE_IND:
+#endif /* LORAMAC_VERSION */
         case MOTE_MAC_DL_CHANNEL_ANS:
         case MOTE_MAC_RX_PARAM_SETUP_ANS:
         case MOTE_MAC_RX_TIMING_SETUP_ANS:
         case MOTE_MAC_TX_PARAM_SETUP_ANS:
-#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+#if (defined( LORAMAC_VERSION ) && (( LORAMAC_VERSION == 0x01000400 ) || ( LORAMAC_VERSION == 0x01010100 )))
         case MOTE_MAC_PING_SLOT_CHANNEL_ANS:
 #endif /* LORAMAC_VERSION */
             return true;
+        default:
+            return false;
+    }
+}
+
+/*
+ * \brief Determines if a MAC command requires an explicit confirmation
+ *
+ * \param[IN]   cid            - MAC command identifier
+ *
+ * \retval                     - Status of the operation
+ */
+static bool IsConfirmationRequired( uint8_t cid )
+{
+    switch( cid )
+    {
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01010100 ))
+        case MOTE_MAC_RESET_IND:
+        case MOTE_MAC_REKEY_IND:
+        case MOTE_MAC_DEVICE_MODE_IND:
+            return true;
+#endif /* LORAMAC_VERSION */
         default:
             return false;
     }
@@ -339,6 +366,7 @@ LoRaMacCommandStatus_t LoRaMacCommandsAddCmd( uint8_t cid, uint8_t* payload, siz
     newCmd->PayloadSize = payloadSize;
     memcpy1( ( uint8_t* )newCmd->Payload, payload, payloadSize );
     newCmd->IsSticky = IsSticky( cid );
+    newCmd->IsConfirmationRequired = IsConfirmationRequired( cid );
 
     CommandsCtx.SerializedCmdsSize += ( CID_FIELD_SIZE + payloadSize );
 
@@ -431,7 +459,8 @@ LoRaMacCommandStatus_t LoRaMacCommandsRemoveStickyAnsCmds( void )
     while( curElement != NULL )
     {
         nexElement = curElement->Next;
-        if( IsSticky( curElement->CID ) == true )
+        if( ( IsSticky( curElement->CID ) == true ) &&
+            ( IsConfirmationRequired( curElement->CID ) == false ) )
         {
             LoRaMacCommandsRemoveCmd( curElement );
         }
@@ -494,32 +523,6 @@ LoRaMacCommandStatus_t LoRaMacCommandsSerializeCmds( size_t availableSize, size_
     return LORAMAC_COMMANDS_SUCCESS;
 }
 
-LoRaMacCommandStatus_t LoRaMacCommandsStickyCmdsPending( bool* cmdsPending )
-{
-    if( cmdsPending == NULL )
-    {
-        return LORAMAC_COMMANDS_ERROR_NPE;
-    }
-    MacCommand_t* curElement;
-    curElement = CommandsCtx.MacCommandList.First;
-
-    *cmdsPending = false;
-
-    // Loop through all elements
-    while( curElement != NULL )
-    {
-        if( curElement->IsSticky == true )
-        {
-            // Found one sticky MAC command
-            *cmdsPending = true;
-            return LORAMAC_COMMANDS_SUCCESS;
-        }
-        curElement = curElement->Next;
-    }
-
-    return LORAMAC_COMMANDS_SUCCESS;
-}
-
 uint8_t LoRaMacCommandsGetCmdSize( uint8_t cid )
 {
     uint8_t cidSize = 0;
@@ -527,6 +530,14 @@ uint8_t LoRaMacCommandsGetCmdSize( uint8_t cid )
     // Decode Frame MAC commands
     switch( cid )
     {
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01010100 ))
+        case SRV_MAC_RESET_CONF:
+        {
+            // cid + Serv_LoRaWAN_version
+            cidSize = 2;
+            break;
+        }
+#endif /* LORAMAC_VERSION */
         case SRV_MAC_LINK_CHECK_ANS:
         {
             // cid + Margin + GwCnt
@@ -581,6 +592,38 @@ uint8_t LoRaMacCommandsGetCmdSize( uint8_t cid )
             cidSize = 5;
             break;
         }
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01010100 ))
+        case SRV_MAC_REKEY_CONF:
+        {
+            // cid + Serv_LoRaWAN_version
+            cidSize = 2;
+            break;
+        }
+        case SRV_MAC_ADR_PARAM_SETUP_REQ:
+        {
+            // cid + ADRparam
+            cidSize = 2;
+            break;
+        }
+        case SRV_MAC_FORCE_REJOIN_REQ:
+        {
+            // cid + Payload (2)
+            cidSize = 3;
+            break;
+        }
+        case SRV_MAC_REJOIN_PARAM_REQ:
+        {
+            // cid + Payload (1)
+            cidSize = 2;
+            break;
+        }
+        case SRV_MAC_DEVICE_MODE_CONF:
+        {
+            // cid + Class
+            cidSize = 2;
+            break;
+        }
+#endif /* LORAMAC_VERSION */
         case SRV_MAC_DEVICE_TIME_ANS:
         {
             // cid + Seconds (4) + Fractional seconds (1)

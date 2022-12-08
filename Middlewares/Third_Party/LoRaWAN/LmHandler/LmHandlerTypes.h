@@ -31,6 +31,11 @@
 #ifndef __LORAMAC_HANDLER_TYPES_H__
 #define __LORAMAC_HANDLER_TYPES_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 #include "LoRaMacInterfaces.h"
 
@@ -44,7 +49,7 @@ typedef enum
 {
     LORAMAC_HANDLER_ADR_OFF = 0,
     LORAMAC_HANDLER_ADR_ON = !LORAMAC_HANDLER_ADR_OFF
-}LmHandlerAdrStates_t;
+} LmHandlerAdrStates_t;
 
 /*!
  *
@@ -53,7 +58,7 @@ typedef enum
 {
     LORAMAC_HANDLER_RESET = 0,
     LORAMAC_HANDLER_SET = !LORAMAC_HANDLER_RESET
-}LmHandlerFlagStatus_t;
+} LmHandlerFlagStatus_t;
 
 /*!
  *
@@ -69,7 +74,7 @@ typedef enum
     LORAMAC_HANDLER_PAYLOAD_LENGTH_RESTRICTED = -7,
     LORAMAC_HANDLER_NVM_DATA_UP_TO_DATE = -8,
     LORAMAC_HANDLER_SUCCESS = 0
-}LmHandlerErrorStatus_t;
+} LmHandlerErrorStatus_t;
 
 /*!
  *
@@ -78,7 +83,7 @@ typedef enum
 {
     LORAMAC_HANDLER_UNCONFIRMED_MSG = 0,
     LORAMAC_HANDLER_CONFIRMED_MSG = !LORAMAC_HANDLER_UNCONFIRMED_MSG
-}LmHandlerMsgTypes_t;
+} LmHandlerMsgTypes_t;
 
 /*!
  *
@@ -87,7 +92,7 @@ typedef enum
 {
     LORAMAC_HANDLER_FALSE = 0,
     LORAMAC_HANDLER_TRUE = !LORAMAC_HANDLER_FALSE
-}LmHandlerBoolean_t;
+} LmHandlerBoolean_t;
 
 typedef enum
 {
@@ -95,19 +100,19 @@ typedef enum
     LORAMAC_HANDLER_BEACON_LOST,
     LORAMAC_HANDLER_BEACON_RX,
     LORAMAC_HANDLER_BEACON_NRX
-}LmHandlerBeaconState_t;
+} LmHandlerBeaconState_t;
 
 typedef enum
 {
     LORAMAC_HANDLER_NVM_RESTORE,
     LORAMAC_HANDLER_NVM_STORE,
-}LmHandlerNvmContextStates_t;
+} LmHandlerNvmContextStates_t;
 
 typedef enum
 {
     LORAMAC_HANDLER_L2_VERSION,
     LORAMAC_HANDLER_REGION_VERSION,
-}LmHandlerVersionType_t;
+} LmHandlerVersionType_t;
 /*!
  * Commissioning parameters
  */
@@ -117,7 +122,7 @@ typedef struct CommissioningParams_s
     uint8_t JoinEui[8];
     uint32_t NetworkId;
     uint32_t DevAddr;
-}CommissioningParams_t;
+} CommissioningParams_t;
 
 /*!
  * Application data structure
@@ -127,7 +132,7 @@ typedef struct LmHandlerAppData_s
     uint8_t Port;
     uint8_t BufferSize;
     uint8_t *Buffer;
-}LmHandlerAppData_t;
+} LmHandlerAppData_t;
 
 typedef struct LmHandlerRequestParams_s
 {
@@ -137,11 +142,15 @@ typedef struct LmHandlerRequestParams_s
     {
         Mcps_t Mcps;
         Mlme_t Mlme;
-    }RequestType;
-}LmHandlerRequestParams_t;
+    } RequestType_t;
+} LmHandlerRequestParams_t;
 
 /* External variables --------------------------------------------------------*/
 /* Exported macros -----------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __LORAMAC_HANDLER_TYPES_H__ */

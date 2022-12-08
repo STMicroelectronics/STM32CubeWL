@@ -64,6 +64,7 @@ void Error_Handler(void);
 #define PROB2_GPIO_Port GPIOB
 #define PROB1_Pin GPIO_PIN_12
 #define PROB1_GPIO_Port GPIOB
+
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

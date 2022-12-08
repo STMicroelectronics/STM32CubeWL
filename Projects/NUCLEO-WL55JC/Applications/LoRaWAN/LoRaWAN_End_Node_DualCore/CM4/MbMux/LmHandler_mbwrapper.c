@@ -53,14 +53,15 @@
 #define ALIGN_X( operand, alignment ) ( ((operand + (alignment - 1)) & ~(alignment - 1)) )
 #endif /* ALIGN_X */
 #define LMH_CONFIG_SIZE     (sizeof(LmHandlerParams_t))
-#define LMH_SEND_SIZE       (256 + sizeof(UTIL_TIMER_Time_t))
+#define LMH_SEND_SIZE       (256 + sizeof(LmHandlerMsgTypes_t) + sizeof(bool))
 #define LMH_GET_CLASS_SIZE  (sizeof(DeviceClass_t))
 #define LMH_EUI_SIZE        (SE_EUI_SIZE)
 #define LMH_KEY_SIZE        (SE_KEY_SIZE)
 #define LMH_REGION_SIZE     (sizeof(LoRaMacRegion_t))
 #define LMH_RX_PARAM_SIZE   (sizeof(RxChannelParams_t))
 #define LMH_BEACON_SIZE     (sizeof(BeaconState_t))
-#define LORA_MBWRAP_SHBUF_SIZE MAX(MAX(MAX(LMH_CONFIG_SIZE, LMH_SEND_SIZE), MAX(LMH_GET_CLASS_SIZE, LMH_EUI_SIZE)), MAX(MAX(LMH_KEY_SIZE, LMH_REGION_SIZE), MAX(LMH_RX_PARAM_SIZE, LMH_BEACON_SIZE)))
+#define LORA_MBWRAP_SHBUF_SIZE MAX(MAX(MAX(LMH_CONFIG_SIZE, LMH_SEND_SIZE), MAX(LMH_GET_CLASS_SIZE, LMH_EUI_SIZE)), \
+                                   MAX(MAX(LMH_KEY_SIZE, LMH_REGION_SIZE), MAX(LMH_RX_PARAM_SIZE, LMH_BEACON_SIZE)))
 
 /* USER CODE BEGIN PD */
 
@@ -289,6 +290,29 @@ LmHandlerErrorStatus_t LmHandlerHalt(void)
   /* USER CODE END LmHandlerHalt_2 */
 }
 
+bool LmHandlerIsBusy(void)
+{
+  /* USER CODE BEGIN LmHandlerIsBusy_1 */
+
+  /* USER CODE END LmHandlerIsBusy_1 */
+  MBMUX_ComParam_t *com_obj;
+  uint32_t ret;
+
+  com_obj = MBMUXIF_GetLoraFeatureCmdComPtr();
+  com_obj->MsgId = LMHANDLER_IS_BUSY_ID;
+  com_obj->ParamCnt = 0;
+
+  MBMUXIF_LoraSendCmd();
+  /* waiting for event */
+  /* once event is received and semaphore released: */
+
+  ret = com_obj->ReturnVal;
+  return (bool) ret;
+  /* USER CODE BEGIN LmHandlerIsBusy_2 */
+
+  /* USER CODE END LmHandlerIsBusy_2 */
+}
+
 LmHandlerErrorStatus_t LmHandlerSend(LmHandlerAppData_t *appData, LmHandlerMsgTypes_t isTxConfirmed,
                                      bool allowDelayedTx)
 {
@@ -342,6 +366,7 @@ void LmHandlerProcess(void)
 
   com_obj = MBMUXIF_GetLoraFeatureCmdComPtr();
   com_obj->MsgId = LMHANDLER_PROCESS_ID;
+  com_obj->ParamCnt = 0;
 
   MBMUXIF_LoraSendCmd();
   /* waiting for event */
@@ -362,6 +387,7 @@ TimerTime_t LmHandlerGetDutyCycleWaitTime(void)
 
   com_obj = MBMUXIF_GetLoraFeatureCmdComPtr();
   com_obj->MsgId = LMHANDLER_GET_DUTY_CYCLE_TIME_ID;
+  com_obj->ParamCnt = 0;
 
   MBMUXIF_LoraSendCmd();
   /* waiting for event */
@@ -579,292 +605,78 @@ LmHandlerErrorStatus_t LmHandlerSetAppEUI(uint8_t *appEUI)
   /* USER CODE END LmHandlerSetAppEUI_2 */
 }
 
-LmHandlerErrorStatus_t LmHandlerGetNwkKey(uint8_t *nwkKey)
+LmHandlerErrorStatus_t LmHandlerGetKey(KeyIdentifier_t keyID, uint8_t *key)
 {
-  /* USER CODE BEGIN LmHandlerGetNwkKey_1 */
+  /* USER CODE BEGIN LmHandlerGetKey_1 */
 
-  /* USER CODE END LmHandlerGetNwkKey_1 */
+  /* USER CODE END LmHandlerGetKey_1 */
   MBMUX_ComParam_t *com_obj;
   uint32_t *com_buffer;
   uint16_t i = 0;
   uint32_t ret;
 
-  if (nwkKey == NULL)
+  if (key == NULL)
   {
     return LORAMAC_HANDLER_ERROR;
   }
 
   /* copy data from Cm4 stack memory to shared memory */
-  UTIL_MEM_cpy_8(aLoraMbWrapShareBuffer, nwkKey, SE_KEY_SIZE);
+  UTIL_MEM_cpy_8(aLoraMbWrapShareBuffer, key, SE_KEY_SIZE);
 
   com_obj = MBMUXIF_GetLoraFeatureCmdComPtr();
-  com_obj->MsgId = LMHANDLER_GET_NWKKEY_ID;
+  com_obj->MsgId = LMHANDLER_GET_KEY_ID;
   com_buffer = com_obj->ParamBuf;
+  com_buffer[i++] = (uint32_t) keyID;
   com_buffer[i++] = (uint32_t) aLoraMbWrapShareBuffer;
   com_obj->ParamCnt = i;
 
   MBMUXIF_LoraSendCmd();
   /* waiting for event */
   /* once event is received and semaphore released: */
-  UTIL_MEM_cpy_8(nwkKey, aLoraMbWrapShareBuffer, SE_KEY_SIZE);
+  UTIL_MEM_cpy_8(key, aLoraMbWrapShareBuffer, SE_KEY_SIZE);
 
   ret = com_obj->ReturnVal;
   return (LmHandlerErrorStatus_t) ret;
-  /* USER CODE BEGIN LmHandlerGetNwkKey_2 */
+  /* USER CODE BEGIN LmHandlerGetKey_2 */
 
-  /* USER CODE END LmHandlerGetNwkKey_2 */
+  /* USER CODE END LmHandlerGetKey_2 */
 }
 
-LmHandlerErrorStatus_t LmHandlerSetNwkKey(uint8_t *nwkKey)
+LmHandlerErrorStatus_t LmHandlerSetKey(KeyIdentifier_t keyID, uint8_t *key)
 {
-  /* USER CODE BEGIN LmHandlerSetNwkKey_1 */
+  /* USER CODE BEGIN LmHandlerSetKey_1 */
 
-  /* USER CODE END LmHandlerSetNwkKey_1 */
+  /* USER CODE END LmHandlerSetKey_1 */
   MBMUX_ComParam_t *com_obj;
   uint32_t *com_buffer;
   uint16_t i = 0;
   uint32_t ret;
 
-  if (nwkKey == NULL)
+  if (key == NULL)
   {
     return LORAMAC_HANDLER_ERROR;
   }
 
   /* copy data from Cm4 stack memory to shared memory */
-  UTIL_MEM_cpy_8(aLoraMbWrapShareBuffer, nwkKey, SE_KEY_SIZE);
+  UTIL_MEM_cpy_8(aLoraMbWrapShareBuffer, key, SE_KEY_SIZE);
 
   com_obj = MBMUXIF_GetLoraFeatureCmdComPtr();
-  com_obj->MsgId = LMHANDLER_SET_NWKKEY_ID;
+  com_obj->MsgId = LMHANDLER_SET_KEY_ID;
   com_buffer = com_obj->ParamBuf;
+  com_buffer[i++] = (uint32_t) keyID;
   com_buffer[i++] = (uint32_t) aLoraMbWrapShareBuffer;
   com_obj->ParamCnt = i;
 
   MBMUXIF_LoraSendCmd();
   /* waiting for event */
   /* once event is received and semaphore released: */
-  UTIL_MEM_cpy_8(nwkKey, aLoraMbWrapShareBuffer, SE_KEY_SIZE);
+  UTIL_MEM_cpy_8(key, aLoraMbWrapShareBuffer, SE_KEY_SIZE);
 
   ret = com_obj->ReturnVal;
   return (LmHandlerErrorStatus_t) ret;
-  /* USER CODE BEGIN LmHandlerSetNwkKey_2 */
+  /* USER CODE BEGIN LmHandlerSetKey_2 */
 
-  /* USER CODE END LmHandlerSetNwkKey_2 */
-}
-
-LmHandlerErrorStatus_t LmHandlerGetAppKey(uint8_t *appKey)
-{
-  /* USER CODE BEGIN LmHandlerGetAppKey_1 */
-
-  /* USER CODE END LmHandlerGetAppKey_1 */
-  MBMUX_ComParam_t *com_obj;
-  uint32_t *com_buffer;
-  uint16_t i = 0;
-  uint32_t ret;
-
-  if (appKey == NULL)
-  {
-    return LORAMAC_HANDLER_ERROR;
-  }
-
-  /* copy data from Cm4 stack memory to shared memory */
-  UTIL_MEM_cpy_8(aLoraMbWrapShareBuffer, appKey, SE_KEY_SIZE);
-
-  com_obj = MBMUXIF_GetLoraFeatureCmdComPtr();
-  com_obj->MsgId = LMHANDLER_GET_APPKEY_ID;
-  com_buffer = com_obj->ParamBuf;
-  com_buffer[i++] = (uint32_t) aLoraMbWrapShareBuffer;
-  com_obj->ParamCnt = i;
-
-  MBMUXIF_LoraSendCmd();
-  /* waiting for event */
-  /* once event is received and semaphore released: */
-  UTIL_MEM_cpy_8(appKey, aLoraMbWrapShareBuffer, SE_KEY_SIZE);
-
-  ret = com_obj->ReturnVal;
-  return (LmHandlerErrorStatus_t) ret;
-  /* USER CODE BEGIN LmHandlerGetAppKey_2 */
-
-  /* USER CODE END LmHandlerGetAppKey_2 */
-}
-
-LmHandlerErrorStatus_t LmHandlerSetAppKey(uint8_t *appKey)
-{
-  /* USER CODE BEGIN LmHandlerSetAppKey_1 */
-
-  /* USER CODE END LmHandlerSetAppKey_1 */
-  MBMUX_ComParam_t *com_obj;
-  uint32_t *com_buffer;
-  uint16_t i = 0;
-  uint32_t ret;
-
-  if (appKey == NULL)
-  {
-    return LORAMAC_HANDLER_ERROR;
-  }
-
-  /* copy data from Cm4 stack memory to shared memory */
-  UTIL_MEM_cpy_8(aLoraMbWrapShareBuffer, appKey, SE_KEY_SIZE);
-
-  com_obj = MBMUXIF_GetLoraFeatureCmdComPtr();
-  com_obj->MsgId = LMHANDLER_SET_APPKEY_ID;
-  com_buffer = com_obj->ParamBuf;
-  com_buffer[i++] = (uint32_t) aLoraMbWrapShareBuffer;
-  com_obj->ParamCnt = i;
-
-  MBMUXIF_LoraSendCmd();
-  /* waiting for event */
-  /* once event is received and semaphore released: */
-  UTIL_MEM_cpy_8(appKey, aLoraMbWrapShareBuffer, SE_KEY_SIZE);
-
-  ret = com_obj->ReturnVal;
-  return (LmHandlerErrorStatus_t) ret;
-  /* USER CODE BEGIN LmHandlerSetAppKey_2 */
-
-  /* USER CODE END LmHandlerSetAppKey_2 */
-}
-
-LmHandlerErrorStatus_t LmHandlerGetNwkSKey(uint8_t *nwkSKey)
-{
-  /* USER CODE BEGIN LmHandlerGetNwkSKey_1 */
-
-  /* USER CODE END LmHandlerGetNwkSKey_1 */
-  MBMUX_ComParam_t *com_obj;
-  uint32_t *com_buffer;
-  uint16_t i = 0;
-  uint32_t ret;
-
-  if (nwkSKey == NULL)
-  {
-    return LORAMAC_HANDLER_ERROR;
-  }
-
-  /* copy data from Cm4 stack memory to shared memory */
-  UTIL_MEM_cpy_8(aLoraMbWrapShareBuffer, nwkSKey, SE_KEY_SIZE);
-
-  com_obj = MBMUXIF_GetLoraFeatureCmdComPtr();
-  com_obj->MsgId = LMHANDLER_GET_NWKSKEY_ID;
-  com_buffer = com_obj->ParamBuf;
-  com_buffer[i++] = (uint32_t) aLoraMbWrapShareBuffer;
-  com_obj->ParamCnt = i;
-
-  MBMUXIF_LoraSendCmd();
-  /* waiting for event */
-  /* once event is received and semaphore released: */
-  UTIL_MEM_cpy_8(nwkSKey, aLoraMbWrapShareBuffer, SE_KEY_SIZE);
-
-  ret = com_obj->ReturnVal;
-  return (LmHandlerErrorStatus_t) ret;
-  /* USER CODE BEGIN LmHandlerGetNwkSKey_2 */
-
-  /* USER CODE END LmHandlerGetNwkSKey_2 */
-}
-
-LmHandlerErrorStatus_t LmHandlerSetNwkSKey(uint8_t *nwkSKey)
-{
-  /* USER CODE BEGIN LmHandlerSetNwkSKey_1 */
-
-  /* USER CODE END LmHandlerSetNwkSKey_1 */
-  MBMUX_ComParam_t *com_obj;
-  uint32_t *com_buffer;
-  uint16_t i = 0;
-  uint32_t ret;
-
-  if (nwkSKey == NULL)
-  {
-    return LORAMAC_HANDLER_ERROR;
-  }
-
-  /* copy data from Cm4 stack memory to shared memory */
-  UTIL_MEM_cpy_8(aLoraMbWrapShareBuffer, nwkSKey, SE_KEY_SIZE);
-
-  com_obj = MBMUXIF_GetLoraFeatureCmdComPtr();
-  com_obj->MsgId = LMHANDLER_SET_NWKSKEY_ID;
-  com_buffer = com_obj->ParamBuf;
-  com_buffer[i++] = (uint32_t) aLoraMbWrapShareBuffer;
-  com_obj->ParamCnt = i;
-
-  MBMUXIF_LoraSendCmd();
-  /* waiting for event */
-  /* once event is received and semaphore released: */
-  UTIL_MEM_cpy_8(nwkSKey, aLoraMbWrapShareBuffer, SE_KEY_SIZE);
-
-  ret = com_obj->ReturnVal;
-  return (LmHandlerErrorStatus_t) ret;
-  /* USER CODE BEGIN LmHandlerSetNwkSKey_2 */
-
-  /* USER CODE END LmHandlerSetNwkSKey_2 */
-}
-
-LmHandlerErrorStatus_t LmHandlerGetAppSKey(uint8_t *appSKey)
-{
-  /* USER CODE BEGIN LmHandlerGetAppSKey_1 */
-
-  /* USER CODE END LmHandlerGetAppSKey_1 */
-  MBMUX_ComParam_t *com_obj;
-  uint32_t *com_buffer;
-  uint16_t i = 0;
-  uint32_t ret;
-
-  if (appSKey == NULL)
-  {
-    return LORAMAC_HANDLER_ERROR;
-  }
-
-  /* copy data from Cm4 stack memory to shared memory */
-  UTIL_MEM_cpy_8(aLoraMbWrapShareBuffer, appSKey, SE_KEY_SIZE);
-
-  com_obj = MBMUXIF_GetLoraFeatureCmdComPtr();
-  com_obj->MsgId = LMHANDLER_GET_APPSKEY_ID;
-  com_buffer = com_obj->ParamBuf;
-  com_buffer[i++] = (uint32_t) aLoraMbWrapShareBuffer;
-  com_obj->ParamCnt = i;
-
-  MBMUXIF_LoraSendCmd();
-  /* waiting for event */
-  /* once event is received and semaphore released: */
-  UTIL_MEM_cpy_8(appSKey, aLoraMbWrapShareBuffer, SE_KEY_SIZE);
-
-  ret = com_obj->ReturnVal;
-  return (LmHandlerErrorStatus_t) ret;
-  /* USER CODE BEGIN LmHandlerGetAppSKey_2 */
-
-  /* USER CODE END LmHandlerGetAppSKey_2 */
-}
-
-LmHandlerErrorStatus_t LmHandlerSetAppSKey(uint8_t *appSKey)
-{
-  /* USER CODE BEGIN LmHandlerSetAppSKey_1 */
-
-  /* USER CODE END LmHandlerSetAppSKey_1 */
-  MBMUX_ComParam_t *com_obj;
-  uint32_t *com_buffer;
-  uint16_t i = 0;
-  uint32_t ret;
-
-  if (appSKey == NULL)
-  {
-    return LORAMAC_HANDLER_ERROR;
-  }
-
-  /* copy data from Cm4 stack memory to shared memory */
-  UTIL_MEM_cpy_8(aLoraMbWrapShareBuffer, appSKey, SE_KEY_SIZE);
-
-  com_obj = MBMUXIF_GetLoraFeatureCmdComPtr();
-  com_obj->MsgId = LMHANDLER_SET_APPSKEY_ID;
-  com_buffer = com_obj->ParamBuf;
-  com_buffer[i++] = (uint32_t) aLoraMbWrapShareBuffer;
-  com_obj->ParamCnt = i;
-
-  MBMUXIF_LoraSendCmd();
-  /* waiting for event */
-  /* once event is received and semaphore released: */
-  UTIL_MEM_cpy_8(appSKey, aLoraMbWrapShareBuffer, SE_KEY_SIZE);
-
-  ret = com_obj->ReturnVal;
-  return (LmHandlerErrorStatus_t) ret;
-  /* USER CODE BEGIN LmHandlerSetAppSKey_2 */
-
-  /* USER CODE END LmHandlerSetAppSKey_2 */
+  /* USER CODE END LmHandlerSetKey_2 */
 }
 
 LmHandlerErrorStatus_t LmHandlerGetNetworkID(uint32_t *networkId)
@@ -891,7 +703,10 @@ LmHandlerErrorStatus_t LmHandlerGetNetworkID(uint32_t *networkId)
   MBMUXIF_LoraSendCmd();
   /* waiting for event */
   /* once event is received and semaphore released: */
-  *networkId = (aLoraMbWrapShareBuffer[3] << 24) | (aLoraMbWrapShareBuffer[2] << 16) | (aLoraMbWrapShareBuffer[1] << 8) | aLoraMbWrapShareBuffer[0];
+  *networkId = (aLoraMbWrapShareBuffer[3] << 24) |
+               (aLoraMbWrapShareBuffer[2] << 16) |
+               (aLoraMbWrapShareBuffer[1] << 8) |
+               aLoraMbWrapShareBuffer[0];
 
   ret = com_obj->ReturnVal;
   return (LmHandlerErrorStatus_t) ret;

@@ -52,11 +52,9 @@ typedef enum
 {
     MODEM_FSK = 0,
     MODEM_LORA,
-    /* ST_WORKAROUND_BEGIN: Upgraded modulations list */
     MODEM_BPSK,
     MODEM_SIGFOX_TX,
     MODEM_SIGFOX_RX,
-    /* ST_WORKAROUND_END */
 }RadioModems_t;
 
 /*!
@@ -117,7 +115,7 @@ typedef struct
     void ( *CadDone ) ( bool channelActivityDetected );
 }RadioEvents_t;
 
-#include "radio_ex.h" /* ST_WORKAROUND: extended radio functions */
+#include "radio_ex.h"
 
 /*!
  * \brief Radio driver definition
@@ -335,7 +333,6 @@ struct Radio_s
      * \retval rssiValue Current RSSI value in [dBm]
      */
     int16_t ( *Rssi )( RadioModems_t modem );
-    /* ST_WORKAROUND_BEGIN: Force register addr to uint16_t */
     /*!
      * \brief Writes the radio register at the specified address
      *
@@ -366,7 +363,6 @@ struct Radio_s
      * \param [in] size Number of registers to be read
      */
     void    ( *ReadRegisters )( uint16_t addr, uint8_t *buffer, uint8_t size );
-    /* ST_WORKAROUND_END */
     /*!
      * \brief Sets the maximum payload length.
      *
@@ -406,7 +402,6 @@ struct Radio_s
      * \param [in]  sleepTime     Structure describing sleep timeout value
      */
     void    ( *SetRxDutyCycle )( uint32_t rxTime, uint32_t sleepTime );
-    /* ST_WORKAROUND_BEGIN: extended radio functions */
     /*!
      * @brief Sets the Transmitter in continuous PRBS mode
      *
@@ -469,7 +464,6 @@ struct Radio_s
      * \return 0 when no parameters error, -1 otherwise
      */
     int32_t ( *ReceiveLongPacket )( uint8_t boosted_mode, uint32_t timeout, void (*RxLongStorePacketChunkCb) ( uint8_t* buffer, uint8_t chunk_size ) );
-    /* ST_WORKAROUND_END */
 };
 
 /*!

@@ -136,7 +136,6 @@ void RegionCN470A26InitializeChannels( ChannelParams_t* channels )
 
 void RegionCN470A26InitializeChannelsMask( uint16_t* channelsDefaultMask )
 {
-    /* ST_WORKAROUND_BEGIN: Hybrid mode */
 #if ( HYBRID_ENABLED == 1 )
     channelsDefaultMask[0] = HYBRID_DEFAULT_MASK0;
     channelsDefaultMask[1] = HYBRID_DEFAULT_MASK1;
@@ -153,7 +152,6 @@ void RegionCN470A26InitializeChannelsMask( uint16_t* channelsDefaultMask )
     channelsDefaultMask[4] = 0x0000;
     channelsDefaultMask[5] = 0x0000;
 #endif /* HYBRID_ENABLED == 1 */
-    /* ST_WORKAROUND_END */
 }
 
 uint32_t RegionCN470A26GetRx1Frequency( uint8_t channel )

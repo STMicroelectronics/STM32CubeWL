@@ -271,8 +271,6 @@ HAL_StatusTypeDef Ymodem_BlobDataPktRxCpltCallback(uint8_t *pData, uint32_t uFla
       /* The last packet is not full, drop the extra bytes */
       tmpSize = m_uFileSizeYmodem - ((uint32_t)(m_uFileSizeYmodem / PACKET_1K_SIZE) * PACKET_1K_SIZE);
     }
-
-    m_uPacketsReceived = 0U;
   }
 
   /* First packet : Contains the FW header */
@@ -309,6 +307,12 @@ HAL_StatusTypeDef Ymodem_BlobDataPktRxCpltCallback(uint8_t *pData, uint32_t uFla
   else
   {
     e_ret_status = HAL_ERROR;
+  }
+
+  /* Last packet : reset m_uPacketsReceived */
+  if (m_uPacketsReceived == m_uNbrBlocksYmodem)
+  {
+    m_uPacketsReceived = 0U;
   }
 
   if (e_ret_status == HAL_ERROR)

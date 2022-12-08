@@ -19,12 +19,14 @@
 /* Includes ------------------------------------------------------------------*/
 #include "platform.h"
 #include "LmhpPackagesRegistration.h"
+#include "LmHandler.h"
+#if (defined (LORAWAN_DATA_DISTRIB_MGT) && (LORAWAN_DATA_DISTRIB_MGT == 1))
 #include "LmhpClockSync.h"
 #include "LmhpRemoteMcastSetup.h"
 #include "LmhpFragmentation.h"
-#include "LmhpFirmwareManagement.h"
-#include "LmHandler.h"
 #include "frag_decoder_if.h"
+#include "LmhpFirmwareManagement.h"
+#endif /* LORAWAN_DATA_DISTRIB_MGT */
 
 /* Private typedef -----------------------------------------------------------*/
 
@@ -37,57 +39,65 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* Exported functions ---------------------------------------------------------*/
-LmHandlerErrorStatus_t LmhpPackagesRegistrationInit(void)
+LmHandlerErrorStatus_t LmhpPackagesRegistrationInit( Version_t *fwVersion )
 {
-  if (LmHandlerPackageRegister(PACKAGE_ID_CLOCK_SYNC, NULL) != LORAMAC_HANDLER_SUCCESS)
-  {
-    return LORAMAC_HANDLER_ERROR;
-  }
-  else if (LmHandlerPackageRegister(PACKAGE_ID_REMOTE_MCAST_SETUP, NULL) != LORAMAC_HANDLER_SUCCESS)
-  {
-    return LORAMAC_HANDLER_ERROR;
-  }
-  else if (LmHandlerPackageRegister(PACKAGE_ID_FRAGMENTATION, (LmhpFragmentationParams_t *)&FRAG_DECODER_IF_FragmentationParams) != LORAMAC_HANDLER_SUCCESS)
-  {
-    return LORAMAC_HANDLER_ERROR;
-  }
-  else if (LmHandlerPackageRegister(PACKAGE_ID_FIRMWARE_MANAGEMENT, NULL) != LORAMAC_HANDLER_SUCCESS)
-  {
-    return LORAMAC_HANDLER_ERROR;
-  }
+#if (defined (LORAWAN_DATA_DISTRIB_MGT) && (LORAWAN_DATA_DISTRIB_MGT == 1))
+    if( LmHandlerPackageRegister( PACKAGE_ID_CLOCK_SYNC, NULL ) != LORAMAC_HANDLER_SUCCESS )
+    {
+        return LORAMAC_HANDLER_ERROR;
+    }
+    else if( LmHandlerPackageRegister( PACKAGE_ID_REMOTE_MCAST_SETUP, NULL ) != LORAMAC_HANDLER_SUCCESS )
+    {
+        return LORAMAC_HANDLER_ERROR;
+    }
+    else if( LmHandlerPackageRegister( PACKAGE_ID_FRAGMENTATION,
+                                       ( LmhpFragmentationParams_t * )&FRAG_DECODER_IF_FragmentationParams ) != LORAMAC_HANDLER_SUCCESS )
+    {
+        return LORAMAC_HANDLER_ERROR;
+    }
+#if (LORAWAN_PACKAGES_VERSION == 2)
+    else if( LmHandlerPackageRegister( PACKAGE_ID_FIRMWARE_MANAGEMENT, fwVersion ) != LORAMAC_HANDLER_SUCCESS )
+    {
+        return LORAMAC_HANDLER_ERROR;
+    }
+#endif /* LORAWAN_PACKAGES_VERSION */
+#endif /* LORAWAN_DATA_DISTRIB_MGT */
 
-  return LORAMAC_HANDLER_SUCCESS;
+    return LORAMAC_HANDLER_SUCCESS;
 }
 
-LmHandlerErrorStatus_t LmhpPackagesRegister(uint8_t id, LmhPackage_t **package)
+LmHandlerErrorStatus_t LmhpPackagesRegister( uint8_t id, LmhPackage_t **package )
 {
-  if (package == NULL)
-  {
+#if (defined (LORAWAN_DATA_DISTRIB_MGT) && (LORAWAN_DATA_DISTRIB_MGT == 1))
+    if( package == NULL )
+    {
+        return LORAMAC_HANDLER_ERROR;
+    }
+    switch( id )
+    {
+        case PACKAGE_ID_CLOCK_SYNC:
+            {
+                *package = LmhpClockSyncPackageFactory();
+                break;
+            }
+        case PACKAGE_ID_REMOTE_MCAST_SETUP:
+            {
+                *package = LmhpRemoteMcastSetupPackageFactory();
+                break;
+            }
+        case PACKAGE_ID_FRAGMENTATION:
+            {
+                *package = LmhpFragmentationPackageFactory();
+                break;
+            }
+        case PACKAGE_ID_FIRMWARE_MANAGEMENT:
+            {
+                *package = LmhpFirmwareManagementPackageFactory();
+                break;
+            }
+    }
+    return LORAMAC_HANDLER_SUCCESS;
+#else
     return LORAMAC_HANDLER_ERROR;
-  }
-  switch (id)
-  {
-    case PACKAGE_ID_CLOCK_SYNC:
-    {
-      *package = LmhpClockSyncPackageFactory();
-      break;
-    }
-    case PACKAGE_ID_REMOTE_MCAST_SETUP:
-    {
-      *package = LmhpRemoteMcastSetupPackageFactory();
-      break;
-    }
-    case PACKAGE_ID_FRAGMENTATION:
-    {
-      *package = LmhpFragmentationPackageFactory();
-      break;
-    }
-    case PACKAGE_ID_FIRMWARE_MANAGEMENT:
-    {
-      *package = LmhpFirmwareManagementPackageFactory();
-      break;
-    }
-  }
-
-  return LORAMAC_HANDLER_SUCCESS;
+#endif /* LORAWAN_DATA_DISTRIB_MGT */
 }

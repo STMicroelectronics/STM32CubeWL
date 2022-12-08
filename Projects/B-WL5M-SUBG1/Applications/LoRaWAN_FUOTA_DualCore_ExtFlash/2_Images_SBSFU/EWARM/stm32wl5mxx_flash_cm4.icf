@@ -1,0 +1,29 @@
+/*###ICF### Set of symbols used in M4 SB ****/
+
+define memory mem with size = 4G;
+
+/******************************************************************************/
+/*       Include of SE symbols file                                           */
+/*   (Project>Options>Linker>Extra Options --config_search option is used to  */
+/*   specify the the directory to search for include files                    */
+/******************************************************************************/
+include "mapping_sbsfu.icf";
+include "mapping_fwimg.icf";
+
+/*-Sizes-*/
+define symbol __ICFEDIT_size_cstack__ = 0x200;
+define symbol __ICFEDIT_size_heap__ = 0x100;
+
+define block CSTACK    with alignment = 8, size = __ICFEDIT_size_cstack__   { };
+define block HEAP      with alignment = 8, size = __ICFEDIT_size_heap__     { };
+
+initialize by copy { readwrite };
+do not initialize  { section .noinit };
+
+/******************************************************************************/
+/*                          placement instructions                            */
+/******************************************************************************/
+place at address mem:__ICFEDIT_M4_SB_region_ROM_start__ { readonly section .intvec };
+place in M4_SB_ROM_region   { readonly };
+place in M4_SB_RAM_region   { readwrite,
+                              block CSTACK, block HEAP };

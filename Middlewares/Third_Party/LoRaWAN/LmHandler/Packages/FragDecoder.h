@@ -2,7 +2,8 @@
  * \file      FragDecoder.h
  *
  * \brief     Implements the LoRa-Alliance fragmentation decoder
- *            Specification: https://lora-alliance.org/sites/default/files/2018-09/fragmented_data_block_transport_v1.0.0.pdf
+ *            Specification V1.0.0: https://resources.lora-alliance.org/technical-specifications/lorawan-fragmented-data-block-transport-specification-v1-0-0
+ *            Specification V2.0.0: https://resources.lora-alliance.org/technical-specifications/ts004-2-0-0-fragmented-data-block-transport
  *
  * \copyright Revised BSD License, see section \ref LICENSE.
  *
@@ -33,6 +34,11 @@
 #ifndef __FRAG_DECODER_H__
 #define __FRAG_DECODER_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #define FRAG_SESSION_FINISHED                       ( int32_t )0
 #define FRAG_SESSION_NOT_STARTED                    ( int32_t )-2
 #define FRAG_SESSION_ONGOING                        ( int32_t )-1
@@ -43,7 +49,7 @@ typedef struct sFragDecoderStatus
     uint16_t FragNbLost;
     uint16_t FragNbLastRx;
     uint8_t MatrixError;
-}FragDecoderStatus_t;
+} FragDecoderStatus_t;
 
 typedef struct sFragDecoderCallbacks
 {
@@ -73,7 +79,7 @@ typedef struct sFragDecoderCallbacks
      * \retval status Read operation status [0: Success, -1 Fail]
      */
     int32_t ( *FragDecoderRead )( uint32_t addr, uint8_t *data, uint32_t size );
-}FragDecoderCallbacks_t;
+} FragDecoderCallbacks_t;
 
 /*!
  * \brief Initializes the fragmentation decoder
@@ -112,4 +118,8 @@ int32_t FragDecoderProcess( uint16_t fragCounter, uint8_t *rawData );
  */
 FragDecoderStatus_t FragDecoderGetStatus( void );
 
-#endif // __FRAG_DECODER_H__
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __FRAG_DECODER_H__ */

@@ -54,14 +54,14 @@
 									<listOptionValue builtIn="false" value="../../../../../../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2"/>
 									<listOptionValue builtIn="false" value="../../../../../../../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3"/>
 									<listOptionValue builtIn="false" value="../../../../../../../Middlewares/Third_Party/LoRaWAN/LmHandler/Packages"/>
-									<listOptionValue builtIn="false" value="../../../../../../../Middlewares/Third_Party/SubGHz_Phy"/>
-									<listOptionValue builtIn="false" value="../../../../../../../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver"/>
 									<listOptionValue builtIn="false" value="../../../../../../../Drivers/CMSIS/Device/ST/STM32WLxx/Include"/>
 									<listOptionValue builtIn="false" value="../../../../../../../Middlewares/Third_Party/LoRaWAN/Crypto"/>
 									<listOptionValue builtIn="false" value="../../../../../../../Middlewares/Third_Party/LoRaWAN/Mac/Region"/>
 									<listOptionValue builtIn="false" value="../../../../../../../Middlewares/Third_Party/LoRaWAN/Mac"/>
 									<listOptionValue builtIn="false" value="../../../../../../../Middlewares/Third_Party/LoRaWAN/LmHandler"/>
 									<listOptionValue builtIn="false" value="../../../../../../../Middlewares/Third_Party/LoRaWAN/Utilities"/>
+									<listOptionValue builtIn="false" value="../../../../../../../Middlewares/Third_Party/SubGHz_Phy"/>
+									<listOptionValue builtIn="false" value="../../../../../../../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver"/>
 									<listOptionValue builtIn="false" value="../../../../../../../Drivers/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../../../../../../../Drivers/BSP/STM32WLxx_Nucleo"/>
 								</option>
@@ -142,14 +142,14 @@
 									<listOptionValue builtIn="false" value="../../../../../../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2"/>
 									<listOptionValue builtIn="false" value="../../../../../../../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3"/>
 									<listOptionValue builtIn="false" value="../../../../../../../Middlewares/Third_Party/LoRaWAN/LmHandler/Packages"/>
-									<listOptionValue builtIn="false" value="../../../../../../../Middlewares/Third_Party/SubGHz_Phy"/>
-									<listOptionValue builtIn="false" value="../../../../../../../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver"/>
 									<listOptionValue builtIn="false" value="../../../../../../../Drivers/CMSIS/Device/ST/STM32WLxx/Include"/>
 									<listOptionValue builtIn="false" value="../../../../../../../Middlewares/Third_Party/LoRaWAN/Crypto"/>
 									<listOptionValue builtIn="false" value="../../../../../../../Middlewares/Third_Party/LoRaWAN/Mac/Region"/>
 									<listOptionValue builtIn="false" value="../../../../../../../Middlewares/Third_Party/LoRaWAN/Mac"/>
 									<listOptionValue builtIn="false" value="../../../../../../../Middlewares/Third_Party/LoRaWAN/LmHandler"/>
 									<listOptionValue builtIn="false" value="../../../../../../../Middlewares/Third_Party/LoRaWAN/Utilities"/>
+									<listOptionValue builtIn="false" value="../../../../../../../Middlewares/Third_Party/SubGHz_Phy"/>
+									<listOptionValue builtIn="false" value="../../../../../../../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver"/>
 									<listOptionValue builtIn="false" value="../../../../../../../Drivers/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../../../../../../../Drivers/BSP/STM32WLxx_Nucleo"/>
 								</option>

@@ -24,17 +24,19 @@
 /* Includes ------------------------------------------------------------------*/
 #include "kms_platf_objects_interface.h"
 #include "app_sfu.h"
+#ifdef KMS_ENCRYPT_DECRYPT_BLOB
+#if defined(__ARMCC_VERSION)
+#include "mapping_sbsfu.h"
+#elif defined (__ICCARM__) || defined(__GNUC__)
+#include "mapping_export.h"
+#endif /* __ARMCC_VERSION */
+#endif /* KMS_ENCRYPT_DECRYPT_BLOB */
 #include "Commissioning.h"
 #include "lorawan_conf.h" /* KEY_EXTRACTABLE */
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#define RAW_TO_INT32A(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p) \
-0x##a##b##c##d, 0x##e##f##g##h, 0x##i##j##k##l, 0x##m##n##o##p
-
-#define FORMAT_KEY_32(...) RAW_TO_INT32A(__VA_ARGS__)
 
 /** @addtogroup Key_Management_Services Key Management Services (KMS)
   * @{
@@ -68,9 +70,56 @@ extern "C" {
 #define KMS_INDEX_BLOBIMPORT_DECRYPT      (2U)      /*!< Index in @ref KMS_PlatfObjects_EmbeddedList
                                                          where the blob decryption key is stored */
 
+#define RAW_TO_INT32A(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p) \
+  0x##a##b##c##d, 0x##e##f##g##h, 0x##i##j##k##l, 0x##m##n##o##p
+#define RAW_TO_DEVJOINKEY_STRUCT(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x) \
+  0x##a##b##c##d, 0x##e##f##g##h, 0x##i##j##k##l, 0x##m##n##o##p, 0x##t##s##r##q, 0x##x##w##v##u
+
+#define FORMAT_KEY_32(...) RAW_TO_INT32A(__VA_ARGS__)
+#define FORMAT_DEVJOINKEY(...) RAW_TO_DEVJOINKEY_STRUCT(__VA_ARGS__)
 /**
   * @}
   */
+
+/*
+ * Blob decrypt encrypt key
+ *
+ */
+#ifdef KMS_LOW_LEVEL_C
+#if defined(KMS_ENCRYPT_DECRYPT_BLOB)
+
+/* Place code in a specific section */
+#if defined(__ICCARM__)
+#pragma default_variable_attributes = @ ".SE_embedded_Keys"
+#elif defined(__CC_ARM)
+#pragma arm section rodata = ".SE_embedded_Keys"
+#endif /* __ICCARM__ */
+
+/* KMS attribute format is used for the key and the data */
+#if defined(__GNUC__)
+__attribute__((section(".SE_embedded_Keys")))
+#endif
+static const uint32_t KMS_Data_Storage_AES128_Encrypt_Key[]  =
+{
+  CKA_VALUE, @AES_DATA_STORAGE_KEY@
+};
+/* The three last uint32_t should be set to zero (not used in this configuration) */
+#if defined(__GNUC__)
+__attribute__((section(".SE_embedded_Keys")))
+#endif
+static const uint32_t KMS_Data_Storage_AES128_Encrypt_Data[] =
+{
+  CKA_VALUE, @AES_DATA_STORAGE_DATA@
+};
+
+/* Stop placing data in specified section*/
+#if defined(__ICCARM__)
+#pragma default_variable_attributes =
+#elif defined(__CC_ARM)
+#pragma arm section code
+#endif /* __ICCARM__ */
+#endif  /* KMS_ENCRYPT_DECRYPT_BLOB */
+#endif /* KMS_LOW_LEVEL_C */
 
 /*
  * Embedded objects definition
@@ -276,6 +325,7 @@ static const kms_obj_keyhead_30_t   SBSFU_ECDSA_3_Verify =
 
 KMS_DECLARE_BLOB_STRUCT(, 21);
 KMS_DECLARE_BLOB_STRUCT(, 27);
+KMS_DECLARE_BLOB_STRUCT(, 29);
 
 /* These objects are used by user tKMS application                 */
 #if defined(__GNUC__)
@@ -361,13 +411,35 @@ static const kms_obj_keyhead_27_t   Lorawan_Nwk_Key =
 #if defined(__GNUC__)
 __attribute__((section(".USER_embedded_Keys")))
 #endif
+static const kms_obj_keyhead_29_t   Lorawan_DevJoinEuiAddr_Key =
+{
+  KMS_ABI_VERSION_CK_2_40,         /*  uint32_t version; */
+  KMS_ABI_CONFIG_KEYHEAD,          /*  uint32_t configuration; */
+  116,                             /*  uint32_t blobs_size; */
+  8,                               /*  uint32_t blobs_count; */
+  16,                              /*  uint32_t object_id; */
+  {
+    CKA_CLASS,        sizeof(CK_OBJECT_CLASS), (uint8_t)CKO_SECRET_KEY,
+    CKA_KEY_TYPE,     sizeof(CK_KEY_TYPE),     CKK_AES,
+    CKA_VALUE,        24UL,                    FORMAT_DEVJOINKEY(LORAWAN_DEVICE_EUI,LORAWAN_JOIN_EUI,LORAWAN_DEVICE_ADDRESS,LORAWAN_DEVICE_ADDRESS),
+    CKA_ENCRYPT,      sizeof(CK_BBOOL),        (uint8_t)CK_FALSE,
+    CKA_DECRYPT,      sizeof(CK_BBOOL),        (uint8_t)CK_FALSE,
+    CKA_COPYABLE,     sizeof(CK_BBOOL),        (uint8_t)CK_FALSE,
+    CKA_EXTRACTABLE,  sizeof(CK_BBOOL),        (uint8_t)CK_TRUE,
+    CKA_LABEL,        4UL,                     0x5F45524CU /* 'LRE_' */
+  }
+};
+
+#if defined(__GNUC__)
+__attribute__((section(".USER_embedded_Keys")))
+#endif
 static const kms_obj_keyhead_21_t   Lorawan_Nwk_S_Key =
 {
   KMS_ABI_VERSION_CK_2_40,         /*  uint32_t version; */
   KMS_ABI_CONFIG_KEYHEAD,          /*  uint32_t configuration; */
   84,                              /*  uint32_t blobs_size; */
   6,                               /*  uint32_t blobs_count; */
-  16,                              /*  uint32_t object_id; */
+  17,                              /*  uint32_t object_id; */
   {
     CKA_CLASS,        sizeof(CK_OBJECT_CLASS), (uint8_t)CKO_SECRET_KEY,
     CKA_KEY_TYPE,     sizeof(CK_KEY_TYPE),     CKK_AES,
@@ -391,7 +463,7 @@ static const kms_obj_keyhead_21_t   Lorawan_App_S_Key =
   KMS_ABI_CONFIG_KEYHEAD,          /*  uint32_t configuration; */
   84,                              /*  uint32_t blobs_size; */
   6,                               /*  uint32_t blobs_count; */
-  17,                              /*  uint32_t object_id; */
+  18,                              /*  uint32_t object_id; */
   {
     CKA_CLASS,        sizeof(CK_OBJECT_CLASS), (uint8_t)CKO_SECRET_KEY,
     CKA_KEY_TYPE,     sizeof(CK_KEY_TYPE),     CKK_AES,
@@ -476,9 +548,9 @@ static const kms_obj_keyhead_t *const KMS_PlatfObjects_EmbeddedList[KMS_INDEX_MA
 #endif /* LORAMAC_CLASSB_ENABLED == 1 */
   (kms_obj_keyhead_t *) &Lorawan_App_Key,                       /* Index = 14 */
   (kms_obj_keyhead_t *) &Lorawan_Nwk_Key,                       /* Index = 15 */
-  (kms_obj_keyhead_t *) &Lorawan_Nwk_S_Key,                     /* Index = 16 */
-  (kms_obj_keyhead_t *) &Lorawan_App_S_Key,                     /* Index = 17 */
-  (kms_obj_keyhead_t *) NULL,                                   /* Index = 18 */
+  (kms_obj_keyhead_t *) &Lorawan_DevJoinEuiAddr_Key,            /* Index = 16 */
+  (kms_obj_keyhead_t *) &Lorawan_Nwk_S_Key,                     /* Index = 17 */
+  (kms_obj_keyhead_t *) &Lorawan_App_S_Key,                     /* Index = 18 */
   (kms_obj_keyhead_t *) NULL,                                   /* Index = 19 */
   (kms_obj_keyhead_t *) NULL,                                   /* Index = 20 */
 };
@@ -487,7 +559,6 @@ static const kms_obj_keyhead_t *const KMS_PlatfObjects_EmbeddedList[KMS_INDEX_MA
   * @}
   */
 #endif /* KMS_PLATF_OBJECTS_C */
-
 
 /**
   * @}

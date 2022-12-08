@@ -28,17 +28,20 @@
 /* Custom Structures declaration */
 KMS_DECLARE_BLOB_STRUCT(, 225)
 KMS_DECLARE_BLOB_STRUCT(, 36)
+KMS_DECLARE_BLOB_STRUCT(, 24)
 
 /* Place code in a specific section*/
 #if defined(__ICCARM__)
 #pragma default_variable_attributes = @ ".KMS_blob_Keys"
 #elif defined(__CC_ARM)
 #pragma arm section rodata = ".KMS_blob_Keys"
-#else
-__attribute__((section(".KMS_blob_Keys")))
 #endif /* __ICCARM__ */
 
+#if defined (__GNUC__) || defined(__ARMCC_VERSION)
+const kms_obj_keyhead_225_t   Test_Key_RSA_2048 __attribute__((section(".KMS_blob_Keys"))) =
+#else /* __GNUC__ || __ARMCC_VERSION */
 const kms_obj_keyhead_225_t   Test_Key_RSA_2048 =
+#endif /* __GNUC__ || __ARMCC_VERSION */
 {
   KMS_ABI_VERSION_CK_2_40,         /*   uint32_t version;           */
   KMS_ABI_CONFIG_KEYHEAD,          /*   uint32_t configuration;     */
@@ -112,11 +115,11 @@ const kms_obj_keyhead_225_t   Test_Key_RSA_2048 =
   }
 };
 
-#if defined(__GNUC__)
-__attribute__((section(".KMS_blob_Keys")))
-#endif /* (__GNUC__) */
-
+#if defined (__GNUC__) || defined(__ARMCC_VERSION)
+const kms_obj_keyhead_36_t   Test_Key_AES256_Derivable __attribute__((section(".KMS_blob_Keys"))) =
+#else /* __GNUC__ || __ARMCC_VERSION */
 const kms_obj_keyhead_36_t   Test_Key_AES256_Derivable =
+#endif /* __GNUC__ || __ARMCC_VERSION */
 {
   KMS_ABI_VERSION_CK_2_40,                /*   uint32_t version;           */
   KMS_ABI_CONFIG_KEYHEAD,                 /*   uint32_t configuration;     */
@@ -137,11 +140,35 @@ const kms_obj_keyhead_36_t   Test_Key_AES256_Derivable =
   }
 };
 
+
+#if defined (__GNUC__) || defined(__ARMCC_VERSION)
+const kms_obj_keyhead_24_t Test_Counter __attribute__((section(".KMS_blob_Keys"))) =
+#else /* __GNUC__ || __ARMCC_VERSION */
+const kms_obj_keyhead_24_t Test_Counter =
+#endif /* __GNUC__ || __ARMCC_VERSION */
+{
+  KMS_ABI_VERSION_CK_2_40,                /*   uint32_t version;           */
+  KMS_ABI_CONFIG_KEYHEAD,                 /*   uint32_t configuration;     */
+  96,                                     /*   uint32_t blobs_size;        */
+  7,                                      /*   uint32_t blobs_count;       */
+  KMS_COUNTER_OBJECT_HANDLE,              /*   uint32_t object_id;         */
+  {
+    CKA_CLASS,                   sizeof(CK_OBJECT_CLASS), CKO_STM_SECURE_COUNTER,
+    CKA_LABEL,                   16, 0x55434553U, 0x4F434552U, 0x45544E55U, 0x00312D52U,
+                                 /* 'SECU', 'RECO', 'UNTE', 'R-1' */
+    CKA_DESTROYABLE,             sizeof(CK_BBOOL), CK_FALSE,
+    CKA_STM_COUNTER_SATURATED,   sizeof(CK_BBOOL), CK_TRUE,
+    CKA_STM_COUNTER_MAX_VALUE,   sizeof(CK_ULONG), 0xFFFFFFFFU,
+    CKA_STM_COUNTER_RESET_VALUE, sizeof(CK_ULONG), 0x00000001U,
+    CKA_STM_COUNTER_VALUE,       sizeof(CK_ULONG), 0x00000001U,
+  }
+};
+
 /* Stop placing data in specified section*/
 #if defined(__ICCARM__)
 #pragma default_function_attributes =
 #elif defined(__CC_ARM)
-#pragma arm section code
+#pragma arm section rodata = ".KMS_blob_Keys"
 #endif /* (__ICCARM__) */
 
 

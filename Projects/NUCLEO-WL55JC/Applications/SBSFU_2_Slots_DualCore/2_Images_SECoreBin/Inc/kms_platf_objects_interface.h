@@ -52,6 +52,8 @@ extern "C" {
 #define KMS_KEY_AES128_OBJECT_HANDLE                  ((CK_OBJECT_HANDLE)13)
 #define KMS_KEY_AES256_OBJECT_HANDLE                  ((CK_OBJECT_HANDLE)14)
 #define KMS_KEY_AES128_DERIVABLE_OBJECT_HANDLE        ((CK_OBJECT_HANDLE)22)
+#define KMS_COUNTER_OBJECT_HANDLE                     ((CK_OBJECT_HANDLE)23)
+
 
 #ifdef __cplusplus
 }

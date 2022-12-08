@@ -1147,6 +1147,9 @@
         <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\ST\STM32_Key_Management_Services\Core\kms_platf_objects.c</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\ST\STM32_Key_Management_Services\Modules\kms_counter.c</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\ST\STM32_Key_Management_Services\Modules\kms_digest.c</name>
       </file>
       <file>

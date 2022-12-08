@@ -24,6 +24,7 @@
 extern "C" {
 #endif
 /* Includes ------------------------------------------------------------------*/
+#include <stdint.h>
 
 /*******************************************Radio LORA enum*****************************************/
 typedef enum
@@ -59,6 +60,7 @@ typedef enum
     RADIO_LORA_CR_4_7                             = 0x03,
     RADIO_LORA_CR_4_8                             = 0x04,
 }RADIO_LoRaCodingRates_t;
+
 /*!
  * @brief Represents the bandwidth values for LoRa packet type
  */
@@ -293,6 +295,7 @@ typedef struct
   RADIO_FSK_CrcTypes_t              CrcLength;        /* Size of the CRC block in the GFSK packet */
   RADIO_FSK_DcFree_t                Whitening;
 } generic_param_tx_msk_t;
+
 /*!
  * @brief Radio generic Tx Configuration
  */

@@ -56,6 +56,7 @@ extern "C" {
   *        Memory storage
   * @note  Mandatory to handle runtime objects addition through blob import or
   *        creation through specific KMS services
+  * @note  Requires @ref KMS_NVM_SLOT_NUMBERS to be defined
   */
 #define KMS_NVM_ENABLED
 
@@ -65,7 +66,7 @@ extern "C" {
   * @note  Mandatory to handle runtime objects creation through specific KMS services
   * @note  Requires @ref KMS_NVM_ENABLED to be defined
   */
-#define KMS_NVM_DYNAMIC_ENABLED
+//#define KMS_NVM_DYNAMIC_ENABLED
 
 /**
   * @brief KMS_NVM_SLOT_NUMBERS Specify here the number of slots to use in the Non Volatile Memory storage
@@ -76,6 +77,22 @@ extern "C" {
   * @note  Mandatory to set if @ref KMS_NVM_ENABLED is defined
   */
 #define KMS_NVM_SLOT_NUMBERS                    (40UL)
+
+/**
+  * @brief KMS_VM_DYNAMIC_ENABLED Uncomment the below line to support
+  *        Volatile Memory storage
+  * @note  Mandatory to handle runtime objects creation through specific KMS services
+  */
+#define KMS_VM_DYNAMIC_ENABLED
+
+/**
+  * @brief KMS_VM_SLOT_NUMBERS Specify here the number of slots to use in the Volatile Memory storage
+  * @note  VM slots correspond to storage slots, it should be at least equal to the number of keys you'll store
+  *        into VM.
+  * @note  Memory impact is a 4 bytes per slot to store slot address in VM.
+  * @note  Mandatory to set if @ref KMS_VM_DYNAMIC_ENABLED is defined
+  */
+#define KMS_VM_SLOT_NUMBERS                    (5UL)
 
 /**
   * @}
@@ -89,12 +106,11 @@ extern "C" {
   *        to handle in parallel
   * @note  This value has an impact on memory footprint
   */
-#define KMS_NB_SESSIONS_MAX                     (10UL)
+#define KMS_NB_SESSIONS_MAX                     (1UL)
 
 /**
   * @}
   */
-
 
 /** @defgroup KMS_PKCS_Config PKCS#11 services
   * @{
@@ -220,6 +236,19 @@ extern "C" {
   * @note  Requires @ref KMS_IMPORT_BLOB to be enabled
   */
 #define KMS_IMPORT_BLOB_CHUNK_SIZE      (512U)
+
+/**
+  * @brief KMS_SECURE_COUNTERS Uncomment the below line to support KMS secure counters
+  * @note  Mandatory to handle counter objects through specific KMS services
+  * @note  Requires @ref KMS_NVM_ENABLED or @ref KMS_VM_DYNAMIC_ENABLED to be defined
+  */
+#define KMS_SECURE_COUNTERS
+
+/**
+  * @brief KMS_ENCRYPT_DECRYPT_BLOB Uncomment the below line to enable the encryption of the blobs within the KMS data storage
+  * @note  Requires @ref KMS_NVM_ENABLED to store imported keys
+  */
+/* #define KMS_ENCRYPT_DECRYPT_BLOB */
 
 /**
   * @}

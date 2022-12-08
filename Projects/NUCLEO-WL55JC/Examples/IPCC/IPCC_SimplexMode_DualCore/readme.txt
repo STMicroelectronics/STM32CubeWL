@@ -79,7 +79,7 @@ This behavior is illustrated using LEDs.
       
 @par Keywords
 
-System, IPCC, Simplex, Dual core, Data transfer synchronisation
+System, IPCC, Simplex, Dual core, Data transfer synchronization
 
 @par Directory contents
 

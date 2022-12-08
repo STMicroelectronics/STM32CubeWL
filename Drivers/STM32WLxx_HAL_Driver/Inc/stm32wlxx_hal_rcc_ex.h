@@ -346,7 +346,7 @@ typedef struct
 /** @defgroup RCCEx_EXTI_LINE_LSECSS  RCC LSE CSS external interrupt line
   * @{
   */
-#define  RCC_EXTI_LINE_LSECSS          EXTI_IMR1_IM19  /*!< External interrupt line 18 connected to the LSE CSS EXTI Line */
+#define  RCC_EXTI_LINE_LSECSS      EXTI_IMR1_IM19  /*!< External interrupt line 18 connected to the LSE CSS EXTI Line */
 /**
   * @}
   */
@@ -354,7 +354,7 @@ typedef struct
 /** @defgroup RCCEx_EXTI_LINE_HSECSS  RCC HSE CSS external interrupt line
   * @{
   */
-#define  RCC_EXTI_LINE_HSECSS          EXTI_IMR2_IM43  /*!< External interrupt line 43 connected to the HSE CSS EXTI Line */
+#define  RCC_EXTI_LINE_HSECSS      EXTI_IMR2_IM43  /*!< External interrupt line 43 connected to the HSE CSS EXTI Line */
 /**
   * @}
   */

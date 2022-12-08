@@ -81,6 +81,7 @@ extern "C" {
   * @}
   */
 
+
 /**
   * @}
   */
@@ -175,7 +176,7 @@ HAL_StatusTypeDef HAL_DACEx_NoiseWaveGenerate(DAC_HandleTypeDef *hdac, uint32_t 
 HAL_StatusTypeDef HAL_DACEx_SelfCalibrate(DAC_HandleTypeDef *hdac, DAC_ChannelConfTypeDef *sConfig, uint32_t Channel);
 HAL_StatusTypeDef HAL_DACEx_SetUserTrimming(DAC_HandleTypeDef *hdac, DAC_ChannelConfTypeDef *sConfig, uint32_t Channel,
                                             uint32_t NewTrimmingValue);
-uint32_t HAL_DACEx_GetTrimOffset(DAC_HandleTypeDef *hdac, uint32_t Channel);
+uint32_t HAL_DACEx_GetTrimOffset(const DAC_HandleTypeDef *hdac, uint32_t Channel);
 
 /**
   * @}
@@ -199,4 +200,4 @@ uint32_t HAL_DACEx_GetTrimOffset(DAC_HandleTypeDef *hdac, uint32_t Channel);
 }
 #endif
 
-#endif /*STM32WLxx_HAL_DAC_EX_H */
+#endif /* STM32WLxx_HAL_DAC_EX_H */

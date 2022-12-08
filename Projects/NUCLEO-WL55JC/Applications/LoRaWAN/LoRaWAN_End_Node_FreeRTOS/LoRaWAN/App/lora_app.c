@@ -25,12 +25,11 @@
 #include "cmsis_os.h"
 #include "stm32_timer.h"
 #include "utilities_def.h"
-#include "lora_app_version.h"
+#include "app_version.h"
 #include "lorawan_version.h"
 #include "subghz_phy_version.h"
 #include "lora_info.h"
 #include "LmHandler.h"
-#include "stm32_lpm.h"
 #include "adc_if.h"
 #include "CayenneLpp.h"
 #include "sys_sensors.h"
@@ -86,7 +85,7 @@ typedef enum TxEventType_e
   * @brief LoRaWAN NVM Flash address
   * @note last 2 sector of a 128kBytes device
   */
-#define LORAWAN_NVM_BASE_ADDRESS                    ((uint32_t)0x0803F000UL)
+#define LORAWAN_NVM_BASE_ADDRESS                    ((void *)0x0803F000UL)
 
 /* USER CODE BEGIN PD */
 static const char *slotStrings[] = { "1", "2", "C", "C_MC", "P", "P_MC" };
@@ -134,6 +133,11 @@ static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params);
   * @param params status of Last Beacon
   */
 static void OnBeaconStatusChange(LmHandlerBeaconParams_t *params);
+
+/**
+  * @brief callback when system time has been updated
+  */
+static void OnSysTimeUpdate(void);
 
 /**
   * @brief callback when LoRaWAN application Class is changed
@@ -260,6 +264,7 @@ static LmHandlerCallbacks_t LmHandlerCallbacks =
   .OnTxData =                     OnTxData,
   .OnRxData =                     OnRxData,
   .OnBeaconStatusChange =         OnBeaconStatusChange,
+  .OnSysTimeUpdate =              OnSysTimeUpdate,
   .OnClassChange =                OnClassChange,
   .OnTxPeriodicityChanged =       OnTxPeriodicityChanged,
   .OnTxFrameCtrlChanged =         OnTxFrameCtrlChanged,
@@ -277,6 +282,7 @@ static LmHandlerParams_t LmHandlerParams =
   .AdrEnable =                LORAWAN_ADR_STATE,
   .IsTxConfirmed =            LORAWAN_DEFAULT_CONFIRMED_MSG_STATE,
   .TxDatarate =               LORAWAN_DEFAULT_DATA_RATE,
+  .TxPower =                  LORAWAN_DEFAULT_TX_POWER,
   .PingSlotPeriodicity =      LORAWAN_DEFAULT_PING_SLOT_PERIODICITY,
   .RxBCTimeout =              LORAWAN_DEFAULT_CLASS_B_C_RESP_TIMEOUT
 };
@@ -439,6 +445,11 @@ void LoRaWAN_Init(void)
   UTIL_TIMER_Create(&TxLedTimer, LED_PERIOD_TIME, UTIL_TIMER_ONESHOT, OnTxTimerLedEvent, NULL);
   UTIL_TIMER_Create(&RxLedTimer, LED_PERIOD_TIME, UTIL_TIMER_ONESHOT, OnRxTimerLedEvent, NULL);
   UTIL_TIMER_Create(&JoinLedTimer, LED_PERIOD_TIME, UTIL_TIMER_PERIODIC, OnJoinTimerLedEvent, NULL);
+
+  if (FLASH_IF_Init(NULL) != FLASH_IF_OK)
+  {
+    Error_Handler();
+  }
 
   /* USER CODE END LoRaWAN_Init_1 */
 
@@ -670,7 +681,8 @@ static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params)
     if (params->RxSlot < RX_SLOT_NONE)
     {
       APP_LOG(TS_OFF, VLEVEL_H, "###### D/L FRAME:%04d | PORT:%d | DR:%d | SLOT:%s | RSSI:%d | SNR:%d\r\n",
-              params->DownlinkCounter, RxPort, params->Datarate, slotStrings[params->RxSlot], params->Rssi, params->Snr);
+              params->DownlinkCounter, RxPort, params->Datarate, slotStrings[params->RxSlot],
+              params->Rssi, params->Snr);
     }
   }
   /* USER CODE END OnRxData_1 */
@@ -684,96 +696,99 @@ static void SendTxData(void)
   sensor_t sensor_data;
   UTIL_TIMER_Time_t nextTxIn = 0;
 
+  if (LmHandlerIsBusy() == false)
+  {
 #ifdef CAYENNE_LPP
-  uint8_t channel = 0;
+    uint8_t channel = 0;
 #else
-  uint16_t pressure = 0;
-  int16_t temperature = 0;
-  uint16_t humidity = 0;
-  uint32_t i = 0;
-  int32_t latitude = 0;
-  int32_t longitude = 0;
-  uint16_t altitudeGps = 0;
+    uint16_t pressure = 0;
+    int16_t temperature = 0;
+    uint16_t humidity = 0;
+    uint32_t i = 0;
+    int32_t latitude = 0;
+    int32_t longitude = 0;
+    uint16_t altitudeGps = 0;
 #endif /* CAYENNE_LPP */
 
-  EnvSensors_Read(&sensor_data);
+    EnvSensors_Read(&sensor_data);
 
-  APP_LOG(TS_ON, VLEVEL_M, "VDDA: %d\r\n", batteryLevel);
-  APP_LOG(TS_ON, VLEVEL_M, "temp: %d\r\n", (int16_t)(sensor_data.temperature));
+    APP_LOG(TS_ON, VLEVEL_M, "VDDA: %d\r\n", batteryLevel);
+    APP_LOG(TS_ON, VLEVEL_M, "temp: %d\r\n", (int16_t)(sensor_data.temperature));
 
-  AppData.Port = LORAWAN_USER_APP_PORT;
+    AppData.Port = LORAWAN_USER_APP_PORT;
 
 #ifdef CAYENNE_LPP
-  CayenneLppReset();
-  CayenneLppAddBarometricPressure(channel++, sensor_data.pressure);
-  CayenneLppAddTemperature(channel++, sensor_data.temperature);
-  CayenneLppAddRelativeHumidity(channel++, (uint16_t)(sensor_data.humidity));
+    CayenneLppReset();
+    CayenneLppAddBarometricPressure(channel++, sensor_data.pressure);
+    CayenneLppAddTemperature(channel++, sensor_data.temperature);
+    CayenneLppAddRelativeHumidity(channel++, (uint16_t)(sensor_data.humidity));
 
-  if ((LmHandlerParams.ActiveRegion != LORAMAC_REGION_US915) && (LmHandlerParams.ActiveRegion != LORAMAC_REGION_AU915)
-      && (LmHandlerParams.ActiveRegion != LORAMAC_REGION_AS923))
-  {
-    CayenneLppAddDigitalInput(channel++, GetBatteryLevel());
-    CayenneLppAddDigitalOutput(channel++, AppLedStateOn);
-  }
+    if ((LmHandlerParams.ActiveRegion != LORAMAC_REGION_US915) && (LmHandlerParams.ActiveRegion != LORAMAC_REGION_AU915)
+        && (LmHandlerParams.ActiveRegion != LORAMAC_REGION_AS923))
+    {
+      CayenneLppAddDigitalInput(channel++, GetBatteryLevel());
+      CayenneLppAddDigitalOutput(channel++, AppLedStateOn);
+    }
 
-  CayenneLppCopy(AppData.Buffer);
-  AppData.BufferSize = CayenneLppGetSize();
+    CayenneLppCopy(AppData.Buffer);
+    AppData.BufferSize = CayenneLppGetSize();
 #else  /* not CAYENNE_LPP */
-  humidity    = (uint16_t)(sensor_data.humidity * 10);            /* in %*10     */
-  temperature = (int16_t)(sensor_data.temperature);
-  pressure = (uint16_t)(sensor_data.pressure * 100 / 10); /* in hPa / 10 */
+    humidity    = (uint16_t)(sensor_data.humidity * 10);            /* in %*10     */
+    temperature = (int16_t)(sensor_data.temperature);
+    pressure = (uint16_t)(sensor_data.pressure * 100 / 10); /* in hPa / 10 */
 
-  AppData.Buffer[i++] = AppLedStateOn;
-  AppData.Buffer[i++] = (uint8_t)((pressure >> 8) & 0xFF);
-  AppData.Buffer[i++] = (uint8_t)(pressure & 0xFF);
-  AppData.Buffer[i++] = (uint8_t)(temperature & 0xFF);
-  AppData.Buffer[i++] = (uint8_t)((humidity >> 8) & 0xFF);
-  AppData.Buffer[i++] = (uint8_t)(humidity & 0xFF);
+    AppData.Buffer[i++] = AppLedStateOn;
+    AppData.Buffer[i++] = (uint8_t)((pressure >> 8) & 0xFF);
+    AppData.Buffer[i++] = (uint8_t)(pressure & 0xFF);
+    AppData.Buffer[i++] = (uint8_t)(temperature & 0xFF);
+    AppData.Buffer[i++] = (uint8_t)((humidity >> 8) & 0xFF);
+    AppData.Buffer[i++] = (uint8_t)(humidity & 0xFF);
 
-  if ((LmHandlerParams.ActiveRegion == LORAMAC_REGION_US915) || (LmHandlerParams.ActiveRegion == LORAMAC_REGION_AU915)
-      || (LmHandlerParams.ActiveRegion == LORAMAC_REGION_AS923))
-  {
-    AppData.Buffer[i++] = 0;
-    AppData.Buffer[i++] = 0;
-    AppData.Buffer[i++] = 0;
-    AppData.Buffer[i++] = 0;
-  }
-  else
-  {
-    latitude = sensor_data.latitude;
-    longitude = sensor_data.longitude;
+    if ((LmHandlerParams.ActiveRegion == LORAMAC_REGION_US915) || (LmHandlerParams.ActiveRegion == LORAMAC_REGION_AU915)
+        || (LmHandlerParams.ActiveRegion == LORAMAC_REGION_AS923))
+    {
+      AppData.Buffer[i++] = 0;
+      AppData.Buffer[i++] = 0;
+      AppData.Buffer[i++] = 0;
+      AppData.Buffer[i++] = 0;
+    }
+    else
+    {
+      latitude = sensor_data.latitude;
+      longitude = sensor_data.longitude;
 
-    AppData.Buffer[i++] = GetBatteryLevel();        /* 1 (very low) to 254 (fully charged) */
-    AppData.Buffer[i++] = (uint8_t)((latitude >> 16) & 0xFF);
-    AppData.Buffer[i++] = (uint8_t)((latitude >> 8) & 0xFF);
-    AppData.Buffer[i++] = (uint8_t)(latitude & 0xFF);
-    AppData.Buffer[i++] = (uint8_t)((longitude >> 16) & 0xFF);
-    AppData.Buffer[i++] = (uint8_t)((longitude >> 8) & 0xFF);
-    AppData.Buffer[i++] = (uint8_t)(longitude & 0xFF);
-    AppData.Buffer[i++] = (uint8_t)((altitudeGps >> 8) & 0xFF);
-    AppData.Buffer[i++] = (uint8_t)(altitudeGps & 0xFF);
-  }
+      AppData.Buffer[i++] = GetBatteryLevel();        /* 1 (very low) to 254 (fully charged) */
+      AppData.Buffer[i++] = (uint8_t)((latitude >> 16) & 0xFF);
+      AppData.Buffer[i++] = (uint8_t)((latitude >> 8) & 0xFF);
+      AppData.Buffer[i++] = (uint8_t)(latitude & 0xFF);
+      AppData.Buffer[i++] = (uint8_t)((longitude >> 16) & 0xFF);
+      AppData.Buffer[i++] = (uint8_t)((longitude >> 8) & 0xFF);
+      AppData.Buffer[i++] = (uint8_t)(longitude & 0xFF);
+      AppData.Buffer[i++] = (uint8_t)((altitudeGps >> 8) & 0xFF);
+      AppData.Buffer[i++] = (uint8_t)(altitudeGps & 0xFF);
+    }
 
-  AppData.BufferSize = i;
+    AppData.BufferSize = i;
 #endif /* CAYENNE_LPP */
 
-  if ((JoinLedTimer.IsRunning) && (LmHandlerJoinStatus() == LORAMAC_HANDLER_SET))
-  {
-    UTIL_TIMER_Stop(&JoinLedTimer);
-    HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_RESET); /* LED_RED */
-  }
-
-  status = LmHandlerSend(&AppData, LmHandlerParams.IsTxConfirmed, false);
-  if (LORAMAC_HANDLER_SUCCESS == status)
-  {
-    APP_LOG(TS_ON, VLEVEL_L, "SEND REQUEST\r\n");
-  }
-  else if (LORAMAC_HANDLER_DUTYCYCLE_RESTRICTED == status)
-  {
-    nextTxIn = LmHandlerGetDutyCycleWaitTime();
-    if (nextTxIn > 0)
+    if ((JoinLedTimer.IsRunning) && (LmHandlerJoinStatus() == LORAMAC_HANDLER_SET))
     {
-      APP_LOG(TS_ON, VLEVEL_L, "Next Tx in  : ~%d second(s)\r\n", (nextTxIn / 1000));
+      UTIL_TIMER_Stop(&JoinLedTimer);
+      HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_RESET); /* LED_RED */
+    }
+
+    status = LmHandlerSend(&AppData, LmHandlerParams.IsTxConfirmed, false);
+    if (LORAMAC_HANDLER_SUCCESS == status)
+    {
+      APP_LOG(TS_ON, VLEVEL_L, "SEND REQUEST\r\n");
+    }
+    else if (LORAMAC_HANDLER_DUTYCYCLE_RESTRICTED == status)
+    {
+      nextTxIn = LmHandlerGetDutyCycleWaitTime();
+      if (nextTxIn > 0)
+      {
+        APP_LOG(TS_ON, VLEVEL_L, "Next Tx in  : ~%d second(s)\r\n", (nextTxIn / 1000));
+      }
     }
   }
 
@@ -872,6 +887,8 @@ static void OnJoinRequest(LmHandlerJoinParams_t *joinParams)
     {
       APP_LOG(TS_OFF, VLEVEL_M, "\r\n###### = JOIN FAILED\r\n");
     }
+
+    APP_LOG(TS_OFF, VLEVEL_H, "###### U/L FRAME:JOIN | DR:%d | PWR:%d\r\n", joinParams->Datarate, joinParams->TxPower);
   }
   /* USER CODE END OnJoinRequest_1 */
 }
@@ -909,6 +926,13 @@ static void OnBeaconStatusChange(LmHandlerBeaconParams_t *params)
     }
   }
   /* USER CODE END OnBeaconStatusChange_1 */
+}
+
+static void OnSysTimeUpdate(void)
+{
+  /* USER CODE BEGIN OnSysTimeUpdate_1 */
+
+  /* USER CODE END OnSysTimeUpdate_1 */
 }
 
 static void OnClassChange(DeviceClass_t deviceClass)
@@ -1087,13 +1111,9 @@ static void OnStoreContextRequest(void *nvm, uint32_t nvm_size)
 
   /* USER CODE END OnStoreContextRequest_1 */
   /* store nvm in flash */
-  if (HAL_FLASH_Unlock() == HAL_OK)
+  if (FLASH_IF_Erase(LORAWAN_NVM_BASE_ADDRESS, FLASH_PAGE_SIZE) == FLASH_IF_OK)
   {
-    if (FLASH_IF_EraseByPages(PAGE(LORAWAN_NVM_BASE_ADDRESS), 1, 0U) == FLASH_OK)
-    {
-      FLASH_IF_Write(LORAWAN_NVM_BASE_ADDRESS, (uint8_t *)nvm, nvm_size, NULL);
-    }
-    HAL_FLASH_Lock();
+    FLASH_IF_Write(LORAWAN_NVM_BASE_ADDRESS, (const void *)nvm, nvm_size);
   }
   /* USER CODE BEGIN OnStoreContextRequest_Last */
 
@@ -1105,7 +1125,7 @@ static void OnRestoreContextRequest(void *nvm, uint32_t nvm_size)
   /* USER CODE BEGIN OnRestoreContextRequest_1 */
 
   /* USER CODE END OnRestoreContextRequest_1 */
-  UTIL_MEM_cpy_8(nvm, (void *)LORAWAN_NVM_BASE_ADDRESS, nvm_size);
+  FLASH_IF_Read(nvm, LORAWAN_NVM_BASE_ADDRESS, nvm_size);
   /* USER CODE BEGIN OnRestoreContextRequest_Last */
 
   /* USER CODE END OnRestoreContextRequest_Last */

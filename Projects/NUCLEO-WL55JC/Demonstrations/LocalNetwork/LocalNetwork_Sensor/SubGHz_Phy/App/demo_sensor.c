@@ -49,15 +49,6 @@ typedef struct
 #if SENS_SCAN_TESTING != 0
   SENS_Debug_t Debug;
 #endif /*SENS_SCAN_TESTING*/
-  union
-  {
-    uint8_t Packet[DEMO_SENSOR_MAX_PAYLOAD];    /**<Array to transmit*/
-    struct
-    {
-      DEMO_packet_sensor_header_t Header;       /**<Packet header*/
-      uint8_t Data[];   /**<Sensor measurements*/
-    };
-  };    /**<Packet to transmit*/
   UTIL_TIMER_Object_t TransmitTimer;    /**<Timer when it is time to transmit*/
   UTIL_TIMER_Object_t BeaconTimer;      /**<Timer when next beacon is expected*/
   UTIL_TIMER_Object_t SyncTimer;        /**<Timer when sync is expected*/
@@ -78,6 +69,15 @@ typedef struct
   bool ReceivingBeacon;         /**<Receiver is on, waiting for the Beacon*/
   bool ReceivingSync;           /**<Receiver is on, waiting for the Sync*/
   SENS_State_t State;           /**<Sensor communication state*/
+  union
+  {
+    uint8_t Packet[DEMO_SENSOR_MAX_PAYLOAD];    /**<Array to transmit*/
+    struct
+    {
+      DEMO_packet_sensor_header_t Header;       /**<Packet header*/
+      uint8_t Data[];   /**<Sensor measurements*/
+    };
+  };    /**<Packet to transmit*/
 } SENS_Global_t;
 static SENS_Global_t SENS; /*Global variables of this module*/
 

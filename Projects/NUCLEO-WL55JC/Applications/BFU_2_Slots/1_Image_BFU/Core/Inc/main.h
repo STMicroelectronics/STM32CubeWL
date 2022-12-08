@@ -25,5 +25,6 @@
 #include "stm32wlxx_nucleo.h"
 #include "app_sfu.h"
 #include "app_hw.h"
-
+void Error_Handler(void);
+void SFU_EXCPT_Security_Error(void);
 #endif /* MAIN_H */

@@ -946,7 +946,7 @@ SFU_ErrorStatus SFU_IMG_DetectFW(uint32_t SlotNumber)
     if (SFU_IMG_GetFwImageSlot(p_header) != SLOT_INACTIVE)
     {
       /*
-       * Control if the first 32 bytes (could be more but time consuming ...) are significants
+       * Control if the first 32 bytes (could be more but time consuming ...) are significant
        * At this location we should find the vector table.
        * Objective is to detect if the FW image has been erased
        * ==> this is the case after SFU_IMG_InvalidateCurrentFirmware() (could be an attack attempt)

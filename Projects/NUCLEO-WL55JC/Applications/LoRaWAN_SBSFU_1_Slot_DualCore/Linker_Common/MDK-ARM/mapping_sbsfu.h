@@ -37,8 +37,8 @@
 
 /* KMS Data Storage (NVMS) region protected area */
 /* KMS Data Storage need for 2 images : 4 kbytes * 2 ==> 8 kbytes */
-#define KMS_DATASTORAGE_START           0x0802B000
-#define KMS_DATASTORAGE_END             0x0802CFFF
+#define KMS_DATASTORAGE_START           0x0802A800
+#define KMS_DATASTORAGE_END             0x0802C7FF
 
 /* SE IF ROM: used to locate Secure Engine interface code out of MPU isolation     */
 #define SE_IF_REGION_ROM_START          (KMS_DATASTORAGE_END + 0x1)
@@ -46,7 +46,7 @@
 
 /* SBSFU Code region */
 #define SB_REGION_ROM_START             (SE_IF_REGION_ROM_END + 1)
-#define SB_REGION_ROM_END               0x080367FF
+#define SB_REGION_ROM_END               0x080357FF
 
 /* M0 Vector table with alignment constraint on VECTOR_SIZE */
 #define VECTOR_SIZE                     0x200
@@ -111,12 +111,16 @@
 
 /* SBSFU RAM region */
 #define SB_REGION_RAM_START             (LW_NVM_RAM_END + 0x1)
-#define SB_REGION_RAM_END               0x2000D3FF
+#define SB_REGION_RAM_END               0x2000CBFF
 
-/* SE RAM region protected area with 1 kBytes alignment constraint (TZIC) ==> 0x2000D400 */
+/* SE RAM region protected area with 1 kBytes alignment constraint (TZIC) ==> 0x2000CC00 */
 #define SE_REGION_RAM_START             (SB_REGION_RAM_END +0x1)
-#define SE_REGION_RAM_STACK_TOP         0x2000DB00                /* Secure Engine's private stack */
-#define SE_REGION_RAM_END               0x2000FFFF
+#define SE_REGION_RAM_STACK_TOP         0x2000D300                /* Secure Engine's private stack */
+#define SE_REGION_RAM_END               0x2000FFEF
+
+/* KMS data storage encryption/decryption key */
+#define KMS_DATASTORAGE_KEY_START       0x2000FFF0
+#define KMS_DATASTORAGE_KEY_END         0x2000FFFF
 
 /* RAM regions definition */
 #define M4_SB_RAM_REGION_SIZE           (M4_SB_REGION_RAM_END - M4_SB_REGION_RAM_START + 0x1)

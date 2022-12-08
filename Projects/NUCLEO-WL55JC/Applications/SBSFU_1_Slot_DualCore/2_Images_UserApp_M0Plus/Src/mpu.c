@@ -172,6 +172,6 @@ void MPU_EnterUnprivilegedMode(void)
 {
   __set_PSP(__get_MSP()); /* set up Process Stack Pointer to current stack pointer */
   __set_MSP(SE_REGION_RAM_STACK_TOP); /* change main stack to point on privileged stack */
-  __set_CONTROL(__get_CONTROL() | 3); /* bit 0 = 1: unpriviledged      bit 1=1: stack=PSP */
+  __set_CONTROL(__get_CONTROL() | 3); /* bit 0 = 1: Unprivileged      bit 1=1: stack=PSP */
   __ISB();
 }

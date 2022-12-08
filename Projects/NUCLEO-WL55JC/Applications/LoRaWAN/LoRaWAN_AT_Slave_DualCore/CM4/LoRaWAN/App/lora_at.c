@@ -23,7 +23,7 @@
 #include "lora_at.h"
 #include "sys_app.h"
 #include "stm32_tiny_sscanf.h"
-#include "lora_app_version.h"
+#include "app_version.h"
 #include "test_rf.h"
 #include "adc_if.h"
 #include "stm32_seq.h"
@@ -60,7 +60,7 @@
   * @brief LoRaWAN NVM Flash address
   * @note last 2 sector of a 128kBytes device
   */
-#define LORAWAN_NVM_BASE_ADDRESS                    ((uint32_t)0x0801F000UL)
+#define LORAWAN_NVM_BASE_ADDRESS                    ((void *)0x0801F000UL)
 
 /* USER CODE BEGIN PD */
 
@@ -333,76 +333,75 @@ void AT_event_OnNvmDataChange(LmHandlerNvmContextStates_t state)
 void AT_event_OnStoreContextRequest(void *nvm, uint32_t nvm_size)
 {
   /* store nvm in flash */
-  if (HAL_FLASH_Unlock() == HAL_OK)
+  if (FLASH_IF_Erase(LORAWAN_NVM_BASE_ADDRESS, FLASH_PAGE_SIZE) == FLASH_IF_OK)
   {
-    if (FLASH_IF_EraseByPages(PAGE(LORAWAN_NVM_BASE_ADDRESS), 1, 0U) == FLASH_OK)
-    {
-      FLASH_IF_Write(LORAWAN_NVM_BASE_ADDRESS, (uint8_t *)nvm, nvm_size, NULL);
-    }
-    HAL_FLASH_Lock();
+    FLASH_IF_Write(LORAWAN_NVM_BASE_ADDRESS, (const void *)nvm, nvm_size);
   }
 }
 
 void AT_event_OnRestoreContextRequest(void *nvm, uint32_t nvm_size)
 {
-  UTIL_MEM_cpy_8(nvm, (void *)LORAWAN_NVM_BASE_ADDRESS, nvm_size);
+  FLASH_IF_Read(nvm, LORAWAN_NVM_BASE_ADDRESS, nvm_size);
 }
 
 /* --------------- General commands --------------- */
-ATEerror_t AT_reset(const char *param)
+ATEerror_t AT_version_get(const char *param)
 {
-  /* USER CODE BEGIN AT_reset_1 */
+  /* USER CODE BEGIN AT_version_get_1 */
 
-  /* USER CODE END AT_reset_1 */
-  NVIC_SystemReset();
-  /* USER CODE BEGIN AT_reset_2 */
+  /* USER CODE END AT_version_get_1 */
+  FEAT_INFO_Param_t *p_cm0plus_specific_features_info;
+  uint32_t feature_version;
 
-  /* USER CODE END AT_reset_2 */
-}
+  /* Get CM4 LoRa APP version*/
+  AT_PRINTF("M4_APP_VERSION:      V%X.%X.%X\r\n",
+            (uint8_t)(APP_VERSION_MAIN),
+            (uint8_t)(APP_VERSION_SUB1),
+            (uint8_t)(APP_VERSION_SUB2));
 
-ATEerror_t AT_restore_factory_settings(const char *param)
-{
-  /* USER CODE BEGIN AT_restore_factory_settings_1 */
+  /* Get CM0 LoRa APP version*/
+  p_cm0plus_specific_features_info = MBMUXIF_SystemGetFeatCapabInfoPtr(FEAT_INFO_SYSTEM_ID);
+  feature_version = p_cm0plus_specific_features_info->Feat_Info_Feature_Version ;
+  AT_PRINTF("M0PLUS_APP_VERSION:  V%X.%X.%X\r\n",
+            (uint8_t)(feature_version >> 24),
+            (uint8_t)(feature_version >> 16),
+            (uint8_t)(feature_version >> 8));
 
-  /* USER CODE END AT_restore_factory_settings_1 */
-  /* store nvm in flash */
-  if (HAL_FLASH_Unlock() == HAL_OK)
-  {
-    if (FLASH_IF_EraseByPages(PAGE(LORAWAN_NVM_BASE_ADDRESS), 1, 0U) == FLASH_OK)
-    {
-      /* System Reboot*/
-      NVIC_SystemReset();
-    }
-    HAL_FLASH_Lock();
-  }
+  /* Get MW LoraWAN info */
+  p_cm0plus_specific_features_info = MBMUXIF_SystemGetFeatCapabInfoPtr(FEAT_INFO_LORAWAN_ID);
+  feature_version = p_cm0plus_specific_features_info->Feat_Info_Feature_Version ;
+  AT_PRINTF("MW_LORAWAN_VERSION:  V%X.%X.%X\r\n",
+            (uint8_t)(feature_version >> 24),
+            (uint8_t)(feature_version >> 16),
+            (uint8_t)(feature_version >> 8));
+
+  /* Get MW SubGhz_Phy info */
+  p_cm0plus_specific_features_info = MBMUXIF_SystemGetFeatCapabInfoPtr(FEAT_INFO_RADIO_ID);
+  feature_version = p_cm0plus_specific_features_info->Feat_Info_Feature_Version ;
+  AT_PRINTF("MW_RADIO_VERSION:    V%X.%X.%X\r\n",
+            (uint8_t)(feature_version >> 24),
+            (uint8_t)(feature_version >> 16),
+            (uint8_t)(feature_version >> 8));
+
+  /* Get LoraWAN Link Layer info */
+  LmHandlerGetVersion(LORAMAC_HANDLER_L2_VERSION, &feature_version);
+  AT_PRINTF("L2_SPEC_VERSION:     V%X.%X.%X\r\n",
+            (uint8_t)(feature_version >> 24),
+            (uint8_t)(feature_version >> 16),
+            (uint8_t)(feature_version >> 8));
+
+  /* Get LoraWAN Regional Parameters info */
+  LmHandlerGetVersion(LORAMAC_HANDLER_REGION_VERSION, &feature_version);
+  AT_PRINTF("RP_SPEC_VERSION:     V%X-%X.%X.%X\r\n",
+            (uint8_t)(feature_version >> 24),
+            (uint8_t)(feature_version >> 16),
+            (uint8_t)(feature_version >> 8),
+            (uint8_t)(feature_version));
+
   return AT_OK;
-  /* USER CODE BEGIN AT_restore_factory_settings_2 */
+  /* USER CODE BEGIN AT_version_get_2 */
 
-  /* USER CODE END AT_restore_factory_settings_2 */
-}
-
-ATEerror_t AT_store_context(const char *param)
-{
-  /* USER CODE BEGIN AT_store_context_1 */
-
-  /* USER CODE END AT_store_context_1 */
-  LmHandlerErrorStatus_t status = LORAMAC_HANDLER_ERROR;
-
-  status = LmHandlerNvmDataStore();
-
-  if (status == LORAMAC_HANDLER_NVM_DATA_UP_TO_DATE)
-  {
-    AT_PRINTF("NVM DATA UP TO DATE\r\n");
-  }
-  else if (status == LORAMAC_HANDLER_ERROR)
-  {
-    AT_PRINTF("NVM DATA STORE FAILED\r\n");
-    return AT_ERROR;
-  }
-  return AT_OK;
-  /* USER CODE BEGIN AT_store_context_2 */
-
-  /* USER CODE END AT_store_context_2 */
+  /* USER CODE END AT_version_get_2 */
 }
 
 ATEerror_t AT_verbose_get(const char *param)
@@ -468,6 +467,60 @@ ATEerror_t AT_LocalTime_get(const char *param)
   /* USER CODE END AT_LocalTime_get_2 */
 }
 
+ATEerror_t AT_reset(const char *param)
+{
+  /* USER CODE BEGIN AT_reset_1 */
+
+  /* USER CODE END AT_reset_1 */
+  NVIC_SystemReset();
+  /* USER CODE BEGIN AT_reset_2 */
+
+  /* USER CODE END AT_reset_2 */
+}
+
+/* ---------------  Context Store commands --------------------------- */
+ATEerror_t AT_restore_factory_settings(const char *param)
+{
+  /* USER CODE BEGIN AT_restore_factory_settings_1 */
+
+  /* USER CODE END AT_restore_factory_settings_1 */
+  /* store nvm in flash */
+  if (FLASH_IF_Erase(LORAWAN_NVM_BASE_ADDRESS, FLASH_PAGE_SIZE) == FLASH_IF_OK)
+  {
+    /* System Reboot*/
+    NVIC_SystemReset();
+  }
+
+  return AT_OK;
+  /* USER CODE BEGIN AT_restore_factory_settings_2 */
+
+  /* USER CODE END AT_restore_factory_settings_2 */
+}
+
+ATEerror_t AT_store_context(const char *param)
+{
+  /* USER CODE BEGIN AT_store_context_1 */
+
+  /* USER CODE END AT_store_context_1 */
+  LmHandlerErrorStatus_t status = LORAMAC_HANDLER_ERROR;
+
+  status = LmHandlerNvmDataStore();
+
+  if (status == LORAMAC_HANDLER_NVM_DATA_UP_TO_DATE)
+  {
+    AT_PRINTF("NVM DATA UP TO DATE\r\n");
+  }
+  else if (status == LORAMAC_HANDLER_ERROR)
+  {
+    AT_PRINTF("NVM DATA STORE FAILED\r\n");
+    return AT_ERROR;
+  }
+  return AT_OK;
+  /* USER CODE BEGIN AT_store_context_2 */
+
+  /* USER CODE END AT_store_context_2 */
+}
+
 /* --------------- Keys, IDs and EUIs management commands --------------- */
 ATEerror_t AT_JoinEUI_get(const char *param)
 {
@@ -517,7 +570,7 @@ ATEerror_t AT_NwkKey_get(const char *param)
 
   /* USER CODE END AT_NwkKey_get_1 */
   uint8_t nwkKey[16];
-  if (LORAMAC_HANDLER_SUCCESS != LmHandlerGetNwkKey(nwkKey))
+  if (LORAMAC_HANDLER_SUCCESS != LmHandlerGetKey(NWK_KEY, nwkKey))
   {
     return AT_ERROR;
   }
@@ -540,7 +593,7 @@ ATEerror_t AT_NwkKey_set(const char *param)
     return AT_PARAM_ERROR;
   }
 
-  if (LORAMAC_HANDLER_SUCCESS != LmHandlerSetNwkKey(nwkKey))
+  if (LORAMAC_HANDLER_SUCCESS != LmHandlerSetKey(NWK_KEY, nwkKey))
   {
     return AT_ERROR;
   }
@@ -557,7 +610,7 @@ ATEerror_t AT_AppKey_get(const char *param)
 
   /* USER CODE END AT_AppKey_get_1 */
   uint8_t appKey[16];
-  if (LORAMAC_HANDLER_SUCCESS != LmHandlerGetAppKey(appKey))
+  if (LORAMAC_HANDLER_SUCCESS != LmHandlerGetKey(APP_KEY, appKey))
   {
     return AT_ERROR;
   }
@@ -580,7 +633,7 @@ ATEerror_t AT_AppKey_set(const char *param)
     return AT_PARAM_ERROR;
   }
 
-  if (LORAMAC_HANDLER_SUCCESS != LmHandlerSetAppKey(appKey))
+  if (LORAMAC_HANDLER_SUCCESS != LmHandlerSetKey(APP_KEY, appKey))
   {
     return AT_ERROR;
   }
@@ -597,7 +650,7 @@ ATEerror_t AT_NwkSKey_get(const char *param)
 
   /* USER CODE END AT_NwkSKey_get_1 */
   uint8_t nwkSKey[16];
-  if (LORAMAC_HANDLER_SUCCESS != LmHandlerGetNwkSKey(nwkSKey))
+  if (LORAMAC_HANDLER_SUCCESS != LmHandlerGetKey(NWK_S_KEY, nwkSKey))
   {
     return AT_ERROR;
   }
@@ -620,7 +673,7 @@ ATEerror_t AT_NwkSKey_set(const char *param)
     return AT_PARAM_ERROR;
   }
 
-  if (LORAMAC_HANDLER_SUCCESS != LmHandlerSetNwkSKey(nwkSKey))
+  if (LORAMAC_HANDLER_SUCCESS != LmHandlerSetKey(NWK_S_KEY, nwkSKey))
   {
     return AT_ERROR;
   }
@@ -637,7 +690,7 @@ ATEerror_t AT_AppSKey_get(const char *param)
 
   /* USER CODE END AT_AppSKey_get_1 */
   uint8_t appSKey[16];
-  if (LORAMAC_HANDLER_SUCCESS != LmHandlerGetAppSKey(appSKey))
+  if (LORAMAC_HANDLER_SUCCESS != LmHandlerGetKey(APP_S_KEY, appSKey))
   {
     return AT_ERROR;
   }
@@ -660,7 +713,7 @@ ATEerror_t AT_AppSKey_set(const char *param)
     return AT_PARAM_ERROR;
   }
 
-  if (LORAMAC_HANDLER_SUCCESS != LmHandlerSetAppSKey(appSKey))
+  if (LORAMAC_HANDLER_SUCCESS != LmHandlerSetKey(APP_S_KEY, appSKey))
   {
     return AT_ERROR;
   }
@@ -958,65 +1011,6 @@ ATEerror_t AT_Send(const char *param)
 }
 
 /* --------------- LoRaWAN network management commands --------------- */
-ATEerror_t AT_version_get(const char *param)
-{
-  /* USER CODE BEGIN AT_version_get_1 */
-
-  /* USER CODE END AT_version_get_1 */
-  FEAT_INFO_Param_t *p_cm0plus_specific_features_info;
-  uint32_t feature_version;
-
-  /* Get CM4 LoRa APP version*/
-  AT_PRINTF("M4_APP_VERSION:      V%X.%X.%X\r\n",
-            (uint8_t)(APP_VERSION_MAIN),
-            (uint8_t)(APP_VERSION_SUB1),
-            (uint8_t)(APP_VERSION_SUB2));
-
-  /* Get CM0 LoRa APP version*/
-  p_cm0plus_specific_features_info = MBMUXIF_SystemGetFeatCapabInfoPtr(FEAT_INFO_SYSTEM_ID);
-  feature_version = p_cm0plus_specific_features_info->Feat_Info_Feature_Version ;
-  AT_PRINTF("M0PLUS_APP_VERSION:  V%X.%X.%X\r\n",
-            (uint8_t)(feature_version >> 24),
-            (uint8_t)(feature_version >> 16),
-            (uint8_t)(feature_version >> 8));
-
-  /* Get MW LoraWAN info */
-  p_cm0plus_specific_features_info = MBMUXIF_SystemGetFeatCapabInfoPtr(FEAT_INFO_LORAWAN_ID);
-  feature_version = p_cm0plus_specific_features_info->Feat_Info_Feature_Version ;
-  AT_PRINTF("MW_LORAWAN_VERSION:  V%X.%X.%X\r\n",
-            (uint8_t)(feature_version >> 24),
-            (uint8_t)(feature_version >> 16),
-            (uint8_t)(feature_version >> 8));
-
-  /* Get MW SubGhz_Phy info */
-  p_cm0plus_specific_features_info = MBMUXIF_SystemGetFeatCapabInfoPtr(FEAT_INFO_RADIO_ID);
-  feature_version = p_cm0plus_specific_features_info->Feat_Info_Feature_Version ;
-  AT_PRINTF("MW_RADIO_VERSION:    V%X.%X.%X\r\n",
-            (uint8_t)(feature_version >> 24),
-            (uint8_t)(feature_version >> 16),
-            (uint8_t)(feature_version >> 8));
-
-  /* Get LoraWAN Link Layer info */
-  LmHandlerGetVersion(LORAMAC_HANDLER_L2_VERSION, &feature_version);
-  AT_PRINTF("L2_SPEC_VERSION:     V%X.%X.%X\r\n",
-            (uint8_t)(feature_version >> 24),
-            (uint8_t)(feature_version >> 16),
-            (uint8_t)(feature_version >> 8));
-
-  /* Get LoraWAN Regional Parameters info */
-  LmHandlerGetVersion(LORAMAC_HANDLER_REGION_VERSION, &feature_version);
-  AT_PRINTF("RP_SPEC_VERSION:     V%X-%X.%X.%X\r\n",
-            (uint8_t)(feature_version >> 24),
-            (uint8_t)(feature_version >> 16),
-            (uint8_t)(feature_version >> 8),
-            (uint8_t)(feature_version));
-
-  return AT_OK;
-  /* USER CODE BEGIN AT_version_get_2 */
-
-  /* USER CODE END AT_version_get_2 */
-}
-
 ATEerror_t AT_ADR_get(const char *param)
 {
   /* USER CODE BEGIN AT_ADR_get_1 */
@@ -1106,7 +1100,10 @@ ATEerror_t AT_Region_get(const char *param)
   /* USER CODE BEGIN AT_Region_get_1 */
 
   /* USER CODE END AT_Region_get_1 */
-  const char *regionStrings[] = { "AS923", "AU915", "CN470", "CN779", "EU433", "EU868", "KR920", "IN865", "US915", "RU864" };
+  const char *regionStrings[] =
+  {
+    "AS923", "AU915", "CN470", "CN779", "EU433", "EU868", "KR920", "IN865", "US915", "RU864"
+  };
   LoRaMacRegion_t region;
   if (LmHandlerGetActiveRegion(&region) != LORAMAC_HANDLER_SUCCESS)
   {
@@ -2004,31 +2001,6 @@ ATEerror_t AT_test_rx(const char *param)
 
   /* USER CODE END AT_test_rx_2 */
 }
-ATEerror_t AT_Certif(const char *param)
-{
-  /* USER CODE BEGIN AT_Certif_1 */
-
-  /* USER CODE END AT_Certif_1 */
-  switch (param[0])
-  {
-    case '0':
-      LmHandlerJoin(ACTIVATION_TYPE_ABP, true);
-    case '1':
-      LmHandlerJoin(ACTIVATION_TYPE_OTAA, true);
-      break;
-    default:
-      return AT_PARAM_ERROR;
-  }
-
-  UTIL_TIMER_Create(&TxCertifTimer, 8000, UTIL_TIMER_ONESHOT, OnCertifTimer, NULL);  /* 8s */
-  UTIL_TIMER_Start(&TxCertifTimer);
-  UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaCertifTx), UTIL_SEQ_RFU, CertifSend);
-
-  return AT_OK;
-  /* USER CODE BEGIN AT_Certif_2 */
-
-  /* USER CODE END AT_Certif_2 */
-}
 
 ATEerror_t AT_test_tx_hopping(const char *param)
 {
@@ -2061,7 +2033,7 @@ ATEerror_t AT_test_tx_hopping(const char *param)
   /**/
   hop_freq = freq_start;
 
-  for (int i = 0; i < nb_tx; i++)
+  for (int32_t i = 0; i < nb_tx; i++)
   {
     /*get current config*/
     TST_get_config(&test_param);
@@ -2105,6 +2077,7 @@ ATEerror_t AT_test_stop(const char *param)
   /* USER CODE END AT_test_stop_2 */
 }
 
+/* --------------- Radio access commands --------------- */
 ATEerror_t AT_write_register(const char *param)
 {
   /* USER CODE BEGIN AT_write_register_1 */
@@ -2164,6 +2137,33 @@ ATEerror_t AT_read_register(const char *param)
   /* USER CODE BEGIN AT_read_register_2 */
 
   /* USER CODE END AT_read_register_2 */
+}
+
+/* --------------- LoraWAN Certif command --------------- */
+ATEerror_t AT_Certif(const char *param)
+{
+  /* USER CODE BEGIN AT_Certif_1 */
+
+  /* USER CODE END AT_Certif_1 */
+  switch (param[0])
+  {
+    case '0':
+      LmHandlerJoin(ACTIVATION_TYPE_ABP, true);
+    case '1':
+      LmHandlerJoin(ACTIVATION_TYPE_OTAA, true);
+      break;
+    default:
+      return AT_PARAM_ERROR;
+  }
+
+  UTIL_TIMER_Create(&TxCertifTimer, 8000, UTIL_TIMER_ONESHOT, OnCertifTimer, NULL);  /* 8s */
+  UTIL_TIMER_Start(&TxCertifTimer);
+  UTIL_SEQ_RegTask((1 << CFG_SEQ_Task_LoRaCertifTx), UTIL_SEQ_RFU, CertifSend);
+
+  return AT_OK;
+  /* USER CODE BEGIN AT_Certif_2 */
+
+  /* USER CODE END AT_Certif_2 */
 }
 
 /* --------------- Information command --------------- */

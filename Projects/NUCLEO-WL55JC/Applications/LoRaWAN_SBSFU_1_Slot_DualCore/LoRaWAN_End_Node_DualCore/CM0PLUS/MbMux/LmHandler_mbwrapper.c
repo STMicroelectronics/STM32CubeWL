@@ -31,7 +31,7 @@
 #include "LmHandler_mbwrapper.h"
 #include "LmHandler.h"
 #include "lora_info.h"
-#include "lora_app_version.h"
+#include "app_version.h"
 
 /* USER CODE BEGIN Includes */
 
@@ -165,6 +165,7 @@ void Process_Lora_Cmd(MBMUX_ComParam_t *ComObj)
   /* USER CODE END Process_Lora_Cmd_1 */
   uint32_t *com_buffer = NULL;
   LmHandlerErrorStatus_t errorStatus;
+  bool busyStatus;
 
   APP_LOG(TS_ON, VLEVEL_H, ">CM0PLUS(LoRa)\r\n");
 
@@ -230,6 +231,14 @@ void Process_Lora_Cmd(MBMUX_ComParam_t *ComObj)
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
       ComObj->ReturnVal = (uint32_t) errorStatus; /* */
+      break;
+
+    case   LMHANDLER_IS_BUSY_ID:
+      busyStatus = LmHandlerIsBusy();
+
+      /* prepare response buffer */
+      ComObj->ParamCnt = 0; /* reset ParamCnt */
+      ComObj->ReturnVal = (bool) busyStatus; /* */
       break;
 
     case   LMHANDLER_SEND_ID:
@@ -299,50 +308,14 @@ void Process_Lora_Cmd(MBMUX_ComParam_t *ComObj)
       ComObj->ParamCnt = 0; /* reset ParamCnt */
       ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
-    case   LMHANDLER_GET_NWKKEY_ID:
-      errorStatus = LmHandlerGetNwkKey((uint8_t *) com_buffer[0]);
+    case   LMHANDLER_GET_KEY_ID:
+      errorStatus = LmHandlerGetKey((KeyIdentifier_t) com_buffer[0], (uint8_t *) com_buffer[1]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
       ComObj->ReturnVal = (uint32_t) errorStatus; /* */
       break;
-    case   LMHANDLER_SET_NWKKEY_ID:
-      errorStatus = LmHandlerSetNwkKey((uint8_t *) com_buffer[0]);
-      /* prepare response buffer */
-      ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
-      break;
-    case   LMHANDLER_GET_APPKEY_ID:
-      errorStatus = LmHandlerGetAppKey((uint8_t *) com_buffer[0]);
-      /* prepare response buffer */
-      ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
-      break;
-    case   LMHANDLER_SET_APPKEY_ID:
-      errorStatus = LmHandlerSetAppKey((uint8_t *) com_buffer[0]);
-      /* prepare response buffer */
-      ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
-      break;
-    case   LMHANDLER_GET_NWKSKEY_ID:
-      errorStatus = LmHandlerGetNwkSKey((uint8_t *) com_buffer[0]);
-      /* prepare response buffer */
-      ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
-      break;
-    case   LMHANDLER_SET_NWKSKEY_ID:
-      errorStatus = LmHandlerSetNwkSKey((uint8_t *) com_buffer[0]);
-      /* prepare response buffer */
-      ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
-      break;
-    case   LMHANDLER_GET_APPSKEY_ID:
-      errorStatus = LmHandlerGetAppSKey((uint8_t *) com_buffer[0]);
-      /* prepare response buffer */
-      ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) errorStatus; /* */
-      break;
-    case   LMHANDLER_SET_APPSKEY_ID:
-      errorStatus = LmHandlerSetAppSKey((uint8_t *) com_buffer[0]);
+    case   LMHANDLER_SET_KEY_ID:
+      errorStatus = LmHandlerSetKey((KeyIdentifier_t) com_buffer[0], (uint8_t *) com_buffer[1]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
       ComObj->ReturnVal = (uint32_t) errorStatus; /* */

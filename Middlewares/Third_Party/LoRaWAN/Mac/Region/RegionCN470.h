@@ -319,7 +319,6 @@ static const uint8_t DataratesCN470[]  = { 12, 11, 10,  9,  8,  7 };
  */
 static const uint32_t BandwidthsCN470[] = { 125000, 125000, 125000, 125000, 125000, 125000 };
 
-/* ST_WORKAROUND_BEGIN: Keep repeater feature */
 /*!
  * Maximum payload with respect to the datarate index. Cannot operate with repeater.
  */
@@ -329,7 +328,6 @@ static const uint8_t MaxPayloadOfDatarateCN470[] = { 51, 51, 51, 115, 242, 242 }
  * Maximum payload with respect to the datarate index. Can operate with repeater.
  */
 static const uint8_t MaxPayloadOfDatarateRepeaterCN470[] = { 51, 51, 51, 115, 222, 222 };
-/* ST_WORKAROUND_END */
 #elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
 /*!
  * Data rates table definition
@@ -356,7 +354,6 @@ static const int8_t DatarateOffsetsCN470[8][6] =
     { DR_7, DR_6, DR_5, DR_4, DR_3, DR_2 }, // DR_7
 };
 
-/* ST_WORKAROUND_BEGIN: Keep repeater feature */
 /*!
  * Maximum payload with respect to the datarate index. Cannot operate with repeater.
  */
@@ -366,7 +363,6 @@ static const uint8_t MaxPayloadOfDatarateCN470[] = { 0, 23, 86, 184, 242, 242, 2
  * Maximum payload with respect to the datarate index. Can operate with repeater.
  */
 static const uint8_t MaxPayloadOfDatarateRepeaterCN470[] = { 0, 23, 86, 164, 222, 222, 222, 222 };
-/* ST_WORKAROUND_END */
 #endif /* REGION_VERSION */
 
 /*!

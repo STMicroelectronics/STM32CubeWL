@@ -27,6 +27,7 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
+#include <stddef.h>
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */

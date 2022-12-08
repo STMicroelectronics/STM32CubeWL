@@ -42,16 +42,19 @@ extern "C" {
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "radio_conf.h"
 
 /* Exported constants --------------------------------------------------------*/
 #define RFO_LP                                      1
 #define RFO_HP                                      2
 
-/*!
- * Generic SUBGRF_ error code
- */
-#define SUBGRF_OK 0
-#define SUBGRF_ERROR -1
+/* Exported macros --------------------------------------------------------*/
+#define SX_FREQ_TO_CHANNEL( channel, freq )                                  \
+do                                                                           \
+{                                                                            \
+  channel = (uint32_t) ((((uint64_t) freq)<<25)/(XTAL_FREQ) );               \
+}while( 0 )
+
 
 /*!
  * \brief Radio complete Wake-up Time with margin for temperature compensation
@@ -161,6 +164,11 @@ extern "C" {
 #define REG_BIT_SYNC                                0x06AC
 
 /*!
+ * \brief The address of the register holding the Tx boost value
+ */
+#define REG_DRV_CTRL                                0x091F
+
+/*!
  * \brief Change the value on the device internal trimming capacitor
  */
 #define REG_XTA_TRIM                                0x0911
@@ -227,22 +235,22 @@ extern "C" {
 #define SUBGHZ_GCRCPOLRH                            REG_LR_CRCPOLYBASEADDR
 /*Sub-GHz radio generic CRC polynomial LSB register*/
 #define SUBGHZ_GCRCPOLRL                            0x06BF
-/*Sub-GHz radio generic synchronization word control register 7*/
-#define SUBGHZ_GSYNCR7                              REG_LR_SYNCWORDBASEADDRESS
-/*Sub-GHz radio generic synchronization word control register 6*/
-#define SUBGHZ_GSYNCR6                              0x06C1
-/*Sub-GHz radio generic synchronization word control register 5*/
-#define SUBGHZ_GSYNCR5                              0x06C2
-/*Sub-GHz radio generic synchronization word control register 4*/
-#define SUBGHZ_GSYNCR4                              0x06C3
-/*Sub-GHz radio generic synchronization word control register 3*/
-#define SUBGHZ_GSYNCR3                              0x06C4
-/*Sub-GHz radio generic synchronization word control register 2*/
-#define SUBGHZ_GSYNCR2                              0x06C5
-/*Sub-GHz radio generic synchronization word control register 1*/
-#define SUBGHZ_GSYNCR1                              0x06C6
 /*Sub-GHz radio generic synchronization word control register 0*/
-#define SUBGHZ_GSYNCR0                              0x06C7
+#define SUBGHZ_GSYNCR0                              REG_LR_SYNCWORDBASEADDRESS
+/*Sub-GHz radio generic synchronization word control register 1*/
+#define SUBGHZ_GSYNCR1                              0x06C1
+/*Sub-GHz radio generic synchronization word control register 2*/
+#define SUBGHZ_GSYNCR2                              0x06C2
+/*Sub-GHz radio generic synchronization word control register 3*/
+#define SUBGHZ_GSYNCR3                              0x06C3
+/*Sub-GHz radio generic synchronization word control register 4*/
+#define SUBGHZ_GSYNCR4                              0x06C4
+/*Sub-GHz radio generic synchronization word control register 5*/
+#define SUBGHZ_GSYNCR5                              0x06C5
+/*Sub-GHz radio generic synchronization word control register 6*/
+#define SUBGHZ_GSYNCR6                              0x06C6
+/*Sub-GHz radio generic synchronization word control register 7*/
+#define SUBGHZ_GSYNCR7                              0x06C7
 /*Sub-GHz radio generic node address register*/
 #define SUBGHZ_GNODEADDR                            0x06CD
 /*Sub-GHz radio generic broadacst address register*/
@@ -277,6 +285,8 @@ extern "C" {
 #define SUBGHZ_SDCFG0R                              0x0889
 /*Sub-GHz radio Agc Gfo Reset Rssi Control register*/
 #define SUBGHZ_AGCRSSICTL0R                         0x089B
+/*Sub-GHz radio Agc LoRa register*/
+#define SUBGHZ_AGCCFG                               0x08A3
 /*Sub-GHz radio receiver gain control register*/
 #define SUBGHZ_RXGAINCR                             REG_RX_GAIN
 /*Sub-GHz radio Agc Gfo Reset Config register*/
@@ -318,7 +328,7 @@ extern "C" {
 /*!
  * \brief Structure describing the radio status
  */
-typedef union RadioStatus_u
+typedef union RadioPhyStatus_u
 {
     uint8_t Value;
     struct
@@ -328,7 +338,7 @@ typedef union RadioStatus_u
         uint8_t ChipMode  : 3;  //!< Chip mode
         uint8_t CpuBusy   : 1;  //!< Flag for CPU radio busy
     }Fields;
-}RadioStatus_t;
+}RadioPhyStatus_t;
 
 /*!
  * \brief Structure describing the error codes for callback functions
@@ -380,6 +390,7 @@ typedef enum
     PACKET_TYPE_LORA                        = 0x01,
     PACKET_TYPE_BPSK                        = 0x02,
     PACKET_TYPE_GMSK                        = 0x03,
+    PACKET_TYPE_LR_FHSS                     = 0x03,
     PACKET_TYPE_NONE                        = 0x0F,
 }RadioPacketTypes_t;
 
@@ -620,6 +631,7 @@ typedef enum
     IRQ_CAD_CLEAR                           = 0x0080,
     IRQ_CAD_DETECTED                        = 0x0100,
     IRQ_RX_TX_TIMEOUT                       = 0x0200,
+    IRQ_LR_FHSS_HOP                         = 0x4000,
     IRQ_RADIO_ALL                           = 0xFFFF,
 }RadioIrqMasks_t;
 
@@ -1077,6 +1089,26 @@ void SUBGRF_WriteBuffer( uint8_t offset, uint8_t *buffer, uint8_t size );
 void SUBGRF_ReadBuffer( uint8_t offset, uint8_t *buffer, uint8_t size );
 
 /*!
+ * \brief Write command to the radio
+ *
+ * \param [in]  Command       The Write Command
+ * \param [out] pBuffer       A pointer command buffer
+ * \param [in]  Size          Size in byte of the command buffer
+ */
+void SUBGRF_WriteCommand( SUBGHZ_RadioSetCmd_t Command, uint8_t *pBuffer,
+                                        uint16_t Size );
+
+/*!
+ * \brief Read command to the radio
+ *
+ * \param [in]  Command       The Read Command
+ * \param [out] pBuffer       A pointer command buffer
+ * \param [in]  Size          Size in byte of the command buffer
+ */
+void SUBGRF_ReadCommand( SUBGHZ_RadioGetCmd_t Command, uint8_t *pBuffer,
+                                        uint16_t Size );
+
+/*!
  * \brief   Sets the IRQ mask and DIO masks
  *
  * \param [in]  irqMask       General IRQ mask
@@ -1176,7 +1208,7 @@ void SUBGRF_SetBufferBaseAddress( uint8_t txBaseAddress, uint8_t rxBaseAddress )
  *
  * \retval      status        Radio status
  */
-RadioStatus_t SUBGRF_GetStatus( void );
+RadioPhyStatus_t SUBGRF_GetStatus( void );
 
 /*!
  * \brief Returns the instantaneous RSSI value for the last packet received

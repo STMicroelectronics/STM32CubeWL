@@ -46,7 +46,7 @@ extern "C" {
  */
 typedef struct
 {
-  uint32_t ActivationMode;  /*!< 1: ABP, 2 : OTAA, 3: ABP & OTAA   */
+  uint32_t ContextManagement;  /*!< 0: not compiled in Mw, 1 : compiled in MW  */
   uint32_t Region;   /*!< Combination of regions compiled on MW  */
   uint32_t ClassB;   /*!< 0: not compiled in Mw, 1 : compiled in MW  */
   uint32_t Kms;      /*!< 0: not compiled in Mw, 1 : compiled in MW  */

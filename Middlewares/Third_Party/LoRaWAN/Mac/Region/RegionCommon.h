@@ -627,7 +627,6 @@ int8_t RegionCommonLimitTxPower( int8_t txPower, int8_t maxBandTxPower );
  */
 uint32_t RegionCommonGetBandwidth( uint32_t drIndex, const uint32_t* bandwidths );
 
-/* ST_WORKAROUND_BEGIN: Print Tx/Rx config */
 /*!
  * \brief Print the current RX configuration
  *
@@ -651,7 +650,6 @@ void RegionCommonRxConfigPrint(LoRaMacRxSlot_t rxSlot,
  *
  */
 void RegionCommonTxConfigPrint(uint32_t frequency, int8_t dr);
-/* ST_WORKAROUND_END */
 /*! \} defgroup REGIONCOMMON */
 
 #ifdef __cplusplus

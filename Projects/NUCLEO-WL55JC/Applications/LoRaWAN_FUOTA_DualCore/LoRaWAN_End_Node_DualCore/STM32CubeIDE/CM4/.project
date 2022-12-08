@@ -282,6 +282,11 @@
 			<locationURI>PARENT-2-PROJECT_LOC/CM4/MbMux/mbmux.c</locationURI>
 		</link>
 		<link>
+			<name>Application/User/MbMux/mbmuxif_flash.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/CM4/MbMux/mbmuxif_flash.c</locationURI>
+		</link>
+		<link>
 			<name>Application/User/MbMux/mbmuxif_lora.c</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/CM4/MbMux/mbmuxif_lora.c</locationURI>

@@ -28,10 +28,16 @@ extern "C"
 #ifndef LORAMAC_VERSION
 /*!
  * @brief LoRaWAN version definition.
- * @note TS001-1.0.4 : https://lora-alliance.org/resource_hub/lorawan-104-specification-package/
  */
 #define LORAMAC_VERSION                             LORAMAC_SPECIFICATION_VERSION
-#endif
+#endif /* !LORAMAC_VERSION */
+
+#if (LORAMAC_VERSION == 0x01010100)
+/*!
+ * LoRaWAN fallback version definition.
+ */
+#define LORAMAC_FALLBACK_VERSION                    0x01000400
+#endif /* LORAMAC_VERSION */
 
 #ifdef __cplusplus
 }

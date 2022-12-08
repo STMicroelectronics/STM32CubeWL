@@ -208,7 +208,7 @@ int32_t EE_Init(int32_t format, uint32_t base_address)
     total_nb_pages =
       2 * (EE_var[0].nb_pages + (CFG_EE_BANK1_SIZE ? EE_var[1].nb_pages : 0));
 
-    if (FLASH_IF_EraseByPages(EE_FLASH_PAGE(EE_var, 0), total_nb_pages, 0) != 0)
+    if (FLASH_IF_Erase((void *)EE_FLASH_ADDR(EE_var, 0), total_nb_pages * FLASH_PAGE_SIZE) != 0)
     {
       return EE_ERASE_ERROR;
     }
@@ -316,7 +316,7 @@ int32_t EE_Write(int32_t bank, uint16_t addr, uint32_t data)
   /* USER CODE END EE_Write_2 */
 }
 
-int32_t EE_Clean(int32_t bank, int32_t interrupt)
+int32_t EE_Clean(int32_t bank)
 {
   /* USER CODE BEGIN EE_Clean_1 */
 
@@ -336,7 +336,7 @@ int32_t EE_Clean(int32_t bank, int32_t interrupt)
   DBG_EE(EE_1);
 
   /* Erase all the pages of the pool */
-  if (FLASH_IF_EraseByPages(EE_FLASH_PAGE(pv, page), pv->nb_pages, interrupt)
+  if (FLASH_IF_Erase((void *)EE_FLASH_ADDR(pv, page), pv->nb_pages * FLASH_PAGE_SIZE)
       != 0)
   {
     return EE_ERASE_ERROR;
@@ -395,7 +395,13 @@ static int32_t EE_Recovery(EE_var_t *pv)
       if ((page == 0) || (page == pv->nb_pages))
       {
         /* Check if state is reliable by checking state of next page */
-        if (EE_GetState(pv, page + 1) != EE_STATE_ERASED)
+        uint32_t next_page = page + 1;
+        /*make sure next page is in range, else modulo*/
+        if (next_page == pv->nb_pages * 2)
+        {
+          next_page = 0;
+        }
+        if (EE_GetState(pv, next_page) != EE_STATE_ERASED)
         {
           continue;
         }
@@ -473,7 +479,7 @@ static int32_t EE_Recovery(EE_var_t *pv)
       {
         if (EE_GetState(pv, page) != EE_STATE_ERASED)
         {
-          if (FLASH_IF_EraseByPages(EE_FLASH_PAGE(pv, page), 1, 0) != 0)
+          if (FLASH_IF_Erase((void *)EE_FLASH_ADDR(pv, page), FLASH_PAGE_SIZE) != 0)
           {
             return EE_ERASE_ERROR;
           }
@@ -622,11 +628,10 @@ static int32_t EE_WriteEl(EE_var_t *pv, uint16_t addr, uint32_t data)
   }
 
   /* Compute write address */
-  flash_addr =
-    EE_FLASH_ADDR(pv, pv->current_write_page) + pv->next_write_offset;
+  flash_addr = EE_FLASH_ADDR(pv, pv->current_write_page) + pv->next_write_offset;
 
   /* Write element in flash */
-  if (FLASH_IF_Write64(flash_addr, el) != 0)
+  if (FLASH_IF_Write((void *)flash_addr, (const void *)&el, 8) != 0)
   {
     return EE_WRITE_ERROR;
   }
@@ -696,13 +701,14 @@ static int32_t EE_SetState(const EE_var_t *pv, uint32_t page, uint32_t state)
 
   /* USER CODE END EE_SetState_1 */
   uint32_t flash_addr;
+  uint64_t programmed_state = EE_PROGRAMMED;
 
   flash_addr = EE_FLASH_ADDR(pv, page) + ((state - 1) * HW_FLASH_WIDTH);
 
   DBG_EE(EE_0);
 
   /* Set new page state inside page header */
-  if (FLASH_IF_Write64(flash_addr, EE_PROGRAMMED) != 0)
+  if (FLASH_IF_Write((void *)flash_addr, (const void *)&programmed_state, 8) != 0)
   {
     return EE_WRITE_ERROR;
   }

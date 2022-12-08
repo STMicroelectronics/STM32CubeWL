@@ -66,7 +66,6 @@ CK_RV tkms_app_find(void)
   /* Find Objects : Find object corresponding to the template specified in FindObjectsInit */
   if (rv == CKR_OK)
   {
-    count = 1;
     rv = C_FindObjects(session, &object_handle, 1, &count);
   }
 
@@ -76,14 +75,18 @@ CK_RV tkms_app_find(void)
     rv = C_FindObjectsFinal(session);
   }
 
-  if (rv == CKR_OK)
+  if ((rv == CKR_OK) && (count == 0UL))
+  {
+    printf("--- Object Not Found --------------------------------------------\r\n");
+  }
+  else if (rv == CKR_OK)
   {
     (void)printf("--- Object Found ------------------------------------------------\r\n");
     (void)printf("--- Object Handle [%d]\r\n", object_handle);
   }
   else
   {
-    printf("--- Object Not Found --------------------------------------------\r\n");
+    printf("--- Unexpected error --------------------------------------------\r\n");
   }
   /* Close session with KMS */
   (void)C_CloseSession(session);

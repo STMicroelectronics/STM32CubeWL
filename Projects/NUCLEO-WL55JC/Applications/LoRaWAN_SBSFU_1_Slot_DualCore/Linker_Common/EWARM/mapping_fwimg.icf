@@ -16,10 +16,10 @@ define exported symbol  __ICFEDIT_SLOT_Active_2_end__      = 0x0801AFFF;
 define exported symbol __ICFEDIT_region_LW_NVM_ROM_start__ = 0x0801B000;
 define exported symbol __ICFEDIT_region_LW_NWM_ROM_end__   = 0x0801BFFF;
 
-/* Active slot #1 (60 kbytes) */
+/* Active slot #1 (58 kbytes) */
 define exported symbol  __ICFEDIT_SLOT_Active_1_header__   = 0x0803F800;
 define exported symbol  __ICFEDIT_SLOT_Active_1_start__    = 0x0801C000;
-define exported symbol  __ICFEDIT_SLOT_Active_1_end__      = 0x0802AFFF;
+define exported symbol  __ICFEDIT_SLOT_Active_1_end__      = 0x0802A7FF;
 
 /* Slots not configured */
 define exported symbol  __ICFEDIT_SLOT_Active_3_header__   = 0x00000000;

@@ -66,14 +66,14 @@ Applications, SubGHz_Phy, LoRaWAN, End_Node, SingleCore
   - LoRaWAN_End_Node/Core/Inc/utilities_conf.h                                  Header for configuration file to utilities
   - LoRaWAN_End_Node/Core/Inc/utilities_def.h                                   Definitions for modules requiring utilities
   - LoRaWAN_End_Node/LoRaWAN/App/app_lorawan.h                                  Header of application of the LRWAN Middleware
+  - LoRaWAN_End_Node/LoRaWAN/App/app_version.h                                  Definition the version of the application
   - LoRaWAN_End_Node/LoRaWAN/App/CayenneLpp.h                                   Implements the Cayenne Low Power Protocol
   - LoRaWAN_End_Node/LoRaWAN/App/Commissioning.h                                End-device commissioning parameters
   - LoRaWAN_End_Node/LoRaWAN/App/lora_app.h                                     Header of application of the LRWAN Middleware
-  - LoRaWAN_End_Node/LoRaWAN/App/lora_app_version.h                             Definition the version of the application
   - LoRaWAN_End_Node/LoRaWAN/App/lora_info.h                                    To give info to the application about LoRaWAN configuration
   - LoRaWAN_End_Node/LoRaWAN/App/se-identity.h                                  Secure Element identity and keys
   - LoRaWAN_End_Node/LoRaWAN/Target/lorawan_conf.h                              Header for LoRaWAN middleware instances
-  - LoRaWAN_End_Node/LoRaWAN/Target/mw_log_conf.h                               Configure (enable/disable) traces for CM0
+  - LoRaWAN_End_Node/LoRaWAN/Target/mw_log_conf.h                               Configure (enable/disable) traces
   - LoRaWAN_End_Node/LoRaWAN/Target/radio_board_if.h                            Header for Radio interface configuration
   - LoRaWAN_End_Node/LoRaWAN/Target/radio_conf.h                                Header of Radio configuration
   - LoRaWAN_End_Node/LoRaWAN/Target/systime.h                                   Map middleware systime
@@ -116,7 +116,7 @@ Applications, SubGHz_Phy, LoRaWAN, End_Node, SingleCore
 
 @par Hardware and Software environment
 
-  - This example runs on the STM32WLxx Nucleo board.
+  - This example runs on the STM32WLxx Nucleo boards. Both NUCLEO-WL55JC1 (HIGH-BAND) and NUCLEO-WL55JC2 (LOW-BAND) are suitable.
 
   - STM32WLxx Nucleo board Set-up
     - Connect the Nucleo board to your PC with a USB cable type A to micro-B
@@ -153,11 +153,11 @@ In order to make the program work, you must do the following :
 @par How to use MX to modify some RF middleware and application settings
   This example is compatible (with some problems/limitations) with STM32CubeMX 
   and the RF application and middleware configuration can be modified via GUI. Few warnings and guidelines:
-  - ioc file is provided in the project directory and can be opened with STM32CubeMX v6.5.0 or higher.
+  - ioc file is provided in the project directory and can be opened with STM32CubeMX v6.7.0 or higher.
   - warning: when regenerating with the provided ioc file, 
     the IDE projects are regenerated and paths to HAL and MWs files from STM32Cube/Repository location are erroneously added; to avoid that, 
     user shall uncheck the "Use Default Firmware Location" in the GUI "Project-Manager" panel
-    and shall replace "Firmware Relative Path" with the root directory of the STM32CubeWL firmware package  (e.g. C:\myDir\STM32Cube_FW_WL_V1.2.0\);
+    and shall replace "Firmware Relative Path" with the root directory of the STM32CubeWL firmware package  (e.g. C:\myDir\STM32Cube_FW_WL_V1.3.0\);
     problem will be fixed in next STM32CubeMX version.
   - .extSettings file allows to add to the generated IDE projects additional files not generated natively by MX (e.g. BSP files).
   - when regenerating on existing code and existing linker files:

@@ -18,6 +18,10 @@
   ******************************************************************************
   */
 /* USER CODE END Header */
+/* Define to prevent recursive inclusion -------------------------------------*/
+#define KMS_LOW_LEVEL_C
+
+/* Includes ------------------------------------------------------------------*/
 #include "kms.h"
 #include "kms_low_level.h"
 /* USER CODE BEGIN KMS_LOW_LEVEL_Includes */
@@ -59,6 +63,32 @@
 /* USER CODE BEGIN KMS_LOW_LEVEL_Private_Exported_Functions */
 /* USER CODE END KMS_LOW_LEVEL_Private_Exported_Functions */
 
+/** @addtogroup KMS_LL_Exported_Functions Exported Functions
+  * @{
+  */
+
+/**
+  * @brief  Initialize resources required for the low level services
+  * @retval Operation status
+  */
+CK_RV KMS_LL_Initialize(void)
+{
+  /* USER CODE BEGIN KMS_LL_Initialize */
+  return CKR_OK;
+  /* USER CODE END KMS_LL_Initialize */
+}
+
+/**
+  * @brief  Deinitialize the resources required for the low level services
+  * @retval Operation status
+  */
+CK_RV KMS_LL_Finalize(void)
+{
+  /* USER CODE BEGIN KMS_LL_Finalize */
+  return CKR_OK;
+  /* USER CODE END KMS_LL_Finalize */
+}
+
 /**
   * @brief  Read data from flash and store into buffer
   * @note   Used to access encrypted blob in flash.
@@ -76,6 +106,15 @@ CK_RV KMS_LL_FLASH_Read(void *pDestination, const void *pSource, uint32_t Length
 
 #ifdef KMS_SE_CHECK_PARAMS
 
+/* Remove compilation optimization */
+#if defined(__ICCARM__)
+#pragma optimize=none
+#elif defined(__CC_ARM)
+#pragma O0
+#else
+__attribute__((optimize("O0")))
+#endif /* __ICCARM__ */
+
 /**
   * @brief  Check if given buffer in inside secure enclave (RAM or Flash, NVM_Storgae)
   *              If it is in Enclave area, then generate a RESET.
@@ -85,9 +124,35 @@ CK_RV KMS_LL_FLASH_Read(void *pDestination, const void *pSource, uint32_t Length
   */
 void KMS_LL_IsBufferInSecureEnclave(void *pBuffer, uint32_t Size)
 {
-
+  /* USER CODE BEGIN KMS_LL_IsBufferInSecureEnclave */
+  /* USER CODE END KMS_LL_IsBufferInSecureEnclave */
 }
 #endif /* KMS_SE_CHECK_PARAMS */
+
+#if defined(KMS_ENCRYPT_DECRYPT_BLOB)
+/**
+  * @brief  Generate the KMS data storage key
+  * @retval Operation status
+  */
+CK_RV KMS_LL_DataStorageKey_Init(void)
+{
+  /* USER CODE BEGIN KMS_LL_DataStorageKey_Init */
+  return CKR_OK;
+  /* USER CODE END KMS_LL_DataStorageKey_Init */
+}
+
+/**
+  * @brief  Generate a random number
+  * @param  pRandomData buffer to store the random number
+  * @retval Operation status
+  */
+CK_RV KMS_LL_GetRandomData(uint32_t *pRandomData)
+{
+  /* USER CODE BEGIN KMS_LL_GetRandomData */
+  return CKR_FUNCTION_NOT_SUPPORTED;
+  /* USER CODE END KMS_LL_GetRandomData */
+}
+#endif /* KMS_ENCRYPT_DECRYPT_BLOB */
 
 /**
   * @brief  An error occurred
@@ -133,6 +198,10 @@ void KMS_LL_ReportMemFree(void *pMem)
 
   /* USER CODE END KMS_LL_ReportMemFree */
 }
+
+/**
+  * @}
+  */
 
 /**
   * @}

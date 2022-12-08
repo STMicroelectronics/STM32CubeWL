@@ -47,8 +47,8 @@
 									<listOptionValue builtIn="false" value="../../../CM4/LoRaWAN/Target"/>
 									<listOptionValue builtIn="false" value="../../../CM4/MbMux"/>
 									<listOptionValue builtIn="false" value="../../../Common/Board"/>
-									<listOptionValue builtIn="false" value="../../../Common/MbMux"/>
 									<listOptionValue builtIn="false" value="../../../Common/System"/>
+									<listOptionValue builtIn="false" value="../../../Common/MbMux"/>
 									<listOptionValue builtIn="false" value="../../../../../../../../Drivers/BSP/STM32WLxx_Nucleo"/>
 									<listOptionValue builtIn="false" value="../../../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc"/>
 									<listOptionValue builtIn="false" value="../../../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc/Legacy"/>
@@ -57,13 +57,12 @@
 									<listOptionValue builtIn="false" value="../../../../../../../../Utilities/sequencer"/>
 									<listOptionValue builtIn="false" value="../../../../../../../../Utilities/timer"/>
 									<listOptionValue builtIn="false" value="../../../../../../../../Utilities/lpm/tiny_lpm"/>
-									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/SubGHz_Phy"/>
-									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver"/>
 									<listOptionValue builtIn="false" value="../../../../../../../../Drivers/CMSIS/Device/ST/STM32WLxx/Include"/>
 									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/LoRaWAN/Mac/Region"/>
 									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/LoRaWAN/Mac"/>
 									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/LoRaWAN/LmHandler"/>
 									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/LoRaWAN/Utilities"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/SubGHz_Phy"/>
 									<listOptionValue builtIn="false" value="../../../../../../../../Drivers/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../../../../Linker_Common/STM32CubeIDE"/>
 								</option>

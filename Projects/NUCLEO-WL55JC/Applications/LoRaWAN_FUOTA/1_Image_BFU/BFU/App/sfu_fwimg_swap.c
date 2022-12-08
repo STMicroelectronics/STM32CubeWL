@@ -239,7 +239,7 @@ static SFU_ErrorStatus CheckTrailerMagic(uint32_t DwlSlot)
    *  - significant values (not an erased flash pattern)
    *
    *  Check clean tag not set :
-   *  - should be erased flash pattern but not clean-up paatern (0x55 0x55 ...)
+   *  - should be erased flash pattern but not clean-up pattern (0x55 0x55 ...)
    */
   if ((memcmp(magic, signature_valid, sizeof(signature_valid)) != 0)
       || (memcmp(&magic[MAGIC_LENGTH / 2U], signature_test, sizeof(signature_test)) != 0)
@@ -580,7 +580,7 @@ static SFU_ErrorStatus SwapFirmwareImages(uint32_t ActiveSlot, uint32_t DwlSlot,
    */
   while (index_active_slot >= 0)
   {
-    /* Reload watchdoag every SWAP size */
+    /* Reload watchdog every SWAP size */
     SFU_LL_SECU_IWDG_Refresh();
 
     TRACE(".");

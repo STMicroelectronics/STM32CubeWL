@@ -43,22 +43,11 @@ extern "C"
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "radio_def.h"
+#include "radio_ex.h"
+#include "lr_fhss_v1_base_types.h"
 
 /* Private typedef -----------------------------------------------------------*/
-/*!
- * Radio driver supported modems
- */
-typedef enum
-{
-    MODEM_FSK = 0,
-    MODEM_LORA,
-    MODEM_MSK,
-    /* ST_WORKAROUND_BEGIN: Upgraded modulations list */
-    MODEM_BPSK,
-    MODEM_SIGFOX_TX,
-    MODEM_SIGFOX_RX,
-    /* ST_WORKAROUND_END */
-}RadioModems_t;
 
 /*!
  * Radio driver internal state machine states definition
@@ -69,56 +58,37 @@ typedef enum
     RF_RX_RUNNING, //!< The radio is in reception state
     RF_TX_RUNNING, //!< The radio is in transmission state
     RF_CAD,        //!< The radio is doing channel activity detection
-}RadioState_t;
+} RadioState_t;
+
+
+typedef struct radio_lr_fhss_params_s
+{
+    lr_fhss_v1_params_t lr_fhss_params;
+    uint32_t            center_frequency_in_hz;
+    int8_t              device_offset;
+} radio_lr_fhss_params_t;
 
 /*!
- * \brief Radio driver callback functions
+ * Radio LR-FHSS configuration parameters
  */
-typedef struct
+typedef struct loramac_radio_lr_fhss_cfg_params_s
 {
-    /*!
-     * \brief  Tx Done callback prototype.
-     */
-    void    ( *TxDone )( void );
-    /*!
-     * \brief  Tx Timeout callback prototype.
-     */
-    void    ( *TxTimeout )( void );
-    /*!
-     * \brief Rx Done callback prototype.
-     *
-     * \param [in] payload Received buffer pointer
-     * \param [in] size    Received buffer size
-     * \param [in] rssi    RSSI value computed while receiving the frame [dBm]
-     * \param [in] LoraSnr_FskCfo
-     *                     FSK : Carrier Frequency Offset in kHz
-     *                     LoRa: SNR value in dB
-     */
-    void    ( *RxDone )( uint8_t *payload, uint16_t size, int16_t rssi, int8_t LoraSnr_FskCfo );
-    /*!
-     * \brief  Rx Timeout callback prototype.
-     */
-    void    ( *RxTimeout )( void );
-    /*!
-     * \brief Rx Error callback prototype.
-     */
-    void    ( *RxError )( void );
-    /*!
-     * \brief  FHSS Change Channel callback prototype.
-     *
-     * \param [in] currentChannel   Index number of the current channel
-     */
-    void ( *FhssChangeChannel )( uint8_t currentChannel );
+    int8_t               tx_rf_pwr_in_dbm;  //!< Radio RF output power
+    radio_lr_fhss_params_t radio_lr_fhss_params;    //!< LR-FHSS parameters
+    uint32_t             tx_timeout_in_ms;  //!< Radio tx timeout
+} radio_lr_fhss_cfg_params_t;
 
-    /*!
-     * \brief CAD Done callback prototype.
-     *
-     * \param [in] channelDetected    Channel Activity detected during the CAD
-     */
-    void ( *CadDone ) ( bool channelActivityDetected );
-}RadioEvents_t;
+/*!
+ * Radio LoRa time on air configuration parameters
+ */
+typedef struct loramac_radio_lr_fhss_time_on_air_params_s
+{
+    radio_lr_fhss_params_t radio_lr_fhss_params;    //!< LR-FHSS parameters
+    uint8_t              pld_len_in_bytes;  //!< LoRa payload length in bytes
+} radio_lr_fhss_time_on_air_params_t;
 
-#include "radio_ex.h" /* ST_WORKAROUND: extended radio functions */
+
+/* Function prototypes -----------------------------------------------------------*/
 
 /*!
  * \brief Radio driver definition
@@ -302,8 +272,10 @@ struct Radio_s
      *
      * \param [in] buffer     Buffer pointer
      * \param [in] size       Buffer size
+     *
+     * \retval status        (OK, ERROR, ...)
      */
-    void    ( *Send )( uint8_t *buffer, uint8_t size );
+    radio_status_t    ( *Send )( uint8_t *buffer, uint8_t size );
     /*!
      * \brief Sets the radio in sleep mode
      */
@@ -336,7 +308,6 @@ struct Radio_s
      * \retval rssiValue Current RSSI value in [dBm]
      */
     int16_t ( *Rssi )( RadioModems_t modem );
-    /* ST_WORKAROUND_BEGIN: Force register addr to uint16_t */
     /*!
      * \brief Writes the radio register at the specified address
      *
@@ -367,7 +338,6 @@ struct Radio_s
      * \param [in] size Number of registers to be read
      */
     void    ( *ReadRegisters )( uint16_t addr, uint8_t *buffer, uint8_t size );
-    /* ST_WORKAROUND_END */
     /*!
      * \brief Sets the maximum payload length.
      *
@@ -407,7 +377,6 @@ struct Radio_s
      * \param [in]  sleepTime     Structure describing sleep timeout value
      */
     void    ( *SetRxDutyCycle )( uint32_t rxTime, uint32_t sleepTime );
-    /* ST_WORKAROUND_BEGIN: extended radio functions */
     /*!
      * @brief Sets the Transmitter in continuous PRBS mode
      *
@@ -470,7 +439,24 @@ struct Radio_s
      * \return 0 when no parameters error, -1 otherwise
      */
     int32_t ( *ReceiveLongPacket )( uint8_t boosted_mode, uint32_t timeout, void (*RxLongStorePacketChunkCb) ( uint8_t* buffer, uint8_t chunk_size ) );
-    /* ST_WORKAROUND_END */
+    /* LrFhss extended radio functions */
+    /*!
+     * \brief Configure the radio LR-FHSS modem parameters
+     *
+     * \param [in] cfg_params LR-FHSS modem configuration parameters
+     *
+     * \returns Operation status
+     */
+    radio_status_t ( *LrFhssSetCfg)( const radio_lr_fhss_cfg_params_t *cfg_params );
+    /*!
+     * \brief Get the time on air in millisecond for LR-FHSS packet
+     *
+     * \param [in] params Pointer to LR-FHSS time on air parameters
+     * \param [out] time_on_air_in_ms  time on air parameters results in ms
+     *
+     * \returns Time-on-air value in ms for LR-FHSS packet LrFhssGetTimeOnAirInMs
+     */
+    radio_status_t ( *LrFhssGetTimeOnAirInMs)( const radio_lr_fhss_time_on_air_params_t *params, uint32_t  *time_on_air_in_ms );
 };
 
 /*!

@@ -50,7 +50,7 @@ static uint32_t m_uDwlAreaSize = 0U;                             /*!< Size of do
 static uint32_t m_uFileSizeYmodem = 0U;                          /*!< Ymodem file size being received */
 static uint32_t m_uNbrBlocksYmodem = 0U;                         /*!< Number of blocks being received via Ymodem*/
 static uint32_t m_uPacketsReceived = 0U;                         /*!< Number of packets received via Ymodem*/
-static uint32_t m_uDwlSlot = SLOT_INACTIVE;                      /*!< Dwl slot identification : to be intialialized after header check */
+static uint32_t m_uDwlSlot = SLOT_INACTIVE;                      /*!< Dwl slot identification : to be initialized after header check */
 static SFU_LOADER_StatusTypeDef m_LoaderStatus;                  /*!< Status of the loader */
 
 /* Private function prototypes -----------------------------------------------*/

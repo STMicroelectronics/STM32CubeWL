@@ -73,7 +73,7 @@ typedef struct sLoRaMacClassBPingSlotNvmData
      * Datarate of the ping slot
      */
     int8_t Datarate;
-#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+#if (defined( LORAMAC_VERSION ) && (( LORAMAC_VERSION == 0x01000400 ) || ( LORAMAC_VERSION == 0x01010100 )))
     /*!
      * Set to 1, if the FPending bit is set
      */

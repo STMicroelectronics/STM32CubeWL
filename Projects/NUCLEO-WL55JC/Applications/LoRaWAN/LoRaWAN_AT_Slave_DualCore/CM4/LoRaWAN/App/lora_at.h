@@ -76,11 +76,14 @@ typedef enum eATEerror
 
 /* AT Command strings. Commands start with AT */
 /* General commands */
-#define AT_RESET      "Z"
-#define AT_RFS        "+RFS"
-#define AT_CS         "+CS"
+#define AT_VER        "+VER"
 #define AT_VL         "+VL"
 #define AT_LTIME      "+LTIME"
+#define AT_RESET      "Z"
+
+/* Context Store */
+#define AT_RFS        "+RFS"
+#define AT_CS         "+CS"
 
 /* Keys, IDs and EUIs management commands */
 #define AT_JOINEUI    "+APPEUI" /*to match with V1.0.x specification- For V1.1.x "+APPEUI" will be replaced by "+JOINEUI"*/
@@ -98,7 +101,6 @@ typedef enum eATEerror
 #define AT_SEND       "+SEND"
 
 /* LoRaWAN network management commands */
-#define AT_VER        "+VER"
 #define AT_ADR        "+ADR"
 #define AT_DR         "+DR"
 #define AT_BAND       "+BAND"
@@ -119,11 +121,15 @@ typedef enum eATEerror
 #define AT_TCONF      "+TCONF"
 #define AT_TTX        "+TTX"
 #define AT_TRX        "+TRX"
-#define AT_CERTIF     "+CERTIF"
 #define AT_TTH        "+TTH"
 #define AT_TOFF       "+TOFF"
+
+/* Radio access commands */
 #define AT_REGW       "+REGW"
 #define AT_REGR       "+REGR"
+
+/* LoraWAN Certif command */
+#define AT_CERTIF     "+CERTIF"
 
 /* Information command */
 #define AT_BAT        "+BAT"
@@ -187,25 +193,11 @@ void AT_event_OnRestoreContextRequest(void *nvm, uint32_t nvm_size);
 
 /* --------------- General commands --------------- */
 /**
-  * @brief  Trig a reset of the MCU
-  * @param  param string of the AT command - unused
+  * @brief  Print the version of the AT_Slave FW
+  * @param  param String parameter
   * @retval AT_OK
   */
-ATEerror_t AT_reset(const char *param);
-
-/**
-  * @brief  Restore factory settings in Eeprom
-  * @param  param string of the AT command - unused
-  * @retval AT_OK
-  */
-ATEerror_t AT_restore_factory_settings(const char *param);
-
-/**
-  * @brief  Store current settings in Eeprom
-  * @param  param string of the AT command - unused
-  * @retval AT_OK
-  */
-ATEerror_t AT_store_context(const char *param);
+ATEerror_t AT_version_get(const char *param);
 
 /**
   * @brief  Get the verbose level
@@ -227,6 +219,28 @@ ATEerror_t AT_verbose_set(const char *param);
   * @retval AT_OK
   */
 ATEerror_t AT_LocalTime_get(const char *param);
+
+/**
+  * @brief  Trig a reset of the MCU
+  * @param  param string of the AT command - unused
+  * @retval AT_OK
+  */
+ATEerror_t AT_reset(const char *param);
+
+/* --------------- Context Store commands --------------- */
+/**
+  * @brief  Restore factory settings in Eeprom
+  * @param  param string of the AT command - unused
+  * @retval AT_OK
+  */
+ATEerror_t AT_restore_factory_settings(const char *param);
+
+/**
+  * @brief  Store current settings in Eeprom
+  * @param  param string of the AT command - unused
+  * @retval AT_OK
+  */
+ATEerror_t AT_store_context(const char *param);
 
 /* --------------- Keys, IDs and EUIs management commands --------------- */
 /**
@@ -364,13 +378,6 @@ ATEerror_t AT_Link_Check(const char *param);
 ATEerror_t AT_Send(const char *param);
 
 /* --------------- LoRaWAN network management commands --------------- */
-/**
-  * @brief  Print the version of the AT_Slave FW
-  * @param  param String parameter
-  * @retval AT_OK
-  */
-ATEerror_t AT_version_get(const char *param);
-
 /**
   * @brief  Print Adaptive Data Rate setting
   * @param  param String pointing to provided ADR setting
@@ -597,13 +604,6 @@ ATEerror_t AT_test_tx(const char *param);
 ATEerror_t AT_test_rx(const char *param);
 
 /**
-  * @brief  set the Modem in Certif Mode
-  * @param  param String parameter
-  * @retval AT_OK
-  */
-ATEerror_t AT_Certif(const char *param);
-
-/**
   * @brief  Start Tx hopping
   * @param  param String parameter
   * @retval AT_OK
@@ -617,6 +617,7 @@ ATEerror_t AT_test_tx_hopping(const char *param);
   */
 ATEerror_t AT_test_stop(const char *param);
 
+/* --------------- Radio access commands --------------- */
 /**
   * @brief  Write Radio Register
   * @param  param String parameter
@@ -630,6 +631,14 @@ ATEerror_t AT_write_register(const char *param);
   * @retval AT_OK
   */
 ATEerror_t AT_read_register(const char *param);
+
+/* --------------- LoraWAN Certif command --------------- */
+/**
+  * @brief  set the Modem in Certif Mode
+  * @param  param String parameter
+  * @retval AT_OK
+  */
+ATEerror_t AT_Certif(const char *param);
 
 /* --------------- Information command --------------- */
 /**

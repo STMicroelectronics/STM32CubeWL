@@ -97,36 +97,14 @@ static const struct ATCommand_s ATCommand[] =
 {
   /* General commands */
   {
-    .string = AT_RESET,
-    .size_string = sizeof(AT_RESET) - 1,
+    .string = AT_VER,
+    .size_string = sizeof(AT_VER) - 1,
 #ifndef NO_HELP
-    .help_string = "AT"AT_RESET" Trig a MCU reset\r\n",
+    .help_string = "AT"AT_VER" Get the FW version\r\n",
 #endif /* !NO_HELP */
-    .get = AT_return_error,
+    .get = AT_version_get,
     .set = AT_return_error,
-    .run = AT_reset,
-  },
-
-  {
-    .string = AT_RFS,
-    .size_string = sizeof(AT_RFS) - 1,
-#ifndef NO_HELP
-    .help_string = "AT"AT_RFS ": Restore EEPROM Factory Settings\r\n",
-#endif /* !NO_HELP */
-    .get = AT_return_error,
-    .set = AT_return_error,
-    .run = AT_restore_factory_settings,
-  },
-
-  {
-    .string = AT_CS,
-    .size_string = sizeof(AT_CS) - 1,
-#ifndef NO_HELP
-    .help_string = "AT"AT_CS ": Store current context to EEPROM\r\n",
-#endif /* !NO_HELP */
-    .get = AT_return_error,
-    .set = AT_return_error,
-    .run = AT_store_context,
+    .run = AT_return_error,
   },
 
   {
@@ -149,6 +127,40 @@ static const struct ATCommand_s ATCommand[] =
     .get = AT_LocalTime_get,
     .set = AT_return_error,
     .run = AT_return_error,
+  },
+
+  {
+    .string = AT_RESET,
+    .size_string = sizeof(AT_RESET) - 1,
+#ifndef NO_HELP
+    .help_string = "AT"AT_RESET" Trig a MCU reset\r\n",
+#endif /* !NO_HELP */
+    .get = AT_return_error,
+    .set = AT_return_error,
+    .run = AT_reset,
+  },
+
+  /* Context Store commands */
+  {
+    .string = AT_RFS,
+    .size_string = sizeof(AT_RFS) - 1,
+#ifndef NO_HELP
+    .help_string = "AT"AT_RFS ": Restore EEPROM Factory Settings\r\n",
+#endif /* !NO_HELP */
+    .get = AT_return_error,
+    .set = AT_return_error,
+    .run = AT_restore_factory_settings,
+  },
+
+  {
+    .string = AT_CS,
+    .size_string = sizeof(AT_CS) - 1,
+#ifndef NO_HELP
+    .help_string = "AT"AT_CS ": Store current context to EEPROM\r\n",
+#endif /* !NO_HELP */
+    .get = AT_return_error,
+    .set = AT_return_error,
+    .run = AT_store_context,
   },
 
   /* Keys, IDs and EUIs management commands */
@@ -275,17 +287,6 @@ static const struct ATCommand_s ATCommand[] =
   },
 
   /* LoRaWAN network management commands */
-  {
-    .string = AT_VER,
-    .size_string = sizeof(AT_VER) - 1,
-#ifndef NO_HELP
-    .help_string = "AT"AT_VER" Get the FW version\r\n",
-#endif /* !NO_HELP */
-    .get = AT_version_get,
-    .set = AT_return_error,
-    .run = AT_return_error,
-  },
-
   {
     .string = AT_ADR,
     .size_string = sizeof(AT_ADR) - 1,
@@ -491,17 +492,6 @@ static const struct ATCommand_s ATCommand[] =
   },
 
   {
-    .string = AT_CERTIF,
-    .size_string = sizeof(AT_CERTIF) - 1,
-#ifndef NO_HELP
-    .help_string = "AT"AT_CERTIF"=<Mode><CR>. Set the module in LoraWan Certification with Join Mode=[0:ABP, 1:OTAA]\r\n",
-#endif /* !NO_HELP */
-    .get = AT_return_error,
-    .set = AT_Certif,
-    .run = AT_return_error,
-  },
-
-  {
     .string = AT_TTH,
     .size_string = sizeof(AT_TTH) - 1,
 #ifndef NO_HELP
@@ -523,6 +513,7 @@ static const struct ATCommand_s ATCommand[] =
     .run = AT_test_stop,
   },
 
+  /* Radio access commands */
 #ifdef AT_RADIO_ACCESS
   {
     .string = AT_REGW,
@@ -546,6 +537,18 @@ static const struct ATCommand_s ATCommand[] =
     .run = AT_return_error,
   },
 #endif /*AT_RADIO_ACCESS*/
+
+  /* LoraWAN Certif command */
+  {
+    .string = AT_CERTIF,
+    .size_string = sizeof(AT_CERTIF) - 1,
+#ifndef NO_HELP
+    .help_string = "AT"AT_CERTIF"=<Mode><CR>. Set the module in LoraWan Certification with Join Mode=[0:ABP, 1:OTAA]\r\n",
+#endif /* !NO_HELP */
+    .get = AT_return_error,
+    .set = AT_Certif,
+    .run = AT_return_error,
+  },
 
   /* Information command */
   {
@@ -740,8 +743,8 @@ static int32_t CMD_ProcessBackSpace(char *cmd)
   /*for every backspace, remove backspace and its preceding character*/
   for (i = 0; i < bs_cnt; i++)
   {
-    int curs = 0;
-    int j = 0;
+    int32_t curs = 0;
+    int32_t j = 0;
 
     /*set cursor to backspace*/
     while (cmd[curs] != '\b')

@@ -101,7 +101,7 @@ static __IO SFU_BOOT_StateMachineContextTypeDef m_StateMachineContext = {SFU_STA
                                                                          SFU_STATE_INITIAL
                                                                         };
 
-/*!< Static member variables identifyng the slots to be processed by secure firmware update . */
+/*!< Static member variables identifying the slots to be processed by secure firmware update . */
 static uint32_t m_DwlSlotToInstall = SLOT_INACTIVE;
 static uint32_t m_ActiveSlotToResume = SLOT_INACTIVE;
 static uint32_t m_ActiveSlotToRollback = SLOT_INACTIVE;
@@ -1124,7 +1124,7 @@ static void SFU_BOOT_SM_RollbackInstallPrevUserFw(void)
   TRACE("\r\n= [SBOOT] STATE: ROLLBACK INSTALLATION TO PREVIOUS USER FIRMWARE");
 
   /*
-   * Rollack installation to the previous User FW from Dwl_Slot
+   * Rollback installation to the previous User FW from Dwl_Slot
    */
   e_ret_status = SFU_IMG_TriggerRollbackInstallation(m_ActiveSlotToRollback, m_DwlSlotToInstall);
 

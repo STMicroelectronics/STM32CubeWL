@@ -73,10 +73,16 @@ extern "C"
 #define CHANNEL_PLAN_GROUP_AS923_3                  3
 
 /*!
+ * Channel plan group AS923-4
+ * AS923_FREQ_OFFSET = -5.90MHz
+ */
+#define CHANNEL_PLAN_GROUP_AS923_4                  4
+
+/*!
  * Channel plan group AS923-1 for Japan
  * AS923_FREQ_OFFSET = 0
  */
-#define CHANNEL_PLAN_GROUP_AS923_1_JP               4
+#define CHANNEL_PLAN_GROUP_AS923_1_JP               5
 
 /*!
  * LoRaMac maximum number of channels
@@ -273,16 +279,6 @@ extern "C"
 #define AS923_JOIN_CHANNELS                         ( uint16_t )( LC( 1 ) | LC( 2 ) )
 
 /*!
- * RSSI threshold for a free channel [dBm]
- */
-#define AS923_RSSI_FREE_TH                          -80
-
-/*!
- * Specifies the time the node performs a carrier sense
- */
-#define AS923_CARRIER_SENSE_TIME                    5
-
-/*!
  * Data rates table definition
  */
 static const uint8_t DataratesAS923[]  = { 12, 11, 10,  9,  8,  7, 7, 50 };
@@ -292,7 +288,6 @@ static const uint8_t DataratesAS923[]  = { 12, 11, 10,  9,  8,  7, 7, 50 };
  */
 static const uint32_t BandwidthsAS923[] = { 125000, 125000, 125000, 125000, 125000, 125000, 250000, 0 };
 
-/* ST_WORKAROUND_BEGIN: Keep repeater feature */
 /*!
  * Maximum payload with respect to the datarate index. Cannot operate with repeater.
  * The table is valid for the dwell time configuration of 0 for uplinks and downlinks.
@@ -312,7 +307,6 @@ static const uint8_t MaxPayloadOfDatarateRepeaterDwell0AS923[] = { 51, 51, 51, 1
 #elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
 static const uint8_t MaxPayloadOfDatarateRepeaterDwell0AS923[] = { 51, 51, 115, 115, 222, 222, 222, 222 };
 #endif /* REGION_VERSION */
-/* ST_WORKAROUND_END */
 
 /*!
  * Maximum payload with respect to the datarate index.

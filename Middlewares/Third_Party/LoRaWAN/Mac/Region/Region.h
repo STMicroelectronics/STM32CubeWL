@@ -132,12 +132,10 @@ typedef enum ePhyAttribute
      * Maximum payload possible.
      */
     PHY_MAX_PAYLOAD,
-    /* ST_WORKAROUND_BEGIN: Keep repeater feature */
     /*!
      * Maximum payload possible when repeater support is enabled.
      */
     PHY_MAX_PAYLOAD_REPEATER,
-    /* ST_WORKAROUND_END */
     /*!
      * Duty cycle.
      */
@@ -603,12 +601,10 @@ typedef struct sRxConfigParams
      * Downlink dwell time.
      */
     uint8_t DownlinkDwellTime;
-    /* ST_WORKAROUND_BEGIN: Keep repeater feature */
     /*!
      * Set to true, if a repeater is supported.
      */
     bool RepeaterSupport;
-    /* ST_WORKAROUND_END */
     /*!
      * Set to true, if RX should be continuous.
      */

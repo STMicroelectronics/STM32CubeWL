@@ -4,6 +4,8 @@
 | CMSIS Device                    | ARM Limited - STMicroelectronics   | Apache-2.0                                       |
 | STM32WL HAL                     | STMicroelectronics                 | BSD-3-Clause                                     |
 | BSP NUCLEO-WL55JC               | STMicroelectronics                 | BSD-3-Clause                                     |
+| B-WL5M-SUBG                     | STMicroelectronics                 | BSD-3-Clause                                     |
+| BSP Components                  | STMicroelectronics                 | BSD-3-Clause                                     |
 | FreeRTOS kernel                 | Amazon.com, Inc. or its affiliates | MIT                                              |
 | FatFS                           | ChaN - STMicroelectronics          | BSD-3-Clause                                     |
 | SubGHz_Phy                      | Semtech - STMicroelectronics       | BSD-3-Clause                                     |

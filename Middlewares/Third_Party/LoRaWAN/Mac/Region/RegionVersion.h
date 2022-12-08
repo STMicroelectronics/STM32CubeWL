@@ -26,20 +26,20 @@ extern "C"
 #include "LoRaMacVersion.h"
 
 #ifndef REGION_VERSION
-#if (defined(LORAMAC_VERSION) && (LORAMAC_VERSION == 0x01000300))
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000300 ))
 /*!
  * @brief Regional parameters version definition.
- * @note RP001-1.0.3 :
+ * @note RP001-1.0.3 : https://lora-alliance.org/resource_hub/lorawan-regional-parameters-v1-0-3reva/
  */
 #define REGION_VERSION                              0x01010003
-#elif (defined(LORAMAC_VERSION) && (LORAMAC_VERSION == 0x01000400))
+#elif (defined( LORAMAC_VERSION ) && (( LORAMAC_VERSION == 0x01000400 ) || ( LORAMAC_VERSION == 0x01010100 )))
 /*!
  * @brief Regional parameters version definition.
  * @note RP002-1.0.1 : https://lora-alliance.org/resource_hub/rp2-101-lorawan-regional-parameters-2/
  */
 #define REGION_VERSION                              0x02010001
 #endif /* LORAMAC_VERSION */
-#endif
+#endif /* REGION_VERSION */
 
 #ifdef __cplusplus
 }

@@ -23,7 +23,7 @@
 #include "stm32_assert.h"
 #else
 #define assert_param(expr) ((void)0U)
-#endif
+#endif /* USE_FULL_ASSERT */
 
 /** @addtogroup STM32WLxx_LL_Driver
   * @{
@@ -47,14 +47,14 @@
 #define IS_LL_EXTI_LINE_32_63(__VALUE__)             (((__VALUE__) & ~LL_EXTI_LINE_ALL_32_63) == 0x00000000U)
 
 #define IS_LL_EXTI_MODE(__VALUE__)                   (((__VALUE__) == LL_EXTI_MODE_IT)            \
-                                                   || ((__VALUE__) == LL_EXTI_MODE_EVENT)         \
-                                                   || ((__VALUE__) == LL_EXTI_MODE_IT_EVENT))
+                                                      || ((__VALUE__) == LL_EXTI_MODE_EVENT)      \
+                                                      || ((__VALUE__) == LL_EXTI_MODE_IT_EVENT))
 
 
 #define IS_LL_EXTI_TRIGGER(__VALUE__)                (((__VALUE__) == LL_EXTI_TRIGGER_NONE)       \
-                                                   || ((__VALUE__) == LL_EXTI_TRIGGER_RISING)     \
-                                                   || ((__VALUE__) == LL_EXTI_TRIGGER_FALLING)    \
-                                                   || ((__VALUE__) == LL_EXTI_TRIGGER_RISING_FALLING))
+                                                      || ((__VALUE__) == LL_EXTI_TRIGGER_RISING)  \
+                                                      || ((__VALUE__) == LL_EXTI_TRIGGER_FALLING) \
+                                                      || ((__VALUE__) == LL_EXTI_TRIGGER_RISING_FALLING))
 
 /**
   * @}
@@ -81,56 +81,56 @@ ErrorStatus LL_EXTI_DeInit(void)
 {
   /* Rising Trigger selection register set to default reset values */
   LL_EXTI_WriteReg(RTSR1, 0x00000000U);
-  
+
   /* Falling Trigger selection register set to default reset values */
   LL_EXTI_WriteReg(FTSR1, 0x00000000U);
-  
+
   /* Software interrupt event register set to default reset values */
   LL_EXTI_WriteReg(SWIER1, 0x00000000U);
-  
+
   /* Pending register set to default reset values */
   LL_EXTI_WriteReg(PR1, 0xFFFFFFFFU);
 
   /* Rising Trigger selection register 2 set to default reset values */
   LL_EXTI_WriteReg(RTSR2, 0x00000000U);
-  
+
   /* Falling Trigger selection register 2 set to default reset values */
   LL_EXTI_WriteReg(FTSR2, 0x00000000U);
-  
+
   /* Software interrupt event register 2 set to default reset values */
   LL_EXTI_WriteReg(SWIER2, 0x00000000U);
-  
+
   /* Pending register 2 set to default reset values */
   LL_EXTI_WriteReg(PR2, 0xFFFFFFFFU);
-  
+
   /* Interrupt mask register set to default reset values */
 #if defined(DUAL_CORE) && defined (CORE_CM0PLUS)
   LL_EXTI_WriteReg(C2IMR1, 0x00000000U);
 #else
   LL_EXTI_WriteReg(IMR1, 0x00000000U);
-#endif
-  
+#endif /* DUAL_CORE && CORE_CM0PLUS */
+
   /* Event mask register set to default reset values */
 #if defined(DUAL_CORE) && defined (CORE_CM0PLUS)
   LL_EXTI_WriteReg(C2EMR1, 0x00000000U);
 #else
   LL_EXTI_WriteReg(EMR1, 0x00000000U);
-#endif
-  
+#endif /* DUAL_CORE && CORE_CM0PLUS */
+
   /* Interrupt mask register 2 set to default reset values */
 #if defined(DUAL_CORE) && defined (CORE_CM0PLUS)
   LL_EXTI_WriteReg(C2IMR2, 0x00000000U);
 #else
   LL_EXTI_WriteReg(IMR2, 0x00000000U);
-#endif
-  
+#endif /* DUAL_CORE && CORE_CM0PLUS */
+
   /* Event mask register 2 set to default reset values */
 #if defined(DUAL_CORE) && defined (CORE_CM0PLUS)
   LL_EXTI_WriteReg(C2EMR2, 0x00000000U);
 #else
   LL_EXTI_WriteReg(EMR2, 0x00000000U);
-#endif
-  
+#endif /* DUAL_CORE && CORE_CM0PLUS */
+
   return SUCCESS;
 }
 
@@ -202,7 +202,7 @@ ErrorStatus LL_EXTI_Init(LL_EXTI_InitTypeDef *EXTI_InitStruct)
         default:
           status = ERROR;
           break;
-#endif
+#endif /* DUAL_CORE && CORE_CM0PLUS */
       }
       if (EXTI_InitStruct->Trigger != LL_EXTI_TRIGGER_NONE)
       {
@@ -277,7 +277,7 @@ ErrorStatus LL_EXTI_Init(LL_EXTI_InitTypeDef *EXTI_InitStruct)
         default:
           status = ERROR;
           break;
-#endif
+#endif /* DUAL_CORE && CORE_CM0PLUS */
       }
       if (EXTI_InitStruct->Trigger != LL_EXTI_TRIGGER_NONE)
       {
@@ -323,7 +323,7 @@ ErrorStatus LL_EXTI_Init(LL_EXTI_InitTypeDef *EXTI_InitStruct)
     /* De-configure EXTI Lines in range from 32 to 63 */
     LL_EXTI_DisableIT_32_63(EXTI_InitStruct->Line_32_63);
     LL_EXTI_DisableEvent_32_63(EXTI_InitStruct->Line_32_63);
-#endif
+#endif /* DUAL_CORE && CORE_CM0PLUS */
   }
   return status;
 }

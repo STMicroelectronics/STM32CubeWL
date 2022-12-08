@@ -24,6 +24,13 @@
 /* Includes ------------------------------------------------------------------*/
 #include "kms_platf_objects_interface.h"
 #include "app_sfu.h"
+#ifdef KMS_ENCRYPT_DECRYPT_BLOB
+#if defined(__ARMCC_VERSION)
+#include "mapping_sbsfu.h"
+#elif defined (__ICCARM__) || defined(__GNUC__)
+#include "mapping_export.h"
+#endif /* __ARMCC_VERSION */
+#endif /* KMS_ENCRYPT_DECRYPT_BLOB */
 #include "app_sigfox.h"  /* SIGFOX_KMS */
 #include "st_sigfox_api.h"
 #include "sgfx_credentials.h"
@@ -49,15 +56,23 @@ extern "C" {
   * @{
   */
 
-/* We consider that the ORDER (static = lower ids) will be kept. */
-#define KMS_INDEX_MIN_EMBEDDED_OBJECTS       1UL   /*!< Embedded objects min ID. Must be > 0 as '0' is never a
-                                                        valid key index */
-#define KMS_INDEX_MAX_EMBEDDED_OBJECTS       (KMS_INDEX_MIN_EMBEDDED_OBJECTS+19UL)    /*!< Embedded objects max ID */
-#define KMS_INDEX_MIN_NVM_STATIC_OBJECTS     (KMS_INDEX_MAX_EMBEDDED_OBJECTS+1UL)     /*!< NVM static objects min ID */
-#define KMS_INDEX_MAX_NVM_STATIC_OBJECTS     (KMS_INDEX_MIN_NVM_STATIC_OBJECTS+19UL)  /*!< NVM static objects max ID */
+/* We consider that the ORDER (static = lower ids) will be kept  */
+#define KMS_INDEX_MIN_EMBEDDED_OBJECTS                1UL   /*!< Embedded objects min ID. Must be > 0 as '0' is never a
+                                                                 valid key index */
+#define KMS_INDEX_MAX_EMBEDDED_OBJECTS               29UL   /*!< Embedded objects max ID */
+#define KMS_INDEX_MIN_NVM_STATIC_OBJECTS             30UL   /*!< NVM static objects min ID */
+#define KMS_INDEX_MAX_NVM_STATIC_OBJECTS             49UL   /*!< NVM static objects max ID */
+#define KMS_INDEX_MIN_NVM_DYNAMIC_OBJECTS            50UL   /*!< NVM dynamic objects min ID */
+#define KMS_INDEX_MAX_NVM_DYNAMIC_OBJECTS            69UL   /*!< NVM dynamic objects max ID */
 
-#define KMS_INDEX_MIN_NVM_DYNAMIC_OBJECTS    (KMS_INDEX_MAX_NVM_STATIC_OBJECTS+1UL)   /*!< NVM dynamic objects min ID */
-#define KMS_INDEX_MAX_NVM_DYNAMIC_OBJECTS    (KMS_INDEX_MIN_NVM_DYNAMIC_OBJECTS+19UL) /*!< NVM dynamic objects max ID */
+#define KMS_INDEX_MIN_VM_DYNAMIC_OBJECTS             50UL   /*!< VM dynamic objects min ID */
+#define KMS_INDEX_MAX_VM_DYNAMIC_OBJECTS             69UL   /*!< VM dynamic objects max ID */
+
+/* When EXTERNAL TOKEN is not supported the below values can be commented */
+#define KMS_INDEX_MIN_EXT_TOKEN_STATIC_OBJECTS        70UL  /*!< External token static objects min ID */
+#define KMS_INDEX_MAX_EXT_TOKEN_STATIC_OBJECTS        89UL  /*!< External token static objects max ID */
+#define KMS_INDEX_MIN_EXT_TOKEN_DYNAMIC_OBJECTS       90UL  /*!< External token dynamic objects min ID */
+#define KMS_INDEX_MAX_EXT_TOKEN_DYNAMIC_OBJECTS      110UL  /*!< External token dynamic objects max ID */
 
 /* Blob import key index */
 #define KMS_INDEX_BLOBIMPORT_VERIFY       (1U)      /*!< Index in @ref KMS_PlatfObjects_EmbeddedList
@@ -79,6 +94,46 @@ extern "C" {
 /**
   * @}
   */
+
+/*
+ * Blob decrypt encrypt key
+ *
+ */
+#ifdef KMS_LOW_LEVEL_C
+#if defined(KMS_ENCRYPT_DECRYPT_BLOB)
+
+/* Place code in a specific section */
+#if defined(__ICCARM__)
+#pragma default_variable_attributes = @ ".SE_embedded_Keys"
+#elif defined(__CC_ARM)
+#pragma arm section rodata = ".SE_embedded_Keys"
+#endif /* __ICCARM__ */
+
+/* KMS attribute format is used for the key and the data */
+#if defined(__GNUC__)
+__attribute__((section(".SE_embedded_Keys")))
+#endif
+static const uint32_t KMS_Data_Storage_AES128_Encrypt_Key[]  =
+{
+  CKA_VALUE, @AES_DATA_STORAGE_KEY@
+};
+/* The three last uint32_t should be set to zero (not used in this configuration) */
+#if defined(__GNUC__)
+__attribute__((section(".SE_embedded_Keys")))
+#endif
+static const uint32_t KMS_Data_Storage_AES128_Encrypt_Data[] =
+{
+  CKA_VALUE, @AES_DATA_STORAGE_DATA@
+};
+
+/* Stop placing data in specified section*/
+#if defined(__ICCARM__)
+#pragma default_variable_attributes =
+#elif defined(__CC_ARM)
+#pragma arm section code
+#endif /* __ICCARM__ */
+#endif  /* KMS_ENCRYPT_DECRYPT_BLOB */
+#endif /* KMS_LOW_LEVEL_C */
 
 /*
  * Embedded objects definition

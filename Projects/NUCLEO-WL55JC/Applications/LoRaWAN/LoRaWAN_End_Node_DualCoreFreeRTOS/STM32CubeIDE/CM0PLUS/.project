@@ -261,6 +261,11 @@
 			<locationURI>PARENT-7-PROJECT_LOC/Middlewares/ST/STM32_Key_Management_Services/Interface/CryptoApi/MBED/ca_rsa_mbed.c</locationURI>
 		</link>
 		<link>
+			<name>Middlewares/STM32_Key_Management_Services/kms_counter.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Middlewares/ST/STM32_Key_Management_Services/Modules/kms_counter.c</locationURI>
+		</link>
+		<link>
 			<name>Middlewares/STM32_Key_Management_Services/kms_der_x962.c</name>
 			<type>1</type>
 			<locationURI>PARENT-7-PROJECT_LOC/Middlewares/ST/STM32_Key_Management_Services/Core/kms_der_x962.c</locationURI>
@@ -499,6 +504,11 @@
 			<name>Middlewares/Third_Party/LoRaWAN/LmhpCompliance.c</name>
 			<type>1</type>
 			<locationURI>PARENT-7-PROJECT_LOC/Middlewares/Third_Party/LoRaWAN/LmHandler/Packages/LmhpCompliance.c</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/Third_Party/LoRaWAN/LmhpPackagesRegistration.c</name>
+			<type>1</type>
+			<locationURI>PARENT-7-PROJECT_LOC/Middlewares/Third_Party/LoRaWAN/LmHandler/Packages/LmhpPackagesRegistration.c</locationURI>
 		</link>
 		<link>
 			<name>Middlewares/Third_Party/LoRaWAN/LoRaMac.c</name>

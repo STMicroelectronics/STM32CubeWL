@@ -126,12 +126,12 @@ extern "C" {
 
 /**
   * @brief Region 4 - Forbid all access to the active slot.
-  *                   From 0x08018000 ==> 0x0801BFFF (16 kbytes)
+  *                   From 0x08018000 ==> 0x0801B7FF (14 kbytes)
   */
 #define SFU_PROTECT_MPU_APP_FLASHEXE_RGNV  MPU_REGION_NUMBER4
 #define SFU_PROTECT_MPU_APP_FLASHEXE_START 0x08018000UL
 #define SFU_PROTECT_MPU_APP_FLASHEXE_SIZE  MPU_REGION_SIZE_16KB
-#define SFU_PROTECT_MPU_APP_FLASHEXE_SREG  0x00U           /*!< All subregions activated */
+#define SFU_PROTECT_MPU_APP_FLASHEXE_SREG  0x80U           /*!< 16 Kbytes / 8 * 7 ==> 14 Kbytes */
 #define SFU_PROTECT_MPU_APP_FLASHEXE_PERM  MPU_REGION_NO_ACCESS
 #define SFU_PROTECT_MPU_APP_FLASHEXE_EXECV MPU_INSTRUCTION_ACCESS_DISABLE
 #define SFU_PROTECT_MPU_APP_FLASHEXE_TEXV  MPU_TEX_LEVEL0
@@ -140,12 +140,12 @@ extern "C" {
 
 /**
   * @brief Region 5 - Forbid all access to the active slot.
-  *                   In addition to region 4, from 0x08015000 ==> 0x08017FFF (12 kbytes)
+  *                   In addition to region 4, from 0x08014800 ==> 0x08017FFF (14 kbytes)
   */
 #define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_RGNV  MPU_REGION_NUMBER5
 #define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_START 0x08014000UL
 #define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_SIZE  MPU_REGION_SIZE_16KB
-#define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_SREG  0x03U    /*!< 16 Kbytes / 8 * 6 ==> 12 Kbytes */
+#define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_SREG  0x01U    /*!< 16 Kbytes / 8 * 7 ==> 14 Kbytes */
 #define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_PERM  MPU_REGION_NO_ACCESS
 #define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_EXECV MPU_INSTRUCTION_ACCESS_DISABLE
 #define SFU_PROTECT_MPU_APP_FLASHEXE_ADJUST_TEXV  MPU_TEX_LEVEL0
@@ -176,12 +176,12 @@ extern "C" {
 /**
   * @brief Region 4 - Enable the execution for the active slot in unprivileged mode.
   *                   Read only capability configured
-  *                   From 0x08018000 ==> 0x0801BFFF (16 kbytes)
+  *                   From 0x08018000 ==> 0x0801B7FF (14 kbytes)
   */
 #define APP_PROTECT_MPU_FLASHEXE_RGNV  MPU_REGION_NUMBER4
 #define APP_PROTECT_MPU_FLASHEXE_START 0x08018000UL
 #define APP_PROTECT_MPU_FLASHEXE_SIZE  MPU_REGION_SIZE_16KB
-#define APP_PROTECT_MPU_FLASHEXE_SREG  0x00U           /*!< All subregions activated */
+#define APP_PROTECT_MPU_FLASHEXE_SREG  0x80U           /*!< 16 Kbytes / 8 * 7 ==> 14 Kbytes */
 #define APP_PROTECT_MPU_FLASHEXE_PERM  MPU_REGION_PRIV_RO_URO
 #define APP_PROTECT_MPU_FLASHEXE_EXECV MPU_INSTRUCTION_ACCESS_ENABLE
 #define APP_PROTECT_MPU_FLASHEXE_TEXV  MPU_TEX_LEVEL0
@@ -191,12 +191,12 @@ extern "C" {
 /**
   * @brief Region 5 - Enable the execution for active slot in unprivileged mode.
   *                   Read only capability configured
-  *                   In addition to region 4, from 0x08015000 ==> 0x08017FFF (12 kbytes)
+  *                   In addition to region 4, from 0x08014800 ==> 0x08017FFF (14 kbytes)
   */
 #define APP_PROTECT_MPU_FLASHEXE_ADJUST_RGNV  MPU_REGION_NUMBER5
 #define APP_PROTECT_MPU_FLASHEXE_ADJUST_START 0x08014000UL
 #define APP_PROTECT_MPU_FLASHEXE_ADJUST_SIZE  MPU_REGION_SIZE_16KB
-#define APP_PROTECT_MPU_FLASHEXE_ADJUST_SREG  0x03U    /*!< 16 Kbytes / 8 * 6 ==> 12 Kbytes */
+#define APP_PROTECT_MPU_FLASHEXE_ADJUST_SREG  0x01U    /*!< 16 Kbytes / 8 * 7 ==> 14 Kbytes */
 #define APP_PROTECT_MPU_FLASHEXE_ADJUST_PERM  MPU_REGION_PRIV_RO_URO
 #define APP_PROTECT_MPU_FLASHEXE_ADJUST_EXECV MPU_INSTRUCTION_ACCESS_ENABLE
 #define APP_PROTECT_MPU_FLASHEXE_ADJUST_TEXV  MPU_TEX_LEVEL0

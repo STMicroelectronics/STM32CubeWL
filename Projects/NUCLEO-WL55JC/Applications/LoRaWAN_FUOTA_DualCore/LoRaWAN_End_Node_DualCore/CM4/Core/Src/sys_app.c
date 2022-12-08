@@ -35,6 +35,7 @@
 #include "mbmuxif_trace.h"
 #include "mbmuxif_radio.h"
 #include "mbmuxif_lora.h"
+#include "mbmuxif_flash.h"
 #ifdef ALLOW_KMS_VIA_MBMUX /* currently not supported */
 /* #include "mbmuxif_kms.h" */
 #endif /* ALLOW_KMS_VIA_MBMUX */
@@ -347,6 +348,13 @@ static void MBMUXIF_Init(void)
     Error_Handler();
   }
   APP_LOG(TS_ON, VLEVEL_H, "Lora registration CM4-CM0PLUS completed \r\n");
+
+  init_status = MBMUXIF_FlashInit();
+  if (init_status < 0)
+  {
+    Error_Handler();
+  }
+  APP_LOG(TS_ON, VLEVEL_H, "Flash registration CM4-CM0PLUS completed \n\r");
 
   /* USER CODE BEGIN MBMUXIF_Init_Last */
 

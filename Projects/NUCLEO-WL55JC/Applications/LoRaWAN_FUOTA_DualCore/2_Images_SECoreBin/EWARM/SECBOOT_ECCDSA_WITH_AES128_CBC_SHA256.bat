@@ -36,10 +36,10 @@ set "iv=%SBSFUBootLoader%\\2_Images_SECoreBin\\Binary\\iv.bin"
 set "ecckey=%SBSFUBootLoader%\\2_Images_SECoreBin\\Binary\\ECCKEY%fwid%.txt"
 IF "%fwid%"=="2" (
 set "priorbin=%userAppBinary%\\SBSFU_LoRaWAN_End_Node_DualCore_CM0Plus.bin"
-set "sbsfuelf=%SBSFUBootLoader%\\2_Images_SBSFU\\EWARM\\CM4\\Exe\\Project.out"
+set "sbsfuelf=%SBSFUBootLoader%\\2_Images_SBSFU\\EWARM\\2_Images_SBSFU_CM4\\Exe\\Project.out"
 goto setkeys
 )
-set "sbsfuelf=%SBSFUBootLoader%\\2_Images_SBSFU\\EWARM\\CM0PLUS\\Exe\\Project.out"
+set "sbsfuelf=%SBSFUBootLoader%\\2_Images_SBSFU\\EWARM\\2_Images_SBSFU_CM0PLUS\\Exe\\Project.out"
 :setkeys
 set "oemkey=%SBSFUBootLoader%\\2_Images_SECoreBin\\Binary\\OEM_KEY_COMPANY%fwid%_key_AES_CBC.bin"
 set "mapping=%SBSFUBootLoader%\\Linker_Common\\EWARM\\mapping_fwimg.icf"

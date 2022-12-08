@@ -136,7 +136,7 @@ Several steps to run BFU application :
    - Stop = 1 bit
    - Flow control = none
 
-4. Load BFU image into target memory with your preferred toolchain or STM32CubeProgammer.
+4. Load BFU image into target memory with your preferred toolchain or STM32CubeProgrammer.
 
 5. Once the BFU software is downloaded, power cycle the board (unplug/plug USB cable) : the BFU
    application starts and configures the security mechanisms if some of them are enabled.

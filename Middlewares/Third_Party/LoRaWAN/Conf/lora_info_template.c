@@ -23,6 +23,8 @@
 #include "lora_info.h"
 #include "lorawan_conf.h"
 #include "sys_app.h" /* APP_PRINTF */
+#include "platform.h" /* Needed for Error_Handler */
+#include "features_info.h"
 
 /* USER CODE BEGIN Includes */
 
@@ -47,19 +49,23 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-static LoraInfo_t loraInfo = {0, 0};
 
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
+/**
+  * @brief initialize the LoraMacInfo capabilities table
+  */
+void StoreValueInFeatureListTable(void);
 
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Exported variables --------------------------------------------------------*/
+UTIL_MEM_PLACE_IN_SECTION("MB_MEM3")  LoraInfo_t loraInfo;
 
 /* USER CODE BEGIN EV */
 
@@ -68,7 +74,7 @@ static LoraInfo_t loraInfo = {0, 0};
 /* Exported functions --------------------------------------------------------*/
 void LoraInfo_Init(void)
 {
-  loraInfo.ActivationMode = 0;
+  loraInfo.ContextManagement = 0;
   loraInfo.Region = 0;
   loraInfo.ClassB = 0;
   loraInfo.Kms = 0;
@@ -125,11 +131,18 @@ void LoraInfo_Init(void)
 
 #if (!defined (LORAWAN_KMS) || (LORAWAN_KMS == 0))
   loraInfo.Kms = 0;
-  loraInfo.ActivationMode = 3;
 #else /* LORAWAN_KMS == 1 */
   loraInfo.Kms = 1;
-  loraInfo.ActivationMode = ACTIVATION_BY_PERSONALIZATION + (OVER_THE_AIR_ACTIVATION << 1);
 #endif /* LORAWAN_KMS */
+
+#if (!defined (CONTEXT_MANAGEMENT_ENABLED) || (CONTEXT_MANAGEMENT_ENABLED == 0))
+  loraInfo.ContextManagement = 0;
+#else /* CONTEXT_MANAGEMENT_ENABLED == 1 */
+  loraInfo.ContextManagement = 1;
+#endif /* CONTEXT_MANAGEMENT_ENABLED */
+
+  /* For DualCore */
+  StoreValueInFeatureListTable();
   /* USER CODE BEGIN LoraInfo_Init_2 */
 
   /* USER CODE END LoraInfo_Init_2 */
@@ -148,6 +161,50 @@ LoraInfo_t *LoraInfo_GetPtr(void)
 /* USER CODE END EF */
 
 /* Private functions --------------------------------------------------------*/
+void StoreValueInFeatureListTable(void)
+{
+  FEAT_INFO_List_t *p_MBMUX_Cm0plusFeatureList = NULL;
+  FEAT_INFO_Param_t  *p_feature;
+  uint8_t i;
+  uint8_t cm0plus_nr_of_supported_features;
+  uint8_t found = 0;
+
+  /* USER CODE BEGIN StoreValueInFeatureListTable_1 */
+
+  /* USER CODE END StoreValueInFeatureListTable_1 */
+
+  p_MBMUX_Cm0plusFeatureList = FEAT_INFO_GetListPtr();
+
+  if (p_MBMUX_Cm0plusFeatureList != NULL)
+  {
+    cm0plus_nr_of_supported_features = p_MBMUX_Cm0plusFeatureList->Feat_Info_Cnt;
+
+    for (i = 0; i < cm0plus_nr_of_supported_features;  i++)
+    {
+      p_feature = i + p_MBMUX_Cm0plusFeatureList->Feat_Info_TableAddress;
+      if (p_feature->Feat_Info_Feature_Id == FEAT_INFO_LORAWAN_ID)
+      {
+        found = 1;
+        break;
+      }
+    }
+  }
+
+  if (found)
+  {
+    p_feature->Feat_Info_Config_Size = sizeof(LoraInfo_t) / sizeof(uint32_t);
+    p_feature->Feat_Info_Config_Ptr = &loraInfo;
+  }
+  else
+  {
+    Error_Handler();
+  }
+
+  /* USER CODE BEGIN StoreValueInFeatureListTable_2 */
+
+  /* USER CODE END StoreValueInFeatureListTable_2 */
+  return;
+}
 
 /* USER CODE BEGIN PF */
 

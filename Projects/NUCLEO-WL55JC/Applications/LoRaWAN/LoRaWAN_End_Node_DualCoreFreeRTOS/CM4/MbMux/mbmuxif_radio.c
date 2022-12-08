@@ -26,8 +26,8 @@
 #include "stm32_mem.h"
 #include "cmsis_os.h"
 #include "radio_mbwrapper.h"
-#include "subghz_phy_version.h"
 #include "utilities_def.h"
+#include "app_version.h"
 
 /* USER CODE BEGIN Includes */
 
@@ -112,25 +112,32 @@ static void Thd_RadioNotifRcvProcess(void *argument);
 /* Exported functions --------------------------------------------------------*/
 int8_t MBMUXIF_RadioInit(void)
 {
-  FEAT_INFO_Param_t *p_cm0plus_specific_features_info;
+  FEAT_INFO_Param_t *p_cm0plus_system_info;
+  int32_t cm0_vers = 0;
   int8_t ret = 0;
 
   /* USER CODE BEGIN MBMUXIF_RadioInit_1 */
 
   /* USER CODE END MBMUXIF_RadioInit_1 */
 
-  p_cm0plus_specific_features_info = MBMUXIF_SystemGetFeatCapabInfoPtr(FEAT_INFO_RADIO_ID);
-  if (p_cm0plus_specific_features_info->Feat_Info_Feature_Version != SUBGHZ_PHY_VERSION)
+  p_cm0plus_system_info = MBMUXIF_SystemGetFeatCapabInfoPtr(FEAT_INFO_SYSTEM_ID);
+  /* abstract CM0 release version from RC (release candidate) and compare */
+  cm0_vers = p_cm0plus_system_info->Feat_Info_Feature_Version >> APP_VERSION_SUB2_SHIFT;
+  if (cm0_vers < (LAST_COMPATIBLE_CM0_RELEASE >> APP_VERSION_SUB2_SHIFT))
   {
-    ret = -4; /* version mismatch */
+    ret = -4; /* version incompatibility */
   }
   if (ret >= 0)
   {
-    ret = MBMUX_RegisterFeature(FEAT_INFO_RADIO_ID, MBMUX_CMD_RESP, MBMUXIF_IsrRadioRespRcvCb, aRadioCmdRespBuff, sizeof(aRadioCmdRespBuff));
+    ret = MBMUX_RegisterFeature(FEAT_INFO_RADIO_ID, MBMUX_CMD_RESP,
+                                MBMUXIF_IsrRadioRespRcvCb,
+                                aRadioCmdRespBuff, sizeof(aRadioCmdRespBuff));
   }
   if (ret >= 0)
   {
-    ret = MBMUX_RegisterFeature(FEAT_INFO_RADIO_ID, MBMUX_NOTIF_ACK, MBMUXIF_IsrRadioNotifRcvCb, aRadioNotifAckBuff, sizeof(aRadioNotifAckBuff));
+    ret = MBMUX_RegisterFeature(FEAT_INFO_RADIO_ID, MBMUX_NOTIF_ACK,
+                                MBMUXIF_IsrRadioNotifRcvCb,
+                                aRadioNotifAckBuff, sizeof(aRadioNotifAckBuff));
   }
 
   if (ret >= 0)

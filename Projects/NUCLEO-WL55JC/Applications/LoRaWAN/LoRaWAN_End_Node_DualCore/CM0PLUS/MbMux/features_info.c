@@ -24,7 +24,7 @@
 #include "features_info.h"
 #include "lora_info.h"
 #include "lorawan_version.h"
-#include "lora_app_version.h"
+#include "app_version.h"
 #include "subghz_phy_version.h"
 #include "stm32_mem.h"
 

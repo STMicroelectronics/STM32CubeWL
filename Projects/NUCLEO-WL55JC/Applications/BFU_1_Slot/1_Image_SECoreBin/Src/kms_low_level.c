@@ -16,7 +16,6 @@
   *
   ******************************************************************************
   */
-
 #include "kms.h"
 #include "kms_low_level.h"
 #include "se_low_level.h"
@@ -63,6 +62,23 @@ uint32_t kms_ll_mem_logging_idx;
 /* Private function prototypes -----------------------------------------------*/
 /* Private function ----------------------------------------------------------*/
 /* Exported functions --------------------------------------------------------*/
+/**
+  * @brief  Initialize resources required for the low level services
+  * @retval Operation status
+  */
+CK_RV KMS_LL_Initialize(void)
+{
+  return CKR_OK;
+}
+
+/**
+  * @brief  Deinitialize the resources required for the low level services
+  * @retval Operation status
+  */
+CK_RV KMS_LL_Finalize(void)
+{
+  return CKR_OK;
+}
 
 /**
   * @brief  Read data from flash and store into buffer
@@ -120,6 +136,27 @@ void KMS_LL_IsBufferInSecureEnclave(void *pBuffer, uint32_t ulSize)
   return;
 }
 #endif /* KMS_SE_CHECK_PARAMS */
+
+#if defined(KMS_ENCRYPT_DECRYPT_BLOB)
+/**
+  * @brief  Generate the KMS data storage key
+  * @retval Operation status
+  */
+CK_RV KMS_LL_DataStorageKey_Init(void)
+{
+  return CKR_OK;
+}
+
+/**
+  * @brief  Generate a random number
+  * @param  pRandomData buffer to store the random number
+  * @retval Operation status
+  */
+CK_RV KMS_LL_GetRandomData(uint32_t *pRandomData)
+{
+  return CKR_FUNCTION_NOT_SUPPORTED;
+}
+#endif /* KMS_ENCRYPT_DECRYPT_BLOB */
 
 /**
   * @brief  An error occurred

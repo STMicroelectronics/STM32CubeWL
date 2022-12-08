@@ -47,7 +47,7 @@
   *
   *      * int HW_FLASH_Erase( uint32_t page,
   *                            uint16_t n,
-  *                            int interrupt );
+  *                            int32_t interrupt );
   *
   * - Configuration definitions:
   *
@@ -175,24 +175,17 @@ extern int32_t EE_Write(int32_t bank, uint16_t addr, uint32_t data);
 /**
   * EE_Clean
   *
-  * Erase obsolete pool of pages in polling or interrupt mode.
+  * Erase obsolete pool of pages in polling mode.
   * This function should be called when EE_Write() has returned EE_CLEAN_NEEDED
   * (and only in that case)
-  * If interrupt mode is used, the user must declare a function with the
-  * following prototype (see hw.h):
-  *  void HWCB_FLASH_EndOfCleanup( void );
-  * this function is called under FLASH IRQ handler at end of cleanup.
   *
   * bank:   index of the bank (0 or 1)
-  *
-  * interrupt: 0 -> polling mode
-  *            1 -> interrupt mode
   *
   * return: EE_OK in case of success
   *         EE..._ERROR in case of error
   */
 
-extern int32_t EE_Clean(int32_t bank, int32_t interrupt);
+extern int32_t EE_Clean(int32_t bank);
 
 /* USER CODE BEGIN EFP */
 

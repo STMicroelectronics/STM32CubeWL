@@ -2,7 +2,8 @@
  * \file      LmhpFragmentation.h
  *
  * \brief     Implements the LoRa-Alliance fragmented data block transport package
- *            Specification: https://lora-alliance.org/sites/default/files/2018-09/fragmented_data_block_transport_v1.0.0.pdf
+ *            Specification V1.0.0: https://resources.lora-alliance.org/technical-specifications/lorawan-fragmented-data-block-transport-specification-v1-0-0
+ *            Specification V2.0.0: https://resources.lora-alliance.org/technical-specifications/ts004-2-0-0-fragmented-data-block-transport
  *
  * \copyright Revised BSD License, see section \ref LICENSE.
  *
@@ -21,6 +22,11 @@
  */
 #ifndef __LMHP_FRAGMENTATION_H__
 #define __LMHP_FRAGMENTATION_H__
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 #include "LmhPackage.h"
 #include "FragDecoder.h"
@@ -57,10 +63,15 @@ typedef struct LmhpFragmentationParams_s
      *                                                  FRAG_SESSION_FINISHED or
      *                                                  FragDecoder.Status.FragNbLost]
      * \param [in] size   Received file size
+     * \param [out] addr  Pointer address of the unfragmented datablock
      */
-    void ( *OnDone )( int32_t status, uint32_t size );
-}LmhpFragmentationParams_t;
+    void ( *OnDone )( int32_t status, uint32_t size, uint32_t *addr );
+} LmhpFragmentationParams_t;
 
 LmhPackage_t *LmhpFragmentationPackageFactory( void );
 
-#endif // __LMHP_FRAGMENTATION_H__
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __LMHP_FRAGMENTATION_H__ */

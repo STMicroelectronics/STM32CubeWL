@@ -63,14 +63,9 @@ extern "C"
 #define LORAMAC_CRYPTO_UNICAST_KEYS                 0
 
 /*!
- * Start value for multicast keys enumeration
- */
-#define LORAMAC_CRYPTO_MULTICAST_KEYS               127
-
-/*!
  * Maximum number of multicast context
  */
-#define LORAMAC_MAX_MC_CTX                          1 /* ST_WORKAROUND: reduced LORAMAC_MAX_MC_CTX */
+#define LORAMAC_MAX_MC_CTX                          1
 
 /*!
  * LoRaWAN devices classes definition
@@ -157,7 +152,6 @@ typedef enum eFCntIdentifier
      * this counter is used for every kind of downlink frame.
      */
     FCNT_DOWN,
-    /* ST_WORKAROUND_BEGIN: reduced LORAMAC_MAX_MC_CTX */
 #if ( LORAMAC_MAX_MC_CTX > 0 )
     /*!
      * Multicast downlink counter for index 0
@@ -182,7 +176,16 @@ typedef enum eFCntIdentifier
      */
     MC_FCNT_DOWN_3,
 #endif /* LORAMAC_MAX_MC_CTX > 3 */
-    /* ST_WORKAROUND_BEGIN: reduced LORAMAC_MAX_MC_CTX */
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01010100 ))
+    /*!
+     * RJcount1 is a counter incremented with every transmitted  Type 1 Rejoin request.
+     */
+    RJ_COUNT_0,
+    /*!
+     * RJcount0 is a counter incremented with every transmitted Type 0 or 2 Rejoin request.
+     */
+    RJ_COUNT_1,
+#endif /* LORAMAC_VERSION */
 }FCntIdentifier_t;
 
 /*!
@@ -198,7 +201,10 @@ typedef enum eKeyIdentifier
      * Network root key
      */
     NWK_KEY,
-#if ( USE_LRWAN_1_1_X_CRYPTO == 1 ) /* ST_WORKAROUND: integrate 1.1.x keys only if required */
+    /*!
+     * Concatenation key of DevEUI and JoinEUI
+     */
+    DEV_JOIN_EUI_ADDR_KEY,
     /*!
      * Join session integrity key
      */
@@ -219,16 +225,18 @@ typedef enum eKeyIdentifier
      * Network session encryption key
      */
     NWK_S_ENC_KEY,
-#else /* USE_LRWAN_1_1_X_CRYPTO == 0 */
     /*!
      * Network session key
      */
     NWK_S_KEY,
-#endif /* USE_LRWAN_1_1_X_CRYPTO */
     /*!
      * Application session key
      */
     APP_S_KEY,
+    /*!
+     * Datablock MIC key
+     */
+    DATABLOCK_INT_KEY,
     /*!
      * Multicast root key
      */
@@ -236,8 +244,7 @@ typedef enum eKeyIdentifier
     /*!
      * Multicast key encryption key
      */
-    MC_KE_KEY = LORAMAC_CRYPTO_MULTICAST_KEYS,
-    /* ST_WORKAROUND_BEGIN: reduced LORAMAC_MAX_MC_CTX */
+    MC_KE_KEY,
 #if ( LORAMAC_MAX_MC_CTX > 0 )
     /*!
      * Multicast root key index 0
@@ -294,7 +301,6 @@ typedef enum eKeyIdentifier
      */
     MC_NWK_S_KEY_3,
 #endif /* LORAMAC_MAX_MC_CTX > 3 */
-    /* ST_WORKAROUND_END */
     /*!
      * Zero key for slot randomization in class B
      */
@@ -310,7 +316,6 @@ typedef enum eKeyIdentifier
  */
 typedef enum eAddressIdentifier
 {
-    /* ST_WORKAROUND_BEGIN: reduced LORAMAC_MAX_MC_CTX */
 #if ( LORAMAC_MAX_MC_CTX > 0 )
     /*!
      * Multicast Address for index 0
@@ -339,41 +344,47 @@ typedef enum eAddressIdentifier
      * Unicast End-device address
      */
     UNICAST_DEV_ADDR,
-    /* ST_WORKAROUND_END */
 }AddressIdentifier_t;
 
 /*
  * Multicast Rx window parameters
  */
-typedef union uMcRxParams
+typedef struct sMcRxParams
 {
-    struct
+    /*!
+     * Multicats channel LoRaWAN class B or C
+     */
+    DeviceClass_t Class;
+    union
     {
-        /*!
-            * Reception frequency of the ping slot windows
-            */
-        uint32_t Frequency;
-        /*!
-            * Datarate of the ping slot
-            */
-        int8_t Datarate;
-        /*!
-            * This parameter is necessary for class B operation. It defines the
-            * periodicity of the multicast downlink slots
-            */
-        uint16_t Periodicity;
-    }ClassB;
-    struct
-    {
-        /*!
-        * Reception frequency of the ping slot windows
-        */
-        uint32_t Frequency;
-        /*!
-        * Datarate of the ping slot
-        */
-        int8_t Datarate;
-    }ClassC;
+        struct
+        {
+            /*!
+             * Reception frequency of the ping slot windows
+             */
+            uint32_t Frequency;
+            /*!
+             * Datarate of the ping slot
+             */
+            int8_t Datarate;
+            /*!
+             * This parameter is necessary for class B operation. It defines the
+             * periodicity of the multicast downlink slots
+             */
+            uint16_t Periodicity;
+        }ClassB;
+        struct
+        {
+            /*!
+             * Reception frequency of the ping slot windows
+             */
+            uint32_t Frequency;
+            /*!
+             * Datarate of the ping slot
+             */
+            int8_t Datarate;
+        }ClassC;
+    }Params;
 }McRxParams_t;
 
 /*!
@@ -386,10 +397,6 @@ typedef struct sMcChannelParams
      * Indicates which set of keys are to be used. \ref uMcKeys
      */
     bool IsRemotelySetup;
-    /*!
-     * Multicats channel LoRaWAN class B or C
-     */
-    DeviceClass_t Class;
     /*!
      * True if the entry is active
      */
@@ -474,7 +481,7 @@ typedef struct sMulticastCtx
      * Ping offset of the multicast channel for Class B
      */
     uint16_t PingOffset;
-#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+#if (defined( LORAMAC_VERSION ) && (( LORAMAC_VERSION == 0x01000400 ) || ( LORAMAC_VERSION == 0x01010100 )))
     /*!
      * Set to 1, if the FPending bit is set
      */
@@ -512,6 +519,12 @@ typedef enum eJoinReqIdentifier
  */
 typedef enum eLoRaMacMoteCmd
 {
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01010100 ))
+    /*!
+     * ResetInd
+     */
+    MOTE_MAC_RESET_IND               = 0x01,
+#endif /* LORAMAC_VERSION */
     /*!
      * LinkCheckReq
      */
@@ -548,10 +561,26 @@ typedef enum eLoRaMacMoteCmd
      * DlChannelAns
      */
     MOTE_MAC_DL_CHANNEL_ANS          = 0x0A,
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01010100 ))
+    /*!
+     * RekeyInd
+     */
+    MOTE_MAC_REKEY_IND               = 0x0B,
+    /*!
+     * ADRParamSetupAns
+     */
+    MOTE_MAC_ADR_PARAM_SETUP_ANS     = 0x0C,
+#endif /* LORAMAC_VERSION */
     /*!
      * DeviceTimeReq
      */
     MOTE_MAC_DEVICE_TIME_REQ         = 0x0D,
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01010100 ))
+    /*!
+     * RejoinParamSetupAns
+     */
+    MOTE_MAC_REJOIN_PARAM_ANS        = 0x0F,
+#endif /* LORAMAC_VERSION */
     /*!
      * PingSlotInfoReq
      */
@@ -561,7 +590,7 @@ typedef enum eLoRaMacMoteCmd
      */
 #if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000300 ))
     MOTE_MAC_PING_SLOT_FREQ_ANS      = 0x11,
-#elif (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+#elif (defined( LORAMAC_VERSION ) && (( LORAMAC_VERSION == 0x01000400 ) || ( LORAMAC_VERSION == 0x01010100 )))
     MOTE_MAC_PING_SLOT_CHANNEL_ANS   = 0x11,
 #endif /* LORAMAC_VERSION */
     /*!
@@ -572,6 +601,20 @@ typedef enum eLoRaMacMoteCmd
      * BeaconFreqAns
      */
     MOTE_MAC_BEACON_FREQ_ANS         = 0x13,
+    /*!
+     * BeaconSettingsReq
+     */
+    MOTE_MAC_BEACON_SETTINGS_REQ     = 0x14,
+    /*!
+     * BeaconSettingsAns
+     */
+    MOTE_MAC_BEACON_SETTINGS_ANS     = 0x15,
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01010100 ))
+    /*!
+     * DeviceModeInd ( Class C only )
+     */
+    MOTE_MAC_DEVICE_MODE_IND         = 0x20,
+#endif /* LORAMAC_VERSION */
 }LoRaMacMoteCmd_t;
 
 /*!
@@ -621,10 +664,30 @@ typedef enum eLoRaMacSrvCmd
      * DlChannelReq
      */
     SRV_MAC_DL_CHANNEL_REQ           = 0x0A,
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01010100 ))
+    /*!
+     * RekeyConf
+     */
+    SRV_MAC_REKEY_CONF               = 0x0B,
+    /*!
+     * ADRParamSetupReq
+     */
+    SRV_MAC_ADR_PARAM_SETUP_REQ      = 0x0C,
+#endif /* LORAMAC_VERSION */
     /*!
      * DeviceTimeAns
      */
     SRV_MAC_DEVICE_TIME_ANS          = 0x0D,
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01010100 ))
+    /*!
+     * ForceRejoinReq
+     */
+    SRV_MAC_FORCE_REJOIN_REQ         = 0x0E,
+    /*!
+     * RejoinParamSetupReq
+     */
+    SRV_MAC_REJOIN_PARAM_REQ         = 0x0F,
+#endif /* LORAMAC_VERSION */
     /*!
      * PingSlotInfoAns
      */
@@ -641,6 +704,16 @@ typedef enum eLoRaMacSrvCmd
      * BeaconFreqReq
      */
     SRV_MAC_BEACON_FREQ_REQ          = 0x13,
+    /*!
+     * BeaconSettingsNotice
+     */
+    SRV_MAC_BEACON_SETTINGS_NOTICE   = 0x15,
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01010100 ))
+    /*!
+     * DeviceModeConf ( Class C only )
+     */
+    SRV_MAC_DEVICE_MODE_CONF         = 0x20,
+#endif /* LORAMAC_VERSION */
 }LoRaMacSrvCmd_t;
 
 /*!
@@ -769,6 +842,12 @@ typedef enum eLoRaMacFrameType
      * LoRaMAC confirmed down-link frame
      */
     FRAME_TYPE_DATA_CONFIRMED_DOWN   = 0x05,
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01010100 ))
+    /*!
+     * LoRaMAC Rejoin Request
+     */
+    FRAME_TYPE_REJOIN                = 0x06,
+#endif /* LORAMAC_VERSION */
     /*!
      * LoRaMAC proprietary frame
      */

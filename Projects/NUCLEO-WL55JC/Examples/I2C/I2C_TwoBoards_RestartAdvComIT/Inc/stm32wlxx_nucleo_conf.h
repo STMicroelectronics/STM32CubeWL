@@ -42,11 +42,21 @@
 /** @defgroup STM32WLXX_NUCLEO_CONFIG_Exported_Constants Exported Constants
   * @{
   */
+#if (USE_VCP_CONNECTION == 1)
+/* COM usage define */
+#define USE_BSP_COM_FEATURE                 1U
+
+/* COM log define */
+#define USE_COM_LOG                         1U
+
+#else
 /* COM usage define */
 #define USE_BSP_COM_FEATURE                 0U
 
 /* COM log define */
 #define USE_COM_LOG                         0U
+
+#endif /* USE_VCP_CONNECTION */
 
 /* IRQ priorities */
 #define BSP_BUTTON_USER_IT_PRIORITY         15U

@@ -2,7 +2,8 @@
  * \file      LmhpRemoteMcastSetup.h
  *
  * \brief     Implements the LoRa-Alliance remote multicast setup package
- *            Specification: https://lora-alliance.org/sites/default/files/2018-09/remote_multicast_setup_v1.0.0.pdf
+ *            Specification V1.0.0: https://resources.lora-alliance.org/technical-specifications/lorawan-remote-multicast-setup-specification-v1-0-0
+ *            Specification V2.0.0: https://resources.lora-alliance.org/technical-specifications/ts005-2-0-0-remote-multicast-setup
  *
  * \copyright Revised BSD License, see section \ref LICENSE.
  *
@@ -22,6 +23,11 @@
 #ifndef __LMHP_REMOTE_MCAST_SETUP_H__
 #define __LMHP_REMOTE_MCAST_SETUP_H__
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "LmhPackage.h"
 
 /*!
@@ -33,4 +39,8 @@
 
 LmhPackage_t *LmhpRemoteMcastSetupPackageFactory( void );
 
-#endif // __LMHP_REMOTE_MCAST_SETUP_H__
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __LMHP_REMOTE_MCAST_SETUP_H__ */

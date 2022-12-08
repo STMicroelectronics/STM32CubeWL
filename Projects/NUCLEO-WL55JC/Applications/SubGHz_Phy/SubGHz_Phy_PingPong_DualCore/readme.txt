@@ -176,7 +176,7 @@ Applications, SubGHz_Phy, PingPong, DualCore
 
 @par Hardware and Software environment
 
-  - This example runs on the STM32WLxx Nucleo board.
+  - This example runs on the STM32WLxx Nucleo boards. Both NUCLEO-WL55JC1 (HIGH-BAND) and NUCLEO-WL55JC2 (LOW-BAND) are suitable.
 
   - STM32WLxx Nucleo board Set-up
     - Connect the Nucleo board to your PC with a USB cable type A to micro-B
@@ -230,11 +230,11 @@ In order to make the program work, you must do the following :
 @par How to use MX to modify some RF middleware and application settings
   This example is compatible (with some problems/limitations) with STM32CubeMX 
   and the RF application and middleware configuration can be modified via GUI. Few warnings and guidelines:
-  - ioc file is provided in the project directory and can be opened with STM32CubeMX v6.5.0 or higher.
+  - ioc file is provided in the project directory and can be opened with STM32CubeMX v6.7.0 or higher.
   - warning: when regenerating with the provided ioc file, 
     the IDE projects are regenerated and paths to HAL and MWs files from STM32Cube/Repository location are erroneously added; to avoid that, 
     user shall uncheck the "Use Default Firmware Location" in the GUI "Project-Manager" panel
-    and shall replace "Firmware Relative Path" with the root directory of the STM32CubeWL firmware package  (e.g. C:\myDir\STM32Cube_FW_WL_V1.2.0\);
+    and shall replace "Firmware Relative Path" with the root directory of the STM32CubeWL firmware package  (e.g. C:\myDir\STM32Cube_FW_WL_V1.3.0\);
     problem will be fixed in next STM32CubeMX version.
   - .extSettings file allows to add to the generated IDE projects additional files not generated natively by MX (e.g. BSP files).
   - when regenerating on existing code and existing linker files:
@@ -243,6 +243,8 @@ In order to make the program work, you must do the following :
   - when regenerating after copying only the ioc file in an empty directory:
     - STM32CubeMX generates default project files and default linker files. (Please check original linker file from project directory)
     - it is up to the user to to fill the USER CODE sections with his application code.
+  This SubGHz_Phy project is based on "Advanced template" (MX GUI Application). 
+  USER CODE SECTION are filled to end up with "Switch_Fhss_Fsk_Lora" project.
 
 @par How to use it with Azure ThreadX RTOS?
   This example can be combined with Azure ThreadX RTOS via STM32CubeMX (CM4 core only).

@@ -673,7 +673,7 @@ typedef struct sLoRaMacParams
      */
     uint32_t JoinAcceptDelay2;
     /*!
-     * Number of uplink messages repetitions [1:15] (unconfirmed messages only)
+     * Number of uplink messages repetitions [1:15]
      */
     uint8_t ChannelsNbTrans;
     /*!
@@ -704,19 +704,26 @@ typedef struct sLoRaMacParams
      * Antenna gain of the node
      */
     float AntennaGain;
-    /* ST_WORKAROUND_BEGIN: Keep repeater feature */
+    /*!
+     * Limit of uplinks without any downlink response before the ADRACKReq bit
+     * will be set.
+     */
+    uint16_t AdrAckLimit;
+    /*!
+     * Limit of uplinks without any downlink response after a the first frame
+     * with set ADRACKReq bit before the trying to regain the connectivity.
+     */
+    uint16_t AdrAckDelay;
     /*!
      * Indicates if the node supports repeaters
      */
     bool RepeaterSupport;
-    /* ST_WORKAROUND_END */
     /*!
      * Default response timeout for class b and class c confirmed downlink frames in milli seconds.
      */
     uint32_t RxBCTimeout;
 }LoRaMacParams_t;
 
-/* ST_WORKAROUND_BEGIN: Move Rx Status from McpsIndication_t as generic struct */
 /*!
  * Global RX layer status
  */
@@ -735,7 +742,6 @@ typedef struct sLoRaMacRxStatus
     */
     LoRaMacRxSlot_t RxSlot;
 }LoRaMacRxStatus_t;
-/* ST_WORKAROUND_END */
 
 /*!
  * LoRaMAC data structure for a PingSlotInfoReq \ref MLME_PING_SLOT_INFO
@@ -793,7 +799,7 @@ typedef struct sBeaconInfo
      * SNR
      */
     int8_t Snr;
-#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+#if (defined( LORAMAC_VERSION ) && (( LORAMAC_VERSION == 0x01000400 ) || ( LORAMAC_VERSION == 0x01010100 )))
     /*!
      * Param
      * |  Bits | 7:2 |  1:0 |
@@ -934,10 +940,6 @@ typedef union eLoRaMacFlags_t
          */
         uint8_t MlmeInd                 : 1;
         /*!
-         * MLME-Ind to schedule an uplink pending
-         */
-        uint8_t MlmeSchedUplinkInd      : 1;
-        /*!
          * MAC cycle done
          */
         uint8_t MacDone                 : 1;
@@ -1027,6 +1029,22 @@ typedef struct sLoRaMacNvmDataGroup1
      */
     bool SrvAckRequested;
     /*!
+     * Counts the number if uplinks to know when the next Rejoin request type 0 is required.
+     * ( If requested by the server through RejoinParamSetupReq MAC command )
+     */
+    uint32_t Rejoin0UplinksCounter;
+    /*!
+     * Counter of Rejoin Request of retries.
+     * ( If requested by the server through ForceRejoinReq MAC command )
+     */
+    uint8_t ForceRejoinRetriesCounter;
+    /*!
+     * Counts the number of uplinks containing a RekeyInd MAC command to know
+     * when the end device should reverted to join state because it didn't
+     * received a RekeyConf.
+     */
+    uint16_t RekeyIndUplinksCounter;
+    /*!
      * CRC32 value of the MacGroup1 data structure.
      */
     uint32_t Crc32;
@@ -1088,7 +1106,7 @@ typedef struct sLoRaMacNvmDataGroup2
      * Enables/Disables duty cycle management (Test only)
      */
     bool DutyCycleOn;
-#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+#if (defined( LORAMAC_VERSION ) && (( LORAMAC_VERSION == 0x01000400 ) || ( LORAMAC_VERSION == 0x01010100 )))
     /*!
      * Set to true, if the datarate was increased
      * with a link adr request.
@@ -1121,6 +1139,47 @@ typedef struct sLoRaMacNvmDataGroup2
      * End-Device network activation
      */
     ActivationType_t NetworkActivation;
+    /*!
+     * Number of uplinks without Rejoin request type 0.
+     * ( If requested by the server through RejoinParamSetupReq MAC command )
+     * When it's set to 0, Rejoin0UplinksCounter won't be incremented
+     */
+    uint32_t Rejoin0UplinksLimit;
+    /*!
+     * The total number of times the device will retry the Rejoin Request.
+     * ( If requested by the server through ForceRejoinReq MAC command )
+     */
+    uint8_t ForceRejoinMaxRetries;
+    /*!
+     * Rejoin Request Type
+     * ( If requested by the server through ForceRejoinReq MAC command )
+     */
+    uint8_t ForceRejoinType;
+    /*!
+     * Time in seconds between cyclic transmission of Type 0 Rejoin requests.
+     */
+    uint32_t Rejoin0CycleInSec;
+    /*!
+     * Time in seconds between cyclic transmission of Type 1 Rejoin requests.
+     */
+    uint32_t Rejoin1CycleInSec;
+    /*!
+     * Indicates if a Rejoin request was sent and no join-accept or any downlink
+     * has been received yet.
+     */
+    bool IsRejoinAcceptPending;
+    /*!
+     * Indicates if a reqjoin request 0 is in the queue to send.
+     */
+    bool IsRejoin0RequestQueued;
+    /*!
+     * Indicates if a reqjoin request 1 is in the queue to send.
+     */
+    bool IsRejoin1RequestQueued;
+    /*!
+     * Indicates if a reqjoin request 2 is in the queue to send.
+     */
+    bool IsRejoin2RequestQueued;
     /*!
      * CRC32 value of the MacGroup2 data structure.
      */
@@ -1383,7 +1442,7 @@ typedef struct sMcpsConfirm
      */
 #if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000300 ))
     uint8_t NbRetries;
-#elif (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+#elif (defined( LORAMAC_VERSION ) && (( LORAMAC_VERSION == 0x01000400 ) || ( LORAMAC_VERSION == 0x01010100 )))
     uint8_t NbTrans;
 #endif /* LORAMAC_VERSION */
     /*!
@@ -1428,7 +1487,7 @@ typedef struct sMcpsIndication
     /*!
      * Frame pending status
      */
-    uint8_t FramePending;
+    uint8_t IsUplinkTxPending;
     /*!
      * Pointer to the received data stream
      */
@@ -1457,7 +1516,7 @@ typedef struct sMcpsIndication
      * Set if a DeviceTimeAns MAC command was received.
      */
     bool DeviceTimeAnsReceived;
-#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+#if (defined( LORAMAC_VERSION ) && (( LORAMAC_VERSION == 0x01000400 ) || ( LORAMAC_VERSION == 0x01010100 )))
     /*!
      * Response timeout for a class b or c device when a
      * confirmed downlink has been received. In all other
@@ -1476,11 +1535,14 @@ typedef struct sMcpsIndication
  * Name                         | Request | Indication | Response | Confirm
  * ---------------------------- | :-----: | :--------: | :------: | :-----:
  * \ref MLME_JOIN               | YES     | NO         | NO       | YES
+ * \ref MLME_REJOIN_0           | YES     | NO         | NO       | YES
+ * \ref MLME_REJOIN_1           | YES     | NO         | NO       | YES
+ * \ref MLME_REJOIN_2           | YES     | NO         | NO       | YES
  * \ref MLME_LINK_CHECK         | YES     | NO         | NO       | YES
  * \ref MLME_TXCW               | YES     | NO         | NO       | YES
- * \ref MLME_SCHEDULE_UPLINK    | NO      | YES        | NO       | NO
  * \ref MLME_DERIVE_MC_KE_KEY   | YES     | NO         | NO       | YES
  * \ref MLME_DERIVE_MC_KEY_PAIR | YES     | NO         | NO       | YES
+ * \ref MLME_REVERT_JOIN        | NO      | YES        | NO       | NO
  *
  * The following table provides links to the function implementations of the
  * related MLME primitives.
@@ -1516,6 +1578,12 @@ typedef enum eMlme
      */
     MLME_REJOIN_1,
     /*!
+     * Initiates sending a ReJoin-request type 2
+     *
+     * LoRaWAN Specification V1.1.0, chapter 6.2.4.2
+     */
+    MLME_REJOIN_2,
+    /*!
      * LinkCheckReq - Connectivity validation
      *
      * LoRaWAN Specification V1.0.2, chapter 5, table 4
@@ -1535,11 +1603,6 @@ typedef enum eMlme
      */
     MLME_TXCW_1,
 #endif /* LORAMAC_VERSION */
-    /*!
-     * Indicates that the application shall perform an uplink as
-     * soon as possible.
-     */
-    MLME_SCHEDULE_UPLINK,
     /*!
      * Derives the McKEKey from the AppKey or NwkKey.
      */
@@ -1588,6 +1651,13 @@ typedef enum eMlme
      * LoRaWAN end-device certification
      */
     MLME_BEACON_LOST,
+    /*!
+     *
+     * Indicates that the device hasn't received a RekeyConf and it reverts to the join state.
+     *
+     * \remark The upper layer is required to trigger the Join process again.
+     */
+    MLME_REVERT_JOIN,
 }Mlme_t;
 
 /*!
@@ -1605,6 +1675,10 @@ typedef struct sMlmeReqJoin
      * Datarate used for join request.
      */
     uint8_t Datarate;
+    /*!
+     * Channels TX power
+     */
+    int8_t TxPower;
 }MlmeReqJoin_t;
 
 /*!
@@ -1853,6 +1927,14 @@ typedef struct sMlmeIndication
  * \ref MIB_LORAWAN_VERSION                      | YES | NO
  * \ref MIB_IS_CERT_FPORT_ON                     | YES | YES
  * \ref MIB_BEACON_STATE                         | YES | NO
+ * \ref MIB_REJOIN_0_CYCLE                       | YES | YES
+ * \ref MIB_REJOIN_1_CYCLE                       | YES | YES
+ * \ref MIB_ADR_ACK_LIMIT                        | YES | YES
+ * \ref MIB_ADR_ACK_DELAY                        | YES | YES
+ * \ref MIB_ADR_ACK_DEFAULT_LIMIT                | YES | YES
+ * \ref MIB_ADR_ACK_DEFAULT_DELAY                | YES | YES
+ * \ref MIB_RSSI_FREE_THRESHOLD                  | YES | YES
+ * \ref MIB_CARRIER_SENSE_TIME                   | YES | YES
  *
  * The following table provides links to the function implementations of the
  * related MIB primitives:
@@ -1920,8 +2002,7 @@ typedef enum eMib
      * LoRaWAN Specification V1.1.0, chapter 6.1.1.3
      */
     MIB_NWK_KEY,
-    /* ST_WORKAROUND_BEGIN: integrate 1.1.x keys only if required */
-#if ( USE_LRWAN_1_1_X_CRYPTO == 1 )
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01010100 ))
     /*!
      * Join session integrity key
      *
@@ -1952,13 +2033,12 @@ typedef enum eMib
      * LoRaWAN Specification V1.1.0, chapter 6.1.2.4
      */
     MIB_NWK_S_ENC_KEY,
-#else /* USE_LRWAN_1_1_X_CRYPTO == 0 */
+#else
     /*!
      * Network session key
      */
     MIB_NWK_S_KEY,
-#endif /* USE_LRWAN_1_1_X_CRYPTO */
-    /* ST_WORKAROUND_END */
+#endif /* LORAMAC_VERSION */
     /*!
      * Application session key
      *
@@ -1971,7 +2051,6 @@ typedef enum eMib
      * LoRaWAN - Secure element specification v1
      */
     MIB_MC_KE_KEY,
-    /* ST_WORKAROUND_BEGIN: reduced LORAMAC_MAX_MC_CTX */
 #if ( LORAMAC_MAX_MC_CTX > 0 )
     /*!
      * Multicast root key index 0
@@ -2052,7 +2131,6 @@ typedef enum eMib
      */
     MIB_MC_NWK_S_KEY_3,
 #endif /* LORAMAC_MAX_MC_CTX > 3 */
-    /* ST_WORKAROUND_END */
     /*!
      * Set the network type to public or private
      *
@@ -2061,7 +2139,6 @@ typedef enum eMib
      * [true: public network, false: private network]
      */
     MIB_PUBLIC_NETWORK,
-    /* ST_WORKAROUND_BEGIN: Keep repeater feature */
     /*!
      * Support the operation with repeaters
      *
@@ -2070,7 +2147,6 @@ typedef enum eMib
      * [true: repeater support enabled, false: repeater support disabled]
      */
     MIB_REPEATER_SUPPORT,
-    /* ST_WORKAROUND_END */
     /*!
      * Communication channels. A get request will return a
      * pointer which references the first entry of the channel list. The
@@ -2118,7 +2194,7 @@ typedef enum eMib
     /*!
      * Set the number of repetitions on a channel
      *
-     * LoRaWAN Specification V1.0.2, chapter 5.2
+     * LoRaWAN Specification V1.0.2, chapter 5.2, V1.1.0, chapter 5.3
      */
     MIB_CHANNELS_NB_TRANS,
     /*!
@@ -2151,7 +2227,7 @@ typedef enum eMib
      * LoRaWAN Regional Parameters V1.0.2rB
      */
     MIB_JOIN_ACCEPT_DELAY_2,
-#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+#if (defined( LORAMAC_VERSION ) && (( LORAMAC_VERSION == 0x01000400 ) || ( LORAMAC_VERSION == 0x01010100 )))
     /*!
      * Minimum Data rate of a channel
      *
@@ -2243,6 +2319,14 @@ typedef enum eMib
      */
     MIB_LORAWAN_VERSION,
     /*!
+     * Time between periodic transmission of a Type 0 Rejoin request.
+     */
+    MIB_REJOIN_0_CYCLE,
+    /*!
+     * Time between periodic transmission of a Type 1 Rejoin request.
+     */
+    MIB_REJOIN_1_CYCLE,
+    /*!
      * Beacon interval in ms
      */
     MIB_BEACON_INTERVAL,
@@ -2299,23 +2383,45 @@ typedef enum eMib
      *
      * The allowed ranges are region specific. Please refer to \ref DR_0 to \ref DR_15 for details.
      */
-    MIB_PING_SLOT_DATARATE,
-    /*!
-     * Default response timeout for class b and class c confirmed downlink frames in milli seconds.
-     */
-    MIB_RXB_C_TIMEOUT,
-#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
-    /*!
-     * LoRaWAN certification FPort handling state (ON/OFF)
-     */
-    MIB_IS_CERT_FPORT_ON,
+     MIB_PING_SLOT_DATARATE,
+     /*!
+      * Default response timeout for class b and class c confirmed downlink frames in milli seconds.
+      */
+     MIB_RXB_C_TIMEOUT,
+#if (defined( LORAMAC_VERSION ) && (( LORAMAC_VERSION == 0x01000400 ) || ( LORAMAC_VERSION == 0x01010100 )))
+     /*!
+      * LoRaWAN certification FPort handling state (ON/OFF)
+      */
+     MIB_IS_CERT_FPORT_ON,
 #endif /* LORAMAC_VERSION */
-    /* ST_WORKAROUND_BEGIN: Retrieve the Beacon state */
-    /*!
-     * Beacon state
-     */
-    MIB_BEACON_STATE,
-    /* ST_WORKAROUND_END */
+     /*!
+      * ADR ack limit value
+      */
+     MIB_ADR_ACK_LIMIT,
+     /*!
+      * ADR ack delay value
+      */
+     MIB_ADR_ACK_DELAY,
+     /*!
+      * ADR ack default limit value
+      */
+     MIB_ADR_ACK_DEFAULT_LIMIT,
+     /*!
+      * ADR ack default delay value
+      */
+     MIB_ADR_ACK_DEFAULT_DELAY,
+     /*!
+      * RSSI free channel threshold value (KR920 and AS923 only)
+      */
+     MIB_RSSI_FREE_THRESHOLD,
+     /*!
+      * Carrier sense time value (KR920 and AS923 only)
+      */
+     MIB_CARRIER_SENSE_TIME,
+     /*!
+      * Beacon state
+      */
+     MIB_BEACON_STATE,
 }Mib_t;
 
 /*!
@@ -2377,8 +2483,7 @@ typedef union uMibParam
      * Related MIB type: \ref MIB_NWK_KEY
      */
     uint8_t* NwkKey;
-    /* ST_WORKAROUND_BEGIN: integrate 1.1.x keys only if required */
-#if ( USE_LRWAN_1_1_X_CRYPTO == 1 )
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01010100 ))
     /*!
      * Join session integrity key
      *
@@ -2409,15 +2514,14 @@ typedef union uMibParam
      * Related MIB type: \ref MIB_NWK_S_ENC_KEY
      */
     uint8_t* NwkSEncKey;
-#else /* USE_LRWAN_1_1_X_CRYPTO == 0 */
+#else
     /*!
      * Network session key
      *
      * Related MIB type: \ref MIB_NWK_S_KEY
      */
     uint8_t* NwkSKey;
-#endif /* USE_LRWAN_1_1_X_CRYPTO */
-    /* ST_WORKAROUND_END */
+#endif /* LORAMAC_VERSION */
     /*!
      * Application session key
      *
@@ -2508,14 +2612,12 @@ typedef union uMibParam
      * Related MIB type: \ref MIB_PUBLIC_NETWORK
      */
     bool EnablePublicNetwork;
-    /* ST_WORKAROUND_BEGIN: Keep repeater feature */
     /*!
      * Enable or disable repeater support
      *
      * Related MIB type: \ref MIB_REPEATER_SUPPORT
      */
     bool EnableRepeaterSupport;
-    /* ST_WORKAROUND_END */
     /*!
      * LoRaWAN Channel
      *
@@ -2594,7 +2696,7 @@ typedef union uMibParam
      * Related MIB type: \ref MIB_JOIN_ACCEPT_DELAY_2
      */
     uint32_t JoinAcceptDelay2;
-#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+#if (defined( LORAMAC_VERSION ) && (( LORAMAC_VERSION == 0x01000400 ) || ( LORAMAC_VERSION == 0x01010100 )))
     /*!
      * Channels minimum tx data rate
      *
@@ -2662,14 +2764,14 @@ typedef union uMibParam
      *
      * Related MIB type: \ref MIB_NVM_CTXS
      */
-    LoRaMacNvmData_t* Contexts;
+    void *Contexts;
     /*!
      * Returns a pointer to the backup structure holding all data which shall be stored
      * in the NVM.
      *
      * Related MIB type: \ref MIB_NVM_CTXS
      */
-    LoRaMacNvmData_t* BackupContexts;
+    void *BackupContexts;
     /*!
      * LoRaWAN MAC layer operating version when activated by ABP.
      *
@@ -2686,6 +2788,18 @@ typedef union uMibParam
         Version_t LoRaWan;
         Version_t LoRaWanRegion;
     }LrWanVersion;
+    /*!
+     * Time in seconds between cyclic transmission of Type 0 Rejoin requests.
+     */
+    uint32_t Rejoin0CycleInSec;
+    /*!
+     * Time in seconds between cyclic transmission of Type 1 Rejoin requests.
+     */
+    uint32_t Rejoin1CycleInSec;
+    /*!
+     * Time in seconds between cyclic transmission of Type 2 Rejoin requests.
+     */
+    uint32_t Rejoin2CycleInSec;
     /*!
      * Beacon interval in ms
      *
@@ -2772,7 +2886,7 @@ typedef union uMibParam
      * Related MIB type: \ref MIB_RXB_C_TIMEOUT
      */
     uint32_t RxBCTimeout;
-#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+#if (defined( LORAMAC_VERSION ) && (( LORAMAC_VERSION == 0x01000400 ) || ( LORAMAC_VERSION == 0x01010100 )))
     /*!
      * LoRaWAN certification FPort handling state (ON/OFF)
      *
@@ -2780,14 +2894,36 @@ typedef union uMibParam
      */
     bool IsCertPortOn;
 #endif /* LORAMAC_VERSION */
-    /* ST_WORKAROUND_BEGIN: Retrieve the Beacon state */
+    /*!
+     * ADR ack limit value
+     *
+     * Related MIB types: \ref MIB_ADR_ACK_LIMIT, MIB_ADR_ACK_DEFAULT_LIMIT
+     */
+    uint16_t AdrAckLimit;
+    /*!
+     * ADR ack delay value
+     *
+     * Related MIB types: \ref MIB_ADR_ACK_DELAY, MIB_ADR_ACK_DEFAULT_DELAY
+     */
+    uint16_t AdrAckDelay;
+    /*!
+     * RSSI free channel threshold (KR920 and AS923 only)
+     *
+     * Related MIB type: \ref MIB_RSSI_FREE_THRESHOLD
+     */
+    int16_t RssiFreeThreshold;
+    /*!
+     * Carrier sense time (KR920 and AS923 only)
+     *
+     * Related MIB type: \ref MIB_CARRIER_SENSE_TIME
+     */
+    uint32_t CarrierSenseTime;
     /*!
     * State of the beaconing mechanism
     *
     * Related MIB type: \ref MIB_BEACON_STATE
     */
     BeaconState_t BeaconState;
-    /* ST_WORKAROUND_END */
 }MibParam_t;
 
 /*!
@@ -2988,22 +3124,24 @@ typedef struct sLoRaMacCallback
      *          to measure the battery level]
      */
     uint8_t ( *GetBatteryLevel )( void );
-    /* ST_WORKAROUND_BEGIN: Return temperature into int16_t instead float */
     /*!
      * \brief   Measures the temperature level
      *
      * \retval  Temperature level
      */
     int16_t ( *GetTemperatureLevel )( void );
-    /* ST_WORKAROUND_END */
-    /* ST_WORKAROUND_BEGIN: Add unique ID callback */
     /*!
      * \brief   Get the board 64 bits unique ID
      *
      * \param   [out] id unique
      */
     void ( *GetUniqueId )(uint8_t *id);
-    /* ST_WORKAROUND_END */
+    /*!
+     * \brief   Get the 64 bits unique Device address
+     *
+     * \param   [out] id unique
+     */
+    void ( *GetDevAddress )(uint32_t *devAddr);
     /*!
      * \brief   Will be called when an attribute has changed in one of the context.
      *

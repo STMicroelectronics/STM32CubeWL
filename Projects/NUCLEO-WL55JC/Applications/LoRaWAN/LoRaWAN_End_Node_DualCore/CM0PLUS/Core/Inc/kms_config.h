@@ -6,7 +6,7 @@
   * @brief   This file contains configuration for Key Management Services (KMS)
   *          module functionalities.
   ******************************************************************************
-   * @attention
+  * @attention
   *
   * Copyright (c) 2020 STMicroelectronics.
   * All rights reserved.
@@ -241,6 +241,19 @@ extern "C" {
   * @note  Requires @ref KMS_IMPORT_BLOB to be enabled
   */
 //#define KMS_IMPORT_BLOB_CHUNK_SIZE      (512U)
+
+/**
+  * @brief KMS_ENCRYPT_DECRYPT_BLOB Uncomment the below line to enable the encryption of the blobs within the KMS data storage
+  * @note  Requires @ref KMS_NVM_ENABLED to be defined
+  */
+//#define KMS_ENCRYPT_DECRYPT_BLOB
+
+/**
+  * @brief KMS_SECURE_COUNTERS Uncomment the below line to support KMS secure counters
+  * @note  Mandatory to handle counter objects through specific KMS services
+  * @note  Requires @ref KMS_NVM_ENABLED or @ref KMS_VM_DYNAMIC_ENABLED to be defined
+  */
+//#define KMS_SECURE_COUNTERS
 
 /**
   * @}

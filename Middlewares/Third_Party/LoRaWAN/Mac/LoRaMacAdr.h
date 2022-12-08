@@ -83,7 +83,7 @@ typedef struct sCalcNextAdrParams
      * TX power used currently.
      */
     int8_t TxPower;
-#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+#if (defined( LORAMAC_VERSION ) && (( LORAMAC_VERSION == 0x01000400 ) || ( LORAMAC_VERSION == 0x01010100 )))
     /*!
      * NbTrans counter used currently.
      */
@@ -114,7 +114,7 @@ typedef struct sCalcNextAdrParams
  * \retval Returns true, if an ADR request should be performed.
  */
 bool LoRaMacAdrCalcNext( CalcNextAdrParams_t* adrNext, int8_t* drOut, int8_t* txPowOut, uint32_t* adrAckCounter );
-#elif (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000400 ))
+#elif (defined( LORAMAC_VERSION ) && (( LORAMAC_VERSION == 0x01000400 ) || ( LORAMAC_VERSION == 0x01010100 )))
 /*!
  * \brief Calculates the next datarate to set, when ADR is on or off.
  *

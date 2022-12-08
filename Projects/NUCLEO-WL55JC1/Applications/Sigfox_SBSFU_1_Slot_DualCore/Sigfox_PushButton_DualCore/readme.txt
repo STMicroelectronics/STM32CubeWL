@@ -77,9 +77,9 @@ Applications, SubGHz_Phy, Sigfox, PushButton, DualCore, SBSFU, KMS
   - Sigfox_PushButton_DualCore/CM0PLUS/MbMux/sigfox_mbwrapper.h                 This file implements the CM0 side wrapper of the SigfoxMac interface
                                                                                 shared between M0 and M4.
   - Sigfox_PushButton_DualCore/CM0PLUS/Sigfox/App/app_sigfox.h                  Header of application of the Sigfox Middleware
+  - Sigfox_PushButton_DualCore/CM0PLUS/Sigfox/App/app_version.h                 Definition the version of the CM0PLUS application
   - Sigfox_PushButton_DualCore/CM0PLUS/Sigfox/App/ee.h                          Header of the EEPROM emulator
   - Sigfox_PushButton_DualCore/CM0PLUS/Sigfox/App/ee_conf.h                     Header for eeprom configuration
-  - Sigfox_PushButton_DualCore/CM0PLUS/Sigfox/App/sgfx_app_version.h            Definition the version of the CM0PLUS application
   - Sigfox_PushButton_DualCore/CM0PLUS/Sigfox/App/sgfx_cstimer.h                Interface for  cstimer.c driver
   - Sigfox_PushButton_DualCore/CM0PLUS/Sigfox/App/sgfx_eeprom_if.h              eeprom interface to the upper module.
   - Sigfox_PushButton_DualCore/CM0PLUS/Sigfox/App/sigfox_data.h                 provides encrypted data
@@ -129,8 +129,8 @@ Applications, SubGHz_Phy, Sigfox, PushButton, DualCore, SBSFU, KMS
   - Sigfox_PushButton_DualCore/CM4/MbMux/system_mbwrapper.h                     This file implements the CM4 side wrapper of the Radio interface
                                                                                 shared between M0 and M4.
   - Sigfox_PushButton_DualCore/CM4/Sigfox/App/app_sigfox.h                      Header of application of the Sigfox Middleware
+  - Sigfox_PushButton_DualCore/CM4/Sigfox/App/app_version.h                     Definition the version of the CM4 application
   - Sigfox_PushButton_DualCore/CM4/Sigfox/App/sgfx_app.h                        provides code for the application of the SIGFOX Middleware
-  - Sigfox_PushButton_DualCore/CM4/Sigfox/App/sgfx_app_version.h                Definition the version of the CM4 application
   - Sigfox_PushButton_DualCore/CM4/Sigfox/App/sgfx_eeprom_if.h                  eeprom interface to the upper module.
   - Sigfox_PushButton_DualCore/CM4/Sigfox/Target/se_nvm.h                       header to emulated SE nvm data
   - Sigfox_PushButton_DualCore/Common/Board/stm32wlxx_nucleo_conf.h             STM32WLxx_Nucleo board configuration file.
@@ -229,9 +229,9 @@ Applications, SubGHz_Phy, Sigfox, PushButton, DualCore, SBSFU, KMS
 
 @par Hardware and Software environment
 
-  - This example runs on the STM32WLxx Nucleo board.
+  - This example runs on the STM32WL55JC1 (HIGH-BAND) Nucleo board. STM32WL55JC2 (LOW-BAND) devices are not suitable.
 
-  - STM32WLxx Nucleo board Set-up
+  - STM32WL55JC1 Nucleo board Set-up
     - Connect the Nucleo board to your PC with a USB cable type A to micro-B
       to ST-LINK connector.
     - Please ensure that the ST-LINK connector jumpers are fitted.

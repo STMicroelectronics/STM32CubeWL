@@ -74,7 +74,9 @@ int8_t MBMUXIF_TraceInit(void)
 
   /* USER CODE END MBMUXIF_TraceInit_1 */
 
-  ret = MBMUX_RegisterFeature(FEAT_INFO_TRACE_ID, MBMUX_NOTIF_ACK, MBMUXIF_IsrTraceNotifRcvCb, aTraceNotifAckBuff, sizeof(aTraceNotifAckBuff));
+  ret = MBMUX_RegisterFeature(FEAT_INFO_TRACE_ID, MBMUX_NOTIF_ACK,
+                              MBMUXIF_IsrTraceNotifRcvCb,
+                              aTraceNotifAckBuff, sizeof(aTraceNotifAckBuff));
   if (ret >= 0)
   {
     /* Note: trace works on ISR, no need to associate a SEQ_TASK */

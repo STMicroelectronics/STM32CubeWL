@@ -35,18 +35,19 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /**
-  * @brief Flash status enumeration
+  * @brief Flash status
   */
-enum
+typedef enum
 {
-  FLASH_PARAM_ERROR = -5,
-  FLASH_LOCK_ERROR = -4,
-  FLASH_WRITE_ERROR = -3,
-  FLASH_ERASE_ERROR  = -2,
-  FLASH_ERROR  = -1,
-  FLASH_OK     = 0,
-  FLASH_BUSY   = 1
-};
+  FLASH_IF_PARAM_ERROR  = -6, /*!< Error Flash invalid parameter */
+  FLASH_IF_LOCK_ERROR   = -5, /*!< Error Flash not locked */
+  FLASH_IF_WRITE_ERROR  = -4, /*!< Error Flash write not possible */
+  FLASH_IF_READ_ERROR   = -3, /*!< Error Flash read not possible */
+  FLASH_IF_ERASE_ERROR  = -2, /*!< Error Flash erase not possible */
+  FLASH_IF_ERROR        = -1, /*!< Error Flash generic */
+  FLASH_IF_OK           = 0,  /*!< Flash Success */
+  FLASH_IF_BUSY         = 1   /*!< Flash not available */
+} FLASH_IF_StatusTypedef;
 
 /* USER CODE BEGIN ET */
 
@@ -63,51 +64,54 @@ enum
 /* USER CODE END EV */
 
 /* Exported macro ------------------------------------------------------------*/
-#define PAGE(__ADDRESS__) (uint32_t)((((__ADDRESS__) - FLASH_BASE) % FLASH_BANK_SIZE) / FLASH_PAGE_SIZE) /*!< Get page index from page address */
-
 /* USER CODE BEGIN EM */
 
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
 /**
-  * @brief  This function writes a user flash area (read/modify/write)
-  * @param  address: ptr to user flash area
-  * @param  data: ptr to data to be written
-  * @param  size: number of 32b.
-  * @param  dataTempPage: ptr used to copy already written page in ram
-  * @return Flash status.
+  * @brief This function initializes the internal and external flash interface
+  *
+  * @param pAllocRamBuffer pointer used to store a FLASH page in RAM when partial replacement is needed
+  * @return FLASH_IF_StatusTypedef status
   */
-int32_t FLASH_IF_Write(uint32_t  address, uint8_t *data, uint32_t size, uint8_t *dataTempPage);
+FLASH_IF_StatusTypedef FLASH_IF_Init(void *pAllocRamBuffer);
 
 /**
-  * Writes a 64-bit word in flash at a specific address.
-  * @param address (in bytes) must be a multiple of 8.
-  * @param data data to write
-  * @returns FLASH_OK, FLASH_BUSY, FLASH_ERASE_ERROR
+  * @brief This function de-initializes the internal and external flash interface
+  *
+  * @return FLASH_IF_StatusTypedef status
   */
-int32_t FLASH_IF_Write64(uint32_t address, uint64_t data);
+FLASH_IF_StatusTypedef FLASH_IF_DeInit(void);
 
 /**
-  * Erases 'n' flash pages from page number 'page' to page number
-  * 'page + n - 1'.
-  * - If 'interrupt' is set to 0, the erasing is performed in polling mode.
-  * - If 'interrupt' is set to 1, the erasing is performed under FLASH
-  *   interrupt: the function returns immediately and the user is informed of
-  *   the end of erasing procedure by a call to the following function that
-  *   must be implemented by the user: void HWCB_FLASH_EndOfCleanup( void );
-  *   this call-back function is called under FLASH IRQ handler.
-  * @param page memory start page number
-  * @param n number of page
-  * @param interrupt choice polling/interrupt
-  * @returns FLASH_OK, FLASH_BUSY, FLASH_ERASE_ERROR
+  * @brief This function writes a data buffer in internal or external flash
+  *
+  * @param pDestination pointer of flash address to write. It has to be 8 bytes aligned.
+  * @param pSource pointer on buffer with data to write
+  * @param uLength length of data buffer in bytes. It has to be 8 bytes aligned.
+  * @return FLASH_IF_StatusTypedef status
   */
-int32_t FLASH_IF_EraseByPages(uint32_t page, uint16_t n, int32_t interrupt);
+FLASH_IF_StatusTypedef FLASH_IF_Write(void *pDestination, const void *pSource, uint32_t uLength);
 
 /**
-  * Callback
+  * @brief This function reads a amount of data from flash and copy into the output data buffer
+  *
+  * @param pDestination pointer of target location to copy the flash sector
+  * @param pSource pointer of flash address to read
+  * @param uLength number of bytes to read
+  * @return FLASH_IF_StatusTypedef status
   */
-void HWCB_FLASH_EndOfCleanup(void);
+FLASH_IF_StatusTypedef FLASH_IF_Read(void *pDestination, const void *pSource, uint32_t uLength);
+
+/**
+  * @brief This function erases a amount of internal or external flash pages depending of the length
+  *
+  * @param pStart pointer of flash address to erase
+  * @param uLength number of bytes to erase
+  * @return FLASH_IF_StatusTypedef status
+  */
+FLASH_IF_StatusTypedef FLASH_IF_Erase(void *pStart, uint32_t uLength);
 
 /* USER CODE BEGIN EFP */
 

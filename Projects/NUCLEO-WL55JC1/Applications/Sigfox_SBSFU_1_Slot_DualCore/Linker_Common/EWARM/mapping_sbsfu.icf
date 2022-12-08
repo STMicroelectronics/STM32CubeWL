@@ -91,10 +91,16 @@ define exported symbol __ICFEDIT_M0PLUS_SHARED_region_SRAM_end__   = 0x20008FFF;
 
 /* SBSFU RAM region */
 define exported symbol __ICFEDIT_SB_region_RAM_start__             = __ICFEDIT_M0PLUS_SHARED_region_SRAM_end__ + 1;
-define exported symbol __ICFEDIT_SB_region_RAM_end__               = 0x2000D3FF;
+define exported symbol __ICFEDIT_SB_region_RAM_end__               = 0x2000C3FF;
 
-/* SE RAM region protected area with 1 kBytes alignment constraint (TZIC) ==> 0x2000D400 */
-define exported symbol __ICFEDIT_SE_region_RAM_start__             = __ICFEDIT_SB_region_RAM_end__ + 1;
+/* KMS Data Storage (VMS) region */
+/* WARNING: Symbols not used */
+/* The VMS address is defined in vms_low_level.h: VMS_KMS_DATA_STORAGE_START */
+define exported symbol __ICFEDIT_VM_KMS_DataStorage_RAM_start__    = 0x2000C400;
+define exported symbol __ICFEDIT_VM_KMS_DataStorage_RAM_end__      = 0x2000CBFF;
+
+/* SE RAM region protected area with 1 kBytes alignment constraint (TZIC) ==> 0x2000CC00 */
+define exported symbol __ICFEDIT_SE_region_RAM_start__             = __ICFEDIT_VM_KMS_DataStorage_RAM_end__ + 1;
 define exported symbol __ICFEDIT_SE_region_RAM_stack_top__         = 0x2000DB00; /* Secure Engine's private stack */
 define exported symbol __ICFEDIT_SE_region_RAM_end__               = 0x2000FFFF;
 
@@ -103,3 +109,4 @@ define region M4_SB_RAM_region           = mem:[from __ICFEDIT_M4_SB_region_RAM_
 define region M4_APP_RAM_region          = mem:[from __ICFEDIT_M4_APP_region_RAM_start__ to __ICFEDIT_M4_APP_region_RAM_end__];
 define region SE_RAM_region              = mem:[from __ICFEDIT_SE_region_RAM_stack_top__ to __ICFEDIT_SE_region_RAM_end__];
 define region SB_RAM_region              = mem:[from __ICFEDIT_SB_region_RAM_start__ to __ICFEDIT_SB_region_RAM_end__];
+define region VM_KMS_DataStorage_region  = mem:[from __ICFEDIT_VM_KMS_DataStorage_RAM_start__ to __ICFEDIT_VM_KMS_DataStorage_RAM_end__];

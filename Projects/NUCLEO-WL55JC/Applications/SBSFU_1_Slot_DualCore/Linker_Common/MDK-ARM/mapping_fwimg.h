@@ -22,10 +22,10 @@
 
 /* Slots  must be aligned on 2048 bytes (0x800) */
 
-/* Active slot #1  (60 kbytes) */
+/* Active slot #1  (58 kbytes) */
 #define SLOT_ACTIVE_1_HEADER         0x0803F800
 #define SLOT_ACTIVE_1_START          0x0801C000
-#define SLOT_ACTIVE_1_END            0x0802AFFF
+#define SLOT_ACTIVE_1_END            0x0802A7FF
 
 /* Active slot #2  (100 kbytes) */
 #define SLOT_ACTIVE_2_HEADER         0x0803F000

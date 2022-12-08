@@ -49,13 +49,6 @@
   */
 #define LED_STATUS_TIMEOUT  1000 /* 1 Second */
 
-#if (USE_VCP_CONNECTION == 1)
-/**
-  * @brief Defines related to Timeout to uart Transmission
-  */
-#define UART_TIMEOUT_VALUE  1000 /* 1 Second */
-#endif
-
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -68,10 +61,6 @@ I2C_HandleTypeDef hi2c1;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-#if (USE_VCP_CONNECTION == 1)
-/* UART handler declaration */
-UART_HandleTypeDef UartHandle;
-#endif
 
 /**
   * @brief Variables related to Master process
@@ -137,6 +126,11 @@ int main(void)
 #if defined(__GNUC__) && defined(MASTER_BOARD) && !defined(__ARMCC_VERSION)
   initialise_monitor_handles(); /*rtt*/
 #endif
+
+#if (USE_VCP_CONNECTION == 1)
+  COM_InitTypeDef COM_Init;
+#endif /* USE_VCP_CONNECTION */
+
   /* STM32WLxx HAL library initialization:
        - Configure the Flash prefetch
        - Systick timer is configured by default as source of time base, but user 
@@ -174,32 +168,28 @@ int main(void)
   BSP_LED_Init(LED3);
 
 #if (USE_VCP_CONNECTION == 1)
-  /* Configure the UART peripheral                                        */
-  /* Put the USART peripheral in the Asynchronous mode (UART Mode) */
+  /* Configure COM port */
+  /* Put the UART peripheral in the Asynchronous mode (UART Mode) */
   /* UART configured as follows:
       - Word Length = 8 Bits
       - Stop Bit = One Stop bit
       - Parity = None
       - BaudRate = 115200 baud
       - Hardware flow control disabled (RTS and CTS signals) */
-  UartHandle.Instance        = USARTx;
-
-  UartHandle.Init.BaudRate   = 115200;
-  UartHandle.Init.WordLength = UART_WORDLENGTH_8B;
-  UartHandle.Init.StopBits   = UART_STOPBITS_1;
-  UartHandle.Init.Parity     = UART_PARITY_NONE;
-  UartHandle.Init.HwFlowCtl  = UART_HWCONTROL_NONE;
-  UartHandle.Init.Mode       = UART_MODE_TX_RX;
-  UartHandle.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT; 
-  if(HAL_UART_DeInit(&UartHandle) != HAL_OK)
-  {
-    Error_Handler();
-  }  
-  if(HAL_UART_Init(&UartHandle) != HAL_OK)
+  COM_Init.BaudRate   = 115200;
+  COM_Init.WordLength = COM_WORDLENGTH_8B;
+  COM_Init.StopBits   = COM_STOPBITS_1;
+  COM_Init.Parity     = COM_PARITY_NONE;
+  COM_Init.HwFlowCtl  = COM_HWCONTROL_NONE;
+  if (BSP_COM_Init(COM1, &COM_Init) != BSP_ERROR_NONE)
   {
     Error_Handler();
   }
-#endif
+  if (BSP_COM_SelectLogPort(COM1) != BSP_ERROR_NONE)
+  {
+    Error_Handler();
+  }
+#endif /* USE_VCP_CONNECTION */
 
 
 #ifdef MASTER_BOARD
@@ -410,7 +400,8 @@ void SystemClock_Config(void)
   /** Configure the main internal regulator output voltage
   */
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
-  /** Initializes the CPU, AHB and APB busses clocks
+
+  /** Initializes the CPU, AHB and APB buses clocks
   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_MSI;
   RCC_OscInitStruct.MSIState = RCC_MSI_ON;
@@ -501,28 +492,6 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-#if (USE_VCP_CONNECTION == 1)
-/**
-  * @brief  Retargets the C library printf function to the USARTx.
-  * @param  ch: character to send
-  * @param  f: pointer to file (not used)
-  * @retval The character transmitted
-  */
-#ifdef __GNUC__
-/* With GCC, small printf (option LD Linker->Libraries->Small printf
-   set to 'Yes') calls __io_putchar() */
-int __io_putchar(int ch)
-#else
-int fputc(int ch, FILE *f)
-#endif /* __GNUC__ */
-{
-  /* Place your implementation of fputc here */
-  /* e.g. write a character to the EVAL_COM1 and Loop until the end of transmission */
-  HAL_UART_Transmit(&UartHandle, (uint8_t *)&ch, 1, UART_TIMEOUT_VALUE); 
-
-  return ch;
-}
-#endif
 
 /**
   * @brief  Tx Transfer completed callback.

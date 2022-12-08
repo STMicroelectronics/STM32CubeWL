@@ -36,10 +36,10 @@
 #define LW_NVM_ROM_START             0x0801B000
 #define LW_NVM_ROM_END               0x0801BFFF
 
-/* Active slot #1  (60 kbytes) */
+/* Active slot #1  (58 kbytes) */
 #define SLOT_ACTIVE_1_HEADER         0x0803F800
 #define SLOT_ACTIVE_1_START          0x0801C000
-#define SLOT_ACTIVE_1_END            0x0802AFFF
+#define SLOT_ACTIVE_1_END            0x0802A7FF
 
 /* Slots not configured */
 #define SLOT_ACTIVE_3_HEADER         0x00000000

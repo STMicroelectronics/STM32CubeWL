@@ -99,6 +99,10 @@ extern uint32_t INTVEC_start;
 #endif /* CORE_CM0PLUS */
 extern volatile uint32_t M4_M0PLUS_flag_RAM_start ;
 #define M4_M0PLUS_FLAG_RAM_START ((uint32_t)& M4_M0PLUS_flag_RAM_start)
+extern volatile uint32_t KMS_DataStorageKey_start ;
+#define KMS_DATASTORAGE_KEY_START ((uint32_t)& KMS_DataStorageKey_start)
+extern volatile uint32_t KMS_DataStorageKey_end ;
+#define KMS_DATASTORAGE_KEY_END ((uint32_t)& KMS_DataStorageKey_end)
 
 
 #ifdef cplusplus

@@ -10,6 +10,12 @@ echo ###########################################
 call %current_dir%..\setenv.bat
 set compile_all_projects=1
 
+if not exist !MDK_EXE! (
+  echo Error: the command line !MDK_EXE! doesn't exist.
+  echo        Check the setenv.bat content and your installation path
+  exit /B 1
+)
+
 REM Get Arguments
 :continue
 if not "%1"=="" (

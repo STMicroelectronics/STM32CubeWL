@@ -69,12 +69,13 @@ typedef struct sFCntList
      * Multicast downlink counters
      */
     uint32_t McFCntDown[LORAMAC_MAX_MC_CTX];
-#if( USE_LRWAN_1_1_X_CRYPTO == 1 )
+#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01010100 ))
     /*!
-     * RJcount1 is a counter incremented with every Rejoin request Type 1 frame transmitted.
+     * RJcount1 is a counter incremented with every Rejoin request Type 1
+     * frame transmitted.
      */
     uint16_t RJcount1;
-#endif
+#endif /* LORAMAC_VERSION */
 }FCntList_t;
 
 /*!

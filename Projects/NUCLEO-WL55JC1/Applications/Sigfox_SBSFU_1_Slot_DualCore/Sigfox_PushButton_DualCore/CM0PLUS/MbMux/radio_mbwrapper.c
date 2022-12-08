@@ -119,7 +119,8 @@ void Process_Radio_Cmd(MBMUX_ComParam_t *ComObj)
   uint32_t *com_buffer = NULL;
   uint32_t ret_uint;
   int32_t ret_int;
-  RadioState_t status;
+  radio_status_t ret_status;
+  RadioState_t state;
 
   APP_LOG(TS_ON, VLEVEL_H, ">CM0PLUS(Radio)\r\n");
 
@@ -142,10 +143,10 @@ void Process_Radio_Cmd(MBMUX_ComParam_t *ComObj)
       break;
 
     case RADIO_GET_STATUS_ID:
-      status = Radio.GetStatus();
+      state = Radio.GetStatus();
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = (uint32_t) status; /* */
+      ComObj->ReturnVal = (uint32_t) state; /* */
       break;
 
     case RADIO_SET_MODEM_ID:
@@ -218,10 +219,10 @@ void Process_Radio_Cmd(MBMUX_ComParam_t *ComObj)
       break;
 
     case RADIO_SEND_ID:
-      Radio.Send((uint8_t *) com_buffer[0], (uint8_t) com_buffer[1]);
+      ret_status = Radio.Send((uint8_t *) com_buffer[0], (uint8_t) com_buffer[1]);
       /* prepare response buffer */
       ComObj->ParamCnt = 0; /* reset ParamCnt */
-      ComObj->ReturnVal = 0; /* */
+      ComObj->ReturnVal = (uint32_t) ret_status; /* */
       break;
 
     case RADIO_SLEEP_ID:

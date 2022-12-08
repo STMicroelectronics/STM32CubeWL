@@ -1,0 +1,3 @@
+mainProject = 1_Image_UserApp
+compilingOrder = 1_Image_KMS_Blob, 1_Image_SECoreBin, 1_Image_BFU, 1_Image_UserApp
+toCopyToUserSpace = Linker_Common

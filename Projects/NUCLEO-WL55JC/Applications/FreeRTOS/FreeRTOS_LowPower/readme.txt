@@ -69,7 +69,7 @@ on STM32Cube with RTOS".
 
 @par Keywords
 
-RTOS, FreeRTOS, Thread, LowPower, SleepMode
+RTOS, FreeRTOS, Threading, LowPower, SleepMode
 
 @par Directory contents
     - FreeRTOS/FreeRTOS_LowPower/Src/main.c                       Main program

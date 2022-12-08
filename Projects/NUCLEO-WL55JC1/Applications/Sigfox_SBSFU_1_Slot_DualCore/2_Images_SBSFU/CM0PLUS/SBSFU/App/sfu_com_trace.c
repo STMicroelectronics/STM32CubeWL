@@ -23,12 +23,17 @@
 #include "sfu_low_level.h"
 #include "sfu_trace.h"
 #include "sfu_com_trace.h"
+#if defined(__ICCARM__)
+#include <LowLevelIOInterface.h>
+#endif /* __ICCARM__ */
 
 #if defined(SFU_DEBUG_MODE) || defined(SFU_TEST_PROTECTION)
 
 /* Private defines -----------------------------------------------------------*/
 #if defined(__ICCARM__)
-#define PUTCHAR_PROTOTYPE int putchar(int ch)
+/* New definition from EWARM V9, compatible with EWARM8 */
+int iar_fputc(int ch);
+#define PUTCHAR_PROTOTYPE int iar_fputc(int ch)
 #elif defined(__ARMCC_VERSION)
 #define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
 #elif defined(__GNUC__)
@@ -91,6 +96,28 @@ SFU_ErrorStatus SFU_COM_Serial_PutString(uint8_t *pString)
   return SFU_LL_UART_Transmit(pString, length, SFU_COM_TRACE_SERIAL_TIME_OUT);
 
 }
+
+/**
+  * @brief  Retargets the C library __write function to the IAR function iar_fputc.
+  * @param  file: file descriptor.
+  * @param  ptr: pointer to the buffer where the data is stored.
+  * @param  len: length of the data to write in bytes.
+  * @retval length of the written data in bytes.
+  */
+#if defined(__ICCARM__)
+size_t __write(int file, unsigned char const *ptr, size_t len)
+{
+  size_t idx;
+  unsigned char const *pdata = ptr;
+
+  for (idx = 0; idx < len; idx++)
+  {
+    iar_fputc((int)*pdata);
+    pdata++;
+  }
+  return len;
+}
+#endif /* __ICCARM__ */
 
 /**
   * @brief  Retargets the C library printf function to SFU UART.

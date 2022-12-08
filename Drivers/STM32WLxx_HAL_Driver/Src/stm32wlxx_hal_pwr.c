@@ -111,22 +111,26 @@ void HAL_PWR_DeInit(void)
 #endif
 
   /* Clear all flags */
+#if defined(DUAL_CORE)
   LL_PWR_WriteReg(SCR,
                   LL_PWR_SCR_CWUF
                   | LL_PWR_SCR_CWRFBUSYF
                   | LL_PWR_SCR_CWPVDF
-#if defined(DUAL_CORE)
                   | LL_PWR_SCR_CC2HF
-#endif
                  );
-
-  LL_PWR_WriteReg(EXTSCR,
-#ifdef CORE_CM0PLUS
-                  LL_PWR_EXTSCR_C2CSSF
 #else
-                  LL_PWR_EXTSCR_C1CSSF
-#endif
+    LL_PWR_WriteReg(SCR,
+                  LL_PWR_SCR_CWUF
+                  | LL_PWR_SCR_CWRFBUSYF
+                  | LL_PWR_SCR_CWPVDF
                  );
+#endif /* DUAL_CORE */
+
+#ifdef CORE_CM0PLUS    
+  LL_PWR_WriteReg(EXTSCR, LL_PWR_EXTSCR_C2CSSF);
+#else
+  LL_PWR_WriteReg(EXTSCR, LL_PWR_EXTSCR_C1CSSF);
+#endif /* CORE_CM0PLUS */
 }
 
 

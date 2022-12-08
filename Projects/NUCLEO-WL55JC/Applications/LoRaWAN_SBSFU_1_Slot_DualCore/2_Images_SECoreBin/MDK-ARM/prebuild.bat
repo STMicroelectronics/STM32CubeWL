@@ -59,6 +59,22 @@ set "command=copy %KMS_config% %KMS_tmp%"
 %command%
 IF %ERRORLEVEL% NEQ 0 goto error
 
+::Provide data for the blob encryption feature
+set "kmsblob_aeskey=%SBSFUBootLoader%\\2_Images_KMS_Blob\\Binary\\AES_DATA_STORAGE_key.bin"
+set "command=%python%%prepareimage% inject -k %kmsblob_aeskey% -f %KMS_tmp% -p @AES_DATA_STORAGE_KEY@ %KMS_config%"
+%command%
+IF %ERRORLEVEL% NEQ 0 goto error
+set "command=copy %KMS_config% %KMS_tmp%"
+%command%
+IF %ERRORLEVEL% NEQ 0 goto error
+set "kmsblob_aesdata=%SBSFUBootLoader%\\2_Images_KMS_Blob\\Binary\\AES_DATA_STORAGE_data.bin"
+set "command=%python%%prepareimage% inject -k %kmsblob_aesdata% -f %KMS_tmp% -p @AES_DATA_STORAGE_DATA@ %KMS_config%"
+%command%
+IF %ERRORLEVEL% NEQ 0 goto error
+set "command=copy %KMS_config% %KMS_tmp%"
+%command%
+IF %ERRORLEVEL% NEQ 0 goto error
+
 if "%crypto%"=="SECBOOT_AES128_GCM_AES128_GCM_AES128_GCM" (
   set "type=GCM"
   goto AES128

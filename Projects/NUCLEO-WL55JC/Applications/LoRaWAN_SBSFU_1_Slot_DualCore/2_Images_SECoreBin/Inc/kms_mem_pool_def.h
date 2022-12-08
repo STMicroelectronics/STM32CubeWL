@@ -17,7 +17,7 @@
   ******************************************************************************
   */
 
-/* Recursive inclusion autorised ---------------------------------------------*/
+/* Recursive inclusion authorized ---------------------------------------------*/
 
 #ifdef __cplusplus
 extern "C" {
@@ -27,6 +27,25 @@ extern "C" {
  * POOL DESCRIPTION
  */
 
+#if  defined(KMS_ENCRYPT_DECRYPT_BLOB)
+/*
+ * Memory pools definition:
+ * 2 pools of 256
+ * 1 pool of 512
+ * 3 pools of 1K
+ * 1 pool of 5K
+ */
+
+KMS_MEM_DECLARE_POOL_START()
+KMS_MEM_DECLARE_POOL_ENTRY(1, 256)
+KMS_MEM_DECLARE_POOL_ENTRY(2, 256)
+KMS_MEM_DECLARE_POOL_ENTRY(3, 512)
+KMS_MEM_DECLARE_POOL_ENTRY(4, 1024)
+KMS_MEM_DECLARE_POOL_ENTRY(5, 1024)
+KMS_MEM_DECLARE_POOL_ENTRY(6, 1024)
+KMS_MEM_DECLARE_POOL_ENTRY(7, 5 * 1024)
+KMS_MEM_DECLARE_POOL_END()
+#else /* KMS_ENCRYPT_DECRYPT_BLOB */
 /*
  * Memory pools definition:
  * 2 pools of 256
@@ -43,6 +62,7 @@ KMS_MEM_DECLARE_POOL_ENTRY(4, 1024)
 KMS_MEM_DECLARE_POOL_ENTRY(5, 1024)
 KMS_MEM_DECLARE_POOL_ENTRY(6, 5 * 1024)
 KMS_MEM_DECLARE_POOL_END()
+#endif /* KMS_ENCRYPT_DECRYPT_BLOB */
 
 
 #ifdef __cplusplus

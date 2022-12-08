@@ -85,35 +85,35 @@ typedef struct
 /** @defgroup TIMEx_Remap TIM Extended Remapping
   * @{
   */
-#define TIM_TIM1_ETR_GPIO           0x00000000U                                           /* !< TIM1_ETR is not connected to I/O      */
-#define TIM_TIM1_ETR_ADC_AWD1       TIM1_OR1_ETR_ADC_RMP_0                                /* !< TIM1_ETR is connected to ADC AWD1    */
-#define TIM_TIM1_ETR_ADC_AWD2       TIM1_OR1_ETR_ADC_RMP_1                                /* !< TIM1_ETR is connected to ADC AWD2    */
-#define TIM_TIM1_ETR_ADC_AWD3       (TIM1_OR1_ETR_ADC_RMP_0 | TIM1_OR1_ETR_ADC_RMP_1)     /* !< TIM1_ETR is connected to ADC AWD3    */
-#define TIM_TIM1_ETR_COMP1          TIM1_AF1_ETRSEL_0                                     /* !< TIM1_ETR is connected to COMP1 output */
-#define TIM_TIM1_ETR_COMP2          TIM1_AF1_ETRSEL_1                                     /* !< TIM1_ETR is connected to COMP2 output */
+#define TIM_TIM1_ETR_GPIO           0x00000000U                                           /*!< TIM1_ETR is not connected to I/O      */
+#define TIM_TIM1_ETR_ADC_AWD1       TIM1_OR1_ETR_ADC_RMP_0                                /*!< TIM1_ETR is connected to ADC AWD1    */
+#define TIM_TIM1_ETR_ADC_AWD2       TIM1_OR1_ETR_ADC_RMP_1                                /*!< TIM1_ETR is connected to ADC AWD2    */
+#define TIM_TIM1_ETR_ADC_AWD3       (TIM1_OR1_ETR_ADC_RMP_0 | TIM1_OR1_ETR_ADC_RMP_1)     /*!< TIM1_ETR is connected to ADC AWD3    */
+#define TIM_TIM1_ETR_COMP1          TIM1_AF1_ETRSEL_0                                     /*!< TIM1_ETR is connected to COMP1 output */
+#define TIM_TIM1_ETR_COMP2          TIM1_AF1_ETRSEL_1                                     /*!< TIM1_ETR is connected to COMP2 output */
 
-#define TIM_TIM1_TI1_GPIO           0x00000000U                                           /* !< TIM1 Input capture 1 is connected to I/0      */
-#define TIM_TIM1_TI1_COMP1         TIM1_OR1_TI1_RMP                                       /* !< TIM1 Input capture 1is connected to COMP1 OUT */
+#define TIM_TIM1_TI1_GPIO           0x00000000U                                           /*!< TIM1 Input capture 1 is connected to I/0      */
+#define TIM_TIM1_TI1_COMP1         TIM1_OR1_TI1_RMP                                       /*!< TIM1 Input capture 1is connected to COMP1 OUT */
 
-#define TIM_TIM2_ETR_GPIO           0x00000000U                                           /* !< TIM2 External trigger ETR is connected to I/O */
-#define TIM_TIM2_ETR_LSE            TIM2_OR1_ETR_RMP                                      /* !< TIM2 External trigger ETR is connected to LSE */
-#define TIM_TIM2_ETR_COMP1          TIM2_AF1_ETRSEL_0                                     /* !< TIM2_ETR is connected to COMP1 output         */
-#define TIM_TIM2_ETR_COMP2          TIM2_AF1_ETRSEL_1                                     /* !< TIM2_ETR is connected to COMP2 output         */
+#define TIM_TIM2_ETR_GPIO           0x00000000U                                           /*!< TIM2 External trigger ETR is connected to I/O */
+#define TIM_TIM2_ETR_LSE            TIM2_OR1_ETR_RMP                                      /*!< TIM2 External trigger ETR is connected to LSE */
+#define TIM_TIM2_ETR_COMP1          TIM2_AF1_ETRSEL_0                                     /*!< TIM2_ETR is connected to COMP1 output         */
+#define TIM_TIM2_ETR_COMP2          TIM2_AF1_ETRSEL_1                                     /*!< TIM2_ETR is connected to COMP2 output         */
 
-#define TIM_TIM2_TI4_GPIO           0x00000000U                                           /* !< TIM2_TI4 is connected to I/O                 */
-#define TIM_TIM2_TI4_COMP1          TIM2_OR1_TI4_RMP_0                                    /* !< TIM2_TI4 is connected to COMP1 OUT           */
-#define TIM_TIM2_TI4_COMP2          TIM2_OR1_TI4_RMP_1                                    /* !< TIM2_TI4 is connected to COMP1 OUT           */
-#define TIM_TIM2_TI4_COMP1_COMP2    (TIM2_OR1_TI4_RMP_0 | TIM2_OR1_TI4_RMP_1)             /* !< TIM2_TI4 is connected to COMP1 and COMP2 OUT */
+#define TIM_TIM2_TI4_GPIO           0x00000000U                                           /*!< TIM2_TI4 is connected to I/O                 */
+#define TIM_TIM2_TI4_COMP1          TIM2_OR1_TI4_RMP_0                                    /*!< TIM2_TI4 is connected to COMP1 OUT           */
+#define TIM_TIM2_TI4_COMP2          TIM2_OR1_TI4_RMP_1                                    /*!< TIM2_TI4 is connected to COMP1 OUT           */
+#define TIM_TIM2_TI4_COMP1_COMP2    (TIM2_OR1_TI4_RMP_0 | TIM2_OR1_TI4_RMP_1)             /*!< TIM2_TI4 is connected to COMP1 and COMP2 OUT */
 
-#define TIM_TIM16_TI1_GPIO          0x00000000U                                           /* !< TIM16_TI1 is connected to I/O       */
-#define TIM_TIM16_TI1_LSI           TIM16_OR1_TI1_RMP_0                                   /* !< TIM16_TI1 is connected to LSI Clock */
-#define TIM_TIM16_TI1_LSE           TIM16_OR1_TI1_RMP_1                                   /* !< TIM16_TI1 is connected to LSE Clock */
-#define TIM_TIM16_TI1_RTC           (TIM16_OR1_TI1_RMP_0 | TIM16_OR1_TI1_RMP_1)           /* !< TIM16_TI1 is connected to RTC       */
+#define TIM_TIM16_TI1_GPIO          0x00000000U                                           /*!< TIM16_TI1 is connected to I/O       */
+#define TIM_TIM16_TI1_LSI           TIM16_OR1_TI1_RMP_0                                   /*!< TIM16_TI1 is connected to LSI Clock */
+#define TIM_TIM16_TI1_LSE           TIM16_OR1_TI1_RMP_1                                   /*!< TIM16_TI1 is connected to LSE Clock */
+#define TIM_TIM16_TI1_RTC           (TIM16_OR1_TI1_RMP_0 | TIM16_OR1_TI1_RMP_1)           /*!< TIM16_TI1 is connected to RTC       */
 
-#define TIM_TIM17_TI1_GPIO          0x00000000U                                           /* !< TIM17_TI1 is connected to I/O       */
-#define TIM_TIM17_TI1_MSI           TIM17_OR1_TI1_RMP_0                                   /* !< TIM17_TI1 is connected to MSI       */
-#define TIM_TIM17_TI1_HSE           TIM17_OR1_TI1_RMP_1                                   /* !< TIM17_TI1 is connected to HSE/32    */
-#define TIM_TIM17_TI1_MCO           (TIM17_OR1_TI1_RMP_0 | TIM17_OR1_TI1_RMP_1)           /* !< TIM17_TI1 is connected to MCO       */
+#define TIM_TIM17_TI1_GPIO          0x00000000U                                           /*!< TIM17_TI1 is connected to I/O       */
+#define TIM_TIM17_TI1_MSI           TIM17_OR1_TI1_RMP_0                                   /*!< TIM17_TI1 is connected to MSI       */
+#define TIM_TIM17_TI1_HSE           TIM17_OR1_TI1_RMP_1                                   /*!< TIM17_TI1 is connected to HSE/32    */
+#define TIM_TIM17_TI1_MCO           (TIM17_OR1_TI1_RMP_0 | TIM17_OR1_TI1_RMP_1)           /*!< TIM17_TI1 is connected to MCO       */
 /**
   * @}
   */
@@ -130,9 +130,9 @@ typedef struct
 /** @defgroup TIMEx_Break_Input_Source TIM Extended Break input source
   * @{
   */
-#define TIM_BREAKINPUTSOURCE_BKIN     0x00000001U                               /* !< An external source (GPIO) is connected to the BKIN pin  */
-#define TIM_BREAKINPUTSOURCE_COMP1    0x00000002U                               /* !< The COMP1 output is connected to the break input */
-#define TIM_BREAKINPUTSOURCE_COMP2    0x00000004U                               /* !< The COMP2 output is connected to the break input */
+#define TIM_BREAKINPUTSOURCE_BKIN     0x00000001U                               /*!< An external source (GPIO) is connected to the BKIN pin  */
+#define TIM_BREAKINPUTSOURCE_COMP1    0x00000002U                               /*!< The COMP1 output is connected to the break input */
+#define TIM_BREAKINPUTSOURCE_COMP2    0x00000004U                               /*!< The COMP2 output is connected to the break input */
 /**
   * @}
   */
@@ -212,7 +212,7 @@ typedef struct
   * @{
   */
 /*  Timer Hall Sensor functions  **********************************************/
-HAL_StatusTypeDef HAL_TIMEx_HallSensor_Init(TIM_HandleTypeDef *htim, TIM_HallSensor_InitTypeDef *sConfig);
+HAL_StatusTypeDef HAL_TIMEx_HallSensor_Init(TIM_HandleTypeDef *htim, const TIM_HallSensor_InitTypeDef *sConfig);
 HAL_StatusTypeDef HAL_TIMEx_HallSensor_DeInit(TIM_HandleTypeDef *htim);
 
 void HAL_TIMEx_HallSensor_MspInit(TIM_HandleTypeDef *htim);
@@ -245,7 +245,8 @@ HAL_StatusTypeDef HAL_TIMEx_OCN_Start_IT(TIM_HandleTypeDef *htim, uint32_t Chann
 HAL_StatusTypeDef HAL_TIMEx_OCN_Stop_IT(TIM_HandleTypeDef *htim, uint32_t Channel);
 
 /* Non-Blocking mode: DMA */
-HAL_StatusTypeDef HAL_TIMEx_OCN_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Channel, uint32_t *pData, uint16_t Length);
+HAL_StatusTypeDef HAL_TIMEx_OCN_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Channel, const uint32_t *pData,
+                                          uint16_t Length);
 HAL_StatusTypeDef HAL_TIMEx_OCN_Stop_DMA(TIM_HandleTypeDef *htim, uint32_t Channel);
 /**
   * @}
@@ -264,7 +265,8 @@ HAL_StatusTypeDef HAL_TIMEx_PWMN_Stop(TIM_HandleTypeDef *htim, uint32_t Channel)
 HAL_StatusTypeDef HAL_TIMEx_PWMN_Start_IT(TIM_HandleTypeDef *htim, uint32_t Channel);
 HAL_StatusTypeDef HAL_TIMEx_PWMN_Stop_IT(TIM_HandleTypeDef *htim, uint32_t Channel);
 /* Non-Blocking mode: DMA */
-HAL_StatusTypeDef HAL_TIMEx_PWMN_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Channel, uint32_t *pData, uint16_t Length);
+HAL_StatusTypeDef HAL_TIMEx_PWMN_Start_DMA(TIM_HandleTypeDef *htim, uint32_t Channel, const uint32_t *pData,
+                                           uint16_t Length);
 HAL_StatusTypeDef HAL_TIMEx_PWMN_Stop_DMA(TIM_HandleTypeDef *htim, uint32_t Channel);
 /**
   * @}
@@ -298,11 +300,11 @@ HAL_StatusTypeDef HAL_TIMEx_ConfigCommutEvent_IT(TIM_HandleTypeDef *htim, uint32
 HAL_StatusTypeDef HAL_TIMEx_ConfigCommutEvent_DMA(TIM_HandleTypeDef *htim, uint32_t  InputTrigger,
                                                   uint32_t  CommutationSource);
 HAL_StatusTypeDef HAL_TIMEx_MasterConfigSynchronization(TIM_HandleTypeDef *htim,
-                                                        TIM_MasterConfigTypeDef *sMasterConfig);
+                                                        const TIM_MasterConfigTypeDef *sMasterConfig);
 HAL_StatusTypeDef HAL_TIMEx_ConfigBreakDeadTime(TIM_HandleTypeDef *htim,
-                                                TIM_BreakDeadTimeConfigTypeDef *sBreakDeadTimeConfig);
+                                                const TIM_BreakDeadTimeConfigTypeDef *sBreakDeadTimeConfig);
 HAL_StatusTypeDef HAL_TIMEx_ConfigBreakInput(TIM_HandleTypeDef *htim, uint32_t BreakInput,
-                                             TIMEx_BreakInputConfigTypeDef *sBreakInputConfig);
+                                             const TIMEx_BreakInputConfigTypeDef *sBreakInputConfig);
 HAL_StatusTypeDef HAL_TIMEx_GroupChannel5(TIM_HandleTypeDef *htim, uint32_t Channels);
 HAL_StatusTypeDef HAL_TIMEx_RemapConfig(TIM_HandleTypeDef *htim, uint32_t Remap);
 
@@ -330,8 +332,8 @@ void HAL_TIMEx_Break2Callback(TIM_HandleTypeDef *htim);
   * @{
   */
 /* Extended Peripheral State functions  ***************************************/
-HAL_TIM_StateTypeDef HAL_TIMEx_HallSensor_GetState(TIM_HandleTypeDef *htim);
-HAL_TIM_ChannelStateTypeDef HAL_TIMEx_GetChannelNState(TIM_HandleTypeDef *htim,  uint32_t ChannelN);
+HAL_TIM_StateTypeDef HAL_TIMEx_HallSensor_GetState(const TIM_HandleTypeDef *htim);
+HAL_TIM_ChannelStateTypeDef HAL_TIMEx_GetChannelNState(const TIM_HandleTypeDef *htim,  uint32_t ChannelN);
 /**
   * @}
   */

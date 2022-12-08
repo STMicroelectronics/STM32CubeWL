@@ -40,7 +40,7 @@ PROCESS_B releases the semaphore with success.
 After successful sequence, LED2 is turned On. 
 In case of errors, LED2 is slowly blinking (1sec period).
 
-Additionnaly, this example demonstrate how to:
+Additionally, this example demonstrate how to:
   Retrieve the current process locking a semaphore.
   Retrieve the current core locking a semaphore.
 

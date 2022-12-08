@@ -137,7 +137,7 @@ Depending of IDE, to watch content of Terminal I/O note that
 Other proposal to retrieve display of Command Code for all IDE is to use the Virtual Com.
 
 In order to select use of Virtual Com port feature of STLINK for connection between NUCLEO-WL55JC RevC and PC,
-User has to set USE_VCP_CONNECTION define to 1 in main.h file.
+User has to set USE_VCP_CONNECTION=1 must be added in command line.
 If so, please ensure that USART communication between the target MCU and ST-LINK MCU is properly enabled 
 on HW board in order to support Virtual Com Port (Default HW SB configuration allows use of VCP)
 
@@ -209,7 +209,7 @@ Also only on Master board side, Terminal I/O can be used to watch the Request Co
 Other proposal to retrieve display of Command Code for all IDE is to use the Virtual Com.
 
 In order to select use of Virtual Com port feature of STLINK for connection between NUCLEO-WL55JC RevC and PC,
-User has to set USE_VCP_CONNECTION define to 1 in main.h file.
+User has to set USE_VCP_CONNECTION=1 must be added in command line.
 If so, please ensure that USART communication between the target MCU and ST-LINK MCU is properly enabled 
 on HW board in order to support Virtual Com Port (Default HW SB configuration allows use of VCP)
 

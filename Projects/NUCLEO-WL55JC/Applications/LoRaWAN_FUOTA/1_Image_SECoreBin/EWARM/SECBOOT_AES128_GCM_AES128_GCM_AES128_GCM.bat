@@ -35,7 +35,7 @@ set "ref_userapp=%projectdir%\\RefUserApp.bin"
 
 set "nonce=%SBSFUBootLoader%\\1_Image_SECoreBin\\Binary\\nonce.bin"
 set "ecckey=%SBSFUBootLoader%\\1_Image_SECoreBin\\Binary\\ECCKEY%fwid%.txt"
-set "sbsfuelf=%SBSFUBootLoader%\\1_Image_BFU\\EWARM\\STM32WL55JC_Nucleo\\Exe\\Project.out"
+set "sbsfuelf=%SBSFUBootLoader%\\1_Image_BFU\\EWARM\\1_Image_BFU\\Exe\\Project.out"
 set "oemkey=%SBSFUBootLoader%\\1_Image_SECoreBin\\Binary\\OEM_KEY_COMPANY%fwid%_key_AES_GCM.bin"
 set "magic=SFU%fwid%"
 set "offset=512"

@@ -2,10 +2,10 @@
 
 /* Slots  must be aligned on 2048 bytes (0x800) */
 
-/* Active slot #1 (60 kbytes) */
+/* Active slot #1 (58 kbytes) */
 define exported symbol  __ICFEDIT_SLOT_Active_1_header__= 0x0803F800;
 define exported symbol  __ICFEDIT_SLOT_Active_1_start__ = 0x0801C000;
-define exported symbol  __ICFEDIT_SLOT_Active_1_end__   = 0x0802AFFF;
+define exported symbol  __ICFEDIT_SLOT_Active_1_end__   = 0x0802A7FF;
 
 /* Active slot #2 (100 kbytes) */
 define exported symbol  __ICFEDIT_SLOT_Active_2_header__= 0x0803F000;

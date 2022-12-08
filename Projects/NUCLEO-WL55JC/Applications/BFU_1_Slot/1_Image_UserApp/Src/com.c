@@ -21,6 +21,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "com.h"
 #include "stm32wlxx_hal.h"
+#if defined(__ICCARM__)
+#include <LowLevelIOInterface.h>
+#endif /* __ICCARM__ */
 
 
 
@@ -37,7 +40,9 @@
   */
 
 #if defined(__ICCARM__)
-#define PUTCHAR_PROTOTYPE int putchar(int ch)
+/* New definition from EWARM V9, compatible with EWARM8 */
+int iar_fputc(int ch);
+#define PUTCHAR_PROTOTYPE int iar_fputc(int ch)
 #elif defined(__ARMCC_VERSION)
 #define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
 #elif defined(__GNUC__)
@@ -225,6 +230,28 @@ HAL_StatusTypeDef COM_Flush(void)
 /** @defgroup COM_Callback_Functions Callback Functions
   * @{
   */
+
+/**
+  * @brief  Retargets the C library __write function to the IAR function iar_fputc.
+  * @param  file: file descriptor.
+  * @param  ptr: pointer to the buffer where the data is stored.
+  * @param  len: length of the data to write in bytes.
+  * @retval length of the written data in bytes.
+  */
+#if defined(__ICCARM__)
+size_t __write(int file, unsigned char const *ptr, size_t len)
+{
+  size_t idx;
+  unsigned char const *pdata = ptr;
+
+  for (idx = 0; idx < len; idx++)
+  {
+    iar_fputc((int)*pdata);
+    pdata++;
+  }
+  return len;
+}
+#endif /* __ICCARM__ */
 
 /**
   * @brief  Retargets the C library printf function to the USART.

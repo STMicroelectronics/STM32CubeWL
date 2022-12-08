@@ -104,11 +104,6 @@ extern "C"
 #define LORA_MAC_MLME_CONFIRM_QUEUE_LEN             5
 
 /*!
- * Start value for multicast keys enumeration
- */
-#define LORAMAC_CRYPTO_MULTICAST_KEYS               127
-
-/*!
  * Maximum MAC commands buffer size
  */
 #define LORA_MAC_COMMAND_MAX_LENGTH                 128
@@ -210,6 +205,13 @@ LoRaMacStatus_t LoRaMacHalt( void );
  * \retval isBusy Mac layer is busy.
  */
 bool LoRaMacIsBusy( void );
+
+/*!
+ * \brief Returns a value indicating if the MAC layer is stopped
+ *
+ * \retval isStopped Mac layer is stopped.
+ */
+bool LoRaMacIsStopped( void );
 
 /*!
  * Processes the LoRaMac events.
@@ -425,7 +427,6 @@ LoRaMacStatus_t LoRaMacMibSetRequestConfirm( MibRequestConfirm_t* mibSet );
  */
 LoRaMacStatus_t LoRaMacMlmeRequest( MlmeReq_t* mlmeRequest );
 
-/* ST_WORKAROUND_BEGIN: Update Mcps request with new input parameter to allow delayed tx */
 /*!
  * \brief   LoRaMAC MCPS-Request
  *
@@ -460,7 +461,6 @@ LoRaMacStatus_t LoRaMacMlmeRequest( MlmeReq_t* mlmeRequest );
  *          \ref LORAMAC_STATUS_LENGTH_ERROR,
  */
 LoRaMacStatus_t LoRaMacMcpsRequest( McpsReq_t* mcpsRequest, bool allowDelayedTx );
-/* ST_WORKAROUND_END */
 
 /*!
  * \brief   LoRaMAC deinitialization
@@ -473,6 +473,8 @@ LoRaMacStatus_t LoRaMacMcpsRequest( McpsReq_t* mcpsRequest, bool allowDelayedTx 
  *          \ref LORAMAC_STATUS_BUSY
  */
 LoRaMacStatus_t LoRaMacDeInitialization( void );
+
+LoRaMacStatus_t LoRaMacProcessMicForDatablock( uint8_t *buffer, uint32_t size, uint16_t sessionCnt, uint8_t fragIndex, uint32_t descriptor, uint32_t *mic );
 
 /*! \} defgroup LORAMAC */
 

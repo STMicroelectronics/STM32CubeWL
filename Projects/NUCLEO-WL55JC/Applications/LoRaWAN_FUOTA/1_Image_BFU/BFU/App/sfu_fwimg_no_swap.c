@@ -388,7 +388,7 @@ static SFU_ErrorStatus VerifyFwSignatureBeforeDecrypt(uint32_t DwlSlot, SE_FwRaw
       /* Last pass ? */
       if (((pFwImageHeader->FwSize + SFU_IMG_IMAGE_OFFSET) - fw_index) < size)
       {
-        /* Default chunk size can be troncated at end of file */
+        /* Default chunk size can be truncated at end of file */
         size = pFwImageHeader->FwSize + SFU_IMG_IMAGE_OFFSET - fw_index;
       }
 
@@ -541,7 +541,7 @@ static SFU_ErrorStatus DecryptImageFromDwlSlotToActiveSlot(uint32_t ActiveSlot, 
       /* Last pass ? */
       if (((pFwImageHeader->FwSize + SFU_IMG_IMAGE_OFFSET) - fw_index) < size)
       {
-        /* Default chunk size can be troncated at end of file */
+        /* Default chunk size can be truncated at end of file */
         size = pFwImageHeader->FwSize + SFU_IMG_IMAGE_OFFSET - fw_index;
       }
 

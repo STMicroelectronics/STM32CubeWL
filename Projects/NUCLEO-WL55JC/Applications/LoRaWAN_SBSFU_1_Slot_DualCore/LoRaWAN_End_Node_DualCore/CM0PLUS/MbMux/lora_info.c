@@ -74,7 +74,7 @@ UTIL_MEM_PLACE_IN_SECTION("MB_MEM3")  LoraInfo_t loraInfo;
 /* Exported functions --------------------------------------------------------*/
 void LoraInfo_Init(void)
 {
-  loraInfo.ActivationMode = 0;
+  loraInfo.ContextManagement = 0;
   loraInfo.Region = 0;
   loraInfo.ClassB = 0;
   loraInfo.Kms = 0;
@@ -131,11 +131,15 @@ void LoraInfo_Init(void)
 
 #if (!defined (LORAWAN_KMS) || (LORAWAN_KMS == 0))
   loraInfo.Kms = 0;
-  loraInfo.ActivationMode = 3;
 #else /* LORAWAN_KMS == 1 */
   loraInfo.Kms = 1;
-  loraInfo.ActivationMode = ACTIVATION_BY_PERSONALIZATION + (OVER_THE_AIR_ACTIVATION << 1);
 #endif /* LORAWAN_KMS */
+
+#if (!defined (CONTEXT_MANAGEMENT_ENABLED) || (CONTEXT_MANAGEMENT_ENABLED == 0))
+  loraInfo.ContextManagement = 0;
+#else /* CONTEXT_MANAGEMENT_ENABLED == 1 */
+  loraInfo.ContextManagement = 1;
+#endif /* CONTEXT_MANAGEMENT_ENABLED */
 
   /* For DualCore */
   StoreValueInFeatureListTable();

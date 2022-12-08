@@ -196,7 +196,7 @@ extern "C" {
 
 /**
   * @brief Use CA_ROUTE_MASK to extract configured route from algorithm configuration definition
- */
+  */
 #define CA_ROUTE_MASK   (0xFUL)
 
 /**
@@ -282,7 +282,7 @@ extern "C" {
 /**
   * @brief Use CA_ROUTE_AES_CFG_ENCRYPT_ENABLE to enable encryption for the configured AES algorithm
   * @note  Requires @ref CA_FEAT_AES_ENCRYPT to be defined
- */
+  */
 #if defined(CA_FEAT_AES_ENCRYPT)
 #define CA_ROUTE_AES_CFG_ENCRYPT_ENABLE     (1UL << 8)
 #else /* CA_FEAT_AES_ENCRYPT */
@@ -331,8 +331,9 @@ extern "C" {
   * @brief Use CA_ROUTE_AES_CFG_DEFAULT to choose default settings for the configured AES algorithm
   * @note  Default is: encryption & decryption using 128, 192 & 256 bits lengths keys enabled
   */
-#define CA_ROUTE_AES_CFG_DEFAULT  (CA_ROUTE_AES_CFG_ENCRYPT_ENABLE\
-                                   | CA_ROUTE_AES_CFG_DECRYPT_ENABLE | CA_ROUTE_AES_CFG_128BITS_ENABLE | CA_ROUTE_AES_CFG_192BITS_ENABLE | CA_ROUTE_AES_CFG_256BITS_ENABLE)
+#define CA_ROUTE_AES_CFG_DEFAULT  (CA_ROUTE_AES_CFG_ENCRYPT_ENABLE | CA_ROUTE_AES_CFG_DECRYPT_ENABLE\
+                                   | CA_ROUTE_AES_CFG_128BITS_ENABLE | CA_ROUTE_AES_CFG_192BITS_ENABLE\
+                                   | CA_ROUTE_AES_CFG_256BITS_ENABLE)
 #endif /* CA_ROUTE_AES_CFG_DEFAULT */
 
 /**
@@ -625,4 +626,3 @@ extern "C" {
 #endif
 
 #endif /* CA_CONF_H */
-

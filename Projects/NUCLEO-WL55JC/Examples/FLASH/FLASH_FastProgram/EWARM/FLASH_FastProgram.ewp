@@ -765,7 +765,7 @@
         </option>
         <option>
           <name>IlinkIcfFile</name>
-          <state>$PROJ_DIR$/stm32wl55xx_flash_cm4.icf</state>
+          <state>$PROJ_DIR$\stm32wl55xx_sram_cm4.icf</state>
         </option>
         <option>
           <name>IlinkIcfFileSlave</name>

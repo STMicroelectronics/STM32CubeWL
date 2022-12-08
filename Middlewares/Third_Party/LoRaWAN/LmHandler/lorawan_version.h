@@ -22,14 +22,14 @@
 #define __LORAWAN_VERSION_H__
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 
 #define LORAWAN_VERSION_MAIN   (0x02U) /*!< [31:24] main version */
-#define LORAWAN_VERSION_SUB1   (0x04U) /*!< [23:16] sub1 version */
+#define LORAWAN_VERSION_SUB1   (0x05U) /*!< [23:16] sub1 version */
 #define LORAWAN_VERSION_SUB2   (0x00U) /*!< [15:8]  sub2 version */
 #define LORAWAN_VERSION_RC     (0x00U) /*!< [7:0]  release candidate */
 

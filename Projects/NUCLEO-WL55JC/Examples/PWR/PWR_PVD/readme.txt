@@ -31,7 +31,7 @@ to be turned off if the voltage is getting really low); when the voltage moves b
 above the target threshold, LED2 starts blinking again.
 
 @note PVD thresholds have an hysteresis between rising and falling edges
-      of approximatively 100mV. For Min/Typ/Max values of thresholds and hysteresis,
+      of approximately 100mV. For Min/Typ/Max values of thresholds and hysteresis,
       refer to device datasheet.
 
 @note Care must be taken when using HAL_Delay(), this function provides accurate delay (in milliseconds)

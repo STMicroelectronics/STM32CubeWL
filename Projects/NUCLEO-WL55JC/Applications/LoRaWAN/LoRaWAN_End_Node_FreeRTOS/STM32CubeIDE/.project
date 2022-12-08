@@ -253,6 +253,11 @@
 			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/Third_Party/LoRaWAN/LmHandler/Packages/LmhpCompliance.c</locationURI>
 		</link>
 		<link>
+			<name>Middlewares/LoRaWAN/LmhpPackagesRegistration.c</name>
+			<type>1</type>
+			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/Third_Party/LoRaWAN/LmHandler/Packages/LmhpPackagesRegistration.c</locationURI>
+		</link>
+		<link>
 			<name>Middlewares/LoRaWAN/LoRaMac.c</name>
 			<type>1</type>
 			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/Third_Party/LoRaWAN/Mac/LoRaMac.c</locationURI>

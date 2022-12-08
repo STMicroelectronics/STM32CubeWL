@@ -83,7 +83,7 @@ This behavior is illustrated using LEDs.
       
 @par Keywords
 
-System, IPCC, Half duplex, Dual core, Data transfer synchronisation
+System, IPCC, Half duplex, Dual core, Data transfer synchronization
 
 @par Directory contents
 
