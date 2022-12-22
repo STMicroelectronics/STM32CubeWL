@@ -19,6 +19,4 @@ The **STM32CubeWL MCU Package** projects are directly running on the STM32WL ser
 
 ## Troubleshooting
 
-**Caution** : The **Issues** requests are strictly limited to submit problems or suggestions related to the software delivered in this repo 
-
-**For any question** related to the STM3WL product, the hardware performance, the hardware characteristics, the tools, the environment, you can submit a topic on the [ST Community/STM32 MCUs forum](https://community.st.com/s/group/0F90X000000AXsASAW/stm32-mcus)
+Please refer to the [CONTRIBUTING.md](CONTRIBUTING.md) guide.

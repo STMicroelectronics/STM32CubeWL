@@ -1,22 +1,23 @@
-## Contributing guide
+# Contributing guide
 
-This document serves as a checklist before contributing to this repository.
-It includes links to read up on if topics are unclear to you.
+This guide serves as a checklist before contributing to this repository. It mainly focuses on the steps to follow to submit an issue or a pull-request.
 
-This guide mainly focuses on steps to be followed to submit an issue or a pull-request.
+## 1. Issues
 
-### 1. Before opening an issue
+### 1.1 Before opening an issue
 
-Please check the following boxes before posting an issue:
-- [ ] `Make sure you are using the latest commit (major releases are tagged, but corrections are available as new commits).`
-- [ ] `Make sure your issue is a question/feedback/suggestions RELATED TO the software provided in this repository.` Otherwise, it should be submitted to the ST Community under the MCU topic [page](https://community.st.com/s/topic/0TO0X000000BSqSWAW/stm32-mcus).
-- [ ] `Make sure your issue is not already reported/fixed on GitHub or discussed on a previous issue.` Please refer to this [dashboard](https://github.com/orgs/STMicroelectronics/projects/2) for the list of issues and pull-requests. Do not forget to browse into the **closed** issues.
+Please check the following points before posting an issue:
+* Make sure you are using the latest commit (major releases are tagged, but corrections are available as new commits).
+* Make sure your issue is a question/feedback/suggestions **related to** the software provided in this repository. Otherwise, please refer to section [3](CONTRIBUTING.md#3-support-requests-and-questions) below.
+* Make sure your issue is not already reported/fixed on GitHub or discussed on a previous issue. Do not forget to browse into the **closed** issues.
 
-### 2. Posting the issue
+### 1.2 Posting the issue
 
-When you have checked the previous boxes. You will find two templates for issues (Bug Report or Other Issue) available in the **Issues** tab of the repository.
+When you have checked the previous points, create a new report from the **Issues** tab of this repository. A template is available [here](../../issues/new/choose) to help you report the issue you are facing or the enhancement you would like to propose.
 
-### 3. Pull Requests
+## 2. Pull Requests
+
+### 2.1 Before opening a pull-request
 
 STMicrolectronics is happy to receive contributions from the community, based on an initial Contributor License Agreement (CLA) procedure.
 
@@ -28,8 +29,12 @@ Please note that:
 * The Corporate CLA will always take precedence over the Individual CLA.
 * One CLA submission is sufficient, for any project proposed by STMicroelectronics.
 
-#### How to proceed
+### 2.2 How to proceed
 
 * We recommend to engage first a communication thru an issue, in order to present your proposal, just to confirm that it corresponds to STMicroelectronics' domain or scope.
 * Then fork the project to your GitHub account to further develop your contribution. Please use the latest commit version.
 * Please, submit one pull-request per new feature or proposal. This will ease the analysis and the final merge if accepted.
+
+## 3. Support requests and questions
+
+For support requests or any other question related to the product, the tools, the environment, you can submit a post to the **ST Community** on the appropriate topic [page](https://community.st.com/s/topiccatalog).
