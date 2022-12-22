@@ -13,6 +13,10 @@
    
 The **STM32CubeWL MCU Package** projects are directly running on the STM32WL series boards. You can find in each Projects/*Board name* directories a set of software projects (Applications/Demonstration/Examples). 
 
+## Release note
+
+Details about the content of this release are available in the release note [here](https://htmlpreview.github.io/?https://github.com/STMicroelectronics/STM32CubeWL/blob/main/Release_Notes.html).
+
 ## Boards available
   * STM32WL 
     * [NUCLEO-WL55JC](https://www.st.com/en/evaluation-tools/nucleo-wl55jc.html)
