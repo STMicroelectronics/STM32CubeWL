@@ -368,7 +368,7 @@ TimerTime_t LmHandlerGetDutyCycleWaitTime( void );
  *                processed else if device not yet joined a network \ref LORAMAC_HANDLER_NO_NETWORK_JOINED
  *                else \ref LORAMAC_HANDLER_ERROR
  */
-LmHandlerErrorStatus_t  LmHandlerJoin( ActivationType_t mode, bool forceRejoin );
+LmHandlerErrorStatus_t LmHandlerJoin( ActivationType_t mode, bool forceRejoin );
 
 /*!
  * Check whether the Device is joined to the network
