@@ -394,7 +394,7 @@ LmHandlerErrorStatus_t LmHandlerPingSlotReq( uint8_t periodicity );
  *
  * \retval status Returns \ref LORAMAC_HANDLER_SUCCESS if request has been
  *                processed else if device not yet joined a network \ref LORAMAC_HANDLER_NO_NETWORK_JOINED
-                  else \ref LORAMAC_HANDLER_ERROR
+ *                else \ref LORAMAC_HANDLER_ERROR
  */
 LmHandlerErrorStatus_t LmHandlerRequestClass( DeviceClass_t newClass );
 
