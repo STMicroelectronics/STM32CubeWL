@@ -6,3 +6,11 @@
 	path = Drivers/CMSIS/Device/ST/STM32WLxx
 	url = https://github.com/STMicroelectronics/cmsis_device_wl.git
 	branch = main
+[submodule "Drivers/BSP/STM32WLxx_Nucleo"]
+	path = Drivers/BSP/STM32WLxx_Nucleo
+	url = https://github.com/STMicroelectronics/stm32wlxx-nucleo-bsp
+	branch = main
+[submodule "Drivers/BSP/B-WL5M-SUBG"]
+	path = Drivers/BSP/B-WL5M-SUBG
+	url = https://github.com/STMicroelectronics/b-wl5m-subg1-bsp
+	branch = main
