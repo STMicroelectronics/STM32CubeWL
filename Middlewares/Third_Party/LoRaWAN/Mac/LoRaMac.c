@@ -1042,6 +1042,10 @@ static void ProcessRadioTxDone( void )
         TimerSetValue( &MacCtx.AckTimeoutTimer, MacCtx.RxWindow2Delay + phyParam.Value );
         TimerStart( &MacCtx.AckTimeoutTimer );
     }
+    else if( MacCtx.NodeAckRequested == false )
+    {
+        MacCtx.McpsConfirm.Status = LORAMAC_EVENT_INFO_STATUS_OK;
+    }
 #elif (defined( LORAMAC_VERSION ) && (( LORAMAC_VERSION == 0x01000400 ) || ( LORAMAC_VERSION == 0x01010100 )))
     if( MacCtx.NodeAckRequested == true )
     {
@@ -1072,13 +1076,6 @@ static void ProcessRadioTxDone( void )
     }
 
     RegionSetBandTxDone( Nvm.MacGroup2.Region, &txDone );
-
-#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000300 ))
-    if( MacCtx.NodeAckRequested == false )
-    {
-        MacCtx.McpsConfirm.Status = LORAMAC_EVENT_INFO_STATUS_OK;
-    }
-#endif /* LORAMAC_VERSION */
 }
 
 static void PrepareRxDoneAbort( void )
