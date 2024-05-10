@@ -272,7 +272,11 @@ uint32_t SysTimeToMs( SysTime_t sysTime )
   DeltaTime.Seconds = UTIL_SYSTIMDriver.BKUPRead_Seconds();
 
   SysTime_t calendarTime = SysTimeSub( sysTime, DeltaTime );
-  return calendarTime.Seconds * 1000 + calendarTime.SubSeconds;
+  int64_t calendar_second = calendarTime.Seconds;
+  int64_t calendar_subsecond = calendarTime.SubSeconds;
+  int64_t calendar_time = calendar_second * 1000 + calendar_subsecond;
+  calendar_time = calendar_time % 4194304000;
+  return calendar_time;
 }
 
 SysTime_t SysTimeFromMs( uint32_t timeMs )
