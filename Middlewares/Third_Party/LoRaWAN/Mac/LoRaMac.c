@@ -316,6 +316,14 @@ typedef struct sLoRaMacCtx
      * Buffer containing the MAC layer commands
      */
     uint8_t MacCommandsBuffer[LORA_MAC_COMMAND_MAX_LENGTH];
+    /*!
+     * Time on air accumulation
+     */
+    uint32_t SumSendTime;
+    /*!
+     * Send count accumulation
+     */
+    uint32_t SumSendCount;
 }LoRaMacCtx_t;
 
 /*!
@@ -4009,6 +4017,9 @@ static LoRaMacStatus_t SendFrameOnChannel( uint8_t channel )
     MacCtx.McpsConfirm.TxPower = txPower;
     MacCtx.McpsConfirm.Channel = channel;
 
+    MacCtx.SumSendCount++;
+    MacCtx.SumSendTime += MacCtx.TxTimeOnAir;
+
     // Store the time on air
     MacCtx.McpsConfirm.TxTimeOnAir = MacCtx.TxTimeOnAir;
     MacCtx.MlmeConfirm.TxTimeOnAir = MacCtx.TxTimeOnAir;
@@ -6668,4 +6679,25 @@ LoRaMacStatus_t LoRaMacDeInitialization( void )
     {
         return LORAMAC_STATUS_BUSY;
     }
+}
+
+uint8_t LoRaMacGetMaxPayloadLength(void)
+{
+    return GetMaxAppPayloadWithoutFOptsLength(Nvm.MacGroup2.ChannelsDatarateDefault);
+}
+
+void LoRaMacSendInfoGet(uint32_t *count, uint32_t *time)
+{
+    if(count != NULL) {
+        *count = MacCtx.SumSendCount;
+    }
+    if(time != NULL) {
+        *time = MacCtx.SumSendTime;
+    }
+}
+
+void LoRaMacSendInfoClear(void)
+{
+    MacCtx.SumSendCount = 0;
+    MacCtx.SumSendTime = 0;
 }
