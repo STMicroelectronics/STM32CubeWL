@@ -476,6 +476,26 @@ LoRaMacStatus_t LoRaMacDeInitialization( void );
 
 LoRaMacStatus_t LoRaMacProcessMicForDatablock( uint8_t *buffer, uint32_t size, uint16_t sessionCnt, uint8_t fragIndex, uint32_t descriptor, uint32_t *mic );
 
+/*!
+ * \brief   LoRaMAC gets the maximum application payload length in the absence of the optional FOpt field
+ *
+ * \retval  Max length
+ */
+uint8_t LoRaMacGetMaxPayloadLength( void );
+
+/*!
+ * \brief   LoRaMAC get send info
+ *
+ * \param   [out] count - Send count accumulation
+ * \param   [out] time - Time on air accumulation
+ */
+void LoRaMacSendInfoGet(uint32_t *count, uint32_t *time);
+
+/*!
+ * \brief   LoRaMAC send info clear
+ */
+void LoRaMacSendInfoClear(void);
+
 /*! \} defgroup LORAMAC */
 
 #ifdef __cplusplus
