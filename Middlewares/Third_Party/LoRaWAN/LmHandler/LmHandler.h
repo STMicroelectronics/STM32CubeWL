@@ -363,8 +363,12 @@ TimerTime_t LmHandlerGetDutyCycleWaitTime( void );
  *
  * \param [in] mode Activation mode (OTAA or ABP)
  * \param [in] forceRejoin Flag to force the rejoin even if LoRaWAN context can be restored
+ *
+ * \retval status Returns \ref LORAMAC_HANDLER_SUCCESS if request has been
+ *                processed else if device not yet joined a network \ref LORAMAC_HANDLER_NO_NETWORK_JOINED
+ *                else \ref LORAMAC_HANDLER_ERROR
  */
-void LmHandlerJoin( ActivationType_t mode, bool forceRejoin );
+LmHandlerErrorStatus_t LmHandlerJoin( ActivationType_t mode, bool forceRejoin );
 
 /*!
  * Check whether the Device is joined to the network
@@ -394,7 +398,7 @@ LmHandlerErrorStatus_t LmHandlerPingSlotReq( uint8_t periodicity );
  *
  * \retval status Returns \ref LORAMAC_HANDLER_SUCCESS if request has been
  *                processed else if device not yet joined a network \ref LORAMAC_HANDLER_NO_NETWORK_JOINED
-                  else \ref LORAMAC_HANDLER_ERROR
+ *                else \ref LORAMAC_HANDLER_ERROR
  */
 LmHandlerErrorStatus_t LmHandlerRequestClass( DeviceClass_t newClass );
 

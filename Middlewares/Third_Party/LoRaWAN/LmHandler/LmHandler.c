@@ -589,8 +589,10 @@ TimerTime_t LmHandlerGetDutyCycleWaitTime( void )
     return DutyCycleWaitTime;
 }
 
-void LmHandlerJoin( ActivationType_t mode, bool forceRejoin )
+LmHandlerErrorStatus_t LmHandlerJoin( ActivationType_t mode, bool forceRejoin )
 {
+    LmHandlerErrorStatus_t lmhStatus = LORAMAC_HANDLER_ERROR;
+    LoRaMacStatus_t status;
     MlmeReq_t mlmeReq;
 
     mlmeReq.Type = MLME_JOIN;
@@ -605,7 +607,12 @@ void LmHandlerJoin( ActivationType_t mode, bool forceRejoin )
         LoRaMacStart();
 #if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000300 ))
         /* Starts the OTAA join procedure */
-        LoRaMacMlmeRequest( &mlmeReq );
+        status = LoRaMacMlmeRequest( &mlmeReq );
+
+        if( status == LORAMAC_STATUS_OK )
+        {
+            lmhStatus = LORAMAC_STATUS_OK;
+        }
 #endif /* LORAMAC_VERSION */
     }
     else
@@ -655,7 +662,7 @@ void LmHandlerJoin( ActivationType_t mode, bool forceRejoin )
         {
             LmHandlerCallbacks->OnJoinRequest( &JoinParams );
         }
-        LmHandlerRequestClass( LmHandlerParams.DefaultClass );
+        lmhStatus = LmHandlerRequestClass( LmHandlerParams.DefaultClass );
 #endif /* LORAMAC_VERSION */
     }
 
@@ -663,10 +670,17 @@ void LmHandlerJoin( ActivationType_t mode, bool forceRejoin )
     if( ( CtxRestoreDone == false ) || ( forceRejoin == true ) )
     {
         /* Starts the join procedure */
-        LoRaMacMlmeRequest( &mlmeReq );
+        status  = LoRaMacMlmeRequest( &mlmeReq );
+
+        if( status == LORAMAC_STATUS_OK )
+        {
+            lmhStatus = LORAMAC_STATUS_OK;
+        }
     }
     DutyCycleWaitTime = mlmeReq.ReqReturn.DutyCycleWaitTime;
 #endif /* LORAMAC_VERSION */
+
+    return lmhStatus;
 }
 
 LmHandlerFlagStatus_t LmHandlerJoinStatus( void )
