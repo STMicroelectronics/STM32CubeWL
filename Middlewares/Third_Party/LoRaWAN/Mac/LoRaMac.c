@@ -1008,11 +1008,15 @@ static void ProcessRadioTxDone( void )
     }
 #if ( !defined(DISABLE_LORAWAN_RX_WINDOW) || (DISABLE_LORAWAN_RX_WINDOW == 0) )
     // Setup timers
+    // Setup timers
     CRITICAL_SECTION_BEGIN( );
-    uint32_t offset = TimerGetCurrentTime( ) - TxDoneParams.CurTime;
-    TimerSetValue( &MacCtx.RxWindowTimer1, MacCtx.RxWindow1Delay - offset );
+    uint32_t cur_time = TimerGetCurrentTime( );
+    uint32_t offset = (cur_time >= TxDoneParams.CurTime) ? (cur_time - TxDoneParams.CurTime) : (cur_time+ (0XFFFFFFFF - TxDoneParams.CurTime + 1));
+    uint32_t value1 = (MacCtx.RxWindow1Delay > offset) ? (MacCtx.RxWindow1Delay - offset) : MacCtx.RxWindow1Delay;
+    TimerSetValue( &MacCtx.RxWindowTimer1, value1 );
     TimerStart( &MacCtx.RxWindowTimer1 );
-    TimerSetValue( &MacCtx.RxWindowTimer2, MacCtx.RxWindow2Delay - offset );
+    uint32_t value2 = (MacCtx.RxWindow2Delay > offset) ? (MacCtx.RxWindow2Delay - offset) : MacCtx.RxWindow2Delay;
+    TimerSetValue( &MacCtx.RxWindowTimer2, value2 );
     TimerStart( &MacCtx.RxWindowTimer2 );
     CRITICAL_SECTION_END( );
 #else
