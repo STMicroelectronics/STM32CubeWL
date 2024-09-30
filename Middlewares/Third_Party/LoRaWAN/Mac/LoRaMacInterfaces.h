@@ -3131,15 +3131,15 @@ typedef struct sLoRaMacCallback
      */
     int16_t ( *GetTemperatureLevel )( void );
     /*!
-     * \brief   Get the board 64 bits unique ID
+     * \brief   Get the board 64 bits unique ID (for OTAA)
      *
      * \param   [out] id unique
      */
     void ( *GetUniqueId )(uint8_t *id);
     /*!
-     * \brief   Get the 64 bits unique Device address
+     * \brief   Get the 32 bits Device address (for ABP)
      *
-     * \param   [out] id unique
+     * \param   [out] id devaddr
      */
     void ( *GetDevAddress )(uint32_t *devAddr);
     /*!
