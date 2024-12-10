@@ -316,6 +316,14 @@ typedef struct sLoRaMacCtx
      * Buffer containing the MAC layer commands
      */
     uint8_t MacCommandsBuffer[LORA_MAC_COMMAND_MAX_LENGTH];
+    /*!
+     * Time on air accumulation
+     */
+    uint32_t SumSendTime;
+    /*!
+     * Send count accumulation
+     */
+    uint32_t SumSendCount;
 }LoRaMacCtx_t;
 
 /*!
@@ -1042,6 +1050,10 @@ static void ProcessRadioTxDone( void )
         TimerSetValue( &MacCtx.AckTimeoutTimer, MacCtx.RxWindow2Delay + phyParam.Value );
         TimerStart( &MacCtx.AckTimeoutTimer );
     }
+    else if( MacCtx.NodeAckRequested == false )
+    {
+        MacCtx.McpsConfirm.Status = LORAMAC_EVENT_INFO_STATUS_OK;
+    }
 #elif (defined( LORAMAC_VERSION ) && (( LORAMAC_VERSION == 0x01000400 ) || ( LORAMAC_VERSION == 0x01010100 )))
     if( MacCtx.NodeAckRequested == true )
     {
@@ -1072,13 +1084,6 @@ static void ProcessRadioTxDone( void )
     }
 
     RegionSetBandTxDone( Nvm.MacGroup2.Region, &txDone );
-
-#if (defined( LORAMAC_VERSION ) && ( LORAMAC_VERSION == 0x01000300 ))
-    if( MacCtx.NodeAckRequested == false )
-    {
-        MacCtx.McpsConfirm.Status = LORAMAC_EVENT_INFO_STATUS_OK;
-    }
-#endif /* LORAMAC_VERSION */
 }
 
 static void PrepareRxDoneAbort( void )
@@ -4012,6 +4017,9 @@ static LoRaMacStatus_t SendFrameOnChannel( uint8_t channel )
     MacCtx.McpsConfirm.TxPower = txPower;
     MacCtx.McpsConfirm.Channel = channel;
 
+    MacCtx.SumSendCount++;
+    MacCtx.SumSendTime += MacCtx.TxTimeOnAir;
+
     // Store the time on air
     MacCtx.McpsConfirm.TxTimeOnAir = MacCtx.TxTimeOnAir;
     MacCtx.MlmeConfirm.TxTimeOnAir = MacCtx.TxTimeOnAir;
@@ -6671,4 +6679,25 @@ LoRaMacStatus_t LoRaMacDeInitialization( void )
     {
         return LORAMAC_STATUS_BUSY;
     }
+}
+
+uint8_t LoRaMacGetMaxPayloadLength(void)
+{
+    return GetMaxAppPayloadWithoutFOptsLength(Nvm.MacGroup2.ChannelsDatarateDefault);
+}
+
+void LoRaMacSendInfoGet(uint32_t *count, uint32_t *time)
+{
+    if(count != NULL) {
+        *count = MacCtx.SumSendCount;
+    }
+    if(time != NULL) {
+        *time = MacCtx.SumSendTime;
+    }
+}
+
+void LoRaMacSendInfoClear(void)
+{
+    MacCtx.SumSendCount = 0;
+    MacCtx.SumSendTime = 0;
 }
