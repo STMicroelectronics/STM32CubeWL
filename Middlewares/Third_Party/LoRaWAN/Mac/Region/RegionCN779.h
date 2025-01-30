@@ -184,7 +184,7 @@ extern "C"
  */
 #if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
 #define CN779_RFU1_SIZE                             2
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
 #define CN779_RFU1_SIZE                             1
 #endif /* REGION_VERSION */
 

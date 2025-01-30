@@ -445,6 +445,12 @@ LmHandlerErrorStatus_t LmHandlerConfigure( LmHandlerParams_t *handlerParams )
             LmHandlerCallbacks->OnNvmDataChange( LORAMAC_HANDLER_NVM_RESTORE );
         }
 
+        //BZ #156695
+        if(( LmHandlerJoinStatus() == LORAMAC_HANDLER_SET) && LoRaMacIsStopped())
+        { 
+            LoRaMacStart();
+        }
+
         mibReq.Type = MIB_NVM_CTXS;
         LoRaMacMibGetRequestConfirm( &mibReq );
         LoRaMacNvmData_t *current_nvm = mibReq.Param.Contexts;

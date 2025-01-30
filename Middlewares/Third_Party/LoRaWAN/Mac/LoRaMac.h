@@ -476,6 +476,14 @@ LoRaMacStatus_t LoRaMacDeInitialization( void );
 
 LoRaMacStatus_t LoRaMacProcessMicForDatablock( uint8_t *buffer, uint32_t size, uint16_t sessionCnt, uint8_t fragIndex, uint32_t descriptor, uint32_t *mic );
 
+
+/*!
+ * \brief   Resets the internal state machine.
+ *
+ * \details Resets the internal state machine to force the MAC to finalize a procedure.
+ */
+void LoRaMacReset( void );
+
 /*! \} defgroup LORAMAC */
 
 #ifdef __cplusplus

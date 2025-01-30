@@ -34,7 +34,7 @@
 
 #define SUBGHZ_PHY_VERSION_MAIN   (0x01U) /*!< [31:24] main version */
 #define SUBGHZ_PHY_VERSION_SUB1   (0x03U) /*!< [23:16] sub1 version */
-#define SUBGHZ_PHY_VERSION_SUB2   (0x00U) /*!< [15:8]  sub2 version */
+#define SUBGHZ_PHY_VERSION_SUB2   (0x01U) /*!< [15:8]  sub2 version */
 #define SUBGHZ_PHY_TYPE           (0x01U) /*!< [7:0] type version */
 #define SUBGHZ_PHY_VERSION        ((SUBGHZ_PHY_VERSION_MAIN  << 24) \
                                    |(SUBGHZ_PHY_VERSION_SUB1 << 16) \

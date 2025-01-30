@@ -152,7 +152,7 @@ static void SystemSecure_Config(void)
     Error_Handler();
   }
 
-  /* Configure security option bytes : overal security, CPU2 boot vector address & SPI SubGhz security enable */
+  /* Configure security option bytes : overall security, CPU2 boot vector address & SPI SubGhz security enable */
   optionbytes.OptionType = (OPTIONBYTE_C2_BOOT_VECT | OPTIONBYTE_SECURE_MODE | OPTIONBYTE_SUBGHZSPI_SECURE_ACCESS);
   optionbytes.SecureMode = (OB_SECURE_SYSTEM_AND_FLASH_ENABLE | OB_SECURE_SRAM1_ENABLE | OB_SECURE_SRAM2_ENABLE);
   optionbytes.SUBGHZSPISecureAccess = OB_SUBGHZSPI_SECURE_ACCESS_ENABLE;

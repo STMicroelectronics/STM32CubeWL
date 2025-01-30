@@ -181,7 +181,7 @@ extern "C"
  */
 #if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
 #define IN865_RFU1_SIZE                             1
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
 #define IN865_RFU1_SIZE                             0
 #endif /* REGION_VERSION */
 
@@ -239,7 +239,7 @@ extern "C"
  */
 #define IN865_JOIN_CHANNELS                         ( uint16_t )( LC( 1 ) | LC( 2 ) | LC( 3 ) )
 
-#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#if (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
 /*!
  * RFU value
  */
@@ -271,7 +271,7 @@ static const uint8_t MaxPayloadOfDatarateRepeaterIN865[] = { 51, 51, 51, 115, 22
  */
 #if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
 static const int8_t EffectiveRx1DrOffsetIN865[] = { 0, 1, 2, 3, 4, 5, -1, -2 };
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
 static const int8_t EffectiveRx1DrOffsetIN865[8][8] =
 {
     { DR_0 , DR_0 , DR_0 , DR_0 , DR_0 , DR_0 , DR_1 , DR_2  }, // DR_0

@@ -42,7 +42,7 @@
 #include "RegionCN470.h"
 #if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
 #include "RegionBaseUS.h"
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
 #include "RegionCN470A20.h"
 #include "RegionCN470B20.h"
 #include "RegionCN470A26.h"
@@ -73,7 +73,7 @@
 #define HYBRID_DEFAULT_MASK5 0x0000
 #endif
 
-#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#if (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
 #ifndef REGION_CN470_DEFAULT_CHANNEL_PLAN
 #define REGION_CN470_DEFAULT_CHANNEL_PLAN CHANNEL_PLAN_20MHZ_TYPE_A
 #endif
@@ -188,7 +188,7 @@ typedef struct sRegionCN470ChannelPlanCtx
  */
 static RegionNvmDataGroup1_t* RegionNvmGroup1;
 static RegionNvmDataGroup2_t* RegionNvmGroup2;
-#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#if (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
 static Band_t* RegionBands;
 
 /*
@@ -333,7 +333,7 @@ static bool VerifyRfFreq( uint32_t freq )
     }
     return true;
 }
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
 static bool VerifyRfFreq( uint32_t frequency )
 {
     // Check radio driver support
@@ -462,7 +462,7 @@ PhyParam_t RegionCN470GetPhyParam( GetPhyParams_t* getPhy )
             phyParam.Value = ( REGION_COMMON_DEFAULT_ACK_TIMEOUT + randr( -REGION_COMMON_DEFAULT_ACK_TIMEOUT_RND, REGION_COMMON_DEFAULT_ACK_TIMEOUT_RND ) );
             break;
         }
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
         case PHY_RETRANSMIT_TIMEOUT:
         {
             phyParam.Value = ( REGION_COMMON_DEFAULT_RETRANSMIT_TIMEOUT + randr( -REGION_COMMON_DEFAULT_RETRANSMIT_TIMEOUT_RND, REGION_COMMON_DEFAULT_RETRANSMIT_TIMEOUT_RND ) );
@@ -478,7 +478,7 @@ PhyParam_t RegionCN470GetPhyParam( GetPhyParams_t* getPhy )
         {
 #if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
             phyParam.Value = CN470_RX_WND_2_FREQ;
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
             phyParam.Value = REGION_CN470_DEFAULT_RX_WND_2_FREQ;
 
             if( RegionNvmGroup2->ChannelPlan != CHANNEL_PLAN_UNKNOWN )
@@ -539,7 +539,7 @@ PhyParam_t RegionCN470GetPhyParam( GetPhyParams_t* getPhy )
             phyParam.Value = RegionBaseUSCalcDownlinkFrequency( getPhy->Channel,
                                                                 CN470_BEACON_CHANNEL_FREQ,
                                                                 CN470_BEACON_CHANNEL_STEPWIDTH );
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
             phyParam.Value = REGION_CN470_DEFAULT_RX_WND_2_FREQ;
 
             // Implementation depending on the join channel
@@ -587,7 +587,7 @@ PhyParam_t RegionCN470GetPhyParam( GetPhyParams_t* getPhy )
             phyParam.Value = CN470_BEACON_NB_CHANNELS;
             break;
         }
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
         case PHY_BEACON_NB_CHANNELS:
         {
             // Implementation depending on the join channel
@@ -661,7 +661,7 @@ void RegionCN470SetBandTxDone( SetBandTxDoneParams_t* txDone )
 #if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
     RegionCommonSetBandTxDone( &RegionNvmGroup1->Bands[RegionNvmGroup2->Channels[txDone->Channel].Band],
                                txDone->LastTxAirTime, txDone->Joined, txDone->ElapsedTimeSinceStartUp );
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
     RegionCommonSetBandTxDone( &RegionBands[RegionNvmGroup2->Channels[txDone->Channel].Band],
                                txDone->LastTxAirTime, txDone->Joined, txDone->ElapsedTimeSinceStartUp );
 #endif /* REGION_VERSION */
@@ -720,7 +720,7 @@ void RegionCN470InitDefaults( InitDefaultsParams_t* params )
 
             // Copy channels default mask
             RegionCommonChanMaskCopy( RegionNvmGroup2->ChannelsMask, RegionNvmGroup2->ChannelsDefaultMask, CHANNELS_MASK_SIZE );
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
             RegionBands = (Band_t*) params->Bands;
 
             // Default bands
@@ -757,7 +757,7 @@ void RegionCN470InitDefaults( InitDefaultsParams_t* params )
 #if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
             // Copy channels default mask
             RegionCommonChanMaskCopy( RegionNvmGroup2->ChannelsMask, RegionNvmGroup2->ChannelsDefaultMask, CHANNELS_MASK_SIZE );
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
             // Restore channels default mask
             RegionCommonChanMaskCopy( RegionNvmGroup2->ChannelsMask, RegionNvmGroup2->ChannelsDefaultMask, CHANNELS_MASK_SIZE );
 
@@ -815,7 +815,7 @@ bool RegionCN470Verify( VerifyParams_t* verify, PhyAttribute_t phyAttribute )
 void RegionCN470ApplyCFList( ApplyCFListParams_t* applyCFList )
 {
 #if defined( REGION_CN470 )
-#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#if (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
     // Setup the channel plan based on the join channel
     RegionNvmGroup2->CommonJoinChannelIndex = applyCFList->JoinChannel;
     RegionNvmGroup2->IsOtaaDevice = true;
@@ -849,7 +849,7 @@ void RegionCN470ApplyCFList( ApplyCFListParams_t* applyCFList )
         RegionNvmGroup2->ChannelsMask[chMaskItr] = (uint16_t) (0x00FF & applyCFList->Payload[cntPayload]);
         RegionNvmGroup2->ChannelsMask[chMaskItr] |= (uint16_t) (applyCFList->Payload[cntPayload+1] << 8);
     }
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
     for( uint8_t chMaskItr = 0, cntPayload = 0; chMaskItr < ChannelPlanCtx.JoinAcceptListSize; chMaskItr++, cntPayload+=2 )
     {
         RegionNvmGroup2->ChannelsMask[chMaskItr] = (uint16_t) (0x00FF & applyCFList->Payload[cntPayload]);
@@ -871,7 +871,7 @@ bool RegionCN470ChanMaskSet( ChanMaskSetParams_t* chanMaskSet )
         {
             RegionCommonChanMaskCopy( RegionNvmGroup2->ChannelsMask, chanMaskSet->ChannelsMaskIn, CHANNELS_MASK_SIZE );
 
-#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#if (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
             for( uint8_t i = 0; i < CHANNELS_MASK_SIZE; i++ )
             { // Copy-And the channels mask
                 RegionNvmGroup1->ChannelsMaskRemaining[i] &= RegionNvmGroup2->ChannelsMask[i];
@@ -927,7 +927,7 @@ bool RegionCN470RxConfig( RxConfigParams_t* rxConfig, int8_t* datarate )
         // Apply window 1 frequency
         frequency = CN470_FIRST_RX1_CHANNEL + ( rxConfig->Channel % 48 ) * CN470_STEPWIDTH_RX1_CHANNEL;
     }
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
     // The RX configuration depends on whether the device has joined or not.
     if( rxConfig->NetworkActivation != ACTIVATION_TYPE_NONE )
     {
@@ -998,7 +998,7 @@ bool RegionCN470TxConfig( TxConfigParams_t* txConfig, int8_t* txPower, TimerTime
 
     // Setup maximum payload length of the radio driver
     Radio.SetMaxPayloadLength( MODEM_LORA, txConfig->PktLen );
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
     RadioModems_t modem;
     uint32_t frequency;
     uint8_t band;
@@ -1109,7 +1109,7 @@ uint8_t RegionCN470LinkAdrReq( LinkAdrReqParams_t* linkAdrReq, int8_t* drOut, in
             channelsMask[linkAdrParams.ChMaskCtrl] = linkAdrParams.ChMask;
         }
     }
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
     while( bytesProcessed < linkAdrReq->PayloadSize )
     {
         // Get ADR request parameters
@@ -1271,7 +1271,7 @@ LoRaMacStatus_t RegionCN470NextChannel( NextChanParams_t* nextChanParams, uint8_
     countChannelsParams.Bands = RegionNvmGroup1->Bands;
     countChannelsParams.MaxNbChannels = CN470_MAX_NB_CHANNELS;
     countChannelsParams.JoinChannels = NULL;
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
     uint8_t nbEnabledChannels = 0;
     uint8_t nbRestrictedChannels = 0;
     uint8_t enabledChannels[CN470_MAX_NB_CHANNELS] = { 0 };
@@ -1332,7 +1332,7 @@ LoRaMacStatus_t RegionCN470NextChannel( NextChanParams_t* nextChanParams, uint8_
         // We found a valid channel. Selection is random.
         *channel = enabledChannels[randr( 0, nbEnabledChannels - 1 )];
 
-#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#if (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
         // Disable the channel in the mask
         RegionCommonChanDisable( RegionNvmGroup1->ChannelsMaskRemaining, *channel, ChannelPlanCtx.ChannelsMaskSize );
 #endif /* REGION_VERSION */
@@ -1374,7 +1374,7 @@ uint8_t RegionCN470ApplyDrOffset( uint8_t downlinkDwellTime, int8_t dr, int8_t d
 #if defined( REGION_CN470 )
 #if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
     int8_t datarate = dr - drOffset;
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
     int8_t datarate = DatarateOffsetsCN470[dr][drOffset];
 #endif /* REGION_VERSION */
     if( datarate < 0 )

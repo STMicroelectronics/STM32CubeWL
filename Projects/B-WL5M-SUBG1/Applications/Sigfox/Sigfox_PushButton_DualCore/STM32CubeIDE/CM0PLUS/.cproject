@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+	<storageModule moduleId="org.eclipse.cdt.core.settings">
+		<cconfiguration id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.1520802400">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.1520802400" moduleId="org.eclipse.cdt.core.settings" name="Debug">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactExtension="elf" artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug" cleanCommand="rm -rf" description="" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.1520802400" name="Debug" parent="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug">
+					<folderInfo id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.1520802400." name="/" resourcePath="">
+						<toolChain id="com.st.stm32cube.ide.mcu.gnu.managedbuild.toolchain.exe.debug.806486693" name="MCU ARM GCC" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.toolchain.exe.debug">
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_mcu.1048778580" name="MCU" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_mcu" useByScannerDiscovery="true" value="STM32WL5MOCHx" valueType="string"/>
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_cpuid.44020938" name="CPU" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_cpuid" useByScannerDiscovery="false" value="1" valueType="string"/>
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_coreid.1430845266" name="Core" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_coreid" useByScannerDiscovery="false" value="0" valueType="string"/>
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_board.561178793" name="Board" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_board" useByScannerDiscovery="false" value="B-WL5M-SUBG1" valueType="string"/>
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.defaults.1421170668" name="Defaults" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.defaults" useByScannerDiscovery="false" value="com.st.stm32cube.ide.common.services.build.inputs.revA.1.0.5 || Debug || true || Executable || com.st.stm32cube.ide.mcu.gnu.managedbuild.option.toolchain.value.workspace || B-WL5M-SUBG1 || 1 || 0 || arm-none-eabi- || ${gnu_tools_for_stm32_compiler_path} || ../../../CM0PLUS/Core/Inc | ../../../CM0PLUS/KMS/App | ../../../CM0PLUS/Sigfox/App | ../../../CM0PLUS/Sigfox/Target | ../../../CM0PLUS/MbMux | ../../../Common/System | ../../../Common/MbMux | ../../../../../../../../Utilities/trace/adv_trace | ../../../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc | ../../../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc/Legacy | ../../../../../../../../Utilities/misc | ../../../../../../../../Utilities/sequencer | ../../../../../../../../Utilities/timer | ../../../../../../../../Utilities/lpm/tiny_lpm | ../../../../../../../../Middlewares/Third_Party/Sigfox/Crypto | ../../../../../../../../Drivers/CMSIS/Device/ST/STM32WLxx/Include | ../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/Core | ../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/Modules | ../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/Interface | ../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/Interface/CryptoApi | ../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/Interface/CryptoApi/HAL | ../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/Interface/CryptoApi/MBED | ../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/Interface/CryptoApi/ST | ../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/niKMS | ../../../../../../../../Middlewares/Third_Party/mbed-crypto/include | ../../../../../../../../Middlewares/Third_Party/mbed-crypto/include/mbedtls | ../../../../../../../../Middlewares/Third_Party/mbed-crypto/include/psa | ../../../../../../../../Middlewares/Third_Party/Sigfox/Monarch | ../../../../../../../../Middlewares/Third_Party/Sigfox/SigfoxLib | ../../../../../../../../Middlewares/Third_Party/Sigfox/SigfoxLibTest | ../../../../../../../../Middlewares/Third_Party/SubGHz_Phy | ../../../../../../../../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver | ../../../../../../../../Drivers/CMSIS/Include ||  ||  || CORE_CM0PLUS | USE_HAL_DRIVER | STM32WL5Mxx | MBEDTLS_CONFIG_FILE=&quot;mbedtls_config.h&quot; | KMS_ENABLED ||  ||  ||  || ../../../../../../../../Middlewares/Third_Party/Sigfox/Crypto/Sgfx-Cmac-V1.0.0-CM0-O3.a | ../../../../../../../../Middlewares/Third_Party/Sigfox/Monarch/Sgfx-Monarch-V2.0.1-CM0-O3.a | ../../../../../../../../Middlewares/Third_Party/Sigfox/SigfoxLib/SFX_LIB_V2.10.0_SE_FDL_MON.a | ../../../../../../../../Middlewares/Third_Party/Sigfox/SigfoxLibTest/SFX_ADDON_RFP_V0.8.0_SE_FDL_MON_ASYNC.a || ${workspace_loc:/${ProjName}/STM32WL5MOCHX_FLASH.ld} || true || NonSecure ||  || secure_nsclib.o ||  || None || true" valueType="string"/>
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.targetplatform.148366815" isAbstract="false" osList="all" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.targetplatform"/>
+							<builder buildPath="${workspace_loc:/Sigfox_PushButton_DualCore_CM0PLUS}/Debug" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.builder.1202232574" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.builder"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.247883547" name="MCU GCC Assembler" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler">
+								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.debuglevel.1503984899" name="Debug level" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.debuglevel" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.debuglevel.value.g3" valueType="enumerated"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.definedsymbols.363788156" name="Define symbols (-D)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.definedsymbols" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="DEBUG"/>
+								</option>
+								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.input.1954703523" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.input"/>
+							</tool>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.1523960046" name="MCU GCC Compiler" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler">
+								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.debuglevel.288086327" name="Debug level" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.debuglevel" useByScannerDiscovery="false" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.debuglevel.value.g3" valueType="enumerated"/>
+								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.optimization.level.241278072" name="Optimization level" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.optimization.level" useByScannerDiscovery="false" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.optimization.level.value.og" valueType="enumerated"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.definedsymbols.1833548834" name="Define symbols (-D)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.definedsymbols" useByScannerDiscovery="false" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="DEBUG"/>
+									<listOptionValue builtIn="false" value="CORE_CM0PLUS"/>
+									<listOptionValue builtIn="false" value="USE_HAL_DRIVER"/>
+									<listOptionValue builtIn="false" value="STM32WL5Mxx"/>
+									<listOptionValue builtIn="false" value="MBEDTLS_CONFIG_FILE=&quot;mbedtls_config.h&quot;"/>
+									<listOptionValue builtIn="false" value="KMS_ENABLED"/>
+								</option>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includepaths.240547621" name="Include paths (-I)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includepaths" useByScannerDiscovery="false" valueType="includePath">
+									<listOptionValue builtIn="false" value="../../../CM0PLUS/Core/Inc"/>
+									<listOptionValue builtIn="false" value="../../../CM0PLUS/KMS/App"/>
+									<listOptionValue builtIn="false" value="../../../CM0PLUS/Sigfox/App"/>
+									<listOptionValue builtIn="false" value="../../../CM0PLUS/Sigfox/Target"/>
+									<listOptionValue builtIn="false" value="../../../CM0PLUS/MbMux"/>
+									<listOptionValue builtIn="false" value="../../../Common/System"/>
+									<listOptionValue builtIn="false" value="../../../Common/MbMux"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Utilities/trace/adv_trace"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc/Legacy"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Utilities/misc"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Utilities/sequencer"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Utilities/timer"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Utilities/lpm/tiny_lpm"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/Sigfox/Crypto"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Drivers/CMSIS/Device/ST/STM32WLxx/Include"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/Core"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/Modules"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/Interface"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/Interface/CryptoApi"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/Interface/CryptoApi/HAL"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/Interface/CryptoApi/MBED"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/Interface/CryptoApi/ST"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/niKMS"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/mbed-crypto/include"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/mbed-crypto/include/mbedtls"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/mbed-crypto/include/psa"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/Sigfox/Monarch"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/Sigfox/SigfoxLib"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/Sigfox/SigfoxLibTest"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/SubGHz_Phy"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Drivers/CMSIS/Include"/>
+								</option>
+								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.208147953" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c"/>
+							</tool>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.1391911628" name="MCU G++ Compiler" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler">
+								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.debuglevel.458554680" name="Debug level" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.debuglevel" useByScannerDiscovery="false" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.debuglevel.value.g3" valueType="enumerated"/>
+								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.optimization.level.1496902793" name="Optimization level" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.optimization.level" useByScannerDiscovery="false"/>
+							</tool>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.732806748" name="MCU GCC Linker" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker">
+								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.script.1841531678" name="Linker Script (-T)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.script" value="${workspace_loc:/${ProjName}/STM32WL5MOCHX_FLASH.ld}" valueType="string"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.directories.1998041067" name="Library search path (-L)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.directories" valueType="libPaths">
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/Sigfox/Crypto"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/Sigfox/Monarch"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/Sigfox/SigfoxLib"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/Sigfox/SigfoxLibTest"/>
+								</option>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.libraries.58885892" name="Libraries (-l)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.libraries" valueType="libs">
+									<listOptionValue builtIn="false" value=":Sgfx-Cmac-V1.0.0-CM0-O3.a"/>
+									<listOptionValue builtIn="false" value=":Sgfx-Monarch-V2.0.1-CM0-O3.a"/>
+									<listOptionValue builtIn="false" value=":SFX_LIB_V2.10.0_SE_FDL_MON.a"/>
+									<listOptionValue builtIn="false" value=":SFX_ADDON_RFP_V0.8.0_SE_FDL_MON_ASYNC.a"/>
+								</option>
+								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.uselinkergroup.120656057" name="Place libraries in a linker group (-Wl,--start-group $(LIBS) -Wl,--end-group)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.uselinkergroup" useByScannerDiscovery="false" value="true" valueType="boolean"/>
+								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.input.1392768755" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.input">
+									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
+								</inputType>
+							</tool>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.linker.1767265094" name="MCU G++ Linker" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.linker"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.archiver.837857522" name="MCU GCC Archiver" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.archiver"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.size.2056683065" name="MCU Size" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.size"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objdump.listfile.1183651490" name="MCU Output Converter list file" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objdump.listfile"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.hex.1799846087" name="MCU Output Converter Hex" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.hex"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.binary.1792711728" name="MCU Output Converter Binary" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.binary"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.verilog.1046135677" name="MCU Output Converter Verilog" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.verilog"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.srec.1378225686" name="MCU Output Converter Motorola S-rec" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.srec"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.symbolsrec.1482459434" name="MCU Output Converter Motorola S-rec with symbols" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.symbolsrec"/>
+						</toolChain>
+					</folderInfo>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+		<cconfiguration id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.release.987464344">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.release.987464344" moduleId="org.eclipse.cdt.core.settings" name="Release">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactExtension="elf" artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release" cleanCommand="rm -rf" description="" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.release.987464344" name="Release" parent="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.release">
+					<folderInfo id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.release.987464344." name="/" resourcePath="">
+						<toolChain id="com.st.stm32cube.ide.mcu.gnu.managedbuild.toolchain.exe.release.1831428881" name="MCU ARM GCC" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.toolchain.exe.release">
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_mcu.1052080165" name="MCU" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_mcu" useByScannerDiscovery="true" value="STM32WL5MOCHx" valueType="string"/>
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_cpuid.1922874145" name="CPU" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_cpuid" useByScannerDiscovery="false" value="1" valueType="string"/>
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_coreid.15948876" name="Core" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_coreid" useByScannerDiscovery="false" value="0" valueType="string"/>
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_board.1939547277" name="Board" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_board" useByScannerDiscovery="false" value="B-WL5M-SUBG1" valueType="string"/>
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.defaults.740298766" name="Defaults" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.defaults" useByScannerDiscovery="false" value="com.st.stm32cube.ide.common.services.build.inputs.revA.1.0.5 || Release || false || Executable || com.st.stm32cube.ide.mcu.gnu.managedbuild.option.toolchain.value.workspace || B-WL5M-SUBG1 || 1 || 0 || arm-none-eabi- || ${gnu_tools_for_stm32_compiler_path} || ../../../CM0PLUS/Core/Inc | ../../../CM0PLUS/KMS/App | ../../../CM0PLUS/Sigfox/App | ../../../CM0PLUS/Sigfox/Target | ../../../CM0PLUS/MbMux | ../../../Common/System | ../../../Common/MbMux | ../../../../../../../../Utilities/trace/adv_trace | ../../../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc | ../../../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc/Legacy | ../../../../../../../../Utilities/misc | ../../../../../../../../Utilities/sequencer | ../../../../../../../../Utilities/timer | ../../../../../../../../Utilities/lpm/tiny_lpm | ../../../../../../../../Middlewares/Third_Party/Sigfox/Crypto | ../../../../../../../../Drivers/CMSIS/Device/ST/STM32WLxx/Include | ../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/Core | ../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/Modules | ../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/Interface | ../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/Interface/CryptoApi | ../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/Interface/CryptoApi/HAL | ../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/Interface/CryptoApi/MBED | ../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/Interface/CryptoApi/ST | ../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/niKMS | ../../../../../../../../Middlewares/Third_Party/mbed-crypto/include | ../../../../../../../../Middlewares/Third_Party/mbed-crypto/include/mbedtls | ../../../../../../../../Middlewares/Third_Party/mbed-crypto/include/psa | ../../../../../../../../Middlewares/Third_Party/Sigfox/Monarch | ../../../../../../../../Middlewares/Third_Party/Sigfox/SigfoxLib | ../../../../../../../../Middlewares/Third_Party/Sigfox/SigfoxLibTest | ../../../../../../../../Middlewares/Third_Party/SubGHz_Phy | ../../../../../../../../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver | ../../../../../../../../Drivers/CMSIS/Include ||  ||  || CORE_CM0PLUS | USE_HAL_DRIVER | STM32WL5Mxx | MBEDTLS_CONFIG_FILE=&quot;mbedtls_config.h&quot; | KMS_ENABLED ||  ||  ||  || ../../../../../../../../Middlewares/Third_Party/Sigfox/Crypto/Sgfx-Cmac-V1.0.0-CM0-O3.a | ../../../../../../../../Middlewares/Third_Party/Sigfox/Monarch/Sgfx-Monarch-V2.0.1-CM0-O3.a | ../../../../../../../../Middlewares/Third_Party/Sigfox/SigfoxLib/SFX_LIB_V2.10.0_SE_FDL_MON.a | ../../../../../../../../Middlewares/Third_Party/Sigfox/SigfoxLibTest/SFX_ADDON_RFP_V0.8.0_SE_FDL_MON_ASYNC.a || ${workspace_loc:/${ProjName}/STM32WL5MOCHX_FLASH.ld} || true || NonSecure ||  || secure_nsclib.o ||  || None || true" valueType="string"/>
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.targetplatform.883984718" isAbstract="false" osList="all" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.targetplatform"/>
+							<builder buildPath="${workspace_loc:/Sigfox_PushButton_DualCore_CM0PLUS}/Release" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.builder.1865829391" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.builder"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.1712381088" name="MCU GCC Assembler" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler">
+								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.debuglevel.945835735" name="Debug level" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.debuglevel" useByScannerDiscovery="false" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.debuglevel.value.g0" valueType="enumerated"/>
+								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.input.478878749" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.input"/>
+							</tool>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.1916108225" name="MCU GCC Compiler" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler">
+								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.debuglevel.405182081" name="Debug level" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.debuglevel" useByScannerDiscovery="false" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.debuglevel.value.g0" valueType="enumerated"/>
+								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.optimization.level.875763464" name="Optimization level" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.optimization.level" useByScannerDiscovery="false" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.optimization.level.value.os" valueType="enumerated"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.definedsymbols.348809221" name="Define symbols (-D)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.definedsymbols" useByScannerDiscovery="false" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="CORE_CM0PLUS"/>
+									<listOptionValue builtIn="false" value="USE_HAL_DRIVER"/>
+									<listOptionValue builtIn="false" value="STM32WL5Mxx"/>
+									<listOptionValue builtIn="false" value="MBEDTLS_CONFIG_FILE=&quot;mbedtls_config.h&quot;"/>
+									<listOptionValue builtIn="false" value="KMS_ENABLED"/>
+								</option>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includepaths.1510680577" name="Include paths (-I)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includepaths" useByScannerDiscovery="false" valueType="includePath">
+									<listOptionValue builtIn="false" value="../../../CM0PLUS/Core/Inc"/>
+									<listOptionValue builtIn="false" value="../../../CM0PLUS/KMS/App"/>
+									<listOptionValue builtIn="false" value="../../../CM0PLUS/Sigfox/App"/>
+									<listOptionValue builtIn="false" value="../../../CM0PLUS/Sigfox/Target"/>
+									<listOptionValue builtIn="false" value="../../../CM0PLUS/MbMux"/>
+									<listOptionValue builtIn="false" value="../../../Common/System"/>
+									<listOptionValue builtIn="false" value="../../../Common/MbMux"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Utilities/trace/adv_trace"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc/Legacy"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Utilities/misc"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Utilities/sequencer"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Utilities/timer"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Utilities/lpm/tiny_lpm"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/Sigfox/Crypto"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Drivers/CMSIS/Device/ST/STM32WLxx/Include"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/Core"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/Modules"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/Interface"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/Interface/CryptoApi"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/Interface/CryptoApi/HAL"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/Interface/CryptoApi/MBED"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/Interface/CryptoApi/ST"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/ST/STM32_Key_Management_Services/niKMS"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/mbed-crypto/include"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/mbed-crypto/include/mbedtls"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/mbed-crypto/include/psa"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/Sigfox/Monarch"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/Sigfox/SigfoxLib"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/Sigfox/SigfoxLibTest"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/SubGHz_Phy"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Drivers/CMSIS/Include"/>
+								</option>
+								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.1901891042" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c"/>
+							</tool>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.833520427" name="MCU G++ Compiler" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler">
+								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.debuglevel.705555994" name="Debug level" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.debuglevel" useByScannerDiscovery="false" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.debuglevel.value.g0" valueType="enumerated"/>
+								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.optimization.level.2113181130" name="Optimization level" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.optimization.level" useByScannerDiscovery="false" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.optimization.level.value.os" valueType="enumerated"/>
+							</tool>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.819247444" name="MCU GCC Linker" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker">
+								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.script.108796544" name="Linker Script (-T)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.script" useByScannerDiscovery="false" value="${workspace_loc:/${ProjName}/STM32WL5MOCHX_FLASH.ld}" valueType="string"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.directories.368621256" name="Library search path (-L)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.directories" useByScannerDiscovery="false" valueType="libPaths">
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/Sigfox/Crypto"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/Sigfox/Monarch"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/Sigfox/SigfoxLib"/>
+									<listOptionValue builtIn="false" value="../../../../../../../../Middlewares/Third_Party/Sigfox/SigfoxLibTest"/>
+								</option>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.libraries.1087736306" name="Libraries (-l)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.libraries" useByScannerDiscovery="false" valueType="libs">
+									<listOptionValue builtIn="false" value=":Sgfx-Cmac-V1.0.0-CM0-O3.a"/>
+									<listOptionValue builtIn="false" value=":Sgfx-Monarch-V2.0.1-CM0-O3.a"/>
+									<listOptionValue builtIn="false" value=":SFX_LIB_V2.10.0_SE_FDL_MON.a"/>
+									<listOptionValue builtIn="false" value=":SFX_ADDON_RFP_V0.8.0_SE_FDL_MON_ASYNC.a"/>
+								</option>
+								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.uselinkergroup.1538143433" name="Place libraries in a linker group (-Wl,--start-group $(LIBS) -Wl,--end-group)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.uselinkergroup" useByScannerDiscovery="false" value="true" valueType="boolean"/>
+								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.input.211319370" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.input">
+									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
+								</inputType>
+							</tool>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.linker.1081646432" name="MCU G++ Linker" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.linker"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.archiver.1151452399" name="MCU GCC Archiver" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.archiver"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.size.878047307" name="MCU Size" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.size"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objdump.listfile.239304642" name="MCU Output Converter list file" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objdump.listfile"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.hex.1843206322" name="MCU Output Converter Hex" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.hex"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.binary.1915864092" name="MCU Output Converter Binary" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.binary"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.verilog.1465217011" name="MCU Output Converter Verilog" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.verilog"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.srec.1213722973" name="MCU Output Converter Motorola S-rec" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.srec"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.symbolsrec.1967852607" name="MCU Output Converter Motorola S-rec with symbols" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.symbolsrec"/>
+						</toolChain>
+					</folderInfo>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.core.pathentry"/>
+	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+		<project id="Sigfox_PushButton_DualCore_CM0PLUS.null.309642896" name="Sigfox_PushButton_DualCore_CM0PLUS"/>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Debug">
+			<resource resourceType="PROJECT" workspacePath="/Sigfox_PushButton_DualCore_CM0PLUS"/>
+		</configuration>
+		<configuration configurationName="Release">
+			<resource resourceType="PROJECT" workspacePath="/Sigfox_PushButton_DualCore_CM0PLUS"/>
+		</configuration>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.1520802400;com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.1520802400.;com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.1523960046;com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.208147953">
+			<autodiscovery enabled="false" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.release.987464344;com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.release.987464344.;com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.1916108225;com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.1901891042">
+			<autodiscovery enabled="false" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+	</storageModule>
+</cproject>

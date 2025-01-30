@@ -42,7 +42,7 @@ extern "C"
 #include "LoRaMacTypes.h"
 #include "RegionVersion.h"
 
-#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#if (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
 /*!
  * Channel plan for region CN470
  */
@@ -122,7 +122,7 @@ typedef struct sRegionNvmDataGroup2
      * LoRaMac channels default mask
      */
     uint16_t ChannelsDefaultMask[ REGION_NVM_CHANNELS_MASK_SIZE ];
-#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#if (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
 #if defined( REGION_CN470 )
     /*!
      * Holds the channel plan.

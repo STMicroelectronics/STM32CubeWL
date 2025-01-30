@@ -317,6 +317,9 @@ static void LmhpFragmentationProcess( void )
     }
 }
 
+
+static uint8_t buffer[FRAG_MAX_SIZE];
+
 static void LmhpFragmentationOnMcpsIndication( McpsIndication_t *mcpsIndication )
 {
     uint8_t cmdIndex = 0;
@@ -537,7 +540,8 @@ static void LmhpFragmentationOnMcpsIndication( McpsIndication_t *mcpsIndication 
 
                     if( FragSessionData[fragIndex].FragDecoderProcessStatus == FRAG_SESSION_ONGOING )
                     {
-                        FragSessionData[fragIndex].FragDecoderProcessStatus = FragDecoderProcess( fragCounter, &mcpsIndication->Buffer[cmdIndex] );
+                        memcpy(buffer, (void *)&mcpsIndication->Buffer[cmdIndex], FragSessionData[fragIndex].FragGroupData.FragSize);
+                        FragSessionData[fragIndex].FragDecoderProcessStatus = FragDecoderProcess( fragCounter, buffer );
                         FragSessionData[fragIndex].FragDecoderStatus = FragDecoderGetStatus( );
                         if( LmhpFragmentationParams->OnProgress != NULL )
                         {

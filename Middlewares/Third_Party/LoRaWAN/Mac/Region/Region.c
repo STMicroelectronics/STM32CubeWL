@@ -31,7 +31,7 @@
 #include "LoRaMacInterfaces.h"
 #include "RegionVersion.h"
 
-#if (defined( REGION_VERSION ) && (( REGION_VERSION == 0x01010003 ) || ( REGION_VERSION == 0x02010001 )))
+#if (defined( REGION_VERSION ) && (( REGION_VERSION == 0x01010003 ) || ( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
 #else
 #error REGION_VERSION not valid
 #endif /* REGION_VERSION */

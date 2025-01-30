@@ -169,7 +169,7 @@ typedef enum ePhyAttribute
      * Acknowledgement time out.
      */
     PHY_ACK_TIMEOUT,
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
     /*!
      * Acknowledgement time out.
      */
@@ -482,7 +482,7 @@ typedef struct sInitDefaultsParams
      * Pointer to region NVM group2.
      */
     void* NvmGroup2;
-#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#if (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
     /*!
      * Pointer to common region band storage.
      */
@@ -536,7 +536,7 @@ typedef union uVerifyParams
  */
 typedef struct sApplyCFListParams
 {
-#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#if (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
     uint8_t JoinChannel;
 #endif /* REGION_VERSION */
     /*!
@@ -613,7 +613,7 @@ typedef struct sRxConfigParams
      * Sets the RX window.
      */
     LoRaMacRxSlot_t RxSlot;
-#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#if (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
     /*!
      * LoRaWAN Network End-Device Activation ( ACTIVATION_TYPE_NONE, ACTIVATION_TYPE_ABP
      * or ACTIVATION_TYPE_OTTA )
@@ -653,7 +653,7 @@ typedef struct sTxConfigParams
      * Frame length to setup.
      */
     uint16_t PktLen;
-#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#if (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
     /*!
      * LoRaWAN Network End-Device Activation ( ACTIVATION_TYPE_NONE, ACTIVATION_TYPE_ABP
      * or ACTIVATION_TYPE_OTTA )

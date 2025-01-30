@@ -793,7 +793,8 @@
     {
         "id": "1cb4d0018af3bdb3",
         "type": "serial-port",
-        "serialport": "",
+        "name": "",
+        "serialport": "to_be_configured",
         "serialbaud": "9600",
         "databits": "8",
         "parity": "none",
@@ -1724,17 +1725,17 @@
             },
             {
                 "t": "set",
-                "p": "payload.accelaration_avg",
+                "p": "payload.acceleration_avg",
                 "pt": "msg",
-                "to": "",
-                "tot": "num"
+                "to": "[]",
+                "tot": "json"
             },
             {
                 "t": "set",
-                "p": "payload.accelaration_max",
+                "p": "payload.acceleration_max",
                 "pt": "msg",
-                "to": "0",
-                "tot": "num"
+                "to": "[]",
+                "tot": "json"
             }
         ],
         "action": "",
@@ -1968,7 +1969,7 @@
         "id": "8ab22b2b6c842050",
         "type": "change",
         "z": "d3f1f54f.32ba68",
-        "name": "accelaration_avg",
+        "name": "acceleration_avg",
         "rules": [
             {
                 "t": "set",
@@ -2044,7 +2045,7 @@
         "type": "comment",
         "z": "82530ef4.8a0f6",
         "name": "Please select this node to see the demo description in the right panel (Node information)",
-        "info": "## This flow is used to monitor values of STM32WL sensors.\n## \n\n# Wiki  :\nDetailed help and information is available on wiki page : [STM32_Wireless_Long_Range_demo](https://wiki.st.com/stm32mcu/index.php?title=STM32CubeMonitor:How_to_start_with_STM32_Wireless_Long_Range_demo)\n\n# Demo description :\nThe demo shows data from wireless sensor connected to a concentrator. The sensors and the concentrator are based on STM32WL boards.\nThe concentrator is connected with serial port to STM32cubeMonitor to display the data from sensors.\nThere is one concentrator, and up to 15 sensors.\nWhen the demo starts, the concentrotr is configured with the region information to select the correct frequency to use. Then, the concentrator will broadcast beacons to synchronize the sensors. Then sensor will send the data (voltage, temperature) periodically.\n\n# Board configuration \nThe software \"concentrator.bin\" must be loaded in the concentrator. The concentrator must be connected to computer with an usb cable. \n\nThe sensors devices must be loaded with software \"sensor.bin\"\n\n# Connection to computer \nConnect the concentrator board to the computer. \nIn the \"UART configuration\" tab, select the COM port \nOpen the node « SERIAL IN » and click on the pencil to edit the Serial Port configuration.\nClick on the search icon at right of “Serial Port” box, to display the list of connected uart. Select the concentrator COM port. Set the baud rate to 9600 Bps. Other parameters don’t need to be changed.\nClick on “Add/Update” button : the port Serial-port configuration is ready.\nOpen the node “SERIAL OUT” and check the Serial-port configuration.\nThe serial port is configured.\n\n# Start the demo\n\nOpen the demo with “Dashboard” button.\nSelect the Region and subRegion and then press start.\nThe sensor list is displayed and will be updated when data are received. \n\n### Sensor List :\nEach detected sensor is added in the list, and information are updated :  \n -  EUI : Sensor unique identifier \n -  Packets received : Number of packets received from this sensor\n -  Packets missed : The sensor increases the packet ID for each packet sent. If there is a gap between previous packet Id and the current one, it means some packets have been lost. This is counted in \"missed packets\". \n -  RSSI : Received Signal Strength Indicator : show the level of power received\n -  PER : Packet Error Rate : Gives the % of lost packets. 0 if perfect. \n -  SNR : Signal to Noise Ratio : give an indication of signal quality. High value are better.\n -  Temp : Sensor temperature value. (Use STM32 internal sensor)\n -  Voltage : Power supply voltage.  Should be around 3.3V when board is usb powered.\n\nThe \"COUNTER RESET\" button set to 0 the received packets, the missed packets and the PER.\nThe \"RESTART\" button allows to reset te concentrator and goes back to Region selection page.\n\n\n### Serial log :\nThe Serial port log shows the AT commands sent to the concentrator (left arrow), and the answers (right arrow). \n### Sensor panels :\nSome \"Sensor x\" panels are added when sensors are detected. The panels can be opened by clicking on the sensor list or with the blue arrows on the right of the panels.  Each Panel shows temperature and RSSI value history in a chart and display the voltage in a gauge.\n\n\n\n\n\n\n\n",
+        "info": "## This flow is used to monitor values of STM32WL sensors.\n## \n\n# Wiki  :\nDetailed help and information is available on wiki page : [STM32_Wireless_Long_Range_demo](https://wiki.st.com/stm32mcu/index.php?title=STM32CubeMonitor:How_to_start_with_STM32_Wireless_Long_Range_demo)\n\n# Demo description :\nThe demo shows data from wireless sensor connected to a concentrator. The sensors and the concentrator are based on STM32WL boards.\nThe concentrator is connected with serial port to STM32cubeMonitor to display the data from sensors.\nThere is one concentrator, and up to 15 sensors.\nWhen the demo starts, the concentrotr is configured with the region information to select the correct frequency to use. Then, the concentrator will broadcast beacons to synchronize the sensors. Then sensor will send the data (voltage, temperature) periodically.\n\n# Board configuration \nThe software \"concentrator.bin\" must be loaded in the concentrator. The concentrator must be connected to computer with an usb cable. \n\nThe sensors devices must be loaded with software \"sensor.bin\"\n\n# Connection to computer \nConnect the concentrator board to the computer. \nIn the \"UART configuration\" tab, select the COM port \nOpen the node « SERIAL IN » and click on the pencil to edit the existing Serial Port configuration. (Do not use the + button)\nClick on the search icon at right of “Serial Port” box, to display the list of connected uart. Select the concentrator COM port. Set the baud rate to 9600 Bps. Other parameters don’t need to be changed.\nClick on “Add/Update” button : the port Serial-port configuration is ready.\nOpen the node “SERIAL OUT” and check the Serial-port configuration.\nThe serial port is configured.\n\n# Start the demo\n\nOpen the demo with “Dashboard” button.\nSelect the Region and subRegion and then press start.\nThe sensor list is displayed and will be updated when data are received. \n\n### Sensor List :\nEach detected sensor is added in the list, and information are updated :  \n -  EUI : Sensor unique identifier \n -  Packets received : Number of packets received from this sensor\n -  Packets missed : The sensor increases the packet ID for each packet sent. If there is a gap between previous packet Id and the current one, it means some packets have been lost. This is counted in \"missed packets\". \n -  RSSI : Received Signal Strength Indicator : show the level of power received\n -  PER : Packet Error Rate : Gives the % of lost packets. 0 if perfect. \n -  SNR : Signal to Noise Ratio : give an indication of signal quality. High value are better.\n -  Temp : Sensor temperature value. (Use STM32 internal sensor)\n -  Voltage : Power supply voltage.  Should be around 3.3V when board is usb powered.\n\nThe \"COUNTER RESET\" button set to 0 the received packets, the missed packets and the PER.\nThe \"RESTART\" button allows to reset te concentrator and goes back to Region selection page.\n\n\n### Serial log :\nThe Serial port log shows the AT commands sent to the concentrator (left arrow), and the answers (right arrow). \n### Sensor panels :\nSome \"Sensor x\" panels are added when sensors are detected. The panels can be opened by clicking on the sensor list or with the blue arrows on the right of the panels.  Each Panel shows temperature and RSSI value history in a chart and display the voltage in a gauge.\n\n\n\n\n\n\n\n",
         "x": 480,
         "y": 180,
         "wires": []
@@ -2160,8 +2161,8 @@
         "type": "comment",
         "z": "41545e6d.1fcf9",
         "name": "Select the Serial Port in this node",
-        "info": "**SERIAL PORT PARAMETERS**\n\nTo change the serial port, open the node \"SERIAL OUT\" and \"SERIAL IN\"\nThe Serial port must be configured with :\n - Speed : 9600 Bps\n - 8 bits\n - Parity None\n - 1 Stop bit\n - COM port number\n \n\n",
-        "x": 450,
+        "info": "**SERIAL PORT PARAMETERS**\n\nTo change the serial port, open the node \"SERIAL OUT\" and \"SERIAL IN\" and edit the existing configuration with the \"pencil\" button. (Do not use the + button)\n\nThe Serial port must be configured with :\n - Speed : 9600 Bps\n - 8 bits\n - Parity None\n - 1 Stop bit\n - COM port number\n \n\n",
+        "x": 490,
         "y": 160,
         "wires": []
     },
@@ -2349,9 +2350,13 @@
         "type": "function",
         "z": "b56598ed.0fee28",
         "name": "Init region",
-        "func": "msg.payload=\"AT+REGION=\"+flow.get(\"Region\",\"file\");\nmsg.flow=\"DEMO\";\nreturn msg;",
+        "func": "msg.payload=\"AT+REGION=\"+flow.get(\"Region\");\nmsg.flow=\"DEMO\";\nreturn msg;",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
         "x": 980,
         "y": 780,
         "wires": [
@@ -2365,9 +2370,13 @@
         "type": "function",
         "z": "b56598ed.0fee28",
         "name": "Init sub region",
-        "func": "msg.payload=\"AT+SUBREGION=\" + flow.get(\"SubRegion\",\"file\");\nmsg.flow=\"DEMO\";\nreturn msg;",
+        "func": "msg.payload=\"AT+SUBREGION=\" + flow.get(\"SubRegion\");\nmsg.flow=\"DEMO\";\nreturn msg;",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
         "x": 1000,
         "y": 820,
         "wires": [
@@ -2615,9 +2624,13 @@
         "type": "function",
         "z": "b56598ed.0fee28",
         "name": "Configure SubRegion",
-        "func": "if (msg.topic===\"Region\") {\n    flow.set (\"Region\",msg.payload,\"file\");\n    var subRegion=[];\n    switch (msg.payload) {\n        case \"0\" : subRegion=[{\"European Union\":\"0\"}];\n        break;\n        case \"1\" : subRegion=[ {\"Australia\":\"1\"}, {\"United Stated\":\"0\"}];\n        break;\n        case \"2\" : subRegion=[ {\"Generic Asia\":\"2\"}, {\"Japan\":\"1\"}, {\"Republic of Korea\":\"0\"}  ];\n        break;\n        case \"3\" : subRegion=[ {\"China\":\"0\"}];\n        break;\n        case \"4\" : subRegion=[ {\"India\":\"0\"}];\n        break;\n        case \"5\" : subRegion=[ {\"Russia\":\"0\"}];\n        break;\n    }\n    msg.payload=flow.get(\"SubRegion\");\n    msg.topic=\"SubRegion\";\n    msg.options=subRegion;\n    return msg;\n}\nreturn null;",
+        "func": "if (msg.topic===\"Region\") {\n    flow.set (\"Region\",msg.payload);\n    var subRegion=[];\n    switch (msg.payload) {\n        case \"0\" : subRegion=[{\"European Union\":\"0\"}];\n        break;\n        case \"1\" : subRegion=[ {\"Australia\":\"1\"}, {\"United Stated\":\"0\"}];\n        break;\n        case \"2\" : subRegion=[ {\"Generic Asia\":\"2\"}, {\"Japan\":\"1\"}, {\"Republic of Korea\":\"0\"}  ];\n        break;\n        case \"3\" : subRegion=[ {\"China\":\"0\"}];\n        break;\n        case \"4\" : subRegion=[ {\"India\":\"0\"}];\n        break;\n        case \"5\" : subRegion=[ {\"Russia\":\"0\"}];\n        break;\n    }\n    msg.payload=flow.get(\"SubRegion\");\n    msg.topic=\"SubRegion\";\n    msg.options=subRegion;\n    return msg;\n}\nreturn null;",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
         "x": 700,
         "y": 140,
         "wires": [
@@ -2931,9 +2944,13 @@
         "type": "function",
         "z": "b56598ed.0fee28",
         "name": "Reset the UI",
-        "func": "if (msg.payload.status===\"INIT\"||msg.payload.status===\"IDLE\" ) {\n\n    return { \n        payload:\"uiInit\"\n    }   ;\n}\n\nif (msg.payload!==\"connect\") {\n    return null;\n}\n\nif ( flow.get(\"initDone\") === true ) {\n    return null;        \n}\n\nflow.set(\"initDone\",true);\n \n newMsg={ \n     payload:\"uiInit\"\n }   ;\n\nreturn newMsg;",
+        "func": "if (msg.payload.status===\"INIT\"||msg.payload.status===\"IDLE\" ) {\n\n    return { \n        payload:\"uiInit\"\n    }   ;\n}\n\nif (msg.payload!==\"connect\") {\n    return null;\n}\n\nif ( flow.get(\"initDone\") === true ) {\n    return null;        \n}\n\nflow.set(\"initDone\",true);\n let newMsg={ \n     payload:\"uiInit\"\n }   ;\n\nreturn newMsg;",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
         "x": 990,
         "y": 440,
         "wires": [
@@ -2984,7 +3001,7 @@
                 "t": "set",
                 "p": "payload",
                 "pt": "msg",
-                "to": "#:(file)::Region",
+                "to": "Region",
                 "tot": "flow"
             }
         ],

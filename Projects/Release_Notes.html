@@ -4,17 +4,26 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Release Notes for Projects of STM32CubeWL Firmware Package</title>
-  <style type="text/css">
-      code{white-space: pre-wrap;}
-      span.smallcaps{font-variant: small-caps;}
-      span.underline{text-decoration: underline;}
-      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  <title>Release Notes for Projects of STM32CubeWL Firmware
+Package</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
   <link rel="stylesheet" href="../_htmresc/mini-st_2020.css" />
-  <!--[if lt IE 9]>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
-  <![endif]-->
   <link rel="icon" type="image/x-icon" href="../_htmresc/favicon.png" />
 </head>
 <body>
@@ -22,16 +31,27 @@
 <div class="col-sm-12 col-lg-4">
 <center>
 <h1 id="release-notes-for">Release Notes for</h1>
-<h1 id="projects-of-stm32cubewl-firmware-package"><mark>Projects of STM32CubeWL Firmware Package</mark></h1>
+<h1 id="projects-of-stm32cubewl-firmware-package"><mark>Projects of
+STM32CubeWL Firmware Package</mark></h1>
 <p>Copyright © 2020 STMicroelectronics<br />
 </p>
-<a href="https://www.st.com" class="logo"><img src="../_htmresc/st_logo_2020.png" alt="ST logo" /></a>
+<a href="https://www.st.com" class="logo"><img
+src="../_htmresc/st_logo_2020.png" alt="ST logo" /></a>
 </center>
 <h1 id="purpose">Purpose</h1>
-<p>The projects are a set of applicative tasks that aim to explain and provide use cases of the different products features based on the products hardware (Boards, STM32 Core(s) features, interconnections and peripherals) and built around the different firmware components. They can be directly used or adapted by the STM32CubeWL Firmware Package users. They provide basic functionalities, show main features or demonstrate performance. They are provided with preconfigured projects for the main supported toolchains.</p>
-<p>In the STM32CubeWL Firmware Package, the projects are organized in a sequential scheme based on the following levels:</p>
+<p>The projects are a set of applicative tasks that aim to explain and
+provide use cases of the different products features based on the
+products hardware (Boards, STM32 Core(s) features, interconnections and
+peripherals) and built around the different firmware components. They
+can be directly used or adapted by the STM32CubeWL Firmware Package
+users. They provide basic functionalities, show main features or
+demonstrate performance. They are provided with preconfigured projects
+for the main supported toolchains.</p>
+<p>In the STM32CubeWL Firmware Package, the projects are organized in a
+sequential scheme based on the following levels:</p>
 <ul>
-<li>Boards: Hardware platform (evaluation, discovery, nucleo boards)</li>
+<li>Boards: Hardware platform (evaluation, discovery, nucleo
+boards)</li>
 <li>Project Category:
 <ul>
 <li>Applications</li>
@@ -43,29 +63,283 @@
 <li>Templates_LL</li>
 </ul></li>
 </ul>
-<p>The exhaustive list of projects is provided in this table: <a href="STM32CubeProjectsList.html">STM32CubeProjectsList</a>.</p>
+<p>The exhaustive list of projects is provided in this table: <a
+href="STM32CubeProjectsList.html">STM32CubeProjectsList</a>.</p>
 <p>Here is the list of references to the user documents:</p>
 <ul>
-<li><a href="https://www.st.com/resource/en/user_manual/DM00660674.pdf">UM2643</a> : Getting started with STM32CubeWL firmware package for STM32WLxx series</li>
+<li><a
+href="https://www.st.com/resource/en/user_manual/DM00660674.pdf">UM2643</a>
+: Getting started with STM32CubeWL firmware package for STM32WLxx
+series</li>
 </ul>
 </div>
-<div class="col-sm-12 col-lg-8">
-<h1 id="update-history">Update History</h1>
+<section id="update-history" class="col-sm-12 col-lg-8">
+<h1>Update History</h1>
 <div class="collapse">
-<input type="checkbox" id="collapse-section4" checked aria-hidden="true"> <label for="collapse-section4" aria-hidden="true"><strong>V1.3.0 / 09-November-2022</strong></label>
+<input type="checkbox" id="collapse-section5" checked aria-hidden="true">
+<label for="collapse-section5" aria-hidden="true"><strong>V1.3.1 /
+29-November-2024</strong></label>
 <div>
 <h2 id="main-changes">Main Changes</h2>
+<h3 id="patch-release">Patch Release</h3>
+<h2 id="contents">Contents</h2>
+<p><small>The Project categories flagged by “<span
+class="icon-st-update"></span>” have changed since the previous release.
+“<span class="icon-st-add"></span>” are new.</small></p>
+<p>Projects</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Board</th>
+<th style="text-align: left;">Project category</th>
+<th style="text-align: left;">Path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">B-WL5M-SUBG1</td>
+<td style="text-align: left;">Demonstrations</td>
+<td style="text-align: left;">Projects\B-WL5M-SUBG1\Demonstrations</td>
+</tr>
+<tr>
+<td style="text-align: left;">B-WL5M-SUBG1</td>
+<td style="text-align: left;">Applications <span
+class="icon-st-update"></span></td>
+<td style="text-align: left;">Projects\B-WL5M-SUBG1\Applications</td>
+</tr>
+<tr>
+<td style="text-align: left;">B-WL5M-SUBG1</td>
+<td style="text-align: left;">HAL Examples</td>
+<td style="text-align: left;">Projects\B-WL5M-SUBG1\Examples</td>
+</tr>
+<tr>
+<td style="text-align: left;">B-WL5M-SUBG1</td>
+<td style="text-align: left;">HAL Template</td>
+<td style="text-align: left;">Projects\B-WL5M-SUBG1\Templates</td>
+</tr>
+<tr>
+<td style="text-align: left;">B-WL5M-SUBG1</td>
+<td style="text-align: left;">LL Template</td>
+<td style="text-align: left;">Projects\B-WL5M-SUBG1\Templates_LL</td>
+</tr>
+<tr>
+<td style="text-align: left;">NUCLEO-WL55JC</td>
+<td style="text-align: left;">Demonstrations</td>
+<td style="text-align: left;">Projects\NUCLEO-WL55JC\Demonstrations</td>
+</tr>
+<tr>
+<td style="text-align: left;">NUCLEO-WL55JC</td>
+<td style="text-align: left;">Applications <span
+class="icon-st-update"></span></td>
+<td style="text-align: left;">Projects\NUCLEO-WL55JC\Applications</td>
+</tr>
+<tr>
+<td style="text-align: left;">NUCLEO-WL55JC</td>
+<td style="text-align: left;">HAL Examples <span
+class="icon-st-update"></span></td>
+<td style="text-align: left;">Projects\NUCLEO-WL55JC\Examples</td>
+</tr>
+<tr>
+<td style="text-align: left;">NUCLEO-WL55JC</td>
+<td style="text-align: left;">LL Examples</td>
+<td style="text-align: left;">Projects\NUCLEO-WL55JC\Examples_LL</td>
+</tr>
+<tr>
+<td style="text-align: left;">NUCLEO-WL55JC</td>
+<td style="text-align: left;">MIX Examples</td>
+<td style="text-align: left;">Projects\NUCLEO-WL55JC\Examples_MIX</td>
+</tr>
+<tr>
+<td style="text-align: left;">NUCLEO-WL55JC</td>
+<td style="text-align: left;">HAL Template</td>
+<td style="text-align: left;">Projects\NUCLEO-WL55JC\Templates</td>
+</tr>
+<tr>
+<td style="text-align: left;">NUCLEO-WL55JC</td>
+<td style="text-align: left;">LL Template</td>
+<td style="text-align: left;">Projects\NUCLEO-WL55JC\Templates_LL</td>
+</tr>
+<tr>
+<td style="text-align: left;">NUCLEO-WL55JC1</td>
+<td style="text-align: left;">Applications <span
+class="icon-st-update"></span></td>
+<td style="text-align: left;">Projects\NUCLEO-WL55JC1\Applications</td>
+</tr>
+</tbody>
+</table>
+<p><br />
+</p>
+<ul>
+<li><strong>NUCLEO-WL55JC</strong>
+<ul>
+<li><strong>Applications/LoRaWAN/LoRaWAN_End_Node_FreeRTOS</strong>
+<ul>
+<li>Fix wakeup timer configuration using the CORE tick factor set to the
+RTC</li>
+<li>Set the ulExpectedIdleTime flag before entering in low power mode in
+PreSleepProcessing</li>
+</ul></li>
+<li><strong>Applications/LoRaWAN/LoRaWAN_End_Node_DualCoreFreeRTOS</strong>
+<ul>
+<li>Fix wakeup timer configuration using the CORE tick factor set to the
+RTC</li>
+<li>Set the ulExpectedIdleTime flag before entering in low power mode in
+PreSleepProcessing</li>
+</ul></li>
+<li><strong>Applications/LoRaWAN_FUOTA_DualCore</strong>
+<ul>
+<li>Fix compilation on Linux host due to lower case letters used in file
+names</li>
+</ul></li>
+<li><strong>Applications/LoRaWAN_SBSFU_1_Slot_DualCore</strong>
+<ul>
+<li>Fix compilation on Linux host due to lower case letters used in file
+names</li>
+</ul></li>
+<li><strong>Applications/Sigfox_SBSFU_1_Slot_DualCore</strong>
+<ul>
+<li>Fix compilation on Linux host due to lower case letters used in file
+names</li>
+</ul></li>
+<li><strong>Examples/PWR/PWR_STOP2_RTC</strong>
+<ul>
+<li>Fix PWR_STOP2_RTC test due to uninitialized RCC_OscInitStruct
+struct</li>
+</ul></li>
+<li><strong>Applications/</strong>*
+<ul>
+<li>Fix HSE frequency default value into all IOC projects files</li>
+</ul></li>
+</ul></li>
+<li><strong>NUCLEO-WL55JC1</strong>
+<ul>
+<li><strong>Applications/</strong>*
+<ul>
+<li>Fix HSE frequency default value into all IOC projects files</li>
+</ul></li>
+</ul></li>
+<li><strong>B-WL5M-SUBG1</strong>
+<ul>
+<li><strong>Applications/LoRaWAN_FUOTA_DualCore_ExtFlash</strong>
+<ul>
+<li>Fix compilation on Linux host due to lower case letters used in file
+names<br />
+</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="known-limitations">Known Limitations</h2>
+<ul>
+<li><strong>LL/HAL</strong>
+<ul>
+<li>All LL/HAL Projects are developed using CubeMx except
+GTZC_GlobalSecurityConfiguration_DualCore</li>
+</ul></li>
+<li><strong>MW Legacy Applications</strong>
+<ul>
+<li>All FreeRTOS applications except FreeRTOS_HSEM_DualCore are
+developed using CubeMx</li>
+<li>FatFs_uSD_Standalone not developed using CubeMx</li>
+</ul></li>
+<li><strong>Security Applications</strong>
+<ul>
+<li>All KMS applications are developed using CubeMx except
+KMS_Blob_Binary</li>
+<li>All SBSFU applications are not developed using CubeMx</li>
+</ul></li>
+<li><strong>RF Applications</strong>
+<ul>
+<li>All SBSFU &amp; FUOTA applications are not developed using
+CubeMx</li>
+<li>The feature Class B Remote multicast setup implemented is not fully
+operational when more than one context defined (context priority
+management)</li>
+<li>The Data Block Integrity Check required by
+TS004-2.0.0_LoRaWAN_Fragmented_Data_Block_Transport is not compliant
+with the current ComputeCmac method implementation</li>
+</ul></li>
+<li><strong>RF Demonstrations</strong>
+<ul>
+<li>All LocalNetwork applications are not developed using CubeMx</li>
+</ul></li>
+</ul>
+<h2 id="development-toolchains-and-compilers">Development Toolchains and
+Compilers</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Toolchain + ST-Link</th>
+<th>Version</th>
+<th style="text-align: left;">Patch (if available)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">IAR Embedded Workbench for ARM
+(EWARM)</td>
+<td>V9.20.1</td>
+<td style="text-align: left;"><a
+href="Utilities/PC_Software/EWARMv8_STM32WLxx_V4.9_Signed.zip">Patch
+EWARM</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">RealView Microcontroller Development Kit
+(MDK-ARM)</td>
+<td>V5.36</td>
+<td style="text-align: left;"><a
+href="Utilities/PC_Software/Keil.STM32WLxx_DFP.1.1.1.zip">Patch
+MDK-ARM</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">STM32CubeIDE (GNU Tools for STM32
+10.3-2021.10)</td>
+<td>V1.11.0</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">STM32CubeProgrammer</td>
+<td>V2.12.0</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Support of ARM Compiler 6 (AC-5 like warnings) for HAL/LL/BSP
+drivers and STMicroelectronics Middleware components</li>
+</ul>
+<h2 id="supported-devices-and-boards">Supported Devices and boards</h2>
+<ul>
+<li>STM32WLE5xx, STM32WL55xx &amp; STM32WL5MOCHxx devices</li>
+<li>NUCLEO-WL55JC1 &amp; NUCLEO-WL55JC2 (except Sigfox applications)
+ecosystem boards - Nucleo kit RevC (MB1389-HIGHBAND-E01 or
+MB1389-LOWBAND-C01)</li>
+<li>B-WL5M-SUBG1 ecosystem boards (MB1779-HIGHBAND-A01)</li>
+</ul>
+<h2 id="dependencies">Dependencies</h2>
+<ul>
+<li>STM32CubeMX 6.7.0</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section4" aria-hidden="true">
+<label for="collapse-section4" aria-hidden="true"><strong>V1.3.0 /
+09-November-2022</strong></label>
+<div>
+<h2 id="main-changes-1">Main Changes</h2>
 <h3 id="maintenance-release">Maintenance Release</h3>
 <ul>
 <li><strong>NUCLEO-WL55JC</strong>
 <ul>
 <li><strong>Examples/FLASH/FLASH_FastProgram</strong>
 <ul>
-<li>Fix Code not functional by changing the ‘.icf’ file to load the program in SRAM</li>
+<li>Fix Code not functional by changing the ‘.icf’ file to load the
+program in SRAM</li>
 </ul></li>
 <li><strong>Examples_LL/CRC</strong>
 <ul>
-<li>Fix incorrect bytes stream for CRC_CalculateAndCheck &amp; CRC_UserDefinedPolynomial projects</li>
+<li>Fix incorrect bytes stream for CRC_CalculateAndCheck &amp;
+CRC_UserDefinedPolynomial projects</li>
 </ul></li>
 <li><strong>RF Applications</strong>
 <ul>
@@ -80,146 +354,180 @@
 </ul></li>
 <li><strong>RF Applications</strong>
 <ul>
-<li>Add LoRaWAN_AT_Slave, LoRaWAN_End_Node, LoRaWAN_End_Node_DualCore applications</li>
-<li>Add Sigfox_AT_Slave, Sigfox_PushButton, Sigfox_PushButton_DualCore applications</li>
+<li>Add LoRaWAN_AT_Slave, LoRaWAN_End_Node, LoRaWAN_End_Node_DualCore
+applications</li>
+<li>Add Sigfox_AT_Slave, Sigfox_PushButton, Sigfox_PushButton_DualCore
+applications</li>
 <li>Add SubGHz_Phy_Per, SubGHz_Phy_PingPong_DualCore applications</li>
-<li>Add LoRaWAN FUOTA DualCore project with External Flash usage for Download Slot</li>
+<li>Add LoRaWAN FUOTA DualCore project with External Flash usage for
+Download Slot</li>
 <li>Add Sensor demonstration</li>
 </ul></li>
 </ul></li>
 </ul>
-<h2 id="contents">Contents</h2>
-<p><small>The Project categories flagged by “<span class="icon-st-update"></span>” have changed since the previous release. “<span class="icon-st-add"></span>” are new.</small></p>
+<h2 id="contents-1">Contents</h2>
+<p><small>The Project categories flagged by “<span
+class="icon-st-update"></span>” have changed since the previous release.
+“<span class="icon-st-add"></span>” are new.</small></p>
 <p>Projects</p>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: left;">Board</th>
 <th style="text-align: left;">Project category</th>
 <th style="text-align: left;">Path</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">B-WL5M-SUBG1</td>
-<td style="text-align: left;">Demonstrations <span class="icon-st-add"></span></td>
+<td style="text-align: left;">Demonstrations <span
+class="icon-st-add"></span></td>
 <td style="text-align: left;">Projects\B-WL5M-SUBG1\Demonstrations</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;">B-WL5M-SUBG1</td>
-<td style="text-align: left;">Applications <span class="icon-st-add"></span></td>
+<td style="text-align: left;">Applications <span
+class="icon-st-add"></span></td>
 <td style="text-align: left;">Projects\B-WL5M-SUBG1\Applications</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">B-WL5M-SUBG1</td>
-<td style="text-align: left;">HAL Examples <span class="icon-st-add"></span></td>
+<td style="text-align: left;">HAL Examples <span
+class="icon-st-add"></span></td>
 <td style="text-align: left;">Projects\B-WL5M-SUBG1\Examples</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;">B-WL5M-SUBG1</td>
-<td style="text-align: left;">HAL Template <span class="icon-st-add"></span></td>
+<td style="text-align: left;">HAL Template <span
+class="icon-st-add"></span></td>
 <td style="text-align: left;">Projects\B-WL5M-SUBG1\Templates</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">B-WL5M-SUBG1</td>
-<td style="text-align: left;">LL Template <span class="icon-st-add"></span></td>
+<td style="text-align: left;">LL Template <span
+class="icon-st-add"></span></td>
 <td style="text-align: left;">Projects\B-WL5M-SUBG1\Templates_LL</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;">NUCLEO-WL55JC</td>
-<td style="text-align: left;">Demonstrations <span class="icon-st-update"></span></td>
+<td style="text-align: left;">Demonstrations <span
+class="icon-st-update"></span></td>
 <td style="text-align: left;">Projects\NUCLEO-WL55JC\Demonstrations</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">NUCLEO-WL55JC</td>
-<td style="text-align: left;">Applications <span class="icon-st-update"></span></td>
+<td style="text-align: left;">Applications <span
+class="icon-st-update"></span></td>
 <td style="text-align: left;">Projects\NUCLEO-WL55JC\Applications</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;">NUCLEO-WL55JC</td>
-<td style="text-align: left;">HAL Examples <span class="icon-st-update"></span></td>
+<td style="text-align: left;">HAL Examples <span
+class="icon-st-update"></span></td>
 <td style="text-align: left;">Projects\NUCLEO-WL55JC\Examples</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">NUCLEO-WL55JC</td>
-<td style="text-align: left;">LL Examples <span class="icon-st-update"></span></td>
+<td style="text-align: left;">LL Examples <span
+class="icon-st-update"></span></td>
 <td style="text-align: left;">Projects\NUCLEO-WL55JC\Examples_LL</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;">NUCLEO-WL55JC</td>
 <td style="text-align: left;">MIX Examples</td>
 <td style="text-align: left;">Projects\NUCLEO-WL55JC\Examples_MIX</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">NUCLEO-WL55JC</td>
 <td style="text-align: left;">HAL Template</td>
 <td style="text-align: left;">Projects\NUCLEO-WL55JC\Templates</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;">NUCLEO-WL55JC</td>
 <td style="text-align: left;">LL Template</td>
 <td style="text-align: left;">Projects\NUCLEO-WL55JC\Templates_LL</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">NUCLEO-WL55JC1</td>
-<td style="text-align: left;">Applications <span class="icon-st-update"></span></td>
+<td style="text-align: left;">Applications <span
+class="icon-st-update"></span></td>
 <td style="text-align: left;">Projects\NUCLEO-WL55JC1\Applications</td>
 </tr>
 </tbody>
 </table>
-<h2 id="known-limitations">Known Limitations</h2>
+<h2 id="known-limitations-1">Known Limitations</h2>
 <ul>
 <li><strong>LL/HAL</strong>
 <ul>
-<li>All LL/HAL Projects are developed using CubeMx except GTZC_GlobalSecurityConfiguration_DualCore</li>
+<li>All LL/HAL Projects are developed using CubeMx except
+GTZC_GlobalSecurityConfiguration_DualCore</li>
 </ul></li>
 <li><strong>MW Legacy Applications</strong>
 <ul>
-<li>All FreeRTOS applications except FreeRTOS_HSEM_DualCore are developed using CubeMx</li>
+<li>All FreeRTOS applications except FreeRTOS_HSEM_DualCore are
+developed using CubeMx</li>
 <li>FatFs_uSD_Standalone not developed using CubeMx</li>
 </ul></li>
 <li><strong>Security Applications</strong>
 <ul>
-<li>All KMS applications are developed using CubeMx except KMS_Blob_Binary</li>
+<li>All KMS applications are developed using CubeMx except
+KMS_Blob_Binary</li>
 <li>All SBSFU applications are not developed using CubeMx</li>
 </ul></li>
 <li><strong>RF Applications</strong>
 <ul>
-<li>All SBSFU &amp; FUOTA applications are not developed using CubeMx</li>
-<li>The feature Class B Remote multicast setup implemented is not fully operational when more than one context defined (context priority management)</li>
-<li>The Data Block Integrity Check required by TS004-2.0.0_LoRaWAN_Fragmented_Data_Block_Transport is not compliant with the current ComputeCmac method implementation</li>
+<li>All SBSFU &amp; FUOTA applications are not developed using
+CubeMx</li>
+<li>The feature Class B Remote multicast setup implemented is not fully
+operational when more than one context defined (context priority
+management)</li>
+<li>The Data Block Integrity Check required by
+TS004-2.0.0_LoRaWAN_Fragmented_Data_Block_Transport is not compliant
+with the current ComputeCmac method implementation</li>
 </ul></li>
 <li><strong>RF Demonstrations</strong>
 <ul>
 <li>All LocalNetwork applications are not developed using CubeMx</li>
 </ul></li>
 </ul>
-<h2 id="development-toolchains-and-compilers">Development Toolchains and Compilers</h2>
+<h2 id="development-toolchains-and-compilers-1">Development Toolchains
+and Compilers</h2>
 <ul>
-<li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1 + <a href="../Utilities/PC_Software/EWARMv8_STM32WLxx_V4.9_Signed.zip">Patch EWARM</a></li>
-<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.36 + <a href="../Utilities/PC_Software/Keil.STM32WLxx_DFP.1.1.1.zip">Keil DFP V1.1.1 Pack</a>
+<li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1 + <a
+href="../Utilities/PC_Software/EWARMv8_STM32WLxx_V4.9_Signed.zip">Patch
+EWARM</a></li>
+<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.36 +
+<a href="../Utilities/PC_Software/Keil.STM32WLxx_DFP.1.1.1.zip">Keil DFP
+V1.1.1 Pack</a>
 <ul>
-<li>Support of ARM Compiler 6 (AC-5 like warnings) for HAL/LL/BSP drivers and STMicroelectronics Middleware components</li>
+<li>Support of ARM Compiler 6 (AC-5 like warnings) for HAL/LL/BSP
+drivers and STMicroelectronics Middleware components</li>
 </ul></li>
 <li>STM32CubeIDE 1.11.0 (GNU Tools for STM32 10.3-2021.10)</li>
 <li>STM32CubeProgrammer 2.12.0</li>
 </ul>
-<h2 id="supported-devices-and-boards">Supported Devices and boards</h2>
+<h2 id="supported-devices-and-boards-1">Supported Devices and
+boards</h2>
 <ul>
 <li>STM32WLE5xx, STM32WL55xx &amp; STM32WL5MOCHxx devices</li>
-<li>NUCLEO-WL55JC1 &amp; NUCLEO-WL55JC2 (except Sigfox applications) ecosystem boards - Nucleo kit RevC (MB1389-HIGHBAND-E01 or MB1389-LOWBAND-C01)</li>
+<li>NUCLEO-WL55JC1 &amp; NUCLEO-WL55JC2 (except Sigfox applications)
+ecosystem boards - Nucleo kit RevC (MB1389-HIGHBAND-E01 or
+MB1389-LOWBAND-C01)</li>
 <li>B-WL5M-SUBG1 ecosystem boards (MB1779-HIGHBAND-A01)</li>
 </ul>
-<h2 id="dependencies">Dependencies</h2>
+<h2 id="dependencies-1">Dependencies</h2>
 <ul>
 <li>STM32CubeMX 6.7.0</li>
 </ul>
 </div>
 </div>
 <div class="collapse">
-<input type="checkbox" id="collapse-section3" aria-hidden="true"> <label for="collapse-section3" aria-hidden="true"><strong>V1.2.0 / 04-February-2022</strong></label>
+<input type="checkbox" id="collapse-section3" aria-hidden="true">
+<label for="collapse-section3" aria-hidden="true"><strong>V1.2.0 /
+04-February-2022</strong></label>
 <div>
-<h2 id="main-changes-1">Main Changes</h2>
+<h2 id="main-changes-2">Main Changes</h2>
 <h3 id="maintenance-release-1">Maintenance Release</h3>
 <ul>
 <li>RF Applications :
@@ -236,174 +544,67 @@
 <li>IKS01A3 MEMS Sensor Shield ready via CubeMx</li>
 </ul></li>
 </ul>
-<h2 id="contents-1">Contents</h2>
-<p><small>The Project categories flagged by “<span class="icon-st-update"></span>” have changed since the previous release. “<span class="icon-st-add"></span>” are new.</small></p>
-<p>Projects</p>
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Board</th>
-<th style="text-align: left;">Project category</th>
-<th style="text-align: left;">Path</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">NUCLEO-WL55JC</td>
-<td style="text-align: left;">Demonstrations <span class="icon-st-update"></span></td>
-<td style="text-align: left;">Projects\NUCLEO-WL55JC\Demonstrations</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">NUCLEO-WL55JC</td>
-<td style="text-align: left;">Applications <span class="icon-st-update"></span></td>
-<td style="text-align: left;">Projects\NUCLEO-WL55JC\Applications</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">NUCLEO-WL55JC</td>
-<td style="text-align: left;">HAL Examples <span class="icon-st-update"></span></td>
-<td style="text-align: left;">Projects\NUCLEO-WL55JC\Examples</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">NUCLEO-WL55JC</td>
-<td style="text-align: left;">LL Examples <span class="icon-st-update"></span></td>
-<td style="text-align: left;">Projects\NUCLEO-WL55JC\Examples_LL</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">NUCLEO-WL55JC</td>
-<td style="text-align: left;">MIX Examples <span class="icon-st-update"></span></td>
-<td style="text-align: left;">Projects\NUCLEO-WL55JC\Examples_MIX</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">NUCLEO-WL55JC</td>
-<td style="text-align: left;">HAL Template <span class="icon-st-update"></span></td>
-<td style="text-align: left;">Projects\NUCLEO-WL55JC\Templates</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">NUCLEO-WL55JC</td>
-<td style="text-align: left;">LL Template <span class="icon-st-update"></span></td>
-<td style="text-align: left;">Projects\NUCLEO-WL55JC\Templates_LL</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">NUCLEO-WL55JC1</td>
-<td style="text-align: left;">Applications <span class="icon-st-add"></span></td>
-<td style="text-align: left;">Projects\NUCLEO-WL55JC1\Applications</td>
-</tr>
-</tbody>
-</table>
-<h2 id="known-limitations-1">Known Limitations</h2>
-<ul>
-<li><strong>LL/HAL</strong>
-<ul>
-<li>All LL/HAL Projects are developed using CubeMx except GTZC_GlobalSecurityConfiguration_DualCore</li>
-</ul></li>
-<li><strong>MW Legacy Applications</strong>
-<ul>
-<li>All FreeRTOS applications except FreeRTOS_HSEM_DualCore are developed using CubeMx</li>
-<li>FatFs_uSD_Standalone not developed using CubeMx</li>
-</ul></li>
-<li><strong>Security Applications</strong>
-<ul>
-<li>All KMS applications are developed using CubeMx except KMS_Blob_Binary</li>
-<li>All SBSFU applications are not developed using CubeMx</li>
-</ul></li>
-<li><strong>RF Applications</strong>
-<ul>
-<li>All SBSFU &amp; FUOTA applications are not developed using CubeMx</li>
-</ul></li>
-<li><strong>RF Demonstrations</strong>
-<ul>
-<li>All LocalNetwork applications are not developed using CubeMx</li>
-</ul></li>
-</ul>
-<h2 id="development-toolchains-and-compilers-1">Development Toolchains and Compilers</h2>
-<ul>
-<li>IAR Embedded Workbench for ARM (EWARM) toolchain V8.30.1</li>
-<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.31
-<ul>
-<li>Support of ARM Compiler 6 (AC-5 like warnings) for HAL/LL/BSP drivers and STMicroelectronics Middleware components</li>
-</ul></li>
-<li>STM32CubeIDE 1.9.0 (native GNU ARM 10.3-2021-10 or optional GNU ARM 9-2020-q2-update)</li>
-<li>STM32CubeProgrammer 2.9.0</li>
-</ul>
-<h2 id="supported-devices-and-boards-1">Supported Devices and boards</h2>
-<ul>
-<li>STM32WLE5xx &amp; STM32WL55xx</li>
-<li>NUCLEO-WL55JC1 &amp; NUCLEO-WL55JC2 (except Sigfox applications) ecosystem boards - Nucleo kit RevC (MB1389-HIGHBAND-E01 or MB1389-LOWBAND-C01)</li>
-</ul>
-<h2 id="backward-compatibility">Backward Compatibility</h2>
-<p>This release is compatible with the previous versions</p>
-<p>SBSFU applications are not compatible with CubeIDE v1.8</p>
-<h2 id="dependencies-1">Dependencies</h2>
-<ul>
-<li>STM32CubeMX 6.5.0</li>
-</ul>
-</div>
-</div>
-<div class="collapse">
-<input type="checkbox" id="collapse-section2" aria-hidden="true"> <label for="collapse-section2" aria-hidden="true"><strong>V1.1.0 / 16-June-2021</strong></label>
-<div>
-<h2 id="main-changes-2">Main Changes</h2>
-<h3 id="maintenance-release-2">Maintenance Release</h3>
-<ul>
-<li>Security Applications :
-<ul>
-<li>BFU_1_Image renamed BFU_1_Slot</li>
-<li>BFU_2_Slots, SBSFU_1_Slot_DualCore and SBSFU_2_Slots_DualCore added</li>
-</ul></li>
-<li>RF Applications :
-<ul>
-<li>LoRaWAN_FUOTA_DualCore STM32CubeIDE project added</li>
-<li>LoRaWAN_FUOTA Single Core project added</li>
-<li>RF Secure projects added: LoRaWAN_SBSFU_1_Slot_DualCore and Sigfox_SBSFU_1_Slot_DualCore added</li>
-<li>SubGHz_Phy_Per Project added. Optionally featuring long packet mode (FSK payload &gt; 255 bytes) on stm32wl revision Y</li>
-</ul></li>
-</ul>
 <h2 id="contents-2">Contents</h2>
-<p><small>The Project categories flagged by “<span class="icon-st-update"></span>” have changed since the previous release. “<span class="icon-st-add"></span>” are new.</small></p>
+<p><small>The Project categories flagged by “<span
+class="icon-st-update"></span>” have changed since the previous release.
+“<span class="icon-st-add"></span>” are new.</small></p>
 <p>Projects</p>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: left;">Board</th>
 <th style="text-align: left;">Project category</th>
 <th style="text-align: left;">Path</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">NUCLEO-WL55JC</td>
-<td style="text-align: left;">Demonstrations <span class="icon-st-update"></span></td>
+<td style="text-align: left;">Demonstrations <span
+class="icon-st-update"></span></td>
 <td style="text-align: left;">Projects\NUCLEO-WL55JC\Demonstrations</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;">NUCLEO-WL55JC</td>
-<td style="text-align: left;">Applications <span class="icon-st-update"></span></td>
+<td style="text-align: left;">Applications <span
+class="icon-st-update"></span></td>
 <td style="text-align: left;">Projects\NUCLEO-WL55JC\Applications</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">NUCLEO-WL55JC</td>
-<td style="text-align: left;">HAL Examples <span class="icon-st-update"></span></td>
+<td style="text-align: left;">HAL Examples <span
+class="icon-st-update"></span></td>
 <td style="text-align: left;">Projects\NUCLEO-WL55JC\Examples</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;">NUCLEO-WL55JC</td>
-<td style="text-align: left;">LL Examples <span class="icon-st-update"></span></td>
+<td style="text-align: left;">LL Examples <span
+class="icon-st-update"></span></td>
 <td style="text-align: left;">Projects\NUCLEO-WL55JC\Examples_LL</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">NUCLEO-WL55JC</td>
-<td style="text-align: left;">MIX Examples <span class="icon-st-update"></span></td>
+<td style="text-align: left;">MIX Examples <span
+class="icon-st-update"></span></td>
 <td style="text-align: left;">Projects\NUCLEO-WL55JC\Examples_MIX</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;">NUCLEO-WL55JC</td>
-<td style="text-align: left;">HAL Template <span class="icon-st-update"></span></td>
+<td style="text-align: left;">HAL Template <span
+class="icon-st-update"></span></td>
 <td style="text-align: left;">Projects\NUCLEO-WL55JC\Templates</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">NUCLEO-WL55JC</td>
-<td style="text-align: left;">LL Template <span class="icon-st-update"></span></td>
+<td style="text-align: left;">LL Template <span
+class="icon-st-update"></span></td>
 <td style="text-align: left;">Projects\NUCLEO-WL55JC\Templates_LL</td>
+</tr>
+<tr>
+<td style="text-align: left;">NUCLEO-WL55JC1</td>
+<td style="text-align: left;">Applications <span
+class="icon-st-add"></span></td>
+<td style="text-align: left;">Projects\NUCLEO-WL55JC1\Applications</td>
 </tr>
 </tbody>
 </table>
@@ -411,95 +612,139 @@
 <ul>
 <li><strong>LL/HAL</strong>
 <ul>
-<li>All LL/HAL Projects are developed using CubeMx except GTZC_GlobalSecurityConfiguration_DualCore (not eligible)</li>
+<li>All LL/HAL Projects are developed using CubeMx except
+GTZC_GlobalSecurityConfiguration_DualCore</li>
 </ul></li>
 <li><strong>MW Legacy Applications</strong>
 <ul>
-<li>All FreeRTOS applications except FreeRTOS_HSEM_DualCore are developed using CubeMx (not eligible)</li>
-<li>FatFs_uSD_Standalone not developed using CubeMx (not eligible)</li>
+<li>All FreeRTOS applications except FreeRTOS_HSEM_DualCore are
+developed using CubeMx</li>
+<li>FatFs_uSD_Standalone not developed using CubeMx</li>
 </ul></li>
 <li><strong>Security Applications</strong>
 <ul>
-<li>All KMS applications are developed using CubeMx except KMS_Blob_Binary (not eligible)</li>
-<li>All SBSFU applications is not developed using CubeMx (not eligible)</li>
+<li>All KMS applications are developed using CubeMx except
+KMS_Blob_Binary</li>
+<li>All SBSFU applications are not developed using CubeMx</li>
 </ul></li>
 <li><strong>RF Applications</strong>
 <ul>
-<li>All SBSFU &amp; FUOTA applications are not developed using CubeMx (not eligible)</li>
+<li>All SBSFU &amp; FUOTA applications are not developed using
+CubeMx</li>
+</ul></li>
+<li><strong>RF Demonstrations</strong>
+<ul>
+<li>All LocalNetwork applications are not developed using CubeMx</li>
 </ul></li>
 </ul>
-<h2 id="development-toolchains-and-compilers-2">Development Toolchains and Compilers</h2>
+<h2 id="development-toolchains-and-compilers-2">Development Toolchains
+and Compilers</h2>
 <ul>
-<li>IAR Embedded Workbench for ARM (EWARM) toolchain V8.30.1 + ST-Link</li>
-<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.31 + ST-Link
+<li>IAR Embedded Workbench for ARM (EWARM) toolchain V8.30.1</li>
+<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.31
 <ul>
-<li>Support of ARM Compiler 6 (AC-5 like warnings) for HAL/LL/BSP drivers and STMicroelectronics Middleware components</li>
+<li>Support of ARM Compiler 6 (AC-5 like warnings) for HAL/LL/BSP
+drivers and STMicroelectronics Middleware components</li>
 </ul></li>
-<li>STM32CubeIDE 1.7.0 + ST-Link</li>
+<li>STM32CubeIDE 1.9.0 (native GNU ARM 10.3-2021-10 or optional GNU ARM
+9-2020-q2-update)</li>
+<li>STM32CubeProgrammer 2.9.0</li>
 </ul>
-<h2 id="supported-devices-and-boards-2">Supported Devices and boards</h2>
+<h2 id="supported-devices-and-boards-2">Supported Devices and
+boards</h2>
 <ul>
 <li>STM32WLE5xx &amp; STM32WL55xx</li>
-<li>NUCLEO-WL55JC1 &amp; NUCLEO-WL55JC2 (except Sigfox applications) ecosystem boards - Nucleo kit RevC (MB1389-HIGHBAND-E01 or MB1389-LOWBAND-C01)</li>
+<li>NUCLEO-WL55JC1 &amp; NUCLEO-WL55JC2 (except Sigfox applications)
+ecosystem boards - Nucleo kit RevC (MB1389-HIGHBAND-E01 or
+MB1389-LOWBAND-C01)</li>
 </ul>
-<h2 id="backward-compatibility-1">Backward Compatibility</h2>
+<h2 id="backward-compatibility">Backward Compatibility</h2>
 <p>This release is compatible with the previous versions</p>
+<p>SBSFU applications are not compatible with CubeIDE v1.8</p>
 <h2 id="dependencies-2">Dependencies</h2>
 <ul>
-<li>STM32CubeMX 6.3.0</li>
+<li>STM32CubeMX 6.5.0</li>
 </ul>
 </div>
 </div>
 <div class="collapse">
-<input type="checkbox" id="collapse-section1" aria-hidden="true"> <label for="collapse-section1" aria-hidden="true"><strong>V1.0.0 / 28-October-2020</strong></label>
+<input type="checkbox" id="collapse-section2" aria-hidden="true">
+<label for="collapse-section2" aria-hidden="true"><strong>V1.1.0 /
+16-June-2021</strong></label>
 <div>
 <h2 id="main-changes-3">Main Changes</h2>
-<h3 id="first-official-release">First Official Release</h3>
+<h3 id="maintenance-release-2">Maintenance Release</h3>
+<ul>
+<li>Security Applications :
+<ul>
+<li>BFU_1_Image renamed BFU_1_Slot</li>
+<li>BFU_2_Slots, SBSFU_1_Slot_DualCore and SBSFU_2_Slots_DualCore
+added</li>
+</ul></li>
+<li>RF Applications :
+<ul>
+<li>LoRaWAN_FUOTA_DualCore STM32CubeIDE project added</li>
+<li>LoRaWAN_FUOTA Single Core project added</li>
+<li>RF Secure projects added: LoRaWAN_SBSFU_1_Slot_DualCore and
+Sigfox_SBSFU_1_Slot_DualCore added</li>
+<li>SubGHz_Phy_Per Project added. Optionally featuring long packet mode
+(FSK payload &gt; 255 bytes) on stm32wl revision Y</li>
+</ul></li>
+</ul>
 <h2 id="contents-3">Contents</h2>
-<p><small>The Project categories flagged by “<span class="icon-st-update"></span>” have changed since the previous release. “<span class="icon-st-add"></span>” are new.</small></p>
+<p><small>The Project categories flagged by “<span
+class="icon-st-update"></span>” have changed since the previous release.
+“<span class="icon-st-add"></span>” are new.</small></p>
 <p>Projects</p>
 <table>
 <thead>
-<tr class="header">
+<tr>
 <th style="text-align: left;">Board</th>
 <th style="text-align: left;">Project category</th>
 <th style="text-align: left;">Path</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">NUCLEO-WL55JC</td>
-<td style="text-align: left;">Demonstrations</td>
+<td style="text-align: left;">Demonstrations <span
+class="icon-st-update"></span></td>
 <td style="text-align: left;">Projects\NUCLEO-WL55JC\Demonstrations</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;">NUCLEO-WL55JC</td>
-<td style="text-align: left;">Applications</td>
+<td style="text-align: left;">Applications <span
+class="icon-st-update"></span></td>
 <td style="text-align: left;">Projects\NUCLEO-WL55JC\Applications</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">NUCLEO-WL55JC</td>
-<td style="text-align: left;">HAL Examples</td>
+<td style="text-align: left;">HAL Examples <span
+class="icon-st-update"></span></td>
 <td style="text-align: left;">Projects\NUCLEO-WL55JC\Examples</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;">NUCLEO-WL55JC</td>
-<td style="text-align: left;">LL Examples</td>
+<td style="text-align: left;">LL Examples <span
+class="icon-st-update"></span></td>
 <td style="text-align: left;">Projects\NUCLEO-WL55JC\Examples_LL</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">NUCLEO-WL55JC</td>
-<td style="text-align: left;">MIX Examples</td>
+<td style="text-align: left;">MIX Examples <span
+class="icon-st-update"></span></td>
 <td style="text-align: left;">Projects\NUCLEO-WL55JC\Examples_MIX</td>
 </tr>
-<tr class="even">
+<tr>
 <td style="text-align: left;">NUCLEO-WL55JC</td>
-<td style="text-align: left;">HAL Template</td>
+<td style="text-align: left;">HAL Template <span
+class="icon-st-update"></span></td>
 <td style="text-align: left;">Projects\NUCLEO-WL55JC\Templates</td>
 </tr>
-<tr class="odd">
+<tr>
 <td style="text-align: left;">NUCLEO-WL55JC</td>
-<td style="text-align: left;">LL Template</td>
+<td style="text-align: left;">LL Template <span
+class="icon-st-update"></span></td>
 <td style="text-align: left;">Projects\NUCLEO-WL55JC\Templates_LL</td>
 </tr>
 </tbody>
@@ -508,49 +753,178 @@
 <ul>
 <li><strong>LL/HAL</strong>
 <ul>
-<li>All LL/HAL Projects are developed using CubeMx except GTZC_GlobalSecurityConfiguration_DualCore (not eligible)</li>
+<li>All LL/HAL Projects are developed using CubeMx except
+GTZC_GlobalSecurityConfiguration_DualCore (not eligible)</li>
 </ul></li>
 <li><strong>MW Legacy Applications</strong>
 <ul>
-<li>All FreeRTOS applications except FreeRTOS_HSEM_DualCore are developed using CubeMx (not eligible)</li>
+<li>All FreeRTOS applications except FreeRTOS_HSEM_DualCore are
+developed using CubeMx (not eligible)</li>
 <li>FatFs_uSD_Standalone not developed using CubeMx (not eligible)</li>
 </ul></li>
 <li><strong>Security Applications</strong>
 <ul>
-<li>All KMS applications are developed using CubeMx except KMS_Blob_Binary (not eligible)</li>
-<li>All SBSFU applications is not developed using CubeMx (not eligible)</li>
+<li>All KMS applications are developed using CubeMx except
+KMS_Blob_Binary (not eligible)</li>
+<li>All SBSFU applications is not developed using CubeMx (not
+eligible)</li>
 </ul></li>
 <li><strong>RF Applications</strong>
 <ul>
-<li>LoRaWAN_FUOTA, LoRaWAN_SBSFU_1_Slot_DualCore and Sigfox_SBSFU_1_Slot_DualCore applications are not developed using CubeMx (not eligible)</li>
+<li>All SBSFU &amp; FUOTA applications are not developed using CubeMx
+(not eligible)</li>
 </ul></li>
 </ul>
-<h2 id="development-toolchains-and-compilers-3">Development Toolchains and Compilers</h2>
+<h2 id="development-toolchains-and-compilers-3">Development Toolchains
+and Compilers</h2>
 <ul>
-<li>IAR Embedded Workbench for ARM (EWARM) toolchain V8.30.1 + ST-Link</li>
-<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.28 + ST-Link</li>
-<li>STM32CubeIDE 1.5.0 + ST-Link</li>
+<li>IAR Embedded Workbench for ARM (EWARM) toolchain V8.30.1 +
+ST-Link</li>
+<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.31 +
+ST-Link
+<ul>
+<li>Support of ARM Compiler 6 (AC-5 like warnings) for HAL/LL/BSP
+drivers and STMicroelectronics Middleware components</li>
+</ul></li>
+<li>STM32CubeIDE 1.7.0 + ST-Link</li>
 </ul>
-<h2 id="supported-devices-and-boards-3">Supported Devices and boards</h2>
+<h2 id="supported-devices-and-boards-3">Supported Devices and
+boards</h2>
 <ul>
 <li>STM32WLE5xx &amp; STM32WL55xx</li>
-<li>NUCLEO-WL55JC1 &amp; NUCLEO-WL55JC2 (except Sigfox applications) ecosystem boards - Nucleo kit RevC (MB1389-HIGHBAND-C01 or MB1389-LOWBAND-C01)</li>
+<li>NUCLEO-WL55JC1 &amp; NUCLEO-WL55JC2 (except Sigfox applications)
+ecosystem boards - Nucleo kit RevC (MB1389-HIGHBAND-E01 or
+MB1389-LOWBAND-C01)</li>
+</ul>
+<h2 id="backward-compatibility-1">Backward Compatibility</h2>
+<p>This release is compatible with the previous versions</p>
+<h2 id="dependencies-3">Dependencies</h2>
+<ul>
+<li>STM32CubeMX 6.3.0</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section1" aria-hidden="true">
+<label for="collapse-section1" aria-hidden="true"><strong>V1.0.0 /
+28-October-2020</strong></label>
+<div>
+<h2 id="main-changes-4">Main Changes</h2>
+<h3 id="first-official-release">First Official Release</h3>
+<h2 id="contents-4">Contents</h2>
+<p><small>The Project categories flagged by “<span
+class="icon-st-update"></span>” have changed since the previous release.
+“<span class="icon-st-add"></span>” are new.</small></p>
+<p>Projects</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Board</th>
+<th style="text-align: left;">Project category</th>
+<th style="text-align: left;">Path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">NUCLEO-WL55JC</td>
+<td style="text-align: left;">Demonstrations</td>
+<td style="text-align: left;">Projects\NUCLEO-WL55JC\Demonstrations</td>
+</tr>
+<tr>
+<td style="text-align: left;">NUCLEO-WL55JC</td>
+<td style="text-align: left;">Applications</td>
+<td style="text-align: left;">Projects\NUCLEO-WL55JC\Applications</td>
+</tr>
+<tr>
+<td style="text-align: left;">NUCLEO-WL55JC</td>
+<td style="text-align: left;">HAL Examples</td>
+<td style="text-align: left;">Projects\NUCLEO-WL55JC\Examples</td>
+</tr>
+<tr>
+<td style="text-align: left;">NUCLEO-WL55JC</td>
+<td style="text-align: left;">LL Examples</td>
+<td style="text-align: left;">Projects\NUCLEO-WL55JC\Examples_LL</td>
+</tr>
+<tr>
+<td style="text-align: left;">NUCLEO-WL55JC</td>
+<td style="text-align: left;">MIX Examples</td>
+<td style="text-align: left;">Projects\NUCLEO-WL55JC\Examples_MIX</td>
+</tr>
+<tr>
+<td style="text-align: left;">NUCLEO-WL55JC</td>
+<td style="text-align: left;">HAL Template</td>
+<td style="text-align: left;">Projects\NUCLEO-WL55JC\Templates</td>
+</tr>
+<tr>
+<td style="text-align: left;">NUCLEO-WL55JC</td>
+<td style="text-align: left;">LL Template</td>
+<td style="text-align: left;">Projects\NUCLEO-WL55JC\Templates_LL</td>
+</tr>
+</tbody>
+</table>
+<h2 id="known-limitations-4">Known Limitations</h2>
+<ul>
+<li><strong>LL/HAL</strong>
+<ul>
+<li>All LL/HAL Projects are developed using CubeMx except
+GTZC_GlobalSecurityConfiguration_DualCore (not eligible)</li>
+</ul></li>
+<li><strong>MW Legacy Applications</strong>
+<ul>
+<li>All FreeRTOS applications except FreeRTOS_HSEM_DualCore are
+developed using CubeMx (not eligible)</li>
+<li>FatFs_uSD_Standalone not developed using CubeMx (not eligible)</li>
+</ul></li>
+<li><strong>Security Applications</strong>
+<ul>
+<li>All KMS applications are developed using CubeMx except
+KMS_Blob_Binary (not eligible)</li>
+<li>All SBSFU applications is not developed using CubeMx (not
+eligible)</li>
+</ul></li>
+<li><strong>RF Applications</strong>
+<ul>
+<li>LoRaWAN_FUOTA, LoRaWAN_SBSFU_1_Slot_DualCore and
+Sigfox_SBSFU_1_Slot_DualCore applications are not developed using CubeMx
+(not eligible)</li>
+</ul></li>
+</ul>
+<h2 id="development-toolchains-and-compilers-4">Development Toolchains
+and Compilers</h2>
+<ul>
+<li>IAR Embedded Workbench for ARM (EWARM) toolchain V8.30.1 +
+ST-Link</li>
+<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.28 +
+ST-Link</li>
+<li>STM32CubeIDE 1.5.0 + ST-Link</li>
+</ul>
+<h2 id="supported-devices-and-boards-4">Supported Devices and
+boards</h2>
+<ul>
+<li>STM32WLE5xx &amp; STM32WL55xx</li>
+<li>NUCLEO-WL55JC1 &amp; NUCLEO-WL55JC2 (except Sigfox applications)
+ecosystem boards - Nucleo kit RevC (MB1389-HIGHBAND-C01 or
+MB1389-LOWBAND-C01)</li>
 </ul>
 <h2 id="backward-compatibility-2">Backward Compatibility</h2>
 <p>This release is compatible with the previous versions</p>
-<h2 id="dependencies-3">Dependencies</h2>
+<h2 id="dependencies-4">Dependencies</h2>
 <ul>
 <li>STM32CubeMX 6.1.0</li>
 </ul>
 </div>
 </div>
-</div>
+</section>
 </div>
 <footer class="sticky">
 <div class="columns">
 <div class="column" style="width:95%;">
-<p>For complete documentation on STM32WLxx, visit: <a href="http://www.st.com/STM32">www.st.com/stm32wl</a></p>
-<p><em>This release note uses up to date web standards and, for this reason, should not be opened with Internet Explorer but preferably with popular browsers such as Google Chrome, Mozilla Firefox, Opera or Microsoft Edge.</em></p>
+<p>For complete documentation on STM32WLxx, visit: <a
+href="http://www.st.com/STM32">www.st.com/stm32wl</a></p>
+<p><em>This release note uses up to date web standards and, for this
+reason, should not be opened with Internet Explorer but preferably with
+popular browsers such as Google Chrome, Mozilla Firefox, Opera or
+Microsoft Edge.</em></p>
 </div><div class="column" style="width:5%;">
 <p><abbr title="Based on template cx626901 version 2.0">Info</abbr></p>
 </div>

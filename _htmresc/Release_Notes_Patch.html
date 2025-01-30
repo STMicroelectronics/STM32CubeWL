@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<title>_htmresc\ReleaseNotes_Patch.html</title>
+</head>
+
+<body style="font-size: 10pt; font-family: Verdana;">
+
+<h3 style="color: blue; text-decoration: underline;">STM32CubeWL Firmware Package v1.3.1 / 20-December-2024</h3>
+
+<div style="margin-left: 18pt;">
+<p>
+<b><u>Main Changes</u></b>
+</p>
+
+<p>
+<b>Patch Release of STM32CubeWL Firmware package</b>
+</p>
+
+<p>
+<b>CMSIS/LL/HAL Drivers updates:</b>
+</p>
+<p>
+- Update HAL/LL drivers to align content to latest github version
+- Update of ADC, CORTEX, CRC, CRYP, DAC, Generic, I2C, RTC, SUBGHZ, TIM, UART, UTILS drivers
+</p>
+
+<p>
+<b>LoRaWAN Middleware updates:</b>
+</p>
+<p>
+- Fix: Re-start LoraMac stack if it is stopped and device is already joined
+</p>
+<p>
+- Fix: Unalignment memory access within FUOTA Fragmentation package
+</p>
+<p>
+- Feature: Integration of LoRaWAN Link Layer v1.0.4/v1.1 + Regional Parameters RP002-1.0.3 from LoRa Mac Semtech/StackForce master branch:<br>
+&nbsp &nbsp - Semtech release [v4.7.0](https://github.com/Lora-net/LoRaMac-node/releases/tag/v4.7.0) integration (latest commit [672b37d] 09-Dec-2022)
+</p>
+<p>
+- Feature: Added support for new release of ARIB STD-T108 Ver1.4 under AS923 region
+</p>
+<p>
+- Feature/Fix: Class C Certification support fix
+</p>
+<p>
+<b>LoRaWAN SubGHz Physical Layer Middleware updates:</b>
+</p>
+<p>
+- Fix: Application hangs because MBMUXIF_LoraSendCmd() command stuck
+</p>
+<p>
+- Fix: typo in setting MaxPayloadLength for GENERIC_LORA in RadioSetRxGenericConfig
+</p>
+
+<p>
+<b>Projects updates</b>
+
+<p>
+NUCLEO-WBA55CG
+<p>
+- Update Applications LoRaWAN_End_Node_FreeRTOS and LoRaWAN_End_Node_DualCoreFreeRTOS to fix RTC wakeup timer
+</p>
+<p>
+- Update Examples/PWR/PWR_STOP2_RTC to fix execution with CubeIDE toolchain
+</p>
+<p>
+- Update LoRaWAN_FUOTA_DualCore, LoRaWAN_SBSFU_1_Slot_DualCore and Sigfox_SBSFU_1_Slot_DualCore to fix compilation issue under Linux
+</p>
+</p>
+
+<p>
+B-WL5M-SUBG1
+<p>
+- Update LoRaWAN_FUOTA_DualCore_ExtFlash to fix compilation issue under Linux
+</p>
+</p>
+
+</p>
+
+</div>
+</body>
+</html>

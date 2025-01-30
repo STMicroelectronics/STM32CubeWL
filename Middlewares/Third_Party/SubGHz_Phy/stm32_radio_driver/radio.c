@@ -2037,7 +2037,7 @@ static int32_t RadioSetRxGenericConfig( GenericModems_t modem, RxConfigGeneric_t
 
         if( config->lora.LengthMode == RADIO_LORA_PACKET_FIXED_LENGTH )
         {
-            MaxPayloadLength = config->fsk.MaxPayloadLength;
+            MaxPayloadLength = config->lora.MaxPayloadLength;
         }
         else
         {

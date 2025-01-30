@@ -67,7 +67,7 @@
 #if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
 static RegionNvmDataGroup1_t* RegionNvmGroup1;
 static RegionNvmDataGroup2_t* RegionNvmGroup2;
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
 // static RegionNvmDataGroup1_t* RegionNvmGroup1; /* Unused for this region */
 static RegionNvmDataGroup2_t* RegionNvmGroup2;
 static Band_t* RegionBands;
@@ -224,7 +224,7 @@ PhyParam_t RegionKR920GetPhyParam( GetPhyParams_t* getPhy )
             phyParam.Value = ( REGION_COMMON_DEFAULT_ACK_TIMEOUT + randr( -REGION_COMMON_DEFAULT_ACK_TIMEOUT_RND, REGION_COMMON_DEFAULT_ACK_TIMEOUT_RND ) );
             break;
         }
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
         case PHY_RETRANSMIT_TIMEOUT:
         {
             phyParam.Value = ( REGION_COMMON_DEFAULT_RETRANSMIT_TIMEOUT + randr( -REGION_COMMON_DEFAULT_RETRANSMIT_TIMEOUT_RND, REGION_COMMON_DEFAULT_RETRANSMIT_TIMEOUT_RND ) );
@@ -343,7 +343,7 @@ void RegionKR920SetBandTxDone( SetBandTxDoneParams_t* txDone )
 #if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
     RegionCommonSetBandTxDone( &RegionNvmGroup1->Bands[RegionNvmGroup2->Channels[txDone->Channel].Band],
                                txDone->LastTxAirTime, txDone->Joined, txDone->ElapsedTimeSinceStartUp );
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
     RegionCommonSetBandTxDone( &RegionBands[RegionNvmGroup2->Channels[txDone->Channel].Band],
                                txDone->LastTxAirTime, txDone->Joined, txDone->ElapsedTimeSinceStartUp );
 #endif /* REGION_VERSION */
@@ -373,7 +373,7 @@ void RegionKR920InitDefaults( InitDefaultsParams_t* params )
 
             // Initialize bands
             memcpy1( ( uint8_t* )RegionNvmGroup1->Bands, ( uint8_t* )bands, sizeof( Band_t ) * KR920_MAX_NB_BANDS );
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
             RegionNvmGroup2 = (RegionNvmDataGroup2_t*) params->NvmGroup2;
             RegionBands = (Band_t*) params->Bands;
 
@@ -617,7 +617,7 @@ bool RegionKR920TxConfig( TxConfigParams_t* txConfig, int8_t* txPower, TimerTime
     int8_t phyDr = DataratesKR920[txConfig->Datarate];
 #if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
     int8_t txPowerLimited = RegionCommonLimitTxPower( txConfig->TxPower, RegionNvmGroup1->Bands[RegionNvmGroup2->Channels[txConfig->Channel].Band].TxMaxPower );
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
     int8_t txPowerLimited = RegionCommonLimitTxPower( txConfig->TxPower, RegionBands[RegionNvmGroup2->Channels[txConfig->Channel].Band].TxMaxPower );
 #endif /* REGION_VERSION */
     uint32_t bandwidth = RegionCommonGetBandwidth( txConfig->Datarate, BandwidthsKR920 );
@@ -907,7 +907,7 @@ LoRaMacStatus_t RegionKR920NextChannel( NextChanParams_t* nextChanParams, uint8_
     countChannelsParams.Channels = RegionNvmGroup2->Channels;
 #if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
     countChannelsParams.Bands = RegionNvmGroup1->Bands;
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
     countChannelsParams.Bands = RegionBands;
 #endif /* REGION_VERSION */
     countChannelsParams.MaxNbChannels = KR920_MAX_NB_CHANNELS;

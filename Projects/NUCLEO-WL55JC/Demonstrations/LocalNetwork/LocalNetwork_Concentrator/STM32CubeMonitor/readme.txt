@@ -1,8 +1,8 @@
 
-STM32WLxx Wireless Long Range Demo Readme file 
+STM32WL5x Wireless Long Range Demo Readme file 
 
 ******************************************************************************
- Copyright (c) 2020 STMicroelectronics.
+ Copyright (c) 2024 STMicroelectronics.
  All rights reserved.
  This software component is licensed by ST under license SLA0048, the "License"; 
  You may not use this file except in compliance with the License. 

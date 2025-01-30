@@ -84,7 +84,7 @@ extern "C"
  * Default datarate used by the node
  */
 #define CN470_DEFAULT_DATARATE                      DR_0
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
 /*!
  * Minimal datarate that can be used by the node
  */
@@ -166,7 +166,7 @@ extern "C"
  * Second reception window channel datarate definition.
  */
 #define CN470_RX_WND_2_DR                           DR_0
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
 /*!
  * Second reception window channel datarate definition.
  */
@@ -211,7 +211,7 @@ extern "C"
  * Size of RFU 1 field
  */
 #define CN470_RFU1_SIZE                             3
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
 /*!
  * Payload size of a beacon frame
  */
@@ -269,7 +269,7 @@ extern "C"
  */
 #define CN470_STEPWIDTH_RX1_CHANNEL                 ( (uint32_t) 200000 )
 
-#if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#if (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
 #define CN470_DEFAULT_DR_RANGE                      { .Value = ( CN470_TX_MAX_DATARATE << 4 ) | CN470_TX_MIN_DATARATE }
 
 #define CN470_COMMON_JOIN_CHANNELS \
@@ -328,7 +328,7 @@ static const uint8_t MaxPayloadOfDatarateCN470[] = { 51, 51, 51, 115, 242, 242 }
  * Maximum payload with respect to the datarate index. Can operate with repeater.
  */
 static const uint8_t MaxPayloadOfDatarateRepeaterCN470[] = { 51, 51, 51, 115, 222, 222 };
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
 /*!
  * Data rates table definition
  */

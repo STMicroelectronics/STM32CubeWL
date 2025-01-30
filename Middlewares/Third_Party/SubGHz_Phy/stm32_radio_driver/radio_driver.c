@@ -951,13 +951,17 @@ void SUBGRF_ClearIrqStatus( uint16_t irq )
 
 void SUBGRF_WriteRegister( uint16_t addr, uint8_t data )
 {
+    CRITICAL_SECTION_BEGIN();
     HAL_SUBGHZ_WriteRegisters( &hsubghz, addr, (uint8_t*)&data, 1 );
+    CRITICAL_SECTION_END();
 }
 
 uint8_t SUBGRF_ReadRegister( uint16_t addr )
 {
     uint8_t data;
+    CRITICAL_SECTION_BEGIN();
     HAL_SUBGHZ_ReadRegisters( &hsubghz, addr, &data, 1 );
+    CRITICAL_SECTION_END();
     return data;
 }
 

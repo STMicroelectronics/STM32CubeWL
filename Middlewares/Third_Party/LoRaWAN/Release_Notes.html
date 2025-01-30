@@ -49,6 +49,46 @@
 <section id="update-history" class="col-sm-12 col-lg-8">
 <h1>Update History</h1>
 <div class="collapse">
+<input type="checkbox" id="collapse-section23" checked aria-hidden="true"> <label for="collapse-section23" aria-hidden="true"><strong>V2.6.1 / 02-Oct-2024</strong></label>
+<div>
+<h2 id="main-changes">Main Changes</h2>
+<ul>
+<li>Fix: Re-start LoraMac stack if it is stopped and device is already joined</li>
+</li>
+<li>Fix: Unalignment memory access within FUOTA Fragmentation package</li>
+</li>
+<li>Release Notes update</li>
+</ul>
+<h2 id="known-limitations">Known limitations:</h2>
+<ul>
+<li>The feature Class B Remote multicast setup implemented is not fully operational when more than one context defined (context priority management)</li>
+<li>The Data Block Integrity Check required by TS004-2.0.0_LoRaWAN_Fragmented_Data_Block_Transport is not compliant with the current ComputeCmac method implementation</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section23" checked aria-hidden="true"> <label for="collapse-section23" aria-hidden="true"><strong>V2.6.0 / 17-Jul-2024</strong></label>
+<div>
+<h2 id="main-changes">Main Changes</h2>
+<ul>
+<li>Feature: Integration of LoRaWAN Link Layer v1.0.4/v1.1 + Regional Parameters RP002-1.0.3 from LoRa Mac Semtech/StackForce master branch:<br>
+<ul>
+<li>Semtech release <a href="https://github.com/Lora-net/LoRaMac-node/releases/tag/v4.7.0">v4.7.0</a> integration (latest commit [672b37d] 09-Dec-2022)</li>
+</ul></li>
+<li>Feature: Added support for new release of ARIB STD-T108 Ver1.4 under AS923 region</li>
+</li>
+<li>Feature/Fix: Class C Certification support fix</li>
+</li>
+<li>Release Notes update</li>
+</ul>
+<h2 id="known-limitations">Known limitations:</h2>
+<ul>
+<li>The feature Class B Remote multicast setup implemented is not fully operational when more than one context defined (context priority management)</li>
+<li>The Data Block Integrity Check required by TS004-2.0.0_LoRaWAN_Fragmented_Data_Block_Transport is not compliant with the current ComputeCmac method implementation</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
 <input type="checkbox" id="collapse-section23" checked aria-hidden="true"> <label for="collapse-section23" aria-hidden="true"><strong>V2.5.0 / 21-Oct-2022</strong></label>
 <div>
 <h2 id="main-changes">Main Changes</h2>

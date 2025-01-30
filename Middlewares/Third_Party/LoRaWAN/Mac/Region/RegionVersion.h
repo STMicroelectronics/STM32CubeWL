@@ -37,7 +37,12 @@ extern "C"
  * @brief Regional parameters version definition.
  * @note RP002-1.0.1 : https://lora-alliance.org/resource_hub/rp2-101-lorawan-regional-parameters-2/
  */
-#define REGION_VERSION                              0x02010001
+//#define REGION_VERSION                              0x02010001
+/*!
+ * Regional parameters version definition.
+ * RP002-1.0.3
+ */
+#define REGION_VERSION                              0x02010003
 #endif /* LORAMAC_VERSION */
 #endif /* REGION_VERSION */
 

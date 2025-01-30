@@ -104,7 +104,7 @@ void PreSleepProcessing(uint32_t *ulExpectedIdleTime)
   on again in the post sleep processing function.  For maximum power saving
   ensure all unused pins are in their lowest power state. */
 
-  uint32_t WakeUpTimer_timeOut_ms = app_freertos_tick_to_ms(*ulExpectedIdleTime);
+  uint32_t WakeUpTimer_timeOut_ms = app_freertos_tick_to_ms((*ulExpectedIdleTime) * CORE_TICK_RATE);
 
   UTIL_TIMER_SetPeriod(&WakeUpTimer, WakeUpTimer_timeOut_ms);
   UTIL_TIMER_Start(&WakeUpTimer);
@@ -113,14 +113,14 @@ void PreSleepProcessing(uint32_t *ulExpectedIdleTime)
   /*Stop the systick here so that it stops even in sleep mode*/
   portNVIC_SYSTICK_CTRL_REG &= ~portNVIC_SYSTICK_ENABLE_BIT;
 
-  UTIL_LPM_EnterLowPower();
-
-  /*
+    /*
     (*ulExpectedIdleTime) is set to 0 to indicate that PreSleepProcessing contains
     its own wait for interrupt or wait for event instruction and so the kernel vPortSuppressTicksAndSleep
     function does not need to execute the wfi instruction
   */
   *ulExpectedIdleTime = 0;
+
+  UTIL_LPM_EnterLowPower();
 }
 
 void PostSleepProcessing(uint32_t *ulExpectedIdleTime)

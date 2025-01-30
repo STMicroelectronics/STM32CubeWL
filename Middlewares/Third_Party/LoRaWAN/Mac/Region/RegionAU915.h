@@ -69,7 +69,7 @@ extern "C"
  * Maximal datarate that can be used by the node
  */
 #define AU915_TX_MAX_DATARATE                       DR_6
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
 /*!
  * Maximal datarate that can be used by the node
  */
@@ -198,7 +198,7 @@ extern "C"
  */
 #define AU915_RFU2_SIZE                             1
 /* #define AU915_RFU2_SIZE                             3 */
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
 /*!
  * Payload size of a beacon frame
  */
@@ -305,7 +305,7 @@ static const uint8_t MaxPayloadOfDatarateDwell1AU915[] = { 0, 0, 11, 53, 125, 24
  */
 #if (defined( REGION_VERSION ) && ( REGION_VERSION == 0x01010003 ))
 static const uint8_t MaxPayloadOfDatarateRepeaterDwell1AU915[] = { 0, 0, 11, 53, 125, 242, 242, 0, 33, 109, 222, 222, 222, 222 };
-#elif (defined( REGION_VERSION ) && ( REGION_VERSION == 0x02010001 ))
+#elif (defined( REGION_VERSION ) && (( REGION_VERSION == 0x02010001 ) || ( REGION_VERSION == 0x02010003 )))
 static const uint8_t MaxPayloadOfDatarateRepeaterDwell1AU915[] = { 0, 0, 11, 53, 125, 222, 222, 0, 33, 109, 222, 222, 222, 222 };
 #endif /* REGION_VERSION */
 

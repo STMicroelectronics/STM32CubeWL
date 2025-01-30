@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workspace>
+  <project>
+    <path>$WS_DIR$\Sigfox_AT_Slave_DualCore_CM0PLUS.ewp</path>
+  </project><project>
+    <path>$WS_DIR$\Sigfox_AT_Slave_DualCore_CM4.ewp</path>
+  </project>
+  <batchBuild />
+</workspace>

@@ -85,7 +85,7 @@ void HAL_RTC_MspInit(RTC_HandleTypeDef* hrtc)
   if(hrtc->Instance==RTC)
   {
   /* USER CODE BEGIN RTC_MspInit 0 */
-  RCC_OscInitTypeDef RCC_OscInitStruct;
+  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
 
   /*## Configure the RTC clock source ######################################*/
   /* Enable LSI Oscillator */
