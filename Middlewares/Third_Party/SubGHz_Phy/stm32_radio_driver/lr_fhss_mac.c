@@ -781,7 +781,7 @@ STATIC uint16_t lr_fhss_payload_interleaving( const uint8_t *data_in, uint16_t d
 
         lr_fhss_set_bit_in_byte_vector( data_out, 0 + out_row_index, 0 );  // guard bits
         lr_fhss_set_bit_in_byte_vector( data_out, 1 + out_row_index, 0 );  // guard bits
-        for( uint32_t j = 0; j < in_row_width; j++ )
+        for( int32_t j = 0; j < in_row_width; j++ )
         {
             lr_fhss_set_bit_in_byte_vector( data_out, j + 2 + out_row_index,
                                             lr_fhss_extract_bit_in_byte_vector( data_in, pos ) );  // guard bit
