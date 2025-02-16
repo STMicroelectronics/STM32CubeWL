@@ -1,0 +1,16 @@
+{
+  "name": "stm32cubewl",
+  "version": "1.3.1",
+  "description": "Arduino Wiring-based Framework for Microchip tinyAVR 0-series and 1-series chips (megaTinyCore)",
+  "keywords": [
+    "framework",
+    "ststm32",
+    "stm32cube",
+    "STM32WLE5CCU6"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RajathBatapati/STM32CubeWLRJ.git"
+  }
+}
+
