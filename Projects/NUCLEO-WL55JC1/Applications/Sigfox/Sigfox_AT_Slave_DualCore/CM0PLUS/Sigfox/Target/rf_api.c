@@ -485,6 +485,7 @@ sfx_u8 RF_API_wait_for_clear_channel(sfx_u8 cs_min, sfx_s8 cs_threshold, sfx_rx_
 {
   sfx_u8 status = SFX_ERR_NONE;
   sfx_rx_state_enum_t cs_state = DL_TIMEOUT;
+  sfx_s8 lbt_threshold_cal;
   /* Starts Rx Windows to sense if channel is occupied or clear*
    * If the channel is clear during the minimum carrier sense
    * value (cs_min), under the limit of the cs_threshold,
@@ -502,6 +503,8 @@ sfx_u8 RF_API_wait_for_clear_channel(sfx_u8 cs_min, sfx_s8 cs_threshold, sfx_rx_
 
   HAL_Delay(Radio.GetWakeupTime());
 
+  lbt_threshold_cal =  E2P_Read_RssiCal();
+  cs_threshold += lbt_threshold_cal;
   APP_LOG(TS_ON, VLEVEL_M, "CS start cs_min=%dms, cs_threshold=%dBm\n\r", cs_min, cs_threshold);
 
   while (RxCarrierSenseGetStatus() == 0)
