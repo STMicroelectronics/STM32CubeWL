@@ -59,7 +59,7 @@
 /*---------------------------------------------------------------------------*/
 /**
   * @brief LoRaWAN NVM Flash address
-  * @note last 2 sector of a 128kBytes device
+  * @note last 2 sector of a 256kBytes device
   */
 #define LORAWAN_NVM_BASE_ADDRESS                    ((void *)0x0803F000UL)
 

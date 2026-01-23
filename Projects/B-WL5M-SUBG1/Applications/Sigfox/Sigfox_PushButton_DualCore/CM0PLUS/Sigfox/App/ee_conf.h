@@ -75,7 +75,6 @@ extern "C" {
 
 /**
   * @brief EEPROM Flash address
-  * @note last 2 sector of a 128kBytes device
   */
 #define EE_BASE_ADRESS                  (0x0801D000UL)
 
