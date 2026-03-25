@@ -330,17 +330,17 @@
 		<link>
 			<name>Middlewares/SubGHz_Phy/radio.c</name>
 			<type>1</type>
-			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio.c</locationURI>
+			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/Third_Party/SubGHz_Phy/radio_driver/radio.c</locationURI>
 		</link>
 		<link>
 			<name>Middlewares/SubGHz_Phy/radio_driver.c</name>
 			<type>1</type>
-			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_driver.c</locationURI>
+			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/Third_Party/SubGHz_Phy/radio_driver/radio_driver.c</locationURI>
 		</link>
 		<link>
 			<name>Middlewares/SubGHz_Phy/radio_fw.c</name>
 			<type>1</type>
-			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c</locationURI>
+			<locationURI>PARENT-6-PROJECT_LOC/Middlewares/Third_Party/SubGHz_Phy/radio_driver/radio_fw.c</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

@@ -3188,7 +3188,7 @@
         "type": "comment",
         "z": "b56598ed.0fee28",
         "name": "Send commands to board",
-        "info": "These nodes are used to format the AT commands for board with STM32WB.\n\nInitialize board with ATZ\nSet Region\nSet SubRegion\nStart beacon\n\nThe command are sent to the flow UART A. (UART flows manage the connection, the data logic and result parsing)",
+        "info": "These nodes are used to format the AT commands for board with STM32WL.\n\nInitialize board with ATZ\nSet Region\nSet SubRegion\nStart beacon\n\nThe command are sent to the flow UART A. (UART flows manage the connection, the data logic and result parsing)",
         "x": 1030,
         "y": 700,
         "wires": []

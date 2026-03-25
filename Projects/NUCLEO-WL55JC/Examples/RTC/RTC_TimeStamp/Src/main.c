@@ -279,9 +279,9 @@ void HAL_RTCEx_TimeStampEventCallback(RTC_HandleTypeDef *RTC_Handle)
   HAL_RTCEx_GetTimeStamp(&hrtc, &sTimeStampget, &sTimeStampDateget, RTC_FORMAT_BIN);
 
   /* Display time Format : hh:mm:ss */
-  sprintf((char *)aShowTimeStamp, "%.2d:%.2d:%.2d", sTimeStampget.Hours, sTimeStampget.Minutes, sTimeStampget.Seconds);
+  sprintf((char *)aShowTimeStamp, "%.2d:%.2d:%.2d", sTimeStampget.Hours % 24, sTimeStampget.Minutes % 60, sTimeStampget.Seconds % 60);
   /* Display date Format : mm-dd */
-  sprintf((char *)aShowDateStamp, "%.2d-%.2d-%.2d", sTimeStampDateget.Month, sTimeStampDateget.Date, 2020);
+  sprintf((char *)aShowDateStamp, "%.2d-%.2d-%.2d", sTimeStampDateget.Month % 13, sTimeStampDateget.Date % 32, 2020);
 }
 
 /**
@@ -301,9 +301,9 @@ static void RTC_CalendarShow(void)
   HAL_RTC_GetDate(&hrtc, &sdatestructureget, RTC_FORMAT_BIN);
 
   /* Display time Format : hh:mm:ss */
-  sprintf((char *)aShowTime, "%.2d:%.2d:%.2d", stimestructureget.Hours, stimestructureget.Minutes, stimestructureget.Seconds);
+  sprintf((char *)aShowTime, "%.2d:%.2d:%.2d", stimestructureget.Hours % 24, stimestructureget.Minutes % 60, stimestructureget.Seconds % 60);
   /* Display date Format : mm-dd-yy */
-  sprintf((char *)aShowDate, "%.2d-%.2d-%.2d", sdatestructureget.Month, sdatestructureget.Date, 2000 + sdatestructureget.Year);
+  sprintf((char *)aShowDate, "%.2d-%.2d-%.2d", sdatestructureget.Month % 13, sdatestructureget.Date % 32, 2000 + sdatestructureget.Year);
 }
 
 /* USER CODE END 4 */

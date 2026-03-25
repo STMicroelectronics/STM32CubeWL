@@ -132,7 +132,7 @@ void Sigfox_Init(void)
   {
     Error_Handler();
   }
-
+  E2P_Init();
   sfx_rc = E2P_Read_Rc();
 
   /*Open Sigfox library */

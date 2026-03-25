@@ -104,10 +104,9 @@ void SystemApp_Init(void)
   /* #warning "should be removed when proper obl is done" */
   __HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_OPTVERR);
 
-  E2P_Init();
 
   /*Set verbose LEVEL*/
-  UTIL_ADV_TRACE_SetVerboseLevel(E2P_Read_VerboseLevel());
+  UTIL_ADV_TRACE_SetVerboseLevel(VERBOSE_LEVEL);
 
   /*Initialize the temperature and Battery measurement services */
   SYS_InitMeasurement();

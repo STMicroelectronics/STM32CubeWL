@@ -32,7 +32,6 @@
 #include "sigfox_mbwrapper.h"
 #include "sigfox_info.h"
 #include "mbmuxif_sys.h"
-#include "flash_if.h"
 /* USER CODE BEGIN Includes */
 #include "sys_sensors.h"
 
@@ -69,7 +68,6 @@ extern RadioEvents_t RfApiRadioEvents;
 /**
   * Temp buffer to store a FLASH page in RAM when partial replacement is needed
   */
-static uint8_t FLASH_RAM_buffer[FLASH_IF_BUFFER_SIZE];
 
 static SigfoxCallback_t SigfoxCallbacks = { SYS_GetBatteryLevel,
                                             GetTemperatureLevel
@@ -144,10 +142,6 @@ void Sigfox_Init(void)
 
   /* USER CODE END Sigfox_Init_1 */
 
-  if (FLASH_IF_Init(FLASH_RAM_buffer) != FLASH_IF_OK)
-  {
-    Error_Handler();
-  }
 
   E2P_Write_Rc(DEFAULT_RC);
   sfx_rc = E2P_Read_Rc();

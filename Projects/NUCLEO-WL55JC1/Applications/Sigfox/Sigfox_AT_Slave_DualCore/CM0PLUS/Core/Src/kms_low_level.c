@@ -148,7 +148,8 @@ CK_RV KMS_LL_DataStorageKey_Init(void)
   return CKR_OK;
   /* USER CODE END KMS_LL_DataStorageKey_Init */
 }
-
+#endif /* KMS_ENCRYPT_DECRYPT_BLOB */
+#if defined(KMS_ENCRYPT_DECRYPT_BLOB) || defined(KMS_GENERATE_KEYS)
 /**
   * @brief  Generate a random number
   * @param  pRandomData buffer to store the random number
@@ -160,7 +161,7 @@ CK_RV KMS_LL_GetRandomData(uint32_t *pRandomData)
   return CKR_FUNCTION_NOT_SUPPORTED;
   /* USER CODE END KMS_LL_GetRandomData */
 }
-#endif /* KMS_ENCRYPT_DECRYPT_BLOB */
+#endif /* KMS_ENCRYPT_DECRYPT_BLOB || KMS_GENERATE_KEYS */
 
 /**
   * @brief  An error occurred

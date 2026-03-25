@@ -42,7 +42,7 @@ void MX_KMS_Init(void);
 
 /* USER CODE BEGIN 2 */
 CK_RV app_kms_encrypt_decrypt_aes_cbc(uint32_t length, uint8_t *pClearMessage);
-void KMS_Start_LocalUpdate(void);
+CK_RV KMS_Start_LocalUpdate(void);
 /* USER CODE END 2 */
 
 #ifdef __cplusplus

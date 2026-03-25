@@ -32,7 +32,7 @@ set "ref_userapp=%projectdir%\\RefUserApp.bin"
 
 set "oemkey="
 set "ecckey=%SBSFUBootLoader%\\1_Image_SECoreBin\\Binary\\ECCKEY%fwid%.txt"
-set "sbsfuelf=%SBSFUBootLoader%\\1_Image_BFU\\EWARM\\B-WL5M-SUBG1\\Exe\\Project.out"
+set "sbsfuelf=%SBSFUBootLoader%\\1_Image_BFU\\EWARM\\BFU\\Exe\\Project.out"
 set "magic=SFU%fwid%"
 set "offset=512"
 set "alignment=16"

@@ -10,7 +10,7 @@
       <TargetName>Sigfox_PushButton</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>6160000::V6.16::ARMCLANG</pCCUsed>
+      <pCCUsed>6220000::V6.22::ARMCLANG</pCCUsed>
       <uAC6>1</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -186,6 +186,7 @@
             <RvdsVP>0</RvdsVP>
             <RvdsMve>0</RvdsMve>
             <RvdsCdeCp>0</RvdsCdeCp>
+            <nBranchProt>0</nBranchProt>
             <hadIRAM2>0</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
@@ -339,7 +340,7 @@
               <MiscControls>-fshort-enums</MiscControls>
               <Define>CORE_CM4,USE_HAL_DRIVER,STM32WL5Mxx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Sigfox/App;../Sigfox/Target;../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc;../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc/Legacy;../../../../../../Utilities/trace/adv_trace;../../../../../../Utilities/misc;../../../../../../Utilities/sequencer;../../../../../../Utilities/timer;../../../../../../Utilities/lpm/tiny_lpm;../../../../../../Middlewares/Third_Party/Sigfox/Crypto;../../../../../../Drivers/CMSIS/Device/ST/STM32WLxx/Include;../../../../../../Middlewares/Third_Party/Sigfox/Monarch;../../../../../../Middlewares/Third_Party/Sigfox/SigfoxLib;../../../../../../Middlewares/Third_Party/Sigfox/SigfoxLibTest;../../../../../../Middlewares/Third_Party/SubGHz_Phy;../../../../../../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver;../../../../../../Drivers/CMSIS/Include;../../../../../../Drivers/BSP/B-WL5M-SUBG;../../../../../../Drivers/BSP/Components/Common;../../../../../../Drivers/BSP/Components/stts22h;../../../../../../Drivers/BSP/Components/ilps22qs</IncludePath>
+              <IncludePath>../Core/Inc;../Sigfox/App;../Sigfox/Target;../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc;../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc/Legacy;../../../../../../Utilities/trace/adv_trace;../../../../../../Utilities/misc;../../../../../../Utilities/sequencer;../../../../../../Utilities/timer;../../../../../../Utilities/lpm/tiny_lpm;../../../../../../Middlewares/Third_Party/Sigfox/Crypto;../../../../../../Drivers/CMSIS/Device/ST/STM32WLxx/Include;../../../../../../Middlewares/Third_Party/Sigfox/Monarch;../../../../../../Middlewares/Third_Party/Sigfox/SigfoxLib;../../../../../../Middlewares/Third_Party/Sigfox/SigfoxLibTest;../../../../../../Middlewares/Third_Party/SubGHz_Phy;../../../../../../Middlewares/Third_Party/SubGHz_Phy/radio_driver;../../../../../../Drivers/CMSIS/Include;../../../../../../Drivers/BSP/B-WL5M-SUBG;../../../../../../Drivers/BSP/Components/Common;../../../../../../Drivers/BSP/Components/stts22h;../../../../../../Drivers/BSP/Components/ilps22qs</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -352,7 +353,7 @@
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
             <useXO>0</useXO>
-            <ClangAsOpt>1</ClangAsOpt>
+            <ClangAsOpt>4</ClangAsOpt>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
@@ -781,17 +782,17 @@
             <File>
               <FileName>radio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>../../../../../../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio.c</FilePath>
+              <FilePath>../../../../../../Middlewares/Third_Party/SubGHz_Phy/radio_driver/radio.c</FilePath>
             </File>
             <File>
               <FileName>radio_driver.c</FileName>
               <FileType>1</FileType>
-              <FilePath>../../../../../../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_driver.c</FilePath>
+              <FilePath>../../../../../../Middlewares/Third_Party/SubGHz_Phy/radio_driver/radio_driver.c</FilePath>
             </File>
             <File>
               <FileName>radio_fw.c</FileName>
               <FileType>1</FileType>
-              <FilePath>../../../../../../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c</FilePath>
+              <FilePath>../../../../../../Middlewares/Third_Party/SubGHz_Phy/radio_driver/radio_fw.c</FilePath>
             </File>
           </Files>
         </Group>

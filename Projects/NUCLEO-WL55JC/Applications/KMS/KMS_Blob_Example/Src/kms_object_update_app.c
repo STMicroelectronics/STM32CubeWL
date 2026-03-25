@@ -55,7 +55,7 @@ static void KMS_UPDATE_PrintWelcome(void);
 static HAL_StatusTypeDef KMS_UPDATE_ImportBlob(KMS_BlobImageFlashTypeDef *pFwImageDwlArea);
 
 uint32_t KMS_APP_GetDownloadAreaInfo(KMS_BlobImageFlashTypeDef *pArea);
-void KMS_Start_LocalUpdate(void);
+CK_RV KMS_Start_LocalUpdate(void);
 
 
 HAL_StatusTypeDef Ymodem_BlobHeaderPktRxCpltCallback(uint32_t uFileSize);
@@ -103,7 +103,7 @@ uint32_t KMS_APP_GetDownloadAreaInfo(KMS_BlobImageFlashTypeDef *pArea)
   * @param  None
   * @retval HAL Status.
   */
-void KMS_Start_LocalUpdate(void)
+CK_RV KMS_Start_LocalUpdate(void)
 {
   HAL_StatusTypeDef ret = HAL_ERROR;
   uint8_t  fw_header_input[KMS_BLOB_HEADER_TOT_LEN];
@@ -150,6 +150,7 @@ void KMS_Start_LocalUpdate(void)
   {
     printf("  -- BLOB import completed successfully \r\n\n");
   }
+  return ret;
 }
 
 /**

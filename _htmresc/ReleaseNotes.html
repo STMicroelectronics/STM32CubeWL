@@ -6,82 +6,66 @@
 
 <body style="font-size: 10pt; font-family: Verdana;">
 
-<h3 style="color: blue; text-decoration: underline;">STM32CubeWL Firmware Package v1.4.0 / 29-October-2025</h3>
+<h3 style="color: blue; text-decoration: underline;">STM32CubeWL Firmware Package v1.5.0 / 04-February-2026</h3>
 
 <div style="margin-left: 18pt;">
 <p>
 <b><u>Main Changes</u></b>
 </p>
 
-<p>
-<b>CMSIS/LL/HAL Drivers updates:</b>
-</p>
-<p>
-- Maintenance release to include latest corrections including the following IP drivers:
-ADC, RCC, HSEM, I2C, SUBGHZ, RTC, TIM, LPTIM, UART, USART, FLASH, SPI, DMA
-</p>
-<p>
-- Fix: STM32CubeIDE projects location of the .size directive in startup code
-</p>
-<p>
-- Fix: ROM symbol addresses in template files to use code region aliases
-</p>
-<p>
-- Feature: Allow redefinition of the macro VECT_TAB_OFFSET externally from the IDE, makefile, or command line
-</p>
-<p>
-- Fix of MISRAC2012 Rules 13.4_b, 12.3, 10.4 and 8.13 violations
-</p>
-  
+<ul>
+  <li><strong>CMSIS Core Drivers</strong> updates
+    <ul>
+      <li>Update to V5.9.0</li>
+    </ul>
+  </li>
+</ul>
+<ul>
+  <li><strong>CMSIS Device Drivers</strong> updates
+    <ul>
+      <li>Update to V1.4.0 to fix MISRAC-2012 rules violations</li>
+    </ul>
+  </li>
+</ul>
+<ul>  
+  <li><strong>HAL/LL Drivers</strong> updates
+    <ul>
+      <li>Update the following HAL drivers to get the latest corrections: ADC, CRYP, SUBGHZ, SPI, I2S, TIM, RCC, RTC, UART, USART</li>
+      <li>Update SubGHz drivers to add new public APIs needed by the LoRAWAN-LBM stack</li>
+    </ul>
+  </li>
+</ul>
+<ul>
+  <li><strong>Middlewares</strong> updates
+    <ul>
+      <li>Update LoRaWAN middlewares to new LBM (Lora Basic Modem) stack</li>
+      <li>Update SubGHz_Phy to V1.4.0 supporting new LoRAWAN-LBM stack. All non-LoRA applications are supported</li>
+      <li>Update FatFS to version r0.12c_stm32cube_20240212 to include the latest bug fixes ensuring API backward compatibility</li>
+	  <li>Update STM32_Key_Management_Services MW to V1.2.4</li>
+    </ul>
+  </li>
+</ul>
+<ul>
+  <li><strong>Projects</strong> updates
+    <ul>
+      <li>Remove all LoRaWAN projects based on LoRAWAN Mac-Node legacy middleware</li>
+      <li>Update all wireless applications to the latest toolchains versions</li>
+      <li>Update all wireless applications to use the new SubGHz_Phy middleware</li>
+      <li>Add the new LoRAWAN-LPBM based applications
+        <ul>
+          <li>LoRaWAN_Relay_LBM</li>
+          <li>LoRaWAN_End_Node_Relay_LBM</li>
+          <li>LoRaWAN_End_Node_LBM</li>
+        </ul>
+      </li>
+      <li>Resolve compilation warnings in various projects when using newer GCC versions</li>
+      <li>Fix a regression in Sigfox applications</li>
+      <li>Update BFU/SBSFU applications to enforce post-build actions dependencies with EWARM v9.60.3</li>
+      <li>Update KMS applications to remove differences versus STM32CubeMX generated code</li>
+    </ul>
+  </li>
+</ul>
 
-<p>
-<b>LoRaWAN Middleware updates:</b>
-</p>
-<p>
-- Fix: rebootTimeReq is based on GPS epoch, convert to Unix epoch
-</p>
-<p>
-- Fix: LCTT Test BV_015_A for CHANNEL_PLAN_GROUP_AS923_1_JP_CH24_CH38_LBT test due to allowed data rate mismatch
-</p>
-<p>
-- Fix: Backoff Algorithm issue (patch from Semtech Github #1399)
-</p>
-<p>
-- Fix: Fixed typo in comments and channel plan name (From CH37 to CH33) for AS923_1 with LBT and DC
-</p>
-<p>
-<b>Security Middleware updates:</b>
-</p>
-<p>
-- Migrate to MbedTLS V3.6.4
-</p>
-<p>
-- Migrate to STM32 Key Management Services V1.2.3
-</p>
-<p>
-- Migrate to STM32_Secure_Engine V2.5.4
-</p>
-<p>
-- Migrate to FreeRTOS V10.6.2
-</p>
-<p>
-<b>Projects updates:</b>
-</p>
-<p>
-- SLA0044 Legal terms updated to latest revision (Rev 6 / October 2025)
-</p>
-<p>
-- Project alignment to STM32CubeMX V6.16.0
-</p>
-<p>
-- Project alignment to updated FreeRTOS and MbedTLS versions
-</p>
-<p>
-<b>Package updates:</b>
-</p>
-<p>  
-- SLA0048 Legal terms updated to latest revision (Rev 5 / October 2025)
-</p>
 </div>
 </body>
 </html>

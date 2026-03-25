@@ -48,7 +48,8 @@ _Min_Stack_Size = 0x1000; /* required amount of stack */
 MEMORY
 {
   RAM_SHARED (xrw): ORIGIN = 0x20009000, LENGTH = 4K
-  RAM2   (xrw)    : ORIGIN = 0x2000A800, LENGTH = 22K
+  RAM2   (rw)     : ORIGIN = 0x2000A800, LENGTH = 21K + 512
+  RAMFUNC   (xr)  : ORIGIN = 0x2000FE00, LENGTH = 512
   VM     (xrw)    : ORIGIN = 0x2000A000, LENGTH = 2K
   FLASH   (rx)    : ORIGIN = 0x08020000, LENGTH = 120K
   USER_Key_region_ROM (rx) : ORIGIN = 0x0803E500, LENGTH = 768
@@ -91,13 +92,15 @@ SECTIONS
     . = ALIGN(8);
   } >FLASH
 
-  .ARM.extab   : {
+  .ARM.extab (READONLY) : /* The READONLY keyword is only supported in GCC11 and later, remove it if using GCC10 or earlier. */
+  {
     . = ALIGN(8);
     *(.ARM.extab* .gnu.linkonce.armextab.*)
     . = ALIGN(8);
   } >FLASH
 
-  .ARM : {
+  .ARM (READONLY) : /* The READONLY keyword is only supported in GCC11 and later, remove it if using GCC10 or earlier. */
+  {
     . = ALIGN(8);
     __exidx_start = .;
     *(.ARM.exidx*)
@@ -105,7 +108,7 @@ SECTIONS
     . = ALIGN(8);
   } >FLASH
 
-  .preinit_array     :
+  .preinit_array (READONLY) : /* The READONLY keyword is only supported in GCC11 and later, remove it if using GCC10 or earlier. */
   {
     . = ALIGN(8);
     PROVIDE_HIDDEN (__preinit_array_start = .);
@@ -114,7 +117,7 @@ SECTIONS
     . = ALIGN(8);
   } >FLASH
 
-  .init_array :
+  .init_array (READONLY) : /* The READONLY keyword is only supported in GCC11 and later, remove it if using GCC10 or earlier. */
   {
     . = ALIGN(8);
     PROVIDE_HIDDEN (__init_array_start = .);
@@ -124,7 +127,7 @@ SECTIONS
     . = ALIGN(8);
   } >FLASH
 
-  .fini_array :
+  .fini_array (READONLY) : /* The READONLY keyword is only supported in GCC11 and later, remove it if using GCC10 or earlier. */
   {
     . = ALIGN(8);
     PROVIDE_HIDDEN (__fini_array_start = .);
@@ -151,13 +154,24 @@ SECTIONS
     _sdata = .;        /* create a global symbol at data start */
     *(.data)           /* .data sections */
     *(.data*)          /* .data* sections */
-    *(.RamFunc)        /* .RamFunc sections */
-    *(.RamFunc*)       /* .RamFunc* sections */
 
     . = ALIGN(8);
     _edata = .;        /* define a global symbol at data end */
 
   } >RAM2 AT> FLASH
+
+  /* Initialized ramfunc sections into "RAMFUNC" Ram type memory */
+  .ramfunc :
+  {
+    . = ALIGN(8);
+    _sramfunc = .;        /* create a global symbol at ramfunc start */
+    *(.RamFunc)        /* .RamFunc sections */
+    *(.RamFunc*)       /* .RamFunc* sections */
+
+    . = ALIGN(8);
+    _eramfunc = .;        /* define a global symbol at ramfunc end */
+
+  } >RAMFUNC AT> FLASH
 
   /* Used by the startup to initialize MB_MEM2 */
   _siMB_MEM2 = LOADADDR(.MB_MEM2);

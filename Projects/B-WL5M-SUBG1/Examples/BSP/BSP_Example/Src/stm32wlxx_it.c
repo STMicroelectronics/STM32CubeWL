@@ -149,10 +149,10 @@ void DebugMon_Handler(void)
 #endif /* !CORE_CM0PLUS */
 
 /******************************************************************************/
-/*                 STM32WBxx Peripherals Interrupt Handlers                   */
+/*                 STM32WLxx Peripherals Interrupt Handlers                   */
 /*  Add here the Interrupt Handler for the used peripheral(s) (PPP), for the  */
 /*  available peripheral interrupt handler's name please refer to the startup */
-/*  file (startup_stm32wbxxxx.s).                                             */
+/*  file (startup_stm32wlxxxx.s).                                             */
 /******************************************************************************/
 
 /**

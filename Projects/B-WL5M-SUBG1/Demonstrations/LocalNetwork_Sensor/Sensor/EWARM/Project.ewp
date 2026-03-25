@@ -356,7 +356,7 @@
                     <state>$PROJ_DIR$/../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc</state>
                     <state>$PROJ_DIR$/../../../../../../Drivers/CMSIS/Include</state>
                     <state>$PROJ_DIR$/../../../../../../Middlewares/Third_Party/SubGHz_Phy</state>
-                    <state>$PROJ_DIR$/../../../../../../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver</state>
+                    <state>$PROJ_DIR$/../../../../../../Middlewares/Third_Party/SubGHz_Phy/radio_driver</state>
                     <state>$PROJ_DIR$/../../../../../../Utilities/lpm/tiny_lpm</state>
                     <state>$PROJ_DIR$/../../../../../../Utilities/misc</state>
                     <state>$PROJ_DIR$/../../../../../../Utilities/sequencer</state>
@@ -1302,13 +1302,13 @@
         <group>
             <name>SubGHz_Phy</name>
             <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\SubGHz_Phy\stm32_radio_driver\radio.c</name>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\SubGHz_Phy\radio_driver\radio.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\SubGHz_Phy\stm32_radio_driver\radio_driver.c</name>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\SubGHz_Phy\radio_driver\radio_driver.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\SubGHz_Phy\stm32_radio_driver\radio_fw.c</name>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\SubGHz_Phy\radio_driver\radio_fw.c</name>
             </file>
         </group>
     </group>

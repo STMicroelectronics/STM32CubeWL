@@ -122,7 +122,7 @@ typedef enum
   * @note This structure MUST contain a field named 'HeaderSignature' (to control authentication of the header)
   * @note This structure MUST contain a field named 'FwImageState' (not part of the authentified header)
   * @note This structure MUST contain a field named 'PrevHeaderFingerprint' (not part of the authentified header)
-  * @note In this example, the header size is always a multiple of 32 to match the FLASH constraint on STM32H7.
+  * @note In this example, the header size is always a multiple of 32 to match the FLASH constraint on STM32WL.
   *       We keep this alignment for all platforms (even when the FLASH alignment constraint is another value) to have
   *       one unique header size per crypto scheme.
   * @note In this example, the authentified header size + the header signature is always 192 bytes (for all crypto

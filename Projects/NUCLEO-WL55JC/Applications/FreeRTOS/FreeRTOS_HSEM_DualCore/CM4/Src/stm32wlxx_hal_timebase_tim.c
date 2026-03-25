@@ -18,7 +18,7 @@
     This file must be copied to the application folder and modified as follows:
     (#) Rename it to 'stm32wlxx_hal_timebase_tim.c'
     (#) Add this file and the TIM HAL driver files to your project and make sure
-       HAL_TIM_MODULE_ENABLED is defined in stm32l4xx_hal_conf.h
+       HAL_TIM_MODULE_ENABLED is defined in stm32wlxx_hal_conf.h
 
     [..]
     (@) The application needs to ensure that the time base is always set to 1 millisecond

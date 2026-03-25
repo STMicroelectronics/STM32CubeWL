@@ -21,7 +21,7 @@
 #include "main.h"
 #include "b_wl5m_subg_bus.h"
 
-/** @addtogroup STM32WBxx_HAL_Examples
+/** @addtogroup STM32WLxx_HAL_Examples
   * @{
   */
 

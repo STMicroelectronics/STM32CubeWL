@@ -84,7 +84,7 @@ Accelerometer, Giroscope, STTS22H, ISM330DHCX.
 
   - BSP/Src/main.c                        Main program
   - BSP/Src/system_stm32wlxx.c            STM32WLxx system clock configuration file
-  - BSP/Src/stm32wbxx_it.c                Interrupt handlers
+  - BSP/Src/stm32wlxx_it.c                Interrupt handlers
   - BSP/Src/flash.c                       Tests of Read/Write to external flash
   - BSP/Src/led.c                         Tests of Turn on/off or toggle the LEDs
   - BSP/Src/sensors.c                     Tests of stts22h, iis2mdc and ism330dhcx sensors

@@ -35,6 +35,7 @@
 #include "mbmuxif_radio.h"
 #include "features_info.h"
 #include "mbmuxif_sigfox.h"
+#include "flash_if.h"
 #ifdef ALLOW_KMS_VIA_MBMUX /* currently not supported */
 /* #include "mbmuxif_kms.h" */
 #endif /* ALLOW_KMS_VIA_MBMUX */
@@ -67,6 +68,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 static uint8_t SYS_TimerInitialisedFlag = 0;
+static uint8_t FLASH_RAM_buffer[FLASH_IF_BUFFER_SIZE];
 
 /* USER CODE BEGIN PV */
 
@@ -101,7 +103,10 @@ void SystemApp_Init(void)
   SYS_TimerInitialisedFlag = 1;
   /* #warning "should be removed when proper obl is done" */
   __HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_OPTVERR);
-
+  if (FLASH_IF_Init(FLASH_RAM_buffer) != FLASH_IF_OK)
+  {
+    Error_Handler();
+  }
   E2P_Init();
 
   /*Init low power manager*/

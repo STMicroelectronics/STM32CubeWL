@@ -18,7 +18,7 @@
     This file must be copied to the application folder and modified as follows:
     (#) Rename it to 'stm32wlxx_hal_timebase_tim.c'
     (#) Add this file and the TIM HAL driver files to your project and make sure
-       HAL_TIM_MODULE_ENABLED is defined in stm32l4xx_hal_conf.h
+       HAL_TIM_MODULE_ENABLED is defined in stm32wlxx_hal_conf.h
 
     [..]
     (@) The application needs to ensure that the time base is always set to 1 millisecond
@@ -97,6 +97,11 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
   status = HAL_TIM_Base_Init(&htim17);
   if (status == HAL_OK)
   {
+#if (USE_HAL_TIM_REGISTER_CALLBACKS == 1U)
+    /* Register callback */
+    HAL_TIM_RegisterCallback(&htim17, HAL_TIM_PERIOD_ELAPSED_CB_ID, TimeBase_TIM_PeriodElapsedCallback);
+#endif /* USE_HAL_TIM_REGISTER_CALLBACKS */
+
     /* Start the TIM time Base generation in interrupt mode */
     status = HAL_TIM_Base_Start_IT(&htim17);
     if (status == HAL_OK)

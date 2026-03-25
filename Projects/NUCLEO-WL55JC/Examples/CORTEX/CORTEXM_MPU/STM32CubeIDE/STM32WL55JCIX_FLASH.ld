@@ -57,13 +57,15 @@ SECTIONS
     . = ALIGN(8);
   } >ROM
 
-  .ARM.extab   : { 
+  .ARM.extab (READONLY) : /* The READONLY keyword is only supported in GCC11 and later, remove it if using GCC10 or earlier. */
+  {
     . = ALIGN(8);
     *(.ARM.extab* .gnu.linkonce.armextab.*)
     . = ALIGN(8);
   } >ROM
   
-  .ARM : {
+  .ARM (READONLY) : /* The READONLY keyword is only supported in GCC11 and later, remove it if using GCC10 or earlier. */
+  {
     . = ALIGN(8);
     __exidx_start = .;
     *(.ARM.exidx*)
@@ -71,7 +73,7 @@ SECTIONS
     . = ALIGN(8);
   } >ROM
 
-  .preinit_array     :
+  .preinit_array (READONLY) : /* The READONLY keyword is only supported in GCC11 and later, remove it if using GCC10 or earlier. */
   {
     . = ALIGN(8);
     PROVIDE_HIDDEN (__preinit_array_start = .);
@@ -80,7 +82,7 @@ SECTIONS
     . = ALIGN(8);
   } >ROM
   
-  .init_array :
+  .init_array (READONLY) : /* The READONLY keyword is only supported in GCC11 and later, remove it if using GCC10 or earlier. */
   {
     . = ALIGN(8);
     PROVIDE_HIDDEN (__init_array_start = .);
@@ -90,7 +92,7 @@ SECTIONS
     . = ALIGN(8);
   } >ROM
   
-  .fini_array :
+  .fini_array (READONLY) : /* The READONLY keyword is only supported in GCC11 and later, remove it if using GCC10 or earlier. */
   {
     . = ALIGN(8);
     PROVIDE_HIDDEN (__fini_array_start = .);
@@ -116,11 +118,10 @@ SECTIONS
     
   } >RAM1 AT> ROM
   
-  .ROarraySection : 
+  .ROarraySection (READONLY) : /* The READONLY keyword is only supported in GCC11 and later, remove it if using GCC10 or earlier. */
   {
-   *(.ROarraySection*)
- 
-  }   >RAM
+    *(.ROarraySection*)
+  } >RAM
  
   /* Uninitialized data section into "SRAM1" Ram type memory */
   . = ALIGN(8);

@@ -74,8 +74,10 @@ void KMS_LL_IsBufferInSecureEnclave(void *pBuffer, uint32_t Size);
 
 #if defined(KMS_ENCRYPT_DECRYPT_BLOB)
 CK_RV KMS_LL_DataStorageKey_Init(void);
-CK_RV KMS_LL_GetRandomData(uint32_t *pRandomData);
 #endif /* KMS_ENCRYPT_DECRYPT_BLOB */
+#if defined(KMS_ENCRYPT_DECRYPT_BLOB) || defined(KMS_GENERATE_KEYS)
+CK_RV KMS_LL_GetRandomData(uint32_t *pRandomData);
+#endif /* KMS_ENCRYPT_DECRYPT_BLOB || KMS_GENERATE_KEYS */
 
 void KMS_LL_ReportError(uint32_t Error);
 

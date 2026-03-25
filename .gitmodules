@@ -38,3 +38,15 @@
 	path = Drivers/BSP/Components/mx25l4006
 	url = https://github.com/STMicroelectronics/stm32-mx25l4006
 	branch = main
+[submodule "Middlewares/Third_Party/mbedtls"]
+	path = Middlewares/Third_Party/mbedtls
+	url = https://github.com/STMicroelectronics/stm32-mw-mbedtls.git
+	branch = main
+[submodule "Middlewares/Third_Party/FreeRTOS"]
+	path = Middlewares/Third_Party/FreeRTOS
+	url = https://github.com/STMicroelectronics/stm32-mw-freertos.git
+	branch = master
+[submodule "Middlewares/Third_Party/FatFs"]
+	path = Middlewares/Third_Party/FatFs
+	url = https://github.com/STMicroelectronics/stm32-mw-fatfs.git
+	branch = master

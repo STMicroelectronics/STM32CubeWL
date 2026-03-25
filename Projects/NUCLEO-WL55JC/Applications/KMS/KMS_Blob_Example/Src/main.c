@@ -96,7 +96,11 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   /* Launch blob importation */
-  KMS_Start_LocalUpdate();
+  ret_status = KMS_Start_LocalUpdate();
+  if (ret_status != CKR_OK)
+  {
+    Error_Handler();
+  }
   /* Launch encryption/decryption test using one imported key */
   ret_status = app_kms_encrypt_decrypt_aes_cbc(sizeof(clear_buffer), clear_buffer);
   printf("Imported AES key usage test %s\r\n", (ret_status == CKR_OK) ? "SUCCESSFUL" : "FAILED");

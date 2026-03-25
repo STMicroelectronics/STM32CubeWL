@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>STM32WL5Mxx,CORE_CM4,USE_HAL_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>../SubGHz_Phy/App;../SubGHz_Phy/Target;../Core/Inc;../../../../../NUCLEO-WL55JC/Demonstrations/LocalNetwork/LocalNetwork_Concentrator/Common/Inc;../../../../../../Drivers/BSP/B-WL5M-SUBG;../../../../../../Drivers/BSP/Components/Common;../../../../../../Drivers/BSP/Components/stts22h;../../../../../../Drivers/BSP/Components/ism330dhcx;../../../../../../Drivers/BSP/Components/mx25l4006;../../../../../../Drivers/BSP/Components/iis2mdc;../../../../../../Drivers/BSP/Components/ilps22qs;../../../../../../Drivers/CMSIS/Device/ST/STM32WLxx/Include;../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc;../../../../../../Drivers/CMSIS/Include;../../../../../../Middlewares/Third_Party/SubGHz_Phy;../../../../../../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver;../../../../../../Utilities/lpm/tiny_lpm;../../../../../../Utilities/misc;../../../../../../Utilities/sequencer;../../../../../../Utilities/timer;../../../../../../Utilities/trace/adv_trace;../Middlewares/ST/STM32_MotionAR_Library/Inc;../Middlewares/ST/STM32_MotionEC_Library/Inc;../Middlewares/ST/STM32_MotionMC_Library/Inc;../Middlewares/ST/STM32_MotionPM_Library/Inc</IncludePath>
+              <IncludePath>../SubGHz_Phy/App;../SubGHz_Phy/Target;../Core/Inc;../../../../../NUCLEO-WL55JC/Demonstrations/LocalNetwork/LocalNetwork_Concentrator/Common/Inc;../../../../../../Drivers/BSP/B-WL5M-SUBG;../../../../../../Drivers/BSP/Components/Common;../../../../../../Drivers/BSP/Components/stts22h;../../../../../../Drivers/BSP/Components/ism330dhcx;../../../../../../Drivers/BSP/Components/mx25l4006;../../../../../../Drivers/BSP/Components/iis2mdc;../../../../../../Drivers/BSP/Components/ilps22qs;../../../../../../Drivers/CMSIS/Device/ST/STM32WLxx/Include;../../../../../../Drivers/STM32WLxx_HAL_Driver/Inc;../../../../../../Drivers/CMSIS/Include;../../../../../../Middlewares/Third_Party/SubGHz_Phy;../../../../../../Middlewares/Third_Party/SubGHz_Phy/radio_driver;../../../../../../Utilities/lpm/tiny_lpm;../../../../../../Utilities/misc;../../../../../../Utilities/sequencer;../../../../../../Utilities/timer;../../../../../../Utilities/trace/adv_trace;../Middlewares/ST/STM32_MotionAR_Library/Inc;../Middlewares/ST/STM32_MotionEC_Library/Inc;../Middlewares/ST/STM32_MotionMC_Library/Inc;../Middlewares/ST/STM32_MotionPM_Library/Inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -352,7 +352,7 @@
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
             <useXO>0</useXO>
-            <ClangAsOpt>1</ClangAsOpt>
+            <ClangAsOpt>4</ClangAsOpt>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
@@ -729,17 +729,17 @@
             <File>
               <FileName>radio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>../../../../../../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio.c</FilePath>
+              <FilePath>../../../../../../Middlewares/Third_Party/SubGHz_Phy/radio_driver/radio.c</FilePath>
             </File>
             <File>
               <FileName>radio_driver.c</FileName>
               <FileType>1</FileType>
-              <FilePath>../../../../../../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_driver.c</FilePath>
+              <FilePath>../../../../../../Middlewares/Third_Party/SubGHz_Phy/radio_driver/radio_driver.c</FilePath>
             </File>
             <File>
               <FileName>radio_fw.c</FileName>
               <FileType>1</FileType>
-              <FilePath>../../../../../../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c</FilePath>
+              <FilePath>../../../../../../Middlewares/Third_Party/SubGHz_Phy/radio_driver/radio_fw.c</FilePath>
             </File>
           </Files>
         </Group>

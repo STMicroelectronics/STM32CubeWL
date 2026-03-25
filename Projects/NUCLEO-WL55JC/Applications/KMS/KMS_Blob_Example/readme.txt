@@ -49,6 +49,19 @@ NUCLEO-WL55JC RevC board LED3 is also used to report test status:
   - LED3 is turned on at the end of the execution when all completed successfully
   - LED3 is blinking twice per second when an error occurred
 
+@par Key and IV File Mapping
+
+The following embedded objects correspond to external files used in the KMS_Blob_Example project:
+
+  - ECCKEY.txt  Contains the ECC public key used for blob header signature verification. This key is embedded as KMS_Blob_ECDSA_Verify.
+
+  - OEM_KEY_COMPANY1_key_AES_CBC.bin  Contains the 128-bit AES key (in binary) used for blob encryption/decryption in AES-CBC mode.
+    This key is embedded as KMS_Blob_AES_CBC128_Decrypt.
+
+  - iv.bin  Contains the initialization vector (IV) for AES-CBC operations.
+    Note: The IV is not embedded as a platform object in this file.
+    In the KMS_Blob_Example project, the IV is provided at runtime or loaded separately as required by the application logic.
+
 @par Keywords
 
 Cryptography, KMS, Provisioning

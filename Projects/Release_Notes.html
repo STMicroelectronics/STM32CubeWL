@@ -76,13 +76,427 @@ series</li>
 <section id="update-history" class="col-sm-12 col-lg-8">
 <h1>Update History</h1>
 <div class="collapse">
-<input type="checkbox" id="collapse-section6" checked aria-hidden="true">
-<label for="collapse-section6" aria-hidden="true"><strong>V1.4.0 /
-29-October-2025</strong></label>
+<input type="checkbox" id="collapse-section7" checked aria-hidden="true">
+<label for="collapse-section7" aria-hidden="true"><strong>V1.5.0 /
+04-February-2026</strong></label>
 <div>
 <h2 id="main-changes">Main Changes</h2>
 <h3 id="maintenance-release">Maintenance Release</h3>
 <h2 id="contents">Contents</h2>
+<p><small>The Project categories flagged by “<span
+class="icon-st-update"></span>” have changed since the previous release.
+“<span class="icon-st-add"></span>” are new.</small></p>
+<p>Projects</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Board</th>
+<th style="text-align: left;">Project category</th>
+<th style="text-align: left;">Path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">B-WL5M-SUBG1</td>
+<td style="text-align: left;">Demonstrations <span
+class="icon-st-update"></span></td>
+<td style="text-align: left;">Projects\B-WL5M-SUBG1\Demonstrations</td>
+</tr>
+<tr>
+<td style="text-align: left;">B-WL5M-SUBG1</td>
+<td style="text-align: left;">Applications <span
+class="icon-st-update"></span></td>
+<td style="text-align: left;">Projects\B-WL5M-SUBG1\Applications</td>
+</tr>
+<tr>
+<td style="text-align: left;">B-WL5M-SUBG1</td>
+<td style="text-align: left;">HAL Examples <span
+class="icon-st-update"></span></td>
+<td style="text-align: left;">Projects\B-WL5M-SUBG1\Examples</td>
+</tr>
+<tr>
+<td style="text-align: left;">B-WL5M-SUBG1</td>
+<td style="text-align: left;">HAL Template <span
+class="icon-st-update"></span></td>
+<td style="text-align: left;">Projects\B-WL5M-SUBG1\Templates</td>
+</tr>
+<tr>
+<td style="text-align: left;">B-WL5M-SUBG1</td>
+<td style="text-align: left;">LL Template <span
+class="icon-st-update"></span></td>
+<td style="text-align: left;">Projects\B-WL5M-SUBG1\Templates_LL</td>
+</tr>
+<tr>
+<td style="text-align: left;">NUCLEO-WL55JC</td>
+<td style="text-align: left;">Demonstrations <span
+class="icon-st-update"></span></td>
+<td style="text-align: left;">Projects\NUCLEO-WL55JC\Demonstrations</td>
+</tr>
+<tr>
+<td style="text-align: left;">NUCLEO-WL55JC</td>
+<td style="text-align: left;">Applications <span
+class="icon-st-update"></span></td>
+<td style="text-align: left;">Projects\NUCLEO-WL55JC\Applications</td>
+</tr>
+<tr>
+<td style="text-align: left;">NUCLEO-WL55JC</td>
+<td style="text-align: left;">HAL Examples <span
+class="icon-st-update"></span></td>
+<td style="text-align: left;">Projects\NUCLEO-WL55JC\Examples</td>
+</tr>
+<tr>
+<td style="text-align: left;">NUCLEO-WL55JC</td>
+<td style="text-align: left;">LL Examples <span
+class="icon-st-update"></span></td>
+<td style="text-align: left;">Projects\NUCLEO-WL55JC\Examples_LL</td>
+</tr>
+<tr>
+<td style="text-align: left;">NUCLEO-WL55JC</td>
+<td style="text-align: left;">MIX Examples</td>
+<td style="text-align: left;">Projects\NUCLEO-WL55JC\Examples_MIX</td>
+</tr>
+<tr>
+<td style="text-align: left;">NUCLEO-WL55JC</td>
+<td style="text-align: left;">HAL Template</td>
+<td style="text-align: left;">Projects\NUCLEO-WL55JC\Templates</td>
+</tr>
+<tr>
+<td style="text-align: left;">NUCLEO-WL55JC</td>
+<td style="text-align: left;">LL Template</td>
+<td style="text-align: left;">Projects\NUCLEO-WL55JC\Templates_LL</td>
+</tr>
+<tr>
+<td style="text-align: left;">NUCLEO-WL55JC1</td>
+<td style="text-align: left;">Applications <span
+class="icon-st-update"></span></td>
+<td style="text-align: left;">Projects\NUCLEO-WL55JC1\Applications</td>
+</tr>
+</tbody>
+</table>
+<p><br />
+</p>
+<p><strong>B-WL5M-SUBG1</strong></p>
+<ul>
+<li><strong>Applications/</strong>*
+<ul>
+<li>Update EWARM projects files to force version v9.60.3</li>
+</ul></li>
+<li><strong>Applications/LoRaWAN</strong>
+<ul>
+<li><strong>LoRaWAN_End_Node_LBM</strong></li>
+<li><strong>LoRaWAN_End_Node_Relay_LBM</strong></li>
+<li><strong>LoRaWAN_Relay_LBM</strong>
+<ul>
+<li>New applications based on LoRaWAN LBM stack</li>
+</ul></li>
+</ul></li>
+<li><strong>Applications/Sigfox/</strong>*
+<ul>
+<li>Update for new SubGHz_Phy version</li>
+<li>Fix MDK-ARM assembler syntax selection to ‘armasm’ to get rid of
+warning for unsupported target</li>
+</ul></li>
+<li><strong>Applications/Sigfox/Sigfox_AT_Slave</strong>
+<ul>
+<li>Fix incorrect documentation on flash size</li>
+</ul></li>
+<li><strong>Applications/Sigfox/Sigfox_PushButton</strong>
+<ul>
+<li>Fix incorrect documentation on flash size</li>
+</ul></li>
+<li><strong>Applications/Sigfox/Sigfox_PushButton_DualCore</strong>
+<ul>
+<li>Fix incorrect documentation on flash size</li>
+<li>Fix regression when using the NVM memory</li>
+<li>Align kms_low_level.[hc] files to latest middleware version</li>
+<li>Fix gnu linker warning due to LOAD segment with RWX attributes</li>
+</ul></li>
+<li><strong>Applications/Sigfox/Sigfox_AT_Slave_DualCore</strong>
+<ul>
+<li>Fix gnu linker warning due to LOAD segment with RWX attributes</li>
+</ul></li>
+<li><strong>Applications/SubGHz_Phy/</strong>*
+<ul>
+<li>Fix MDK-ARM assembler syntax selection to ‘armasm’ to get rid of
+warning for unsupported target</li>
+</ul></li>
+<li><strong>Applications/SubGHz_Phy/SubGHz_Phy_Per</strong>
+<ul>
+<li>Update for new SubGHz_Phy version</li>
+</ul></li>
+<li><strong>Applications/SubGHz_Phy/SubGHz_Phy_PingPong_DualCore</strong>
+<ul>
+<li>Update for new SubGHz_Phy version</li>
+<li>Fix compilation error in Release configuration</li>
+</ul></li>
+<li><strong>Applications/Examples/BSP/BSP_Example</strong>
+<ul>
+<li>Fix MDK-ARM assembler syntax selection to ‘armasm’ to get rid of
+warning for unsupported target</li>
+</ul></li>
+<li><strong>Demonstrations/LocalNetwork_Sensor/Sensor</strong>
+<ul>
+<li>Update for new SubGHz_Phy version</li>
+<li>Fix MDK-ARM assembler syntax selection to ‘armasm’ to get rid of
+warning for unsupported target</li>
+</ul></li>
+<li><strong>Templates/</strong>*
+<ul>
+<li>Fix MDK-ARM assembler syntax selection to ‘armasm’ to get rid of
+warning for unsupported target</li>
+</ul></li>
+<li><strong>Templates_LL/</strong>*
+<ul>
+<li>Fix MDK-ARM assembler syntax selection to ‘armasm’ to get rid of
+warning for unsupported target</li>
+</ul></li>
+</ul>
+<p><br />
+</p>
+<p><strong>NUCLEO-WL55JC</strong></p>
+<ul>
+<li><strong>Applications/</strong>*
+<ul>
+<li>Update EWARM project files to force version v9.60.3</li>
+</ul></li>
+<li><strong>Applications/KMS/KMS_Blob_Binary</strong>
+<ul>
+<li>Align to STM32CubeMX generated code</li>
+<li>Enforce post-build actions order with EWARM 9.60.3</li>
+</ul></li>
+<li><strong>Applications/KMS/KMS_Blob_Example</strong>
+<ul>
+<li>Alignment of mbedtls_config.h to latest MbedTLS v3.6.4</li>
+<li>Fixes to handle blob import failure</li>
+<li>Align to STM32CubeMX generated code</li>
+<li>Align kms_low_level.[hc] files to latest middleware version</li>
+</ul></li>
+<li><strong>Applications/KMS/KMS_Derive_Key</strong>
+<ul>
+<li>Align kms_low_level.[hc] files to latest middleware version</li>
+</ul></li>
+<li><strong>Applications/KMS/KMS_Embedded_AES_Keys</strong>
+<ul>
+<li>Align kms_low_level.[hc] files to latest middleware version</li>
+</ul></li>
+<li><strong>Applications/KMS/KMS_Embedded_RSA_Key</strong>
+<ul>
+<li>Alignment of mbedtls_config.h to latest MbedTLS v3.6.4</li>
+<li>Align to STM32CubeMX generated code</li>
+<li>Align kms_low_level.[hc] files to latest middleware version</li>
+</ul></li>
+<li><strong>Applications/LoRaWAN</strong>
+<ul>
+<li><strong>LoRaWAN_End_Node_LBM</strong></li>
+<li><strong>LoRaWAN_End_Node_Relay_LBM</strong></li>
+<li><strong>LoRaWAN_Relay_LBM</strong>
+<ul>
+<li>New applications based on LoRaWAN LBM stack</li>
+</ul></li>
+</ul></li>
+<li><strong>Applications/BFU_1_Slot</strong>
+<ul>
+<li>Enforce post-build actions order with EWARM v9.60.3</li>
+</ul></li>
+<li><strong>Applications/BFU_2_Slots</strong>
+<ul>
+<li>Enforce post-build actions order with EWARM v9.60.3</li>
+</ul></li>
+<li><strong>Applications/SBSFU_1_Slot_DualCore</strong>
+<ul>
+<li>Enforce post-build actions order with EWARM v9.60.3</li>
+</ul></li>
+<li><strong>Applications/SBSFU_2_Slots_DualCore</strong>
+<ul>
+<li>Enforce post-build actions order with EWARM v9.60.3</li>
+<li>Fixes for example selector usage with STM32CubeMX</li>
+</ul></li>
+<li><strong>Applications/SubGHz_Phy/</strong>*
+<ul>
+<li>Update for new SubGHz_Phy version</li>
+<li>Fix MDK-ARM assembler syntax selection to ‘armasm’ to get rid of
+warning for unsupported target</li>
+</ul></li>
+<li><strong>Applications/FreeRTOS/</strong>*
+<ul>
+<li>Align hal_timebase_tim.c to STM32CubeMX generated code</li>
+</ul></li>
+<li><strong>Demonstrations/LocalNetwork/</strong>*
+<ul>
+<li>Update for new SubGHz_Phy version</li>
+</ul></li>
+<li><strong>Examples/GTC</strong>
+<ul>
+<li>GTZC_GlobalSecurityConfiguration_DualCore</li>
+<li>GTZC_MemoryWatermarkProtection_DualCore
+<ul>
+<li>Solve compilation issues with new IAR EWARM version due to Windows
+MAX_PATH limit</li>
+</ul></li>
+</ul></li>
+<li><strong>Examples/RTC/RTC_TimeStamp</strong>
+<ul>
+<li>Fix warnings spotted by new gcc version</li>
+</ul></li>
+<li><strong>Examples_LL/ADC/ADC_ContinuousConversion_TriggerSW_LowPower_Init</strong></li>
+<li><strong>Examples_LL/ADC/ADC_SingleConversion_TriggerTimer_DMA_Init</strong></li>
+<li><strong>Examples_LL/DAC/DAC_GenerateConstantSignal_TriggerSW_LP_Init</strong></li>
+<li><strong>Examples_LL/I2C/I2C_OneBoard_AdvCommunication_DMAAndIT_Init</strong></li>
+<li><strong>Examples_LL/I2C/I2C_OneBoard_Communication_PollingAndIT_Init</strong></li>
+<li><strong>Examples_LL/USART/USART_Communication_Rx_IT_Continuous_Init</strong></li>
+<li><strong>Examples_LL/USART/USART_Communication_Rx_IT_Continuous_VCP_Init</strong></li>
+<li><strong>Examples_LL/USART/USART_SyncCommunication_FullDuplex_DMA_Init</strong></li>
+<li><strong>Examples_LL/USART/USART_SyncCommunication_FullDuplex_IT_Init</strong>
+<ul>
+<li>Solve compilation issues with new IAR EWARM version due to Windows
+MAX_PATH limit</li>
+</ul></li>
+</ul>
+<p><br />
+</p>
+<p><strong>NUCLEO-WL55JC1</strong></p>
+<ul>
+<li><strong>Applications/</strong>*
+<ul>
+<li>Update IAR project files to force version v9.60.3</li>
+</ul></li>
+<li><strong>Applications/Sigfox/</strong>*
+<ul>
+<li>Update for new SubGHz_Phy version</li>
+<li>Fix MDK-ARM assembler syntax selection to ‘armasm’ to get rid of
+warning for unsupported target</li>
+</ul></li>
+<li><strong>Applications/Sigfox/Sigfox_AT_Slave</strong>
+<ul>
+<li>Fix incorrect documentation on flash size</li>
+<li>Fix E2P initialization</li>
+</ul></li>
+<li><strong>Applications/Sigfox/Sigfox_AT_Slave_DualCore</strong>
+<ul>
+<li>Align kms_low_level.[hc] files to latest middleware version</li>
+<li>Fix gnu linker warnings due to LOAD segment with RWX attributes</li>
+</ul></li>
+<li><strong>Applications/Sigfox/Sigfox_PushButton</strong>
+<ul>
+<li>Fix incorrect documentation on flash size</li>
+<li>Fix E2P initialization</li>
+</ul></li>
+<li><strong>Applications/Sigfox/Sigfox_PushButton_DualCore</strong>
+<ul>
+<li>Fix incorrect documentation on flash size</li>
+<li>Align kms_low_level.[hc] files to latest middleware version</li>
+<li>Fix gnu linker warnings due to LOAD segment with RWX attributes</li>
+<li>Fix E2P initialization</li>
+</ul></li>
+<li><strong>Applications/Sigfox/Sigfox_SBSFU_1_Slot_DualCore</strong>
+<ul>
+<li>Update for new SubGHz_Phy version</li>
+<li>Fix gnu linker warnings due to LOAD segment with RWX attributes</li>
+<li>Fix build warnings generated by -Warray-bounds</li>
+<li>Fix gcc warnings due to missing syscalls.c file</li>
+<li>Enforce post-build actions order with EWARM v9.60.3</li>
+<li>Fix E2P initialization</li>
+<li>Fix typo of option byte name in script file to disable security</li>
+</ul></li>
+<li><strong>Applications/KMS/KMS_Blob_Binary</strong>
+<ul>
+<li>Force post-build actions dependencies<br />
+</li>
+</ul></li>
+</ul>
+<h2 id="known-limitations">Known Limitations</h2>
+<ul>
+<li><strong>LL/HAL</strong>
+<ul>
+<li>All LL/HAL Projects are developed using STM32CubeMX except
+GTZC_GlobalSecurityConfiguration_DualCore</li>
+</ul></li>
+<li><strong>MW Legacy Applications</strong>
+<ul>
+<li>All FreeRTOS applications except FreeRTOS_HSEM_DualCore are
+developed using STM32CubeMX</li>
+<li>FatFs_uSD_Standalone not developed using STM32CubeMX</li>
+</ul></li>
+<li><strong>Security Applications</strong>
+<ul>
+<li>All KMS applications are developed using STM32CubeMX except
+KMS_Blob_Binary</li>
+<li>All SBSFU applications are not developed using STM32CubeMX</li>
+</ul></li>
+<li><strong>RF Applications</strong>
+<ul>
+<li>All SBSFU applications are not developed using STM32CubeMX</li>
+<li>For LoRaWAN known limitations refer to <a
+href="../Middlewares/Third_Party/LoRaWAN/Release_Notes.html">LoRaWAN
+release note</a> for detailed description</li>
+</ul></li>
+<li><strong>RF Demonstrations</strong>
+<ul>
+<li>All LocalNetwork applications are not developed using
+STM32CubeMX</li>
+</ul></li>
+</ul>
+<h2 id="development-toolchains-and-compilers">Development Toolchains and
+Compilers</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Toolchain + ST-Link</th>
+<th>Version</th>
+<th style="text-align: left;">Patch (if available)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">IAR Embedded Workbench for ARM
+(EWARM)</td>
+<td>V9.60.3 <span class="icon-st-update"></span></td>
+<td style="text-align: left;"><a
+href="../Utilities/PC_Software/EWARMv8_STM32WLxx_V4.9_Signed.zip">Patch
+EWARM</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">RealView Microcontroller Development Kit
+(MDK-ARM)</td>
+<td>V5.40 <span class="icon-st-update"></span></td>
+<td style="text-align: left;"><a
+href="../Utilities/PC_Software/Keil.STM32WLxx_DFP.1.1.1.zip">Patch
+MDK-ARM</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">STM32CubeIDE</td>
+<td>V1.19.0 <span class="icon-st-update"></span></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">STM32CubeProgrammer</td>
+<td>V2.12.0</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="supported-devices-and-boards">Supported Devices and boards</h2>
+<ul>
+<li>STM32WLE5xx, STM32WL55xx &amp; STM32WL5MOCHxx devices</li>
+<li>NUCLEO-WL55JC1 &amp; NUCLEO-WL55JC2 (except Sigfox applications)
+ecosystem boards - Nucleo kit RevC (MB1389-HIGHBAND-E01 or
+MB1389-LOWBAND-C01)</li>
+<li>B-WL5M-SUBG1 ecosystem boards (MB1779-HIGHBAND-A01)</li>
+</ul>
+<h2 id="dependencies">Dependencies</h2>
+<ul>
+<li>STM32CubeMX 6.17.0</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section6" aria-hidden="true">
+<label for="collapse-section6" aria-hidden="true"><strong>V1.4.0 /
+29-October-2025</strong></label>
+<div>
+<h2 id="main-changes-1">Main Changes</h2>
+<h3 id="maintenance-release-1">Maintenance Release</h3>
+<h2 id="contents-1">Contents</h2>
 <p><small>The Project categories flagged by “<span
 class="icon-st-update"></span>” have changed since the previous release.
 “<span class="icon-st-add"></span>” are new.</small></p>
@@ -196,8 +610,7 @@ class="icon-st-update"></span></td>
 <li><strong>Applications/</strong>*
 <ul>
 <li>SLA0044 Legal terms updated to latest revision (Rev 6 / October
-2025)<br />
-</li>
+2025)</li>
 <li>Project alignment to STM32CubeMX V6.16.0</li>
 </ul></li>
 <li><strong>Demonstrations/</strong>*
@@ -304,8 +717,7 @@ more supported)</li>
 <li>Align firmware generated code to CubeMX v6.16.0</li>
 <li>Fix HSE_VALUE in .ioc file to be aligned to Nucleo board
 schematic</li>
-<li>Remove FLASH empty check &amp; adapt applications
-accordingly760da37a9</li>
+<li>Remove FLASH empty check &amp; adapt applications accordingly</li>
 </ul></li>
 <li><strong>Application/LoRaWAN/LoRaWAN_End_Node</strong>
 <ul>
@@ -605,8 +1017,7 @@ consider it when performing LBT</li>
 <li><strong>Applications/</strong>*
 <ul>
 <li>SLA0044 Legal terms updated to latest revision (Rev 6 / October
-2025)<br />
-</li>
+2025)</li>
 <li>Project alignment to STM32CubeMX V6.16.0</li>
 </ul></li>
 <li><strong>Demonstrations/</strong>*
@@ -732,7 +1143,7 @@ Ping_Pong project<br />
 </ul></li>
 </ul></li>
 </ul>
-<h2 id="known-limitations">Known Limitations</h2>
+<h2 id="known-limitations-1">Known Limitations</h2>
 <ul>
 <li><strong>LL/HAL</strong>
 <ul>
@@ -770,8 +1181,8 @@ with the current ComputeCmac method implementation</li>
 <li>All LocalNetwork applications are not developed using CubeMx</li>
 </ul></li>
 </ul>
-<h2 id="development-toolchains-and-compilers">Development Toolchains and
-Compilers</h2>
+<h2 id="development-toolchains-and-compilers-1">Development Toolchains
+and Compilers</h2>
 <table>
 <thead>
 <tr>
@@ -814,7 +1225,8 @@ MDK-ARM</a></td>
 <li>Support of ARM Compiler 6 (AC-5 like warnings) for HAL/LL/BSP
 drivers and STMicroelectronics Middleware components</li>
 </ul>
-<h2 id="supported-devices-and-boards">Supported Devices and boards</h2>
+<h2 id="supported-devices-and-boards-1">Supported Devices and
+boards</h2>
 <ul>
 <li>STM32WLE5xx, STM32WL55xx &amp; STM32WL5MOCHxx devices</li>
 <li>NUCLEO-WL55JC1 &amp; NUCLEO-WL55JC2 (except Sigfox applications)
@@ -822,7 +1234,7 @@ ecosystem boards - Nucleo kit RevC (MB1389-HIGHBAND-E01 or
 MB1389-LOWBAND-C01)</li>
 <li>B-WL5M-SUBG1 ecosystem boards (MB1779-HIGHBAND-A01)</li>
 </ul>
-<h2 id="dependencies">Dependencies</h2>
+<h2 id="dependencies-1">Dependencies</h2>
 <ul>
 <li>STM32CubeMX 6.16.0</li>
 </ul>
@@ -833,9 +1245,9 @@ MB1389-LOWBAND-C01)</li>
 <label for="collapse-section5" aria-hidden="true"><strong>V1.3.1 /
 20-December-2024</strong></label>
 <div>
-<h2 id="main-changes-1">Main Changes</h2>
+<h2 id="main-changes-2">Main Changes</h2>
 <h3 id="patch-release">Patch Release</h3>
-<h2 id="contents-1">Contents</h2>
+<h2 id="contents-2">Contents</h2>
 <p><small>The Project categories flagged by “<span
 class="icon-st-update"></span>” have changed since the previous release.
 “<span class="icon-st-add"></span>” are new.</small></p>
@@ -999,7 +1411,7 @@ names</li>
 </ul>
 <p><br />
 </p>
-<h2 id="known-limitations-1">Known Limitations</h2>
+<h2 id="known-limitations-2">Known Limitations</h2>
 <ul>
 <li><strong>LL/HAL</strong>
 <ul>
@@ -1034,7 +1446,7 @@ with the current ComputeCmac method implementation</li>
 <li>All LocalNetwork applications are not developed using CubeMx</li>
 </ul></li>
 </ul>
-<h2 id="development-toolchains-and-compilers-1">Development Toolchains
+<h2 id="development-toolchains-and-compilers-2">Development Toolchains
 and Compilers</h2>
 <table>
 <thead>
@@ -1078,7 +1490,7 @@ MDK-ARM</a></td>
 <li>Support of ARM Compiler 6 (AC-5 like warnings) for HAL/LL/BSP
 drivers and STMicroelectronics Middleware components</li>
 </ul>
-<h2 id="supported-devices-and-boards-1">Supported Devices and
+<h2 id="supported-devices-and-boards-2">Supported Devices and
 boards</h2>
 <ul>
 <li>STM32WLE5xx, STM32WL55xx &amp; STM32WL5MOCHxx devices</li>
@@ -1087,7 +1499,7 @@ ecosystem boards - Nucleo kit RevC (MB1389-HIGHBAND-E01 or
 MB1389-LOWBAND-C01)</li>
 <li>B-WL5M-SUBG1 ecosystem boards (MB1779-HIGHBAND-A01)</li>
 </ul>
-<h2 id="dependencies-1">Dependencies</h2>
+<h2 id="dependencies-2">Dependencies</h2>
 <ul>
 <li>STM32CubeMX 6.7.0</li>
 </ul>
@@ -1098,8 +1510,8 @@ MB1389-LOWBAND-C01)</li>
 <label for="collapse-section4" aria-hidden="true"><strong>V1.3.0 /
 09-November-2022</strong></label>
 <div>
-<h2 id="main-changes-2">Main Changes</h2>
-<h3 id="maintenance-release-1">Maintenance Release</h3>
+<h2 id="main-changes-3">Main Changes</h2>
+<h3 id="maintenance-release-2">Maintenance Release</h3>
 <ul>
 <li><strong>NUCLEO-WL55JC</strong>
 <ul>
@@ -1137,7 +1549,7 @@ Download Slot</li>
 </ul></li>
 </ul></li>
 </ul>
-<h2 id="contents-2">Contents</h2>
+<h2 id="contents-3">Contents</h2>
 <p><small>The Project categories flagged by “<span
 class="icon-st-update"></span>” have changed since the previous release.
 “<span class="icon-st-add"></span>” are new.</small></p>
@@ -1228,7 +1640,7 @@ class="icon-st-update"></span></td>
 </tr>
 </tbody>
 </table>
-<h2 id="known-limitations-2">Known Limitations</h2>
+<h2 id="known-limitations-3">Known Limitations</h2>
 <ul>
 <li><strong>LL/HAL</strong>
 <ul>
@@ -1263,7 +1675,7 @@ with the current ComputeCmac method implementation</li>
 <li>All LocalNetwork applications are not developed using CubeMx</li>
 </ul></li>
 </ul>
-<h2 id="development-toolchains-and-compilers-2">Development Toolchains
+<h2 id="development-toolchains-and-compilers-3">Development Toolchains
 and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1 + <a
@@ -1279,7 +1691,7 @@ drivers and STMicroelectronics Middleware components</li>
 <li>STM32CubeIDE 1.11.0 (GNU Tools for STM32 10.3-2021.10)</li>
 <li>STM32CubeProgrammer 2.12.0</li>
 </ul>
-<h2 id="supported-devices-and-boards-2">Supported Devices and
+<h2 id="supported-devices-and-boards-3">Supported Devices and
 boards</h2>
 <ul>
 <li>STM32WLE5xx, STM32WL55xx &amp; STM32WL5MOCHxx devices</li>
@@ -1288,7 +1700,7 @@ ecosystem boards - Nucleo kit RevC (MB1389-HIGHBAND-E01 or
 MB1389-LOWBAND-C01)</li>
 <li>B-WL5M-SUBG1 ecosystem boards (MB1779-HIGHBAND-A01)</li>
 </ul>
-<h2 id="dependencies-2">Dependencies</h2>
+<h2 id="dependencies-3">Dependencies</h2>
 <ul>
 <li>STM32CubeMX 6.7.0</li>
 </ul>
@@ -1299,8 +1711,8 @@ MB1389-LOWBAND-C01)</li>
 <label for="collapse-section3" aria-hidden="true"><strong>V1.2.0 /
 04-February-2022</strong></label>
 <div>
-<h2 id="main-changes-3">Main Changes</h2>
-<h3 id="maintenance-release-2">Maintenance Release</h3>
+<h2 id="main-changes-4">Main Changes</h2>
+<h3 id="maintenance-release-3">Maintenance Release</h3>
 <ul>
 <li>RF Applications :
 <ul>
@@ -1316,7 +1728,7 @@ MB1389-LOWBAND-C01)</li>
 <li>IKS01A3 MEMS Sensor Shield ready via CubeMx</li>
 </ul></li>
 </ul>
-<h2 id="contents-3">Contents</h2>
+<h2 id="contents-4">Contents</h2>
 <p><small>The Project categories flagged by “<span
 class="icon-st-update"></span>” have changed since the previous release.
 “<span class="icon-st-add"></span>” are new.</small></p>
@@ -1380,7 +1792,7 @@ class="icon-st-add"></span></td>
 </tr>
 </tbody>
 </table>
-<h2 id="known-limitations-3">Known Limitations</h2>
+<h2 id="known-limitations-4">Known Limitations</h2>
 <ul>
 <li><strong>LL/HAL</strong>
 <ul>
@@ -1409,7 +1821,7 @@ CubeMx</li>
 <li>All LocalNetwork applications are not developed using CubeMx</li>
 </ul></li>
 </ul>
-<h2 id="development-toolchains-and-compilers-3">Development Toolchains
+<h2 id="development-toolchains-and-compilers-4">Development Toolchains
 and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V8.30.1</li>
@@ -1422,7 +1834,7 @@ drivers and STMicroelectronics Middleware components</li>
 9-2020-q2-update)</li>
 <li>STM32CubeProgrammer 2.9.0</li>
 </ul>
-<h2 id="supported-devices-and-boards-3">Supported Devices and
+<h2 id="supported-devices-and-boards-4">Supported Devices and
 boards</h2>
 <ul>
 <li>STM32WLE5xx &amp; STM32WL55xx</li>
@@ -1433,7 +1845,7 @@ MB1389-LOWBAND-C01)</li>
 <h2 id="backward-compatibility">Backward Compatibility</h2>
 <p>This release is compatible with the previous versions</p>
 <p>SBSFU applications are not compatible with CubeIDE v1.8</p>
-<h2 id="dependencies-3">Dependencies</h2>
+<h2 id="dependencies-4">Dependencies</h2>
 <ul>
 <li>STM32CubeMX 6.5.0</li>
 </ul>
@@ -1444,8 +1856,8 @@ MB1389-LOWBAND-C01)</li>
 <label for="collapse-section2" aria-hidden="true"><strong>V1.1.0 /
 16-June-2021</strong></label>
 <div>
-<h2 id="main-changes-4">Main Changes</h2>
-<h3 id="maintenance-release-3">Maintenance Release</h3>
+<h2 id="main-changes-5">Main Changes</h2>
+<h3 id="maintenance-release-4">Maintenance Release</h3>
 <ul>
 <li>Security Applications :
 <ul>
@@ -1463,7 +1875,7 @@ Sigfox_SBSFU_1_Slot_DualCore added</li>
 (FSK payload &gt; 255 bytes) on stm32wl revision Y</li>
 </ul></li>
 </ul>
-<h2 id="contents-4">Contents</h2>
+<h2 id="contents-5">Contents</h2>
 <p><small>The Project categories flagged by “<span
 class="icon-st-update"></span>” have changed since the previous release.
 “<span class="icon-st-add"></span>” are new.</small></p>
@@ -1521,7 +1933,7 @@ class="icon-st-update"></span></td>
 </tr>
 </tbody>
 </table>
-<h2 id="known-limitations-4">Known Limitations</h2>
+<h2 id="known-limitations-5">Known Limitations</h2>
 <ul>
 <li><strong>LL/HAL</strong>
 <ul>
@@ -1547,7 +1959,7 @@ eligible)</li>
 (not eligible)</li>
 </ul></li>
 </ul>
-<h2 id="development-toolchains-and-compilers-4">Development Toolchains
+<h2 id="development-toolchains-and-compilers-5">Development Toolchains
 and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V8.30.1 +
@@ -1560,7 +1972,7 @@ drivers and STMicroelectronics Middleware components</li>
 </ul></li>
 <li>STM32CubeIDE 1.7.0 + ST-Link</li>
 </ul>
-<h2 id="supported-devices-and-boards-4">Supported Devices and
+<h2 id="supported-devices-and-boards-5">Supported Devices and
 boards</h2>
 <ul>
 <li>STM32WLE5xx &amp; STM32WL55xx</li>
@@ -1570,7 +1982,7 @@ MB1389-LOWBAND-C01)</li>
 </ul>
 <h2 id="backward-compatibility-1">Backward Compatibility</h2>
 <p>This release is compatible with the previous versions</p>
-<h2 id="dependencies-4">Dependencies</h2>
+<h2 id="dependencies-5">Dependencies</h2>
 <ul>
 <li>STM32CubeMX 6.3.0</li>
 </ul>
@@ -1581,9 +1993,9 @@ MB1389-LOWBAND-C01)</li>
 <label for="collapse-section1" aria-hidden="true"><strong>V1.0.0 /
 28-October-2020</strong></label>
 <div>
-<h2 id="main-changes-5">Main Changes</h2>
+<h2 id="main-changes-6">Main Changes</h2>
 <h3 id="first-official-release">First Official Release</h3>
-<h2 id="contents-5">Contents</h2>
+<h2 id="contents-6">Contents</h2>
 <p><small>The Project categories flagged by “<span
 class="icon-st-update"></span>” have changed since the previous release.
 “<span class="icon-st-add"></span>” are new.</small></p>
@@ -1634,7 +2046,7 @@ class="icon-st-update"></span>” have changed since the previous release.
 </tr>
 </tbody>
 </table>
-<h2 id="known-limitations-5">Known Limitations</h2>
+<h2 id="known-limitations-6">Known Limitations</h2>
 <ul>
 <li><strong>LL/HAL</strong>
 <ul>
@@ -1661,7 +2073,7 @@ Sigfox_SBSFU_1_Slot_DualCore applications are not developed using CubeMx
 (not eligible)</li>
 </ul></li>
 </ul>
-<h2 id="development-toolchains-and-compilers-5">Development Toolchains
+<h2 id="development-toolchains-and-compilers-6">Development Toolchains
 and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V8.30.1 +
@@ -1670,7 +2082,7 @@ ST-Link</li>
 ST-Link</li>
 <li>STM32CubeIDE 1.5.0 + ST-Link</li>
 </ul>
-<h2 id="supported-devices-and-boards-5">Supported Devices and
+<h2 id="supported-devices-and-boards-6">Supported Devices and
 boards</h2>
 <ul>
 <li>STM32WLE5xx &amp; STM32WL55xx</li>
@@ -1680,7 +2092,7 @@ MB1389-LOWBAND-C01)</li>
 </ul>
 <h2 id="backward-compatibility-2">Backward Compatibility</h2>
 <p>This release is compatible with the previous versions</p>
-<h2 id="dependencies-5">Dependencies</h2>
+<h2 id="dependencies-6">Dependencies</h2>
 <ul>
 <li>STM32CubeMX 6.1.0</li>
 </ul>

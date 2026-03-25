@@ -126,6 +126,8 @@ void Sigfox_Init(void)
     Error_Handler();
   }
 
+  E2P_Init();
+  
   E2P_Write_Rc(DEFAULT_RC);
   sfx_rc = E2P_Read_Rc();
 
