@@ -14,7 +14,7 @@
  * Copyright (c) 2019 Keil - An ARM Company. All rights reserved.
  *----------------------------------------------------------------------------*/
 
-#include <stm32wlxx.h>                  /* STM32l5xx Definitions              */
+#include <stm32wlxx.h>                  /* STM32WLxx Definitions              */
 #include "Serial.h"
 
 #ifdef __DBG_ITM

@@ -660,6 +660,10 @@ static void EventCallback(void)
           /* Uncomment this follow line to enable Relay mode in the Relay APP with Default configuration*/
           /* smtc_modem_relay_rx_enable(); */
 
+#if ( LORAMAC_CLASSB_ENABLED == 1 )
+          smtc_modem_set_class(stack_id, SMTC_MODEM_CLASS_B);
+#endif
+
           /* Send first periodical uplink */
           SendTxData(LORAWAN_USER_APP_PORT);
         }

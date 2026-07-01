@@ -36,8 +36,8 @@
 #define FLASH_ROW_SIZE          32
 
 /* @note All the executable code is mapped in SRAM1 area */
-#define FLASH_USER_START_ADDR   ADDR_FLASH_PAGE_0   /* Start @ of user Flash area */
-#define FLASH_USER_END_ADDR     (ADDR_FLASH_PAGE_127 + FLASH_PAGE_SIZE - 1)   /* End @ of user Flash area */
+#define FLASH_USER_START_ADDR   FLASH_BASE       /* Start @ of user Flash area */
+#define FLASH_USER_END_ADDR     FLASH_END_ADDR   /* End @ of user Flash area */
 
 /* USER CODE END PD */
 
@@ -122,9 +122,6 @@ int main(void)
   /* Erase the user Flash area
     (area defined by FLASH_USER_START_ADDR and FLASH_USER_END_ADDR) ***********/
 
-  /* Clear OPTVERR bit set on virgin samples */
-  __HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_OPTVERR);
-
   /* Fill EraseInit structure*/
   EraseInitStruct.TypeErase = FLASH_TYPEERASE_MASSERASE;
   if (HAL_FLASHEx_Erase(&EraseInitStruct, &PAGEError) != HAL_OK)
@@ -134,12 +131,7 @@ int main(void)
       User can add here some code to deal with this error.
       To know the code error, user can call function 'HAL_FLASH_GetError()'
     */
-    /* Infinite loop */
-    while (1)
-    {
-      /* Switch on LED3 to indicate error in Erase operation */
-      BSP_LED_On(LED3);
-    }
+    Error_Handler();
   }
 
   /* Program the user Flash area word by word
@@ -157,11 +149,7 @@ int main(void)
     {
       /* Error occurred while writing data in Flash memory.
          User can add here some code to deal with this error */
-      while (1)
-      {
-        /* Switch on LED3 to indicate error in Write operation */
-        BSP_LED_On(LED3);
-      }
+      Error_Handler();
     }
   }
 
@@ -275,6 +263,7 @@ void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
+  BSP_LED_On(LED3);
   while(1)
   {
   }

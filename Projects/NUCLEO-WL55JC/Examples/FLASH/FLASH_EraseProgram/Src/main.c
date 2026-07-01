@@ -33,8 +33,8 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define FLASH_USER_START_ADDR   ADDR_FLASH_PAGE_16   /* Start @ of user Flash area */
-#define FLASH_USER_END_ADDR     (ADDR_FLASH_PAGE_127 + FLASH_PAGE_SIZE - 1)   /* End @ of user Flash area */
+#define FLASH_USER_START_ADDR   (FLASH_BASE + (16U * FLASH_PAGE_SIZE))    /* Start @ of user Flash area: page 16 */
+#define FLASH_USER_END_ADDR     FLASH_END_ADDR                            /* End @ of user Flash area */
 
 #define DATA_32                 ((uint32_t)0x12345678)
 #define DATA_64                 ((uint64_t)0x1234567812345678)
@@ -81,10 +81,10 @@ int main(void)
   /* USER CODE BEGIN 1 */
   /* STM32WLxx HAL library initialization:
        - Configure the Flash prefetch
-       - Systick timer is configured by default as source of time base, but user 
-         can eventually implement his proper time base source (a general purpose 
-         timer for example or other time source), keeping in mind that Time base 
-         duration should be kept 1ms since PPP_TIMEOUT_VALUEs are defined and 
+       - Systick timer is configured by default as source of time base, but user
+         can eventually implement his proper time base source (a general purpose
+         timer for example or other time source), keeping in mind that Time base
+         duration should be kept 1ms since PPP_TIMEOUT_VALUEs are defined and
          handled in milliseconds basis.
        - Set NVIC Group Priority to 4
        - Low Level Initialization
@@ -118,9 +118,6 @@ int main(void)
   /* Unlock the Flash to enable the flash control register access *************/
   HAL_FLASH_Unlock();
 
- /* Clear OPTVERR bit set on virgin samples */
-  __HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_OPTVERR);
-
   /* Erase the user Flash area
     (area defined by FLASH_USER_START_ADDR and FLASH_USER_END_ADDR) ***********/
 
@@ -147,12 +144,7 @@ int main(void)
       PageError will contain the faulty page and then to know the code error on this page,
       user can call function 'HAL_FLASH_GetError()'
     */
-    /* Infinite loop */
-    while (1)
-    {
-      /* Turn on LED3 */
-      BSP_LED_On(LED3);
-    }
+    Error_Handler();
   }
 
   /* Program the user Flash area word by word
@@ -170,11 +162,7 @@ int main(void)
     {
       /* Error occurred while writing data in Flash memory.
          User can add here some code to deal with this error */
-      while (1)
-      {
-        /* Turn on LED3 */
-        BSP_LED_On(LED3);
-      }
+      Error_Handler();
     }
   }
 
@@ -284,7 +272,7 @@ void SystemClock_Config(void)
   */
 static uint32_t GetPage(uint32_t Addr)
 {
-  return (Addr - FLASH_BASE) / FLASH_PAGE_SIZE;;
+  return (Addr - FLASH_BASE) / FLASH_PAGE_SIZE;
 }
 
 
@@ -298,6 +286,7 @@ void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
+  BSP_LED_On(LED3);
   while(1)
   {
   }

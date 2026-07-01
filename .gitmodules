@@ -54,3 +54,7 @@
 	path = Middlewares/Third_Party/SubGHz_Phy
 	url = https://github.com/STMicroelectronics/stm32-mw-subghz-phy
 	branch = main
+[submodule "Middlewares/Third_Party/LoRaWAN"]
+	path = Middlewares/Third_Party/LoRaWAN
+	url = https://github.com/STMicroelectronics/stm32-mw-lorawan-lbm.git
+	branch = main

@@ -35,20 +35,16 @@ typedef enum {FAILED = 0, PASSED = !FAILED} TestStatus;
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 
-#define FLASH_USER_START_ADDR       ADDR_FLASH_PAGE_24   /* Start @ of user Flash area */
-#define FLASH_USER_END_ADDR         ADDR_FLASH_PAGE_28   /* End @ of user Flash area */
+#define FLASH_USER_START_PAGE       24U
+#define FLASH_USER_END_PAGE         28U
+#define FLASH_USER_START_ADDR       (FLASH_BASE + (FLASH_USER_START_PAGE * FLASH_PAGE_SIZE)) /* Start @ of user Flash area */
+#define FLASH_USER_END_ADDR         (FLASH_BASE + (FLASH_USER_END_PAGE * FLASH_PAGE_SIZE))   /* End @ of user Flash area */
 
 #define DATA_32                     ((uint32_t)0x12345678)
 #define DATA_64                     ((uint64_t)0x1234567812345678)
 
-/* Uncomment this line to program the Flash pages */
-#define FLASH_PAGE_PROGRAM
-
-/* Uncomment this line to Enable Write Protection */
-/* #define WRITE_PROTECTION_ENABLE */
-
-/* Uncomment this line to Disable Write Protection */
-/* #define WRITE_PROTECTION_DISABLE */
+/* WRITE_PROTECTION_MODE: 0U to disable write protection, 1U to enable write protection. */
+#define WRITE_PROTECTION_MODE       0U
 
 /* USER CODE END PD */
 
@@ -65,9 +61,7 @@ uint32_t Address = 0;
 uint32_t PageError = 0;
 __IO TestStatus MemoryProgramStatus = PASSED;
 /*Variable used for Erase procedure*/
-#ifdef FLASH_PAGE_PROGRAM
 static FLASH_EraseInitTypeDef EraseInitStruct;
-#endif
 /*Variable used to handle the Options Bytes*/
 static FLASH_OBProgramInitTypeDef OptionsBytesStruct, OptionsBytesStruct2;
 
@@ -134,9 +128,6 @@ int main(void)
 
   /* Unlock the Flash to enable the flash control register access *************/
   HAL_FLASH_Unlock();
-  
-  /* Clear OPTVERR bit set on virgin samples */
-  __HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_OPTVERR);
 
   /* Unlock the Options Bytes *************************************************/
   HAL_FLASH_OB_Unlock();
@@ -152,7 +143,7 @@ int main(void)
   HAL_FLASHEx_OBGetConfig(&OptionsBytesStruct);
   HAL_FLASHEx_OBGetConfig(&OptionsBytesStruct2);
 
-#ifdef WRITE_PROTECTION_DISABLE
+#if (WRITE_PROTECTION_MODE == 0U)
   /* Check if desired pages are already write protected ***********************/
   if ((OptionsBytesStruct.WRPStartOffset == StartPage) && (OptionsBytesStruct.WRPEndOffset == EndPage))
   {
@@ -194,10 +185,7 @@ int main(void)
     {
       /* Second area of the bank already used for WRP */
       /* => Error : not possible to deactivate only the pages indicated */
-      while (1)
-      {
-        BSP_LED_On(LED3);
-      }
+      Error_Handler();
     }
   }
   else if ((OptionsBytesStruct2.WRPStartOffset == StartPage) && (OptionsBytesStruct2.WRPEndOffset == EndPage))
@@ -240,14 +228,11 @@ int main(void)
     {
       /* Second area of the bank already used for WRP */
       /* => Error : not possible to deactivate only the pages indicated */
-      while (1)
-      {
-        BSP_LED_On(LED3);
-      }
+      Error_Handler();
     }
   }
 
-#elif defined WRITE_PROTECTION_ENABLE
+#elif (WRITE_PROTECTION_MODE == 1U)
   /* Check if desired pages are not yet write protected ***********************/
   if ((OptionsBytesStruct.WRPStartOffset <= StartPage) && (OptionsBytesStruct.WRPEndOffset >= (StartPage - 1)))
   {
@@ -321,13 +306,10 @@ int main(void)
   {
     /* No more area available to protect the pages */
     /* => Error : not possible to activate the pages indicated */
-    while (1)
-    {
-      BSP_LED_On(LED3);
-    }
+    Error_Handler();
   }
 
-#endif /* WRITE_PROTECTION_DISABLE */
+#endif /* WRITE_PROTECTION_MODE */
 
   /* Configure write protected pages */
   if (OptionsBytesStruct.OptionType == OPTIONBYTE_WRP)
@@ -335,10 +317,7 @@ int main(void)
     if(HAL_FLASHEx_OBProgram(&OptionsBytesStruct) != HAL_OK)
     {
       /* Error occurred while options bytes programming. **********************/
-      while (1)
-      {
-        BSP_LED_On(LED3);
-      }
+      Error_Handler();
     }
   }
 
@@ -347,10 +326,7 @@ int main(void)
     if(HAL_FLASHEx_OBProgram(&OptionsBytesStruct2) != HAL_OK)
     {
       /* Error occurred while options bytes programming. **********************/
-      while (1)
-      {
-        BSP_LED_On(LED3);
-      }
+      Error_Handler();
     }
   }
 
@@ -363,17 +339,18 @@ int main(void)
   /* Lock the Options Bytes *************************************************/
   HAL_FLASH_OB_Lock();
 
-#ifdef FLASH_PAGE_PROGRAM
   /* The selected pages are write protected *******************************/
   if (((OptionsBytesStruct.WRPStartOffset  <= StartPage) && (OptionsBytesStruct.WRPEndOffset  >= EndPage)) ||
       ((OptionsBytesStruct2.WRPStartOffset <= StartPage) && (OptionsBytesStruct2.WRPEndOffset >= EndPage)))
   {
-    /* The desired pages are write protected */
-    /* Check that it is not allowed to write in this page */
-    Address = FLASH_USER_START_ADDR;
-    if (HAL_FLASH_Program(FLASH_TYPEPROGRAM_DOUBLEWORD, Address, DATA_64) != HAL_OK)
-      {
-      /* Error returned during programming. */
+    /* The desired pages are write protected. Verify erase is rejected. */
+    EraseInitStruct.TypeErase = FLASH_TYPEERASE_PAGES;
+    EraseInitStruct.Page      = StartPage;
+    EraseInitStruct.NbPages   = 1U;
+
+    if (HAL_FLASHEx_Erase(&EraseInitStruct, &PageError) != HAL_OK)
+    {
+      /* Error returned during erase. */
       /* Check that WRPERR flag is well set */
       if ((HAL_FLASH_GetError() & HAL_FLASH_ERROR_WRP) != 0)
       {
@@ -383,20 +360,14 @@ int main(void)
       {
         /* Another error occurred.
            User can add here some code to deal with this error */
-        while (1)
-        {
-          BSP_LED_On(LED3);
-        }
+        Error_Handler();
       }
     }
     else
     {
-      /* Write operation is successful. Should not occur
+      /* Erase operation is successful. Should not occur.
          User can add here some code to deal with this error */
-      while (1)
-      {
-        BSP_LED_On(LED3);
-      }
+      Error_Handler();
     }
   }
   else
@@ -415,10 +386,7 @@ int main(void)
         PageError will contain the faulty page and then to know the code error on this page,
         user can call function 'HAL_FLASH_GetError()'
       */
-      while (1)
-      {
-        BSP_LED_On(LED3);
-      }
+      Error_Handler();
     }
 
     /* FLASH Word program of DATA_32 at addresses defined by FLASH_USER_START_ADDR and FLASH_USER_END_ADDR */
@@ -433,10 +401,7 @@ int main(void)
       {
         /* Error occurred while writing data in Flash memory.
            User can add here some code to deal with this error */
-        while (1)
-        {
-          BSP_LED_On(LED3);
-        }
+        Error_Handler();
       }
     }
 
@@ -452,7 +417,6 @@ int main(void)
       Address += 4;
     }
   }
-#endif /* FLASH_PAGE_PROGRAM */
 
   /* Lock the Flash to disable the flash control register access (recommended
      to protect the FLASH memory against possible unwanted operation) *********/
@@ -567,6 +531,7 @@ void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
+  BSP_LED_On(LED3);
   while(1)
   {
   }

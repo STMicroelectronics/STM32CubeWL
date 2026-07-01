@@ -267,7 +267,6 @@ static void MX_GPIO_Init(void)
 
 /**
   * @brief  This function is executed in case of error occurrence.
-  * @param  None
   * @retval None
   */
 static void Timeout_Error_Handler(void)

@@ -28,18 +28,24 @@ all the peripherals, initialize the Flash interface and the systick.
 Then the SystemClock_Config() function is used to configure the system clock (SYSCLK)
 to run at 48 MHz.
 
-  - If WRITE_PROTECTION_ENABLE is selected, the write protection will be enabled
+  - The WRITE_PROTECTION_MODE definition selects the requested configuration:
+    0U disables write protection and 1U enables write protection for the defined pages.
+
+  - If WRITE_PROTECTION_MODE is set to 1U, the write protection will be enabled
     for the defined pages.
     To load the new option byte values, a system Reset is necessary, for this, the
     function HAL_FLASH_OB_Launch() is used.
 
-  - If WRITE_PROTECTION_DISABLE is selected, the write protection will be disabled
+  - If WRITE_PROTECTION_MODE is set to 0U, the write protection will be disabled
     for the defined pages.
     To load the new option byte values, a system Reset is necessary, for this, the
     function HAL_FLASH_OB_Launch() is used.
 
-  - If FLASH_PAGE_PROGRAM is selected, then an erase operation is done by filling
-    the erase init structure giving the starting erase page and the number of
+  - After option byte handling, the example always checks the flash erase/program
+    capability for the selected area.
+
+    If the area is not write protected, an erase operation is done by filling
+    the erase init structure with the starting erase page and the number of
     pages to erase. At this stage, all these pages will be erased one by one separately.
 
     @note: if problem occurs on a page, erase will be stopped and faulty page will
@@ -50,9 +56,9 @@ to run at 48 MHz.
 
 NUCLEO-WL55JC RevC board's LED can be used to monitor the transfer status:
  - LED2 is ON when there are no errors detected after programming
-    => should be the case when WRITE_PROTECTION_DISABLE flag is enabled
+   => should be the case when WRITE_PROTECTION_MODE is set to 0U
  - LED1 is ON when there are errors detected after programming
-    => should be the case when WRITE_PROTECTION_ENABLE flag is enabled
+   => should be the case when WRITE_PROTECTION_MODE is set to 1U
  - LED3 is ON when there is an issue during erase, program or OB program procedure
 
 @note Care must be taken when using HAL_Delay(), this function provides accurate

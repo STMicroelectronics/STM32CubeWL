@@ -1,71 +1,47 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
-<head>
-<title>_htmresc\ReleaseNotes.html</title>
-</head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US"><head><title>_htmresc\ReleaseNotes.html</title></head><body style="font-size: 10pt; font-family: Verdana;">
 
-<body style="font-size: 10pt; font-family: Verdana;">
-
-<h3 style="color: blue; text-decoration: underline;">STM32CubeWL Firmware Package v1.5.0 / 04-February-2026</h3>
+<h3 style="color: blue; text-decoration: underline;">STM32CubeWL Firmware Package v1.6.0 / 05-June-2026</h3>
 
 <div style="margin-left: 18pt;">
 <p>
 <b><u>Main Changes</u></b>
-</p>
-
-<ul>
-  <li><strong>CMSIS Core Drivers</strong> updates
-    <ul>
-      <li>Update to V5.9.0</li>
-    </ul>
-  </li>
-</ul>
-<ul>
-  <li><strong>CMSIS Device Drivers</strong> updates
-    <ul>
-      <li>Update to V1.4.0 to fix MISRAC-2012 rules violations</li>
-    </ul>
-  </li>
-</ul>
-<ul>  
+</p><ul>  
   <li><strong>HAL/LL Drivers</strong> updates
     <ul>
-      <li>Update the following HAL drivers to get the latest corrections: ADC, CRYP, SUBGHZ, SPI, I2S, TIM, RCC, RTC, UART, USART</li>
-      <li>Update SubGHz drivers to add new public APIs needed by the LoRAWAN-LBM stack</li>
+      <li>Update the following HAL drivers to get the latest corrections: <span style="color: rgb(3, 35, 75); font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; font-size: 13.5px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; white-space: normal; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">DAC, CRC, SUBGHZ, RNG, TIM</span></li>
+      
     </ul>
   </li>
 </ul>
 <ul>
   <li><strong>Middlewares</strong> updates
     <ul>
-      <li>Update LoRaWAN middlewares to new LBM (Lora Basic Modem) stack</li>
-      <li>Update SubGHz_Phy to V1.4.0 supporting new LoRAWAN-LBM stack. All non-LoRA applications are supported</li>
-      <li>Update FatFS to version r0.12c_stm32cube_20240212 to include the latest bug fixes ensuring API backward compatibility</li>
-	  <li>Update STM32_Key_Management_Services MW to V1.2.4</li>
-    </ul>
+      <li style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25;">Upgrade<span>&nbsp;</span><strong style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25; font-size: 1em; font-weight: 700;">mbed-crypto</strong><span>&nbsp;</span>Lib to use V3.6.6 (ST modified 2026-04-15)</li>
+      <li style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25;">Upgrade<span>&nbsp;</span><strong style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25; font-size: 1em; font-weight: 700;">Sigfox</strong><span>&nbsp;</span>to use V1.10.0</li>
+      <li style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25;">Upgrade<span>&nbsp;</span><strong style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25; font-size: 1em; font-weight: 700;">STM32_Key_Management_Services</strong><span>&nbsp;</span>to V1.2.5</li>
+      <li style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25;">Upgrade<span>&nbsp;</span><strong style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25; font-size: 1em; font-weight: 700;">STM32_Secure_Engine</strong><span>&nbsp;</span>to V2.5.5</li>
+      <li style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25;">Upgrade<span>&nbsp;</span><strong style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25; font-size: 1em; font-weight: 700;">FreeRTOS</strong><span>&nbsp;</span>to V10.6.2 (ST modified 2026-03-27)</li>
+      <li style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25;">Upgrade<span>&nbsp;</span><strong style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25; font-size: 1em; font-weight: 700;">FatFS</strong><span>&nbsp;</span>to R0.12c (ST modified 2026-04-03)</li>
+      <li style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25;">Upgrade<span>&nbsp;</span><strong style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25; font-size: 1em; font-weight: 700;">LoRaWAN-LBM</strong><span>&nbsp;</span>to V1.1.0</li>
+      <li style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25;">Upgrade<span>&nbsp;</span><strong style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25; font-size: 1em; font-weight: 700;">SubGHz_Phy</strong><span>&nbsp;</span>to V1.5.0</li>
+</ul>
   </li>
 </ul>
 <ul>
   <li><strong>Projects</strong> updates
     <ul>
-      <li>Remove all LoRaWAN projects based on LoRAWAN Mac-Node legacy middleware</li>
-      <li>Update all wireless applications to the latest toolchains versions</li>
-      <li>Update all wireless applications to use the new SubGHz_Phy middleware</li>
-      <li>Add the new LoRAWAN-LPBM based applications
-        <ul>
-          <li>LoRaWAN_Relay_LBM</li>
-          <li>LoRaWAN_End_Node_Relay_LBM</li>
-          <li>LoRaWAN_End_Node_LBM</li>
-        </ul>
-      </li>
-      <li>Resolve compilation warnings in various projects when using newer GCC versions</li>
-      <li>Fix a regression in Sigfox applications</li>
-      <li>Update BFU/SBSFU applications to enforce post-build actions dependencies with EWARM v9.60.3</li>
-      <li>Update KMS applications to remove differences versus STM32CubeMX generated code</li>
-    </ul>
+      <li style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25;">Update the system clock configuration to increase the LSE drive capability from LOW to HIGH</li>
+      <li style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25;">API
+call added to LoRaWAN_End_Node_LBM and LoRaWAN_Relay_LBM APPs for
+NUCLEO board. Class B can be enabled with LORAMAC_CLASSB_ENABLED set to
+1.</li>
+      <li style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25;">Update
+the FLASH examples to simplify page handling, remove unnecessary
+OPTVERR clearing, and improve write protection verification.</li>
+</ul>
   </li>
 </ul>
 
 </div>
-</body>
-</html>
+</body></html>

@@ -657,6 +657,9 @@ static void EventCallback(void)
         /* USER CODE END EventCallback_1 */
         if (CertMode == false)
         {
+#if ( LORAMAC_CLASSB_ENABLED == 1 )
+          smtc_modem_set_class(stack_id, SMTC_MODEM_CLASS_B);
+#endif
           /* Send first periodical uplink */
           SendTxData(LORAWAN_USER_APP_PORT);
         }
