@@ -1,45 +1,40 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en-US"><head><title>_htmresc\ReleaseNotes.html</title></head><body style="font-size: 10pt; font-family: Verdana;">
 
-<h3 style="color: blue; text-decoration: underline;">STM32CubeWL Firmware Package v1.6.0 / 05-June-2026</h3>
+<h3 style="color: blue; text-decoration: underline;">STM32CubeWL Firmware Package v1.7.0 / 28-October-2026</h3>
 
 <div style="margin-left: 18pt;">
 <p>
 <b><u>Main Changes</u></b>
-</p><ul>  
+</p>
+<ul>
   <li><strong>HAL/LL Drivers</strong> updates
     <ul>
-      <li>Update the following HAL drivers to get the latest corrections: <span style="color: rgb(3, 35, 75); font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; font-size: 13.5px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; white-space: normal; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">DAC, CRC, SUBGHZ, RNG, TIM</span></li>
+      <li>Update the following HAL drivers to get the latest corrections: <span style="color: rgb(3, 35, 75); font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; font-size: 13.5px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; white-space: normal; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">CRYP, RTC</span></li>
       
     </ul>
   </li>
 </ul>
+
+
 <ul>
-  <li><strong>Middlewares</strong> updates
+  <li><strong>Middlewares </strong> updates
     <ul>
-      <li style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25;">Upgrade<span>&nbsp;</span><strong style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25; font-size: 1em; font-weight: 700;">mbed-crypto</strong><span>&nbsp;</span>Lib to use V3.6.6 (ST modified 2026-04-15)</li>
-      <li style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25;">Upgrade<span>&nbsp;</span><strong style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25; font-size: 1em; font-weight: 700;">Sigfox</strong><span>&nbsp;</span>to use V1.10.0</li>
-      <li style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25;">Upgrade<span>&nbsp;</span><strong style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25; font-size: 1em; font-weight: 700;">STM32_Key_Management_Services</strong><span>&nbsp;</span>to V1.2.5</li>
-      <li style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25;">Upgrade<span>&nbsp;</span><strong style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25; font-size: 1em; font-weight: 700;">STM32_Secure_Engine</strong><span>&nbsp;</span>to V2.5.5</li>
-      <li style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25;">Upgrade<span>&nbsp;</span><strong style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25; font-size: 1em; font-weight: 700;">FreeRTOS</strong><span>&nbsp;</span>to V10.6.2 (ST modified 2026-03-27)</li>
-      <li style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25;">Upgrade<span>&nbsp;</span><strong style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25; font-size: 1em; font-weight: 700;">FatFS</strong><span>&nbsp;</span>to R0.12c (ST modified 2026-04-03)</li>
-      <li style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25;">Upgrade<span>&nbsp;</span><strong style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25; font-size: 1em; font-weight: 700;">LoRaWAN-LBM</strong><span>&nbsp;</span>to V1.1.0</li>
-      <li style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25;">Upgrade<span>&nbsp;</span><strong style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25; font-size: 1em; font-weight: 700;">SubGHz_Phy</strong><span>&nbsp;</span>to V1.5.0</li>
-</ul>
+      <li style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25;">Upgrade LoRaWAN-LBM to V1.2.0</li>
+	  <li style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25;">Upgrade SubGHz_Phy to V1.6.0</li>
+	  <li style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25;">Remove LR-FHSS feature support from LoRAWAN-LBM and SubGHz_Phy. Contact your local STMicroelectronics sales office for information.</li>
+	</ul>
   </li>
 </ul>
+
 <ul>
   <li><strong>Projects</strong> updates
     <ul>
-      <li style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25;">Update the system clock configuration to increase the LSE drive capability from LOW to HIGH</li>
-      <li style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25;">API
-call added to LoRaWAN_End_Node_LBM and LoRaWAN_Relay_LBM APPs for
-NUCLEO board. Class B can be enabled with LORAMAC_CLASSB_ENABLED set to
-1.</li>
-      <li style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25;">Update
-the FLASH examples to simplify page handling, remove unnecessary
-OPTVERR clearing, and improve write protection verification.</li>
-</ul>
+      <li style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25;">Add LoRaWAN_End_Node_LBM_FreeRTOS application</li>
+	  <li style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25;">Add LoRaWAN_AT_Slave_LBM application</li>
+	  <li style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25;">Remove SubGHz_Phy_LrFhss application</li>
+      <li style="font-family: -apple-system,BlinkMacSystemFont,Helvetica,arial,sans-serif; line-height: 1.25;">Upgrade projects to support STM32CubeMX V6.19.0</li>
+	</ul>
   </li>
 </ul>
 

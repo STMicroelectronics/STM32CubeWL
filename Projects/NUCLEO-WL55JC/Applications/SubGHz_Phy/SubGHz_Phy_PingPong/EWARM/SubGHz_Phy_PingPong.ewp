@@ -1285,9 +1285,6 @@
         <group>
             <name>SubGHz_Phy</name>
             <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\SubGHz_Phy\radio_driver\lr_fhss_mac.c</name>
-            </file>
-            <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\SubGHz_Phy\radio_driver\radio.c</name>
             </file>
             <file>
@@ -1295,9 +1292,6 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\SubGHz_Phy\radio_driver\radio_fw.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\SubGHz_Phy\radio_driver\wl_lr_fhss.c</name>
             </file>
         </group>
     </group>

@@ -1065,11 +1065,6 @@
           <GroupName>Middlewares/SubGHz_Phy/lorawan/radio_drivers/sx126x_driver/src</GroupName>
           <Files>
             <File>
-              <FileName>lr_fhss_mac.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../../../../../../Middlewares/Third_Party/SubGHz_Phy/lorawan/radio_drivers/sx126x_driver/src/lr_fhss_mac.c</FilePath>
-            </File>
-            <File>
               <FileName>sx126x.c</FileName>
               <FileType>1</FileType>
               <FilePath>../../../../../../Middlewares/Third_Party/SubGHz_Phy/lorawan/radio_drivers/sx126x_driver/src/sx126x.c</FilePath>
@@ -1078,11 +1073,6 @@
               <FileName>sx126x_driver_version.c</FileName>
               <FileType>1</FileType>
               <FilePath>../../../../../../Middlewares/Third_Party/SubGHz_Phy/lorawan/radio_drivers/sx126x_driver/src/sx126x_driver_version.c</FilePath>
-            </File>
-            <File>
-              <FileName>sx126x_lr_fhss.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../../../../../../Middlewares/Third_Party/SubGHz_Phy/lorawan/radio_drivers/sx126x_driver/src/sx126x_lr_fhss.c</FilePath>
             </File>
           </Files>
         </Group>

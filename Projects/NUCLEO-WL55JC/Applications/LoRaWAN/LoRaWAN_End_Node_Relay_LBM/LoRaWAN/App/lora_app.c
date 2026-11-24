@@ -298,11 +298,6 @@ static smtc_modem_relay_tx_config_t relay_config = { 0 };
   */
 static bool CertMode = LORAWAN_CERTIFICATION_MODE;
 
-/**
-  * @brief Type of Event to generate application Tx
-  */
-static TxEventType_t EventType = TX_ON_TIMER;
-
 #if defined (LOW_POWER_DISABLE) && (LOW_POWER_DISABLE == 0)
 /**
   * @brief Timer to handle the sleep time
@@ -330,6 +325,12 @@ static Callbacks_t Callbacks =
 };
 
 /* USER CODE BEGIN PV */
+
+/**
+  * @brief Type of Event to generate application Tx
+  */
+static TxEventType_t EventType = TX_ON_TIMER;
+
 /**
   * @brief User application buffer
   */
@@ -825,8 +826,7 @@ static void EventCallback(void)
 
       case SMTC_MODEM_EVENT_REGIONAL_DUTY_CYCLE:
       {
-        uint8_t duty_cycle_status = current_event.event_data.regional_duty_cycle.status;
-        APP_LOG(TS_OFF, VLEVEL_M,  "Event received: DUTY_CYCLE busy %d\r\n", duty_cycle_status);
+        APP_LOG(TS_OFF, VLEVEL_M,  "Event received: DUTY_CYCLE busy %d\r\n", current_event.event_data.regional_duty_cycle.status);
       }
       break;
       default:

@@ -650,11 +650,6 @@
           <GroupName>Middlewares/SubGHz_Phy</GroupName>
           <Files>
             <File>
-              <FileName>lr_fhss_mac.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../../../../../../Middlewares/Third_Party/SubGHz_Phy/radio_driver/lr_fhss_mac.c</FilePath>
-            </File>
-            <File>
               <FileName>radio.c</FileName>
               <FileType>1</FileType>
               <FilePath>../../../../../../Middlewares/Third_Party/SubGHz_Phy/radio_driver/radio.c</FilePath>
@@ -668,11 +663,6 @@
               <FileName>radio_fw.c</FileName>
               <FileType>1</FileType>
               <FilePath>../../../../../../Middlewares/Third_Party/SubGHz_Phy/radio_driver/radio_fw.c</FilePath>
-            </File>
-            <File>
-              <FileName>wl_lr_fhss.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../../../../../../Middlewares/Third_Party/SubGHz_Phy/radio_driver/wl_lr_fhss.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -1639,16 +1639,10 @@
                         <group>
                             <name>src</name>
                             <file>
-                                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\SubGHz_Phy\lorawan\radio_drivers\sx126x_driver\src\lr_fhss_mac.c</name>
-                            </file>
-                            <file>
                                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\SubGHz_Phy\lorawan\radio_drivers\sx126x_driver\src\sx126x.c</name>
                             </file>
                             <file>
                                 <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\SubGHz_Phy\lorawan\radio_drivers\sx126x_driver\src\sx126x_driver_version.c</name>
-                            </file>
-                            <file>
-                                <name>$PROJ_DIR$\..\..\..\..\..\..\Middlewares\Third_Party\SubGHz_Phy\lorawan\radio_drivers\sx126x_driver\src\sx126x_lr_fhss.c</name>
                             </file>
                         </group>
                     </group>

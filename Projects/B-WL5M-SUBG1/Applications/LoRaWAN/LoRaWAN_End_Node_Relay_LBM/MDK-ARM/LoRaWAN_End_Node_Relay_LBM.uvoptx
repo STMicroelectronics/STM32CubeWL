@@ -1791,8 +1791,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>../../../../../../Middlewares/Third_Party/SubGHz_Phy/lorawan/radio_drivers/sx126x_driver/src/lr_fhss_mac.c</PathWithFileName>
-      <FilenameWithoutPath>lr_fhss_mac.c</FilenameWithoutPath>
+      <PathWithFileName>../../../../../../Middlewares/Third_Party/SubGHz_Phy/lorawan/radio_drivers/sx126x_driver/src/sx126x.c</PathWithFileName>
+      <FilenameWithoutPath>sx126x.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1803,32 +1803,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>../../../../../../Middlewares/Third_Party/SubGHz_Phy/lorawan/radio_drivers/sx126x_driver/src/sx126x.c</PathWithFileName>
-      <FilenameWithoutPath>sx126x.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>31</GroupNumber>
-      <FileNumber>115</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
       <PathWithFileName>../../../../../../Middlewares/Third_Party/SubGHz_Phy/lorawan/radio_drivers/sx126x_driver/src/sx126x_driver_version.c</PathWithFileName>
       <FilenameWithoutPath>sx126x_driver_version.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>31</GroupNumber>
-      <FileNumber>116</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>../../../../../../Middlewares/Third_Party/SubGHz_Phy/lorawan/radio_drivers/sx126x_driver/src/sx126x_lr_fhss.c</PathWithFileName>
-      <FilenameWithoutPath>sx126x_lr_fhss.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -1842,7 +1818,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>32</GroupNumber>
-      <FileNumber>117</FileNumber>
+      <FileNumber>115</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1862,7 +1838,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>33</GroupNumber>
-      <FileNumber>118</FileNumber>
+      <FileNumber>116</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1882,7 +1858,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>34</GroupNumber>
-      <FileNumber>119</FileNumber>
+      <FileNumber>117</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1902,7 +1878,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>35</GroupNumber>
-      <FileNumber>120</FileNumber>
+      <FileNumber>118</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1914,7 +1890,7 @@
     </File>
     <File>
       <GroupNumber>35</GroupNumber>
-      <FileNumber>121</FileNumber>
+      <FileNumber>119</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1926,7 +1902,7 @@
     </File>
     <File>
       <GroupNumber>35</GroupNumber>
-      <FileNumber>122</FileNumber>
+      <FileNumber>120</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1938,7 +1914,7 @@
     </File>
     <File>
       <GroupNumber>35</GroupNumber>
-      <FileNumber>123</FileNumber>
+      <FileNumber>121</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1950,7 +1926,7 @@
     </File>
     <File>
       <GroupNumber>35</GroupNumber>
-      <FileNumber>124</FileNumber>
+      <FileNumber>122</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1962,7 +1938,7 @@
     </File>
     <File>
       <GroupNumber>35</GroupNumber>
-      <FileNumber>125</FileNumber>
+      <FileNumber>123</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1974,7 +1950,7 @@
     </File>
     <File>
       <GroupNumber>35</GroupNumber>
-      <FileNumber>126</FileNumber>
+      <FileNumber>124</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -1986,7 +1962,7 @@
     </File>
     <File>
       <GroupNumber>35</GroupNumber>
-      <FileNumber>127</FileNumber>
+      <FileNumber>125</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>

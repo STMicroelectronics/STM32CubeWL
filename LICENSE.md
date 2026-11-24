@@ -9,7 +9,7 @@
 | FreeRTOS kernel                 | Amazon.com, Inc. or its affiliates | MIT                                              |
 | FatFS                           | ChaN - STMicroelectronics          | BSD-3-Clause                                     |
 | SubGHz_Phy                      | Semtech - STMicroelectronics       | BSD-3-Clause                                     |
-| LoRaWAN                         | Semtech - STMicroelectronics       | BSD-3-Clause                                     |
+| LoRaWAN                         | Semtech - STMicroelectronics       | BSD-3-Clause Clear                               |
 | Sigfox                          | Sigfox - STMicroelectronics        | SLA0044 and SIGFOX Specific Terms                |
 | mbed-crypto                     | ARM Limited (or its affiliates)    | Apache-2.0                                       |
 | STM32_Key_Management_Services   | STMicroelectronics                 | SLA0044                                          |
