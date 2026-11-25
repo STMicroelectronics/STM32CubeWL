@@ -7,7 +7,7 @@ define symbol __ICFEDIT_intvec_start__ = 0x08020000;
 /*-Memory Regions-*/
 /***** FLASH part dedicated to M0+ *****/
 define symbol __ICFEDIT_region_ROM_start__ = 0x08020000;
-define symbol __ICFEDIT_region_ROM_end__   = 0x0803EFFF;
+define symbol __ICFEDIT_region_ROM_end__   = 0x0803FFFF;
 /***** SRAM2 shared allocated by M0+ *****/
 define symbol __ICFEDIT_region_RAM2_SHARED_start__ = 0x20009000;
 define symbol __ICFEDIT_region_RAM2_SHARED_end__   = 0x20009FFF;

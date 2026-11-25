@@ -15,8 +15,7 @@ _Min_Stack_Size = 0x400; /* required amount of stack */
 MEMORY
 {
   ROM    (rx)    : ORIGIN = 0x08000000, LENGTH = 256K
-  RAM1   (xrw)   : ORIGIN = 0x20000000, LENGTH = 16K    /* Non-backup SRAM1 dedicated to CM4 */
-  RAM   (xrw)    : ORIGIN = 0x20002000, LENGTH = 16K
+  RAM1   (xrw)   : ORIGIN = 0x20000000, LENGTH = 32K    /* Non-backup SRAM1 dedicated to CM4 */
   RAM2   (xrw)   : ORIGIN = 0x20008000, LENGTH = 32K    /* Backup SRAM2 */
 }
 
@@ -118,10 +117,10 @@ SECTIONS
     
   } >RAM1 AT> ROM
   
-  .ROarraySection (READONLY) : /* The READONLY keyword is only supported in GCC11 and later, remove it if using GCC10 or earlier. */
+  .ROarraySection 0x20002000 (READONLY) : /* fixed address: matches ARRAY_ADDRESS_START in main.c and the IAR #pragma location. The READONLY keyword is only supported in GCC11 and later, remove it if using GCC10 or earlier. */
   {
     *(.ROarraySection*)
-  } >RAM
+  } >RAM1
  
   /* Uninitialized data section into "SRAM1" Ram type memory */
   . = ALIGN(8);
