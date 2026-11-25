@@ -90,9 +90,17 @@ typedef struct
 #define UTIL_SEQ_CONF_TASK_NBR  (32)
 #endif /* UTIL_SEQ_CONF_TASK_NBR */
 
-#if UTIL_SEQ_CONF_TASK_NBR > 32
-#error "UTIL_SEQ_CONF_TASK_NBR must be less than or equal to 32"
-#endif /* UTIL_SEQ_CONF_TASK_NBR */
+/* NOTE: applications commonly set UTIL_SEQ_CONF_TASK_NBR to an enum
+ * constant (e.g. #define UTIL_SEQ_CONF_TASK_NBR CFG_SEQ_Task_NBR).
+ * An enum constant is not visible to the preprocessor, so a
+ * preprocessor "#if UTIL_SEQ_CONF_TASK_NBR > 32" would silently
+ * evaluate the unresolved identifier as 0 and never trigger, per the
+ * C standard's handling of #if. Use a compile-time assertion evaluated
+ * by the compiler proper (which does see enum values) instead. A
+ * negative-size array is used rather than _Static_assert/static_assert
+ * to stay compatible with the C89/C99 toolchains still selectable in
+ * this project's MDK-ARM/EWARM configurations. */
+typedef char UTIL_SEQ_CONF_TASK_NBR_Assert[(UTIL_SEQ_CONF_TASK_NBR <= 32) ? 1 : -1];
 
 /**
   * @brief default value of priority number.
